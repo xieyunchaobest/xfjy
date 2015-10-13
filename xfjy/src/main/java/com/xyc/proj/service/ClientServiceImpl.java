@@ -14,7 +14,7 @@ import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.Question;
 import com.xyc.proj.entity.Store;
 import com.xyc.proj.entity.StoreStat;
-import com.xyc.proj.entity.User;
+import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.entity.Version;
 import com.xyc.proj.repository.CarRepository;
 import com.xyc.proj.repository.ConfigRepository;
@@ -22,13 +22,13 @@ import com.xyc.proj.repository.OrderRepository;
 import com.xyc.proj.repository.QuestionRepository;
 import com.xyc.proj.repository.StoreRepository;
 import com.xyc.proj.repository.StoreStatRepository;
-import com.xyc.proj.repository.UserRepository;
+import com.xyc.proj.repository.UserCodeRepository;
 import com.xyc.proj.repository.VersionRepository;
 
 @Service
 public class ClientServiceImpl implements ClientService {
     @Autowired
-    UserRepository userRepository;
+    UserCodeRepository userCodeRepository;
 
     @Autowired
     StoreRepository storeRepository;
@@ -52,13 +52,13 @@ public class ClientServiceImpl implements ClientService {
     QuestionRepository questionRepository;
     
 	@Override
-	public void saveUser(User u) {
-		userRepository.save(u);
+	public void saveUserAuthCode(UserAuthCode u) {
+		userCodeRepository.save(u);
 	}
  
 	@Override
 	public List getUserListByMobileNoAndAuthCode(String mobileNo,String authCode) {
-		return userRepository.findUserByMobileAndAuthCode(mobileNo, authCode);
+		return userCodeRepository.findUserByMobileAndAuthCode(mobileNo, authCode);
 	}
 	
 	public List findStoreBySts() {

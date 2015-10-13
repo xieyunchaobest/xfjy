@@ -18,8 +18,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.xyc.proj.utility.CustomDateSerializer;
 
 @Entity
-@Table(name = "T_USER")
-public class User {
+@Table(name = "T_USER_AUTHCODE")
+public class UserAuthCode {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,7 +37,7 @@ public class User {
 	private Date createdTime;
 	 
 
-	public User() {
+	public UserAuthCode() {
 	}
 
 
