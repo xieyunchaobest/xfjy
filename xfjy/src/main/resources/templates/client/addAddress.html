@@ -1,0 +1,56 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>登录</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.autocomplete.js}"></script> 
+<script type="text/javascript">
+$().ready(function() {
+	$('#autocompleteInput').autocomplete({
+        source:function(query,process){
+            var matchCount = 10;//返回结果集最大数量
+            $.post("/client/getCommunitys",{"matchInfo":query,"matchCount":matchCount},function(respData){
+                return process(respData);
+            });
+        },
+        formatItem:function(item){
+            return item["regionName"] ;
+        },
+        setValue:function(item){
+            return {'data-value':item["regionName"],'real-value':item["regionCode"]};
+        }
+    });
+ 
+$("#goBtn").click(function(){ //获取文本框的实际值
+        var regionCode = $("#autocompleteInput").attr("real-value") || "";
+        alert(regionCode);
+    });
+});
+</script>
+
+
+</head>
+
+<body>
+	<form action="/saveInfo">
+		<div class="container-fluid">
+			<div class="row" id="image" style="height:100px;" />
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<div class="input-group input-group-lg ">
+						<input type="text" class="form-control" id="autocompleteInput"/><span class="input-group-btn">
+							<button class="btn btn-default" id="goBtn" type="button">Go</button>
+						</span> 
+					</div><br/> 
+					<!-- /input-group -->
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

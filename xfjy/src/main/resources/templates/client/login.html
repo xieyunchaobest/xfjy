@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>登录</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script type="text/javascript">
+	
+</script>
+
+
+</head>
+
+<body>
+	<form action="/saveInfo">
+		<div class="container-fluid">
+			<div class="row" id="image" style="height:100px;" />
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<div class="input-group input-group-lg ">
+						<input type="text" class="form-control" /><span class="input-group-btn">
+							<button class="btn btn-default" type="button">Go</button>
+						</span> 
+					</div><br/>
+					<div>
+						<input type="text" class="form-control input-lg" /> 
+					</div>
+					<!-- /input-group -->
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<div style="height:30px;"></div>
+			<div class="row">
+				<div class="col-md-4">&nbsp;</div>
+				<div class="col-md-4">
+					<button class="btn btn-default" style="width:100%" type="button">Go</button>
+				</div>
+				<div class="col-md-4">&nbsp;</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>
