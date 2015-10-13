@@ -61,7 +61,12 @@ public class ClientController {
 		 return "client/serviceDate";
 	 }
 	 
-	 
+	 @RequestMapping("/client/login.html")
+	 public String toLogin(
+	            @RequestParam(value = "areaId", required = false) String areaId,
+	            Model model) {
+		 return "client/login";
+	 }
 	 
 
 }
