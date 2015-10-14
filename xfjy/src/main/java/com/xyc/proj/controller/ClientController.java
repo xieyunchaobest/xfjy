@@ -4,17 +4,24 @@
 package com.xyc.proj.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cloopen.rest.sdk.CCPRestSDK;
+import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.Properties;
 
@@ -78,27 +85,27 @@ public class ClientController {
 		 return "client/login";
 	 }
 	 
-//	 @RequestMapping(value="/client/getAuthCode",method = RequestMethod.POST)
-//	 @ResponseBody
-//		public Map getAuthCode( 
-//		        Model model,HttpSession Session,HttpServletRequest request) {
-//			String mobileNo=request.getParameter("mobileNo");
-//			String randomCode=String.valueOf((int)(Math.random()*9000+1000));
-//			CCPRestSDK restAPI = new CCPRestSDK();
-//			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
-//			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
-//			restAPI.setAppId(properties.getSmsappid());// 初始化应用ID
-//			String templeId=properties.getSmstemplateId();
-//			Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new String[]{randomCode});
-//			if("000000".equals(result.get("statusCode"))) {
-//				UserAuthCode u=new UserAuthCode();
-//				u.setAuthCode(randomCode);
-//				u.setMobileNo(mobileNo);
-//				u.setCreatedTime(new Date());
-//				clientService.saveUserAuthCode(u);
-//			}
-//			return  new HashMap();
-//		}
+	 @RequestMapping(value="/client/getAuthCode",method = RequestMethod.POST)
+	 @ResponseBody
+		public Map getAuthCode( 
+		        Model model,HttpSession Session,HttpServletRequest request) {
+			String mobileNo=request.getParameter("mobileNo");
+			String randomCode=String.valueOf((int)(Math.random()*9000+1000));
+			CCPRestSDK restAPI = new CCPRestSDK();
+			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
+			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
+			restAPI.setAppId(properties.getSmsappid());// 初始化应用ID
+			String templeId=properties.getSmstemplateId();
+			Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new String[]{randomCode});
+			if("000000".equals(result.get("statusCode"))) {
+				UserAuthCode u=new UserAuthCode();
+				u.setAuthCode(randomCode);
+				u.setMobileNo(mobileNo);
+				u.setCreatedTime(new Date());
+				clientService.saveUserAuthCode(u);
+			}
+			return  new HashMap();
+		}
 	 
 	 @RequestMapping("/client/index.html")
 	 public String index(
@@ -121,5 +128,19 @@ public class ClientController {
 	 public String test( Model model) {
 		 return "client/test";
 	 }
+	 
+	@RequestMapping("/client/login")
+	public String getLatestUserByMobile( 
+		        Model model,HttpSession Session,HttpServletRequest request) { 
+		String mobileNo=request.getParameter("mobileNo");
+		String authCode=request.getParameter("authCode");
+			List ulist=clientService.getUserListByMobileNoAndAuthCode(mobileNo,authCode);
+			if(ulist!=null && ulist.size()>0) {
+				 return "client/index";
+			}else {
+				return "client/login";
+			}
+			
+		}
 
 }

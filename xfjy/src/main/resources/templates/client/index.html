@@ -56,7 +56,9 @@
 </style>
 
 <script type="text/javascript">
-	 
+	 function toclean(){
+		 window.location.href=basePath+"/client/cleanIndex.html";
+	 }
 </script>
 
 
@@ -66,39 +68,36 @@
 <body>
 	<form th:action="@{/client/login}" method="post" id="loginForm">
 		<div class="container-fluid">
-			<!-- 
 			<div style="height:20px"></div>
 			<div class="row" id="image">
-				<div class="col-md-1 col-sm-1" />
-				<div class="col-md-10 col-sm-10">
-					<img style="width:100%;height:auto"   />
+				<div class="col-md-1 col-sm-1 col-xs-1 col-lg-1" />
+				<div class="col-md-10 col-sm-10 col-xs-10 col-lg-10" style="border:1px solid red">
+					<img style="width:100%;height:auto" th:src="@{/app/img/banner.png}"   />
 				</div>
-				<div class="col-md-1 col-sm-1"/>
+				<div class="col-md-1 col-sm-1 col-xs-1 col-lg-1"/>
 			</div>
 			<div class="row" id="func">
-				<div class="col-md-1 col-sm-1" />
-				<div class="col-md-5 col-sm-5" style="height:100px;border:1px solid red" >
+				<div class="col-md-1 col-sm-1 col-lg-1 col-xs-1" />
+				<div class="col-md-5 col-sm-5 col-lg-5 col-xs-5" style="height:100px;border:1px solid red"  onclick="toclean()">
 					<div style="width:60px;float:left" >
 						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
 					</div>
 					<div style="width:100px">
-						都市封神发
+						保洁
 					</div>
-					
 				</div>
-				<div class="col-md-5 col-sm-5" style="height:100px;border:1px solid red">
+				<div class="col-md-5 col-sm-5 col-lg-5 col-xs-5" style="height:100px;border:1px solid red">
 					<div style="width:60px;float:left" >
 						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
 					</div>
 					<div style="width:100px">
-						都市封神发
+						家政
 					</div>
 				</div>
-				<div class="col-md-1 col-sm-1" />
+				<div class="col-md-1 col-sm-1 col-lg-1 col-xs-1" />
 			</div>
 			<div>
 			</div>
-			  -->
 			<div class="row">
 				<div id="ftt"></div>
 				<div id="fttc">

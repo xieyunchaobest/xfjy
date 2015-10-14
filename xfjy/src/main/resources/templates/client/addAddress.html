@@ -1,12 +1,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>登录</title>
+<title>添加地址</title>
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
 <script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
 <script th:src="@{/app/js/vendor/bootstrap.autocomplete.js}"></script> 
+<script th:src="@{/app/js/public.js}"></script>
 <script type="text/javascript">
 $().ready(function() {
 	$('#autocompleteInput').autocomplete({
@@ -30,14 +32,11 @@ $("#goBtn").click(function(){ //获取文本框的实际值
     });
     
 
+/*<![CDATA[*/
 $("#btnSure").click(function(){
-	if(window.opener) { 
-        var testword = window.opener.document.getElementById("test"); 
-        testword.value ="mayongzhan"; 
-        window.close(); 
- } 
+	window.location.href=basePath+"/client/addressSelect.html";
 });
-    
+/*]]>*/
     
 });
 </script>

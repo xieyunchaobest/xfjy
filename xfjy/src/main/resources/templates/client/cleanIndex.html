@@ -14,7 +14,22 @@
 </style>
 
 <script type="text/javascript">
+	 function cbcheck(){
+		 if($("#cbprovide").prop("checked")==true){
+			 $("#cbprovide").prop("checked",false);
+		 }else{
+			 $("#cbprovide").prop("checked",true);
+		 }
+	 }
 	 
+	 function toAddressSelect(){
+		 window.open (basePath+"/client/addressSelect.html",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+		 
+	 }
+	 
+	 function toDateSelect(){
+		 window.open (basePath+"/client/serviceDate",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+	 }
 </script>
 
 
@@ -26,11 +41,11 @@
 		<div class="container-fluid">
 		<div style="height:20px"></div>
 		<ul class="list-group">
-  				<li class="list-group-item">
+  				<li class="list-group-item" onclick="toAddressSelect()">
   					<label>地址：</label>
   					<span class="badge">></span>
   				</li>
-			<li class="list-group-item">
+			<li class="list-group-item" onclick="toDateSelect()">
 				<label>时间：</label>
   					<span class="badge">></span>
 			</li>
@@ -40,10 +55,10 @@
 				<label>电话：</label>
 			</li> 
 		</ul>
-		<ul class="list-group">
+		<ul class="list-group"  onclick="cbcheck()">
 			<li class="list-group-item">
 				<label>提供 <font color="red">宝洁用品(+99元)</font></label> 
-				<input type="checkbox"  />
+				<input type="checkbox" style="float:right" id="cbprovide"/>
 			</li> 
 		</ul>
 		
