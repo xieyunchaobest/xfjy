@@ -12,7 +12,7 @@ $().ready(function() {
 	$('#autocompleteInput').autocomplete({
         source:function(query,process){
             var matchCount = 10;//返回结果集最大数量
-            $.post("/client/getCommunitys",{"matchInfo":query,"matchCount":matchCount},function(respData){
+            $.post(basePath+"/client/getCommunitys",{"matchInfo":query,"matchCount":matchCount},function(respData){
                 return process(respData);
             });
         },
@@ -28,6 +28,17 @@ $("#goBtn").click(function(){ //获取文本框的实际值
         var regionCode = $("#autocompleteInput").attr("real-value") || "";
         alert(regionCode);
     });
+    
+
+$("#btnSure").click(function(){
+	if(window.opener) { 
+        var testword = window.opener.document.getElementById("test"); 
+        testword.value ="mayongzhan"; 
+        window.close(); 
+ } 
+});
+    
+    
 });
 </script>
 
@@ -37,8 +48,33 @@ $("#goBtn").click(function(){ //获取文本框的实际值
 <body>
 	<form action="/saveInfo">
 		<div class="container-fluid">
-			<div class="row" id="image" style="height:100px;" />
-			<div class="row">
+			<div class="row" id="image" style="height:20px;" />
+			<ul class="list-group">
+				<li class="list-group-item">
+					<input type="text" placeholder="请输入您的姓名" class="form-control" id="addressDetail"/>
+				</li>  
+			</ul>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<label>城市：</label> 天津
+				</li>  
+				<li class="list-group-item">
+					<label>区域：</label> 请选择
+					<span class="badge">></span>
+				</li> 
+			</ul>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<input type="text" placeholder="请输入小区名称"  class="form-control" id="autocompleteInput"/>
+				</li> 
+				<li class="list-group-item">
+					<input type="text" placeholder="请输入详细地址，如9号楼3单元301" class="form-control" id="addressDetail"/>
+				</li> 
+			</ul>
+			
+			
+			
+			<!--<div class="row">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<div class="input-group input-group-lg ">
@@ -46,9 +82,17 @@ $("#goBtn").click(function(){ //获取文本框的实际值
 							<button class="btn btn-default" id="goBtn" type="button">Go</button>
 						</span> 
 					</div><br/> 
-					<!-- /input-group -->
+					 
 				</div>
 				<div class="col-md-1"></div>
+			</div>-->
+			
+			<div class="row">
+				<div class="col-xs-2"/>
+				<div>
+					<button type="button" id="btnSure" class="btn col-xs-8 btn-default btn-lg">确定</button>
+				</div>
+				<div class="col-xs-2"/>
 			</div>
 		</div>
 	</form>

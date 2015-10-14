@@ -1,0 +1,62 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>首页</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+<style type="text/css">
+ 
+</style>
+
+<script type="text/javascript">
+	 
+</script>
+
+
+
+</head>
+
+<body>
+	<form th:action="@{/client/login}" method="post" id="loginForm">
+		<div class="container-fluid">
+		<div style="height:20px"></div>
+		<ul class="list-group">
+  				<li class="list-group-item">
+  					<label>地址：</label>
+  					<span class="badge">></span>
+  				</li>
+			<li class="list-group-item">
+				<label>时间：</label>
+  					<span class="badge">></span>
+			</li>
+		</ul>
+		<ul class="list-group">
+			<li class="list-group-item">
+				<label>电话：</label>
+			</li> 
+		</ul>
+		<ul class="list-group">
+			<li class="list-group-item">
+				<label>提供 <font color="red">宝洁用品(+99元)</font></label> 
+				<input type="checkbox"  />
+			</li> 
+		</ul>
+		
+		<div class="row">
+			<div class="col-xs-2"/>
+			<div>
+				<button type="button" class="btn col-xs-8 btn-default btn-lg">确定</button>
+			</div>
+			<div class="col-xs-2"/>
+		</div>
+		 
+		</div>
+		
+	</form>
+</body>
+</html>

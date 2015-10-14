@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>首页</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+<style type="text/css">
+ 
+</style>
+
+<script type="text/javascript">
+	 function toAddressAdd(){
+		 window.open (basePath+"/client/addAddressInit",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')   
+	 }
+</script>
+
+
+
+</head>
+
+<body>
+	<form th:action="@{/client/login}" method="post" id="loginForm">
+		<div class="container-fluid">
+		<input type="text" id="test" />
+		<div style="height:20px"></div>
+		<ul class="list-group" style="border:1px solid red">
+			<li class="list-group-item">
+				<label>谢云超   18611298927</label><br/>
+				朝阳区太阳宫小区3号楼1单元501
+			</li> 
+		</ul>
+		
+		<ul class="list-group">
+			<li class="list-group-item">
+				<label>谢云超   18611298927</label><br/>
+				朝阳区太阳宫小区3号楼1单元501
+			</li> 
+		</ul>
+		 
+		<div class="row">
+			<div class="col-xs-1"/>
+			<div>
+				<button type="button" id="btnAddAddress" onclick="toAddressAdd()" class="btn col-xs-10 btn-default btn-lg">添加新地址</button>
+			</div>
+			<div class="col-xs-1"/>
+		</div>
+		<div style="margin-top:20px;"></div>
+		<div class="row">
+			<div class="col-xs-1"/>
+			<div>
+				<button type="button" class="btn col-xs-5 btn-danger btn-lg">删除该地址</button>&nbsp;
+				<button type="button" class="btn col-xs-5  btn-primary btn-lg">设为默认地址</button>
+			</div>
+			<div class="col-xs-1"/>
+		</div>
+		 
+		</div>
+		
+	</form>
+</body>
+</html>
