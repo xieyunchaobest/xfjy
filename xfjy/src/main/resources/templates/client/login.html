@@ -9,6 +9,27 @@
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
 <script th:src="@{/app/js/public.js}"></script>
 <script type="text/javascript">
+/*<![CDATA[*/
+	function checkAuthCode(obj){
+		if(obj.innerHTML!="获取验证码"){
+			return false;
+		}
+		getAuthCode();
+		obj.innerHTML="60秒后重发";
+		var ii = 59;
+		var timer = setInterval(function(){
+			if(ii<1){
+				obj.innerHTML = "获取验证码";
+				clearInterval(timer);
+			}else{
+			obj.innerHTML = ii+"秒后重发";
+			}
+			ii--;
+		}, 1000);
+	}
+	
+	/*]]>*/
+
 	function getAuthCode(){
 			$.ajax({
 	            type: "POST",
@@ -32,7 +53,7 @@
 			<div class="row">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
-					<img alt="" th:src="@{/app/img/banner.png}" style="width:100%"/>
+					<img alt=""   style="width:100%"/>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -41,7 +62,7 @@
 				<div class="col-md-10">
 					<div class="input-group input-group-lg ">
 						<input type="text" value="18611298927" name="mobileNo" placeholder="请输入手机号" class="form-control" /><span class="input-group-btn">
-							<button class="btn btn-default" type="button" onclick="getAuthCode()">获取校验码</button>
+							<button class="btn btn-default" type="button" onclick="checkAuthCode(this)">获取验证码</button>
 						</span> 
 					</div><br/>
 					<div>

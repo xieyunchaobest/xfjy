@@ -31,28 +31,42 @@ public class Order {
 	@Column(name = "OUT_TRADE_NO")
 	private String outTradeNo="";
 	
+	@Column(name = "OPEN_ID")
+	private String openId;
+	
 	@Column(name = "MOBILE_NO")
 	private String mobileNo;
+	
+	@Column(name = "ADDRESS")
+	private String address;
 	
 	@Column(name = "TOTAL_FEE")
 	private Double totalFee;
 	
-	@Column(name = "DISCOUNT")
-	private Integer discount;
+	@Column(name = "TOOL_FEE_CLEAN")
+	private Double toolFeeClean;
 	
+	@Column(name = "SERVICE_TYPE")
+	private String servicetype; //家政，宝洁
+	
+	@Column(name = "CYCLE_TYPE")
+	private String cycleType;//零工，包月
+	
+	@Column(name = "DURATION")
+	private String duration;//持续时间
+	
+	@Column(name = "ADDRESS_ID")
+	private Long addressId;
+	 
+	
+	 
 	@Column(name = "STATE")
 	private String state;
+	 
 	
-	
-	@Column(name = "TRADE_TYPE")
-	private String tradeType;
-	
-	@Column(name = "CAR_ID")
-	private Integer carId;
-	
-	@Column(name = "STORE_ID")
-	private Integer storeId;
-	
+	@Column(name = "AYI_ID")
+	private Long ayiId; 
+	  
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATE_TIME") 
@@ -62,35 +76,9 @@ public class Order {
 	@Column(name = "PAY_TIME") 
 	private Date payTime;
 	
+	 
 	
-	@Column(name = "CAR_MODEL")
-	private String carModel;
-	
-	
-	@Column(name = "GET_STORE_NAME")
-	private String getStoreName;
-	
-	@Column(name = "RENT_TIME")
-	private String rentTime;
-	
-	@Column(name = "RETURN_STORE_NAME")
-	private String returnStoreName;
-	
-	@Column(name = "RETURN_TIME")
-	private String returnTime;
-	
-	@Column(name = "SXF")
-	private Double sxf;
-	
-	@Column(name = "SIN_FEE")
-	private Double sinFee;
-	
-	@Column(name = "YDHCF")
-	private Double ydhcf;
-	
-	@Column(name = "USE_TIME")
-	private Integer useTime;
-	
+	 
 
 	public Order() {
 	}
@@ -158,16 +146,7 @@ public class Order {
 		this.state = state;
 	}
 
-
-	public String getTradeType() {
-		return tradeType;
-	}
-
-
-	public void setTradeType(String tradeType) {
-		this.tradeType = tradeType;
-	}
-
+  
 
 	public String getPayTime() {
 		return DateUtil.Time2Str(payTime);
@@ -189,128 +168,83 @@ public class Order {
 	}
 
 
-	public Integer getDiscount() {
-		return discount;
+	public String getOpenId() {
+		return openId;
 	}
 
 
-	public void setDiscount(Integer discount) {
-		this.discount = discount;
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 
 
-	public Integer getCarId() {
-		return carId;
+	public String getAddress() {
+		return address;
 	}
 
 
-	public void setCarId(Integer carId) {
-		this.carId = carId;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 
-	public Integer getStoreId() {
-		return storeId;
+	public Double getToolFeeClean() {
+		return toolFeeClean;
 	}
 
 
-	public void setStoreId(Integer storeId) {
-		this.storeId = storeId;
+	public void setToolFeeClean(Double toolFeeClean) {
+		this.toolFeeClean = toolFeeClean;
 	}
 
 
-	 
-
-	public String getCarModel() {
-		return carModel;
+	public String getServicetype() {
+		return servicetype;
 	}
 
 
-	public void setCarModel(String carModel) {
-		this.carModel = carModel;
+	public void setServicetype(String servicetype) {
+		this.servicetype = servicetype;
 	}
 
 
-	public String getGetStoreName() {
-		return getStoreName;
+	public String getCycleType() {
+		return cycleType;
 	}
 
 
-	public void setGetStoreName(String getStoreName) {
-		this.getStoreName = getStoreName;
+	public void setCycleType(String cycleType) {
+		this.cycleType = cycleType;
 	}
 
 
-	public String getRentTime() {
-		return rentTime;
+	public String getDuration() {
+		return duration;
 	}
 
 
-	public void setRentTime(String rentTime) {
-		this.rentTime = rentTime;
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
-
-
-	public String getReturnStoreName() {
-		return returnStoreName;
-	}
-
-
-	public void setReturnStoreName(String returnStoreName) {
-		this.returnStoreName = returnStoreName;
-	}
-
-
-	public String getReturnTime() {
-		return returnTime;
-	}
-
-
-	public void setReturnTime(String returnTime) {
-		this.returnTime = returnTime;
-	}
-
-
-	public Double getSxf() {
-		return sxf;
-	}
-
-
-	public void setSxf(Double sxf) {
-		this.sxf = sxf;
-	}
-
-
  
 
-
-	public Double getSinFee() {
-		return sinFee;
+	public Long getAyiId() {
+		return ayiId;
 	}
 
 
-	public void setSinFee(Double sinFee) {
-		this.sinFee = sinFee;
+	public void setAyiId(Long ayiId) {
+		this.ayiId = ayiId;
 	}
 
 
-	public Integer getUseTime() {
-		return useTime;
+	public Long getAddressId() {
+		return addressId;
 	}
 
 
-	public void setUseTime(Integer useTime) {
-		this.useTime = useTime;
-	}
-
-
-	public Double getYdhcf() {
-		return ydhcf;
-	}
-
-
-	public void setYdhcf(Double ydhcf) {
-		this.ydhcf = ydhcf;
+	public void setAddressId(Long addressId) {
+		this.addressId = addressId;
 	}
 
  

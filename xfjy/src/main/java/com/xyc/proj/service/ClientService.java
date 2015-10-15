@@ -13,29 +13,5 @@ public interface ClientService {
 	void saveUserAuthCode(UserAuthCode u );
 	
 	List getUserListByMobileNoAndAuthCode(String mobileNo,String authCode);
-	
-	List findStoreBySts();
-	
-	List findByTradeTypeAndSts(String tradeType,String sts);
-	
-	List findCarBySts(String sts);
-	
-	List findOrderByMobleAndState(String mobile,String sts);
-	
-	public void updateStoreStatistic(Long storeId) ;
-	
-	 Version findVersionByPfType(String pfType);
 	 
-	 void createOrder(Order o);
-	 
-	 void updateOrder(Order o);
-	 
-	 List getConfigList();
-	 
-	 Order getOrderInfo(Long id);
-	 
-	 Order findOrderByOutTradeNo(String outTradeNo);
-	 
-	 Question getQuestion();
-	 void updateQuesion(Question question);
 }
