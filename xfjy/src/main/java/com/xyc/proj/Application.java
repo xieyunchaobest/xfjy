@@ -13,6 +13,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.xyc.proj.utility.Properties;
 
+/**
+ * 幸福家缘服务启动类
+ * @author xieyunchao
+ *
+ */
 @ComponentScan
 @EnableAutoConfiguration
 @EnableJpaRepositories(basePackages = "com.xyc.proj.repository")

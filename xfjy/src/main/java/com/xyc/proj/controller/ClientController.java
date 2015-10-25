@@ -25,6 +25,11 @@ import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.Properties;
 
+/**
+ * 幸福加缘客户端控制类
+ * @author xieyunchao
+ *
+ */
 @Controller
 public class ClientController {
 	
@@ -34,6 +39,12 @@ public class ClientController {
 	ClientService clientService;
 	
 
+	/**
+	 * 获取天津下的地区
+	 * @param areaId
+	 * @param model
+	 * @return
+	 */
 	 @RequestMapping("/client/getCommunitys")
 	 @ResponseBody
 	 public List getCommunitys(
@@ -63,6 +74,13 @@ public class ClientController {
 		 return cList;
 	  }
 	 
+	 
+	 /**
+	  * 添加用户地址
+	  * @param areaId
+	  * @param model
+	  * @return
+	  */
 	 @RequestMapping("/client/addAddressInit")
 	 public String addAddressInit(
 	            @RequestParam(value = "areaId", required = false) String areaId,
@@ -71,6 +89,12 @@ public class ClientController {
 	 }
 	 
 	 
+	 /**
+	  * 选择服务时间
+	  * @param areaId
+	  * @param model
+	  * @return
+	  */
 	 @RequestMapping("/client/serviceDate")
 	 public String serviceDate(
 	            @RequestParam(value = "areaId", required = false) String areaId,
@@ -78,6 +102,12 @@ public class ClientController {
 		 return "client/serviceDate";
 	 }
 	 
+	 /**
+	  * 登录
+	  * @param areaId
+	  * @param model
+	  * @return
+	  */
 	 @RequestMapping("/client/login.html")
 	 public String toLogin(
 	            @RequestParam(value = "areaId", required = false) String areaId,
@@ -85,6 +115,13 @@ public class ClientController {
 		 return "client/login";
 	 }
 	 
+	 /**
+	  * 获取短信校验码
+	  * @param model
+	  * @param Session
+	  * @param request
+	  * @return
+	  */
 	 @RequestMapping(value="/client/getAuthCode",method = RequestMethod.POST)
 	 @ResponseBody
 		public Map getAuthCode( 
@@ -107,6 +144,12 @@ public class ClientController {
 			return  new HashMap();
 		}
 	 
+	 /**
+	  *系统首页 
+	  * @param areaId
+	  * @param model
+	  * @return
+	  */
 	 @RequestMapping("/client/index.html")
 	 public String index(
 	            @RequestParam(value = "areaId", required = false) String areaId,
@@ -114,11 +157,21 @@ public class ClientController {
 		 return "client/index";
 	 }
 	 
+	 /**
+	  * 宝洁功能首页
+	  * @param model
+	  * @return
+	  */
 	 @RequestMapping("/client/cleanIndex.html")
 	 public String cleanIndex( Model model) {
 		 return "client/cleanIndex";
 	 }
 
+	 /**
+	  * 选择地址
+	  * @param model
+	  * @return
+	  */
 	 @RequestMapping("/client/addressSelect.html")
 	 public String addressSelect( Model model) {
 		 return "client/addressSelect";
