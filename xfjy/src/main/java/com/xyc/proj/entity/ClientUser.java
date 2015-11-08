@@ -31,6 +31,10 @@ public class ClientUser {
 	
 	@Column(name = "MOBILE_NO")
 	private String mobileNo;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CREATE_TIME") 
+	private Date createdTime;
 	 
 	public ClientUser() {
 	}
@@ -63,6 +67,16 @@ public class ClientUser {
 
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+
+
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
 	}
 
  

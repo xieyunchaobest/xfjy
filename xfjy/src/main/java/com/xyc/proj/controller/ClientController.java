@@ -81,11 +81,13 @@ public class ClientController {
 	  * @param model
 	  * @return
 	  */
-	 @RequestMapping("/client/addAddressInit")
+	 @RequestMapping(value="/client/addAddressInit",method = {RequestMethod.POST,RequestMethod.GET})
 	 public String addAddressInit(
 	            @RequestParam(value = "areaId", required = false) String areaId,
 	            Model model) {
+		 
 		 return "client/addAddress";
+		 
 	 }
 	 
 	 
@@ -172,7 +174,7 @@ public class ClientController {
 	  * @param model
 	  * @return
 	  */
-	 @RequestMapping("/client/addressSelect.html")
+	 @RequestMapping(value = "/client/addressSelect.html", method = {RequestMethod.POST, RequestMethod.GET})
 	 public String addressSelect( Model model) {
 		 return "client/addressSelect";
 	 }

@@ -7,10 +7,18 @@
 <link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
 <script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
-<script th:src="@{/app/js/vendor/bootstrap.autocomplete.js}"></script> 
-<script type="text/javascript">
-</script>
+<script th:src="@{/app/js/vendor/bootstrap.autocomplete.js}"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_002.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_004.js}" type="text/javascript"></script>
+<link th:href="@{/app/datepicker/css/mobiscroll_002.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/app/datepicker/css/mobiscroll.css}" rel="stylesheet" type="text/css" />
+<script th:src="@{/app/datepicker/js/mobiscroll.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_003.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_005.js}" type="text/javascript"></script>
+<link th:href="@{/app/datepicker/css/mobiscroll_003.css}" rel="stylesheet" type="text/css" />
+<script th:src="@{/app/js/public.js}"></script>
 
+ 
 
 </head>
 
@@ -23,93 +31,50 @@
 <div id="myTabContent" class="tab-content container-fluid">
 	<div style="margin-top:20px;"></div>
    <div class="tab-pane fade in active" id="home">
+   	<form id="sgform" method="post">
    		<div class="row">
    			<div class="col-md-1"></div>
    			<div class="col-md-10">
    				 <ul class="list-group" >
-					<li class="list-group-item">
-						<label>时长:</label>&nbsp;2小时
+   				 <li class="list-group-item"  >
+						<label>日期:</label>&nbsp;<span id="spandate4sg"></span>
+						<input type="text" id="serviceDate4sg" style="border:0px;width:70%;" />
+						<span class="badge">></span>
+					</li>  
+					<li class="list-group-item" onclick="showModal()">
+						<label>时长:</label>&nbsp;<span id="spanserviceDateDuring">2小时</span>
+						<input type="hidden" value="2" id="serviceduring4sg"  />
 						<span class="badge">></span>
 					</li>  
 				</ul>
-				<div class="btn-group btn-group-justified" role="group" aria-label="...">
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	今天<br/>2015-10-14
-					    </button>
-					  </div>
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	明天<br/>2015-10-15
-					    </button>
-					  </div>
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	后天<br/>2015-10-16
-					    </button>
-					  </div>
-				</div>
    			</div>
    			<div class="col-md-1"></div>
    		</div>
-   		
-   		<div style="height:20px;"></div>
    		<div class="row">
-   			<div class="col-md-1"></div>
-   			<div class="col-md-10">
-   				<div class="btn-group btn-group-justified" role="group" aria-label="...">
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	7:00-9:00
-					    </button>
-					  </div>
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	7:00-9:00
-					    </button>
-					  </div>
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	7:00-9:00
-					    </button>
-					  </div>
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	7:00-9:00
-					    </button>
-					  </div>
-				</div>
+   			<div class="col-md-1">
+   				<input type="hidden" id="durationTime4sgStart" />
+   				<input type="hidden" id="durationTime4sgEnd" />
    			</div>
+   			<div class="col-md-10" id="timesplit2h" th:include="client/timesplit :: timesplitcopy2hours"></div>
+   			<div class="col-md-10" id="timesplit3h" style="display:none" th:include="client/timesplit :: timesplitcopy3hours"></div>
+   			<div class="col-md-10" id="timesplit4h" style="display:none" th:include="client/timesplit :: timesplitcopy4hours"></div>
+   			<div class="col-md-10" id="timesplit5h" style="display:none" th:include="client/timesplit :: timesplitcopy5hours"></div>
+   			<div class="col-md-10" id="timesplit6h"  style="display:none" th:include="client/timesplit :: timesplitcopy6hours"></div>
    			<div class="col-md-1"></div>
    		</div>
-      <div class="row">
-   			<div class="col-md-1"></div>
-   			<div class="col-md-10">
-   				<div class="btn-group btn-group-justified" role="group" aria-label="...">
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	7:00-9:00
-					    </button>
-					  </div>
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	7:00-9:00
-					    </button>
-					  </div>
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	7:00-9:00
-					    </button>
-					  </div>
-					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default">
-					    	7:00-9:00
-					    </button>
-					  </div>
-				</div>
-   			</div>
-   			<div class="col-md-1"></div>
+   		<div class="row">
+   			<div class="col-md-1">&nbsp;</div>
+   			<div class="col-md-10" id="validateInfo4sg" style="font-weight:bold;color:red;height:30px;"></div>
+   			<div class="col-md-1">&nbsp;</div>
    		</div>
+   		<div class="row">
+				<div class="col-md-4">&nbsp;</div>
+				<div class="col-md-4">
+					<button class="btn btn-default btn-lg" style="width:100%" onclick="submitsg()" type="button">确定</button>
+				</div>
+				<div class="col-md-4">&nbsp;</div>
+			</div>
+   		</form>
    </div>
    <div class="tab-pane fade" id="ios">
       <p>iOS is a mobile operating system developed and distributed by Apple 
@@ -130,10 +95,170 @@
       </p>
    </div>
 </div>
+
+	<!-- 模态框（Modal） -->
+<div class="modal fade" id="dateSelectModal" tabindex="-1" role="dialog" style="margin-top:100px"
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+      <!--    <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" 
+               aria-hidden="true">×
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              选择区域
+            </h4>
+         </div> -->
+         <div class="modal-body">
+            <ul class="list-group">
+				<li class="list-group-item" value="2" hours="2小时" onclick="fillContent(this)">
+					<span>2小时</span>
+				</li>  
+				<li class="list-group-item" value="3" hours="3小时" onclick="fillContent(this)">
+				 	<span>3小时</span>
+				</li> 
+				<li class="list-group-item"  value="4" hours="4小时" onclick="fillContent(this)">
+				 	<span>4小时</span>
+				</li>
+				<li class="list-group-item"  value="5" hours="5小时" onclick="fillContent(this)">
+				 	<span>5小时</span>
+				</li>
+				<li class="list-group-item"  value="6" hours="6小时" onclick="fillContent(this)">
+				 	<span>6小时</span>
+				</li> 
+			</ul>
+         </div>
+         <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary">
+               提交更改
+            </button>
+         </div> -->
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+	
+	
+
 <script>
    $(function () {
       $('#myTab li:eq(0) a').tab('show');
+      
+      var currYear = (new Date()).getFullYear();	
+  	var opt={};
+  	opt.date = {preset : 'date'};
+  	opt.datetime = {preset : 'datetime'};
+  	opt.time = {preset : 'time'};
+  	opt.default = {
+  		theme: 'android-ics light', //皮肤样式
+          display: 'modal', //显示方式 
+          mode: 'scroller', //日期选择模式
+  		dateFormat: 'yyyy-mm-dd',
+  		lang: 'zh',
+  		showNow: true,
+  		nowText: "今天",
+          startYear: currYear - 10, //开始年份
+          endYear: currYear + 10 //结束年份
+  	};
+
+    	$("#serviceDate4sg").mobiscroll($.extend(opt['date'], opt['default']));
+    	
+    	
+$("button[xtype='tmsel']").click(function(){
+    		 if($(this).hasClass('btn-sucess')){
+    			 $(this).removeClass('btn-sucess');
+    			 $(this).addClass('btn-default');
+    			 $("#durationTime4sgStart").val('');
+    			 $("#durationTime4sgEnd").val('');
+    		 }else{
+    			 $("button[xtype='tmsel']").removeClass('btn-sucess');
+    			 $("button[xtype='tmsel']").addClass('btn-default');
+    			  $(this).removeClass('btn-default');
+    			 $(this).addClass('btn-sucess');
+    			 $("#durationTime4sgStart").val($(this).attr('startTime'));
+    			 $("#durationTime4sgEnd").val($(this).attr('endTime'));
+    		 }
+    		//if($(this)
+    	});
    });
+   
+   
+   function fillContent(target){
+	   var hours=$(target).prop('value');
+	   $("#spanserviceDateDuring").html($(target).attr('hours'));
+	   $("#serviceduring4sg").val();
+	   $("#dateSelectModal").modal('hide');
+	   if(hours=="2"){
+		   $("#timesplit2h").show();
+		   $("#timesplit3h").hide();
+		   $("#timesplit4h").hide();
+		   $("#timesplit5h").hide();
+		   $("#timesplit6h").hide();
+	   }else if(hours=="3"){
+		   $("#timesplit2h").hide();
+		   $("#timesplit3h").show();
+		   $("#timesplit4h").hide();
+		   $("#timesplit5h").hide();
+		   $("#timesplit6h").hide();
+	   }else if(hours=="4"){
+		   $("#timesplit2h").hide();
+		   $("#timesplit3h").hide();
+		   $("#timesplit4h").show();
+		   $("#timesplit5h").hide();
+		   $("#timesplit6h").hide();
+	   }else if(hours=="5"){
+		   $("#timesplit2h").hide();
+		   $("#timesplit3h").hide();
+		   $("#timesplit4h").hide();
+		   $("#timesplit5h").show();
+		   $("#timesplit6h").hide();
+	   }else if(hours=="6"){
+		   $("#timesplit2h").hide();
+		   $("#timesplit3h").hide();
+		   $("#timesplit4h").hide();
+		   $("#timesplit5h").hide();
+		   $("#timesplit6h").show();
+	   }
+   }
+   
+   function showModal(){
+		$('#dateSelectModal').modal({
+		      keyboard: true
+		   })
+   }
+   
+   function submitsg(){
+		   var res=validate();
+		   if(res==true){
+			   var path = basePath+"/client/cleanIndex.html";  
+				$('#sgform').attr("action", path).submit();
+		   }
+   }
+   function validate(){
+	   var res=true;
+	   if($("#serviceDate4sg").val()==''){
+		   $("#validateInfo4sg").text('请选择日期!');
+		   res=false;
+		   return res;
+	   }
+	   
+	   if($("#serviceduring4sg").val()==''){
+		   $("#validateInfo4sg").text('请选择时长!');
+		  res=false;
+		  return res;
+	   }
+	   
+	   if($("#durationTime4sgStart").val()==''){
+		   $("#validateInfo4sg").text('请选择时间段!');
+		   res=false;
+		   return res;
+	   }
+	  return res;
+	   //if($("#validateInfo4sg"))
+	   
+   }
 </script>
 
 </body>

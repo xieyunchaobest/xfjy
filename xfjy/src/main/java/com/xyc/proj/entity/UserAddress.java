@@ -3,18 +3,12 @@
  */
 package com.xyc.proj.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.xyc.proj.utility.DateUtil;
 
 
 @Entity
@@ -25,19 +19,27 @@ public class UserAddress {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column(name = "NAME")
-	private String name="";
+	@Column(name = "OPEN_ID")
+	private String openId="";
 	
-	@Column(name = "AMOUNT")
-	private String amount="";
+	@Column(name = "USER_NAME")
+	private String userName="";
 	
-	@Column(name = "UNIT")
-	private String unit;
+	@Column(name = "MOBILE_NO")
+	private String mobileNo="";
 	
-	@Column(name = "SPECIFICATION")
-	private String specification;
+	@Column(name = "AREA_ID")
+	private String areaId;
+	
+	@Column(name = "COMMUNITY_ID")
+	private String communityId;
 	 
+	@Column(name = "DETAIL_ADDRESS")
+	private String detailAddress;
 
+	@Column(name = "IS_DEFAULT")
+	private String isDefault;
+	
 	public UserAddress() {
 	}
 
@@ -52,46 +54,76 @@ public class UserAddress {
 	}
 
 
-	public String getName() {
-		return name;
+	public String getOpenId() {
+		return openId;
 	}
 
 
-	public void setName(String name) {
-		this.name = name;
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 
 
-	public String getAmount() {
-		return amount;
+	public String getMobileNo() {
+		return mobileNo;
 	}
 
 
-	public void setAmount(String amount) {
-		this.amount = amount;
+	public void setMobileNo(String mobileNo) {
+		this.mobileNo = mobileNo;
 	}
 
 
-	public String getUnit() {
-		return unit;
+	public String getAreaId() {
+		return areaId;
 	}
 
 
-	public void setUnit(String unit) {
-		this.unit = unit;
+	public void setAreaId(String areaId) {
+		this.areaId = areaId;
 	}
 
 
-	public String getSpecification() {
-		return specification;
+	public String getCommunityId() {
+		return communityId;
 	}
 
 
-	public void setSpecification(String specification) {
-		this.specification = specification;
+	public void setCommunityId(String communityId) {
+		this.communityId = communityId;
 	}
 
 
+	public String getDetailAddress() {
+		return detailAddress;
+	}
+
+
+	public void setDetailAddress(String detailAddress) {
+		this.detailAddress = detailAddress;
+	}
+
+
+	public String getUserName() {
+		return userName;
+	}
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+	public String getIsDefault() {
+		return isDefault;
+	}
+
+
+	public void setIsDefault(String isDefault) {
+		this.isDefault = isDefault;
+	}
+
+ 
 	 
 	 
 }

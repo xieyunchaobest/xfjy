@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>首页</title>
+<title>宝洁</title>
 <link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
 <meta content="IE=edge" http-equiv="X-UA-Compatible" />
@@ -23,12 +23,15 @@
 	 }
 	 
 	 function toAddressSelect(){
-		 window.open (basePath+"/client/addressSelect.html",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
-		 
+		 //window.open (basePath+"/client/addressSelect.html",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			var path = basePath+"/client/addressSelect.html";  
+			$('#aform').attr("action", path).submit();
 	 }
 	 
 	 function toDateSelect(){
-		 window.open (basePath+"/client/serviceDate",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+		 var path = basePath+"/client/serviceDate";  
+			$('#aform').attr("action", path).submit();
+		 // window.open (basePath+"/client/serviceDate",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 	 }
 </script>
 
@@ -37,7 +40,7 @@
 </head>
 
 <body>
-	<form th:action="@{/client/login}" method="post" id="loginForm">
+	<form th:action="@{/client/login}" method="post" id="aform">
 		<div class="container-fluid">
 		<div style="height:20px"></div>
 		<ul class="list-group">
@@ -57,7 +60,7 @@
 		</ul>
 		<ul class="list-group"  onclick="cbcheck()">
 			<li class="list-group-item">
-				<label>提供 <font color="red">宝洁用品(+99元)</font></label> 
+				<label onclick="javascipt:alert();">提供 <font color="red">宝洁用品(+99元)</font></label> 
 				<input type="checkbox" style="float:right" id="cbprovide"/>
 			</li> 
 		</ul>

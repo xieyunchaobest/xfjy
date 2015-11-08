@@ -34,11 +34,22 @@ public class Order {
 	@Column(name = "OPEN_ID")
 	private String openId;
 	
+	
 	@Column(name = "MOBILE_NO")
 	private String mobileNo;
 	
-	@Column(name = "ADDRESS")
-	private String address;
+	@Column(name = "USER_ADDRESS_ID")
+	private String userAddressId;
+	
+	@Column(name = "SERVICE_DATE")
+	private String serviceDate;
+	
+	@Column(name = "DURATION")
+	private String duration;//持续时间
+	
+	
+	@Column(name = "SERVICE_TIME")
+	private String serviceTime;
 	
 	@Column(name = "TOTAL_FEE")
 	private Double totalFee;
@@ -51,14 +62,8 @@ public class Order {
 	
 	@Column(name = "CYCLE_TYPE")
 	private String cycleType;//零工，包月
-	
-	@Column(name = "DURATION")
-	private String duration;//持续时间
-	
-	@Column(name = "ADDRESS_ID")
-	private Long addressId;
 	 
-	
+	 
 	 
 	@Column(name = "STATE")
 	private String state;
@@ -114,7 +119,6 @@ public class Order {
 	}
 
 
- 
 
 	public String getOutTradeNo() {
 		return outTradeNo;
@@ -123,6 +127,36 @@ public class Order {
 
 	public void setOutTradeNo(String outTradeNo) {
 		this.outTradeNo = outTradeNo;
+	}
+
+
+	public String getUserAddressId() {
+		return userAddressId;
+	}
+
+
+	public void setUserAddressId(String userAddressId) {
+		this.userAddressId = userAddressId;
+	}
+
+
+	public String getServiceDate() {
+		return serviceDate;
+	}
+
+
+	public void setServiceDate(String serviceDate) {
+		this.serviceDate = serviceDate;
+	}
+
+
+	public String getServiceTime() {
+		return serviceTime;
+	}
+
+
+	public void setServiceTime(String serviceTime) {
+		this.serviceTime = serviceTime;
 	}
 
 
@@ -178,15 +212,7 @@ public class Order {
 	}
 
 
-	public String getAddress() {
-		return address;
-	}
-
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
+ 
 
 	public Double getToolFeeClean() {
 		return toolFeeClean;
@@ -237,15 +263,6 @@ public class Order {
 		this.ayiId = ayiId;
 	}
 
-
-	public Long getAddressId() {
-		return addressId;
-	}
-
-
-	public void setAddressId(Long addressId) {
-		this.addressId = addressId;
-	}
 
  
 	 
