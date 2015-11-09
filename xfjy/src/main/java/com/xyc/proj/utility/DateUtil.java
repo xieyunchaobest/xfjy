@@ -29,6 +29,15 @@ public class DateUtil {
 		return today;
 	}
 	
+	public static String getTomorrow() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 1);
+		String today = new SimpleDateFormat("yyyy-MM-dd").format(cal
+				.getTime());
+		return today;
+	}
+	
+	
 	/**
 	 * 按指定的格式将日期对象转换为字符串
 	 * 

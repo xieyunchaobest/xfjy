@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.xyc.proj.entity.Ayi;
+import com.xyc.proj.entity.Worker;
 
 
 
-public interface AyiRepository extends JpaRepository<Ayi, Long> {
+public interface AyiRepository extends JpaRepository<Worker, Long> {
 	List findByServiceType(String type);
 }

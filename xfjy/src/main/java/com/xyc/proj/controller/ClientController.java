@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-//import com.cloopen.rest.sdk.CCPRestSDK;
+import com.cloopen.rest.sdk.CCPRestSDK;
 import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.service.ClientService;
+import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
+import com.xyc.proj.utility.StringUtil;
 
 /**
  * 幸福加缘客户端控制类
@@ -100,7 +102,26 @@ public class ClientController {
 	 @RequestMapping("/client/serviceDate")
 	 public String serviceDate(
 	            @RequestParam(value = "areaId", required = false) String areaId,
-	            Model model) {
+	            Model model,HttpServletRequest request) {
+		 String busiDate=request.getParameter("busiDate");
+		 if(StringUtil.isBlank(busiDate)) {
+			 busiDate="2015-11-10";
+		 }
+			String serviceType=request.getParameter("serviceType");
+			serviceType="CC";
+			Map m=new HashMap();
+			m.put("busiDate", busiDate);
+			m.put("serviceType", serviceType);
+			List resList=clientService.getNonReservationTimeList(m);
+			String  rs="";
+			for(int i=0;i<resList.size();i++) {
+				String code=(String)resList.get(i);
+				rs=rs+code+",";
+			}
+			if(rs.length()>0) {
+				rs = rs.substring(0, rs.length() - 1); 
+			}
+			model.addAttribute("NonReservationTimeIdList", resList);
 		 return "client/serviceDate";
 	 }
 	 
@@ -130,19 +151,19 @@ public class ClientController {
 		        Model model,HttpSession Session,HttpServletRequest request) {
 			String mobileNo=request.getParameter("mobileNo");
 			String randomCode=String.valueOf((int)(Math.random()*9000+1000));
-//			CCPRestSDK restAPI = new CCPRestSDK();
-//			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
-//			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
-//			restAPI.setAppId(properties.getSmsappid());// 初始化应用ID
-//			String templeId=properties.getSmstemplateId();
-//			Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new String[]{randomCode});
-//			if("000000".equals(result.get("statusCode"))) {
-//				UserAuthCode u=new UserAuthCode();
-//				u.setAuthCode(randomCode);
-//				u.setMobileNo(mobileNo);
-//				u.setCreatedTime(new Date());
-//				clientService.saveUserAuthCode(u);
-//			}
+			CCPRestSDK restAPI = new CCPRestSDK();
+			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
+			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
+			restAPI.setAppId(properties.getSmsappid());// 初始化应用ID
+			String templeId=properties.getSmstemplateId();
+			Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new String[]{randomCode});
+			if("000000".equals(result.get("statusCode"))) {
+				UserAuthCode u=new UserAuthCode();
+				u.setAuthCode(randomCode);
+				u.setMobileNo(mobileNo);
+				u.setCreatedTime(new Date());
+				clientService.saveUserAuthCode(u);
+			}
 			return  new HashMap();
 		}
 	 
@@ -165,7 +186,7 @@ public class ClientController {
 	  * @return
 	  */
 	 @RequestMapping("/client/cleanIndex.html")
-	 public String cleanIndex( Model model) {
+	 public String cleanIndex( Model model,HttpServletRequest request) {
 		 return "client/cleanIndex";
 	 }
 
@@ -201,6 +222,20 @@ public class ClientController {
 			}
 			
 		}
+	
+	
+	@ResponseBody
+	public List getNonReservationTimeList (Model model,HttpSession Session,HttpServletRequest request){
+		String busiDate=request.getParameter("busiDate");
+		String serviceType=request.getParameter("serviceType");
+		Map m=new HashMap();
+		m.put("busiDate", busiDate);
+		m.put("serviceType", serviceType);
+		List resList=clientService.getNonReservationTimeList(m);
+		return resList;
+	}
+	
+	
 	
 	@RequestMapping("/client/testquery")
 	public String testquery( 

@@ -18,7 +18,7 @@ import com.xyc.proj.utility.DateUtil;
 
 
 @Entity
-@Table(name = "CLEAN_TOOLS")
+@Table(name = "T_CLEAN_TOOLS")
 public class CleanTools {
 
 	@Id

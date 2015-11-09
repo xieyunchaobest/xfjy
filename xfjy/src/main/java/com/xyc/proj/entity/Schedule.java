@@ -34,7 +34,7 @@ public class Schedule {
 	@Column(name = "START_TIME")
 	private Integer startTime;
 	
-	@Column(name = "START_TIME")
+	@Column(name = "END_TIME")
 	private Integer endTime;
 	
 	@Column(name = "AYI_ID")

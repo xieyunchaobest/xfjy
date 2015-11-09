@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "T_AYI")
-public class Ayi {
+@Table(name = "T_WORKER")
+public class Worker {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +31,7 @@ public class Ayi {
 	private String birthday;
 	
 	@Column(name = "NATIVE_PLACE")
-	private String nativepPlace;
+	private String nativePlace;
 	
 	@Column(name = "SERVICE_TYPE")
 	private String serviceType; //服务类型，家政/保捷等
@@ -51,7 +51,7 @@ public class Ayi {
 	@Column(name = "SALARY")
 	private Double salary;
 	 
-	public Ayi() {
+	public Worker() {
 	}
 
 
@@ -106,12 +106,12 @@ public class Ayi {
 
 
 	public String getNativepPlace() {
-		return nativepPlace;
+		return nativePlace;
 	}
 
 
 	public void setNativepPlace(String nativepPlace) {
-		this.nativepPlace = nativepPlace;
+		this.nativePlace = nativepPlace;
 	}
 
 

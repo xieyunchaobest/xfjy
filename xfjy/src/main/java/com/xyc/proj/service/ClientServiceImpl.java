@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.xyc.proj.entity.Ayi;
 import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.TimeSplit;
 import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.entity.Version;
+import com.xyc.proj.entity.Worker;
 import com.xyc.proj.mapper.UserAddressMapper;
 import com.xyc.proj.repository.AyiRepository;
 import com.xyc.proj.repository.ConfigRepository;
@@ -68,12 +68,15 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	
+	/**
+	 * 先找出能预约的，然后在排除掉
+	 */
 	public List getNonReservationTimeList(Map m) {
-		Date busiDate=(Date)m.get("busiDate");
+		String busiDate=(String)m.get("busiDate");
 		String serviceType=(String)m.get("serviceType");
 		
 		List<TimeSplit> timeSplitList=timeSplitRepository.findAll();
-		List resList=new ArrayList();
+		List tempList=new ArrayList();
 		for(int i=0;i<timeSplitList.size();i++) {
 			TimeSplit ts=timeSplitList.get(i);
 			String tscode=ts.getCode();
@@ -81,24 +84,42 @@ public class ClientServiceImpl implements ClientService {
 			int startTime=ts.getStartTime();
 			int endTime=ts.getEndTime();
 			
-			List<Ayi> aiyiList=ayiRepository.findByServiceType(serviceType);
-			
-		loop2:	for(int j=0;j<aiyiList.size();j++) {
-				Ayi ayi=aiyiList.get(j);
+			List<Worker> aiyiList=ayiRepository.findByServiceType(serviceType);
+			int ayisize=aiyiList.size();
+			int ayin=0;
+			for(int j=0;j<ayisize;j++) {
+			Worker ayi=aiyiList.get(j);
 				Long aid=ayi.getId();
 				List<Schedule> scheList=scheduleRepository.findByAyiIdAndBusiDate(aid, busiDate);
-				for(int k=0;k<scheList.size();k++) {
+				int n=0;
+				int scheSize=scheList.size();
+				for(int k=0;k<scheSize;k++) {
 					Schedule schedule=scheList.get(k);
 					int sTime=schedule.getStartTime();
 					int eTime=schedule.getEndTime();
-					if( !(startTime<eTime && endTime>sTime) ) {
-						resList.add(tscode);
-						break loop2;
+					if(startTime<eTime && endTime>sTime) {//和某个阿姨的时间都不冲突
+						n++;
 					}
 				}
+				if(n!=0) {//
+					ayin++;
+				}
+			}
+			
+			if(ayin==ayisize) {
+				tempList.add(tscode);
 			}
 		}
-		return resList;
+		
+//		List resList=new ArrayList();
+//		for(int i=0;i<timeSplitList.size();i++) {
+//			TimeSplit ts=timeSplitList.get(i);
+//			String tscode=ts.getCode();
+//			resList.add(tscode);
+//		}
+//		resList.removeAll(tempList);
+//		
+		return tempList;
 	}
 	
 	
