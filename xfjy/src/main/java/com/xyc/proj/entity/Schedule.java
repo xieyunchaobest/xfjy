@@ -31,11 +31,16 @@ public class Schedule {
 	@Column(name = "BUSI_DATE")
 	private String busiDate="";
 	
-	@Column(name = "BUSI_TIME")
-	private String busiTime;
+	@Column(name = "START_TIME")
+	private Integer startTime;
+	
+	@Column(name = "START_TIME")
+	private Integer endTime;
 	
 	@Column(name = "AYI_ID")
 	private Long ayiId;
+	
+	
 	
 	@Column(name = "REMARK")
 	private String remark;
@@ -78,16 +83,6 @@ public class Schedule {
 	}
 
 
-	public String getBusiTime() {
-		return busiTime;
-	}
-
-
-	public void setBusiTime(String busiTime) {
-		this.busiTime = busiTime;
-	}
-
-
 	public Long getAyiId() {
 		return ayiId;
 	}
@@ -115,6 +110,26 @@ public class Schedule {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+
+	public Integer getStartTime() {
+		return startTime;
+	}
+
+
+	public void setStartTime(Integer startTime) {
+		this.startTime = startTime;
+	}
+
+
+	public Integer getEndTime() {
+		return endTime;
+	}
+
+
+	public void setEndTime(Integer endTime) {
+		this.endTime = endTime;
 	}
 
  

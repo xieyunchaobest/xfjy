@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cloopen.rest.sdk.CCPRestSDK;
+//import com.cloopen.rest.sdk.CCPRestSDK;
 import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.Properties;
@@ -130,19 +130,19 @@ public class ClientController {
 		        Model model,HttpSession Session,HttpServletRequest request) {
 			String mobileNo=request.getParameter("mobileNo");
 			String randomCode=String.valueOf((int)(Math.random()*9000+1000));
-			CCPRestSDK restAPI = new CCPRestSDK();
-			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
-			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
-			restAPI.setAppId(properties.getSmsappid());// 初始化应用ID
-			String templeId=properties.getSmstemplateId();
-			Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new String[]{randomCode});
-			if("000000".equals(result.get("statusCode"))) {
-				UserAuthCode u=new UserAuthCode();
-				u.setAuthCode(randomCode);
-				u.setMobileNo(mobileNo);
-				u.setCreatedTime(new Date());
-				clientService.saveUserAuthCode(u);
-			}
+//			CCPRestSDK restAPI = new CCPRestSDK();
+//			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
+//			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
+//			restAPI.setAppId(properties.getSmsappid());// 初始化应用ID
+//			String templeId=properties.getSmstemplateId();
+//			Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new String[]{randomCode});
+//			if("000000".equals(result.get("statusCode"))) {
+//				UserAuthCode u=new UserAuthCode();
+//				u.setAuthCode(randomCode);
+//				u.setMobileNo(mobileNo);
+//				u.setCreatedTime(new Date());
+//				clientService.saveUserAuthCode(u);
+//			}
 			return  new HashMap();
 		}
 	 
@@ -176,6 +176,10 @@ public class ClientController {
 	  */
 	 @RequestMapping(value = "/client/addressSelect.html", method = {RequestMethod.POST, RequestMethod.GET})
 	 public String addressSelect( Model model) {
+		 Map map=new HashMap();
+		 map.put("openId", "121212121");
+		 List addressList=clientService.findAddressByUser(map);
+		 model.addAttribute("addressList",addressList);
 		 return "client/addressSelect";
 	 }
 	 
@@ -197,5 +201,15 @@ public class ClientController {
 			}
 			
 		}
+	
+	@RequestMapping("/client/testquery")
+	public String testquery( 
+		        Model model,HttpSession Session,HttpServletRequest request) { 
+		Map map=new HashMap();
+		map.put("openId", "121212121");
+		List addressList=clientService.findAddressByUser(map);
+		return "client/login";
+	}
+	
 
 }

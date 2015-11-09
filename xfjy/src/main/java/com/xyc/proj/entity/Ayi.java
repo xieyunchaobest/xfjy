@@ -33,6 +33,9 @@ public class Ayi {
 	@Column(name = "NATIVE_PLACE")
 	private String nativepPlace;
 	
+	@Column(name = "SERVICE_TYPE")
+	private String serviceType; //服务类型，家政/保捷等
+	
 	@Column(name = "CONSTELLATION")
 	private String constellation;//星座
 	
@@ -161,5 +164,16 @@ public class Ayi {
 		this.salary = salary;
 	}
 
+
+	public String getServiceType() {
+		return serviceType;
+	}
+
+
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
+	}
+
+	
 	 
 }

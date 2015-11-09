@@ -36,17 +36,11 @@
 	<form th:action="@{/client/login}" method="post" id="aform">
 		<div class="container-fluid">
 		<div style="height:20px"></div>
-		<ul class="list-group" style="border:1px solid red">
-			<li class="list-group-item">
-				<label>谢云超   18611298927</label><br/>
-				朝阳区太阳宫小区3号楼1单元501
-			</li> 
-		</ul>
 		
-		<ul class="list-group">
+		<ul class="list-group" style="border:1px solid red" th:value="${address.id}" th:each="address : ${addressList}">
 			<li class="list-group-item">
-				<label>谢云超   18611298927</label><br/>
-				朝阳区太阳宫小区3号楼1单元501
+				<label th:text="${address.areaNameAndCommunityName}"></label><br/>
+				<span th:text="${address.detailAddress}"> </span>
 			</li> 
 		</ul>
 		 
