@@ -10,21 +10,27 @@
 <script th:src="@{/app/js/vendor/bootstrap.autocomplete.js}"></script> 
 <script th:src="@{/app/js/public.js}"></script>
 <script type="text/javascript">
+//<![CDATA[
 $().ready(function() {
 	$('#autocompleteInput').autocomplete({
         source:function(query,process){
+        	var areaId=$("#areaId").val();
             var matchCount = 10;//返回结果集最大数量
-            $.post(basePath+"/client/getCommunitys",{"matchInfo":query,"matchCount":matchCount},function(respData){
-                return process(respData);
+            var communityName=$('#autocompleteInput').val();
+            $.post(
+            		basePath+"/client/getCommunitys?areaId="+areaId+'&communityName='+communityName,{"matchInfo":query,"matchCount":matchCount},function(respData){
+                return process(respData,$('#autocompleteInput'));
             });
         },
         formatItem:function(item){
-            return item["regionName"] ;
+        	
+            return item["name"] ;
         },
         setValue:function(item){
-            return {'data-value':item["regionName"],'real-value':item["regionCode"]};
+            return {'data-value':item["name"],'real-value':item["id"]};
         }
     });
+	/*]]>*/
  
 $("#goBtn").click(function(){ //获取文本框的实际值
         var regionCode = $("#autocompleteInput").attr("real-value") || "";
@@ -35,12 +41,43 @@ $("#goBtn").click(function(){ //获取文本框的实际值
 /*<![CDATA[*/
 $("#btnSure").click(function(){
 	//window.location.href=basePath+"/client/addressSelect.html";
-	 var path = basePath+"/client/addressSelect.html";  
-		$('#aform').attr("action", path).submit();
+	var res= validate();
+	if(res==true){
+		$("#communityId").val($("#autocompleteInput").attr("real-value"));
+		 var path = basePath+"/client/addAddress.html";  
+		$('#aform').attr("action", path).submit(); 
+	}
+	 
 });
 /*]]>*/
     
 });
+
+
+function validate(){
+	var res=true;
+	var relVal= $("#autocompleteInput").attr("real-value");
+	var addressDetail=$("#addressDetail").val();
+	var areaId=$("#areaId").val();
+	if(areaId==''){
+		$("#spnwarngin").text("请选择区域！");
+		return false;
+	}
+	
+	if(relVal=='' || $("#autocompleteInput").val()==''){
+		$("#spnwarngin").text("请选择小区！");
+		res=false;
+		return res;
+	}
+	if(addressDetail==''){
+		$("#spnwarngin").text("请输入详细地址！");
+		res=false;
+		return res;
+	}
+	return res;
+	
+	
+}
 
 function showAreaModal(){
 	$('#areaModal').modal({
@@ -65,7 +102,7 @@ function fillContent(target){
 	<form action="/saveInfo" id="aform" method="post">
 		<div class="container-fluid">
 			<div class="row" id="image" style="height:20px;" />
-			<ul class="list-group">
+			<ul class="list-group" style="display:none">
 				<li class="list-group-item">
 					<input type="text" placeholder="请输入您的姓名" class="form-control" id="userName"/>
 				</li> 
@@ -79,16 +116,17 @@ function fillContent(target){
 				</li>  
 				<li class="list-group-item" onclick="showAreaModal()">
 					<label>区域：</label> <span id="spanArea">请选择</span>
-					<input type="hidden" id="areaId" />
+					<input type="hidden" id="areaId" name="areaId" />
 					<span class="badge">></span>
 				</li> 
 			</ul>
 			<ul class="list-group">
 				<li class="list-group-item">
-					<input type="text" placeholder="请输入小区名称"  class="form-control" id="autocompleteInput"/>
+					<input type="hidden" name="communityId" id="communityId"/>
+					<input type="text" placeholder="请输入小区名称" real-value="" name="communityName" class="form-control" id="autocompleteInput"/>
 				</li> 
 				<li class="list-group-item">
-					<input type="text" placeholder="请输入详细地址，如9号楼3单元301" class="form-control" id="addressDetail"/>
+					<input type="text" placeholder="请输入详细地址，如9号楼3单元301" class="form-control" id="addressDetail" name="addressDetail"/>
 				</li> 
 			</ul>
 			
@@ -106,6 +144,14 @@ function fillContent(target){
 				</div>
 				<div class="col-md-1"></div>
 			</div>-->
+			<div class="row" id="warnginInfo">
+				<div class="col-xs-1"/>
+				<div>
+					 <span id="spnwarngin" style="font-weight:bold;color:red"></span>
+				</div>
+				<div class="col-xs-1"/>
+			</div>
+			
 			
 			<div class="row">
 				<div class="col-xs-2"/>
@@ -132,15 +178,9 @@ function fillContent(target){
          </div> -->
          <div class="modal-body">
             <ul class="list-group">
-				<li class="list-group-item" value="1" areaName="和平区" onclick="fillContent(this)">
-					<span>和平区</span>
-				</li>  
-				<li class="list-group-item" value="2" areaName="河西区" onclick="fillContent(this)">
-				 	<span>河西区</span>
+				<li class="list-group-item"  th:attr="value=''+${area.id}+'',areaName=''+${area.name}+''"  onclick="fillContent(this)"  th:each="area : ${areaList}">
+					<span  th:text="${area.name}"> </span>
 				</li> 
-				<li class="list-group-item"  value="3" areaName="南开区" onclick="fillContent(this)">
-				 	<span>南开区</span>
-				</li>
 			</ul>
          </div>
          <!-- <div class="modal-footer">

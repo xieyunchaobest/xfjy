@@ -25,8 +25,11 @@ public class Community {
 	@Column(name = "NAME")
 	private String name;
 	
+	@Column(name = "SPELL_NAME")
+	private String spellName;
+	
 	@Column(name = "AREA_ID")
-	private String area_id;
+	private Long areaId;
 	
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -70,14 +73,25 @@ public class Community {
 	}
 
 
-	public String getArea_id() {
-		return area_id;
+	public Long getAreaId() {
+		return areaId;
 	}
 
 
-	public void setArea_id(String area_id) {
-		this.area_id = area_id;
+	public void setAreaId(Long areaId) {
+		this.areaId = areaId;
 	}
+
+
+	public String getSpellName() {
+		return spellName;
+	}
+
+
+	public void setSpellName(String spellName) {
+		this.spellName = spellName;
+	}
+ 
 
  
 

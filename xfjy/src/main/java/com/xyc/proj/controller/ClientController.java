@@ -3,7 +3,6 @@
  */
 package com.xyc.proj.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cloopen.rest.sdk.CCPRestSDK;
 import com.xyc.proj.entity.Order;
+import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.global.CharacterEncodingFilter;
 import com.xyc.proj.service.ClientService;
@@ -46,7 +46,7 @@ public class ClientController {
 	ClientService clientService;
 	
 
-	/**
+	/** 
 	 * 获取天津下的地区
 	 * @param areaId
 	 * @param model
@@ -55,30 +55,11 @@ public class ClientController {
 	 @RequestMapping("/client/getCommunitys")
 	 @ResponseBody
 	 public List getCommunitys(
-	            @RequestParam(value = "areaId", required = false) String areaId,
+	            @RequestParam(value = "areaId", required = false) Long areaId,
+	            @RequestParam(value = "communityName", required = false) String communityName,
 	            Model model) {
-		 List cList=new ArrayList();
-		 Map m1=new HashMap();
-		 m1.put("regionName", "地区1");
-		 m1.put("regionCode", "001");
-		 
-		 Map m2=new HashMap();
-		 m2.put("regionName", "地区2");
-		 m2.put("regionCode", "002");
-		 
-		 Map m3=new HashMap();
-		 m3.put("regionName", "地区3");
-		 m3.put("regionCode", "003");
-		 
-		 Map m4=new HashMap();
-		 m4.put("regionName", "地区4");
-		 m4.put("regionCode", "004");
-		 
-		 cList.add(m1);
-		 cList.add(m2);
-		 cList.add(m3);
-		 cList.add(m4);
-		 return cList;
+		 List commLit=clientService.findListByAreaIdAndName(areaId,communityName);
+		 return commLit;
 	  }
 	 
 	 
@@ -92,6 +73,8 @@ public class ClientController {
 	 public String addAddressInit(
 	            @RequestParam(value = "areaId", required = false) String areaId,
 	            Model model) {
+		 List areaList=clientService.findAreaList();
+		 model.addAttribute("areaList", areaList);
 		 
 		 return "client/addAddress";
 		 
@@ -241,16 +224,36 @@ public class ClientController {
 		 return "client/cleanIndex";
 	 }
 
+	 @RequestMapping(value = "/client/addAddress.html", method = {RequestMethod.POST, RequestMethod.GET})
+	 public String addAddress( Model model,HttpServletRequest request,
+			 @RequestParam(value = "areaId", required = true) Long areaId,
+	            @RequestParam(value = "communityId", required = true) Long communityId,
+	            @RequestParam(value = "addressDetail", required = true) String addressDetail,
+	            @RequestParam(value = "openId", required = false) String openId
+			 ) {
+		 UserAddress ua=new UserAddress();
+		 ua.setAreaId(areaId);
+		 ua.setCommunityId(communityId);
+		 ua.setDetailAddress(addressDetail);
+		 ua.setOpenId("121212121");
+		 clientService.saveUserAddress(ua);
+		 return  "forward:/client/addressSelect.html";
+		 
+	 }
+	 
 	 /**
 	  * 选择地址
 	  * @param model
 	  * @return
 	  */
 	 @RequestMapping(value = "/client/addressSelect.html", method = {RequestMethod.POST, RequestMethod.GET})
-	 public String addressSelect( Model model,HttpServletRequest request) {
+	 public String addressSelect( Model model,HttpServletRequest request,
+			 @RequestParam(value = "openId", required = false) String openId
+			 ) {
 		 forwardPage(model,request);
 		 Map map=new HashMap();
-		 map.put("openId", "121212121");
+		 openId="121212121";
+		 map.put("openId", openId);
 		 List addressList=clientService.findAddressByUser(map);
 		 model.addAttribute("addressList",addressList);
 		 return "client/addressSelect";

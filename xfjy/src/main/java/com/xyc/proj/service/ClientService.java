@@ -3,6 +3,7 @@ package com.xyc.proj.service;
 import java.util.List;
 import java.util.Map;
 
+import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
 
 public interface ClientService {
@@ -14,5 +15,12 @@ public interface ClientService {
 	List findAddressByUser(Map m);
 	
 	List getNonReservationTimeList(Map m) ;
+	
+	List findAreaList();
+	
+	public List findCommunityByAreaId(Long areaId) ;
 	 
+	List findListByAreaIdAndName(Long areaId,String communityName);
+	
+	public void saveUserAddress(UserAddress ua) ;
 }

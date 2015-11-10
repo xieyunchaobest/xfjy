@@ -29,10 +29,10 @@ public class UserAddress {
 	private String mobileNo="";
 	
 	@Column(name = "AREA_ID")
-	private String areaId;
+	private Long areaId;
 	
 	@Column(name = "COMMUNITY_ID")
-	private String communityId;
+	private Long communityId;
 	 
 	@Column(name = "DETAIL_ADDRESS")
 	private String detailAddress;
@@ -73,23 +73,26 @@ public class UserAddress {
 		this.mobileNo = mobileNo;
 	}
 
+ 
 
-	public String getAreaId() {
+ 
+
+	public Long getAreaId() {
 		return areaId;
 	}
 
 
-	public void setAreaId(String areaId) {
+	public void setAreaId(Long areaId) {
 		this.areaId = areaId;
 	}
 
 
-	public String getCommunityId() {
+	public Long getCommunityId() {
 		return communityId;
 	}
 
 
-	public void setCommunityId(String communityId) {
+	public void setCommunityId(Long communityId) {
 		this.communityId = communityId;
 	}
 

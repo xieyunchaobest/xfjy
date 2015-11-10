@@ -79,7 +79,10 @@
       return items ? this.process(items) : this
     }
 
-  , process: function (items) {
+  , process: function (items,target) {
+	 if(items==''){
+		$(target).attr("real-value","");
+	 }
       var that = this
       if (!items.length) {
         return this.shown ? this.hide() : this

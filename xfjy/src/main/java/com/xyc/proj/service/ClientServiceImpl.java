@@ -1,6 +1,5 @@
 package com.xyc.proj.service;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +10,18 @@ import org.springframework.stereotype.Service;
 
 import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.TimeSplit;
+import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.entity.Version;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.mapper.UserAddressMapper;
+import com.xyc.proj.repository.AreaRepository;
 import com.xyc.proj.repository.AyiRepository;
+import com.xyc.proj.repository.CommunityRepository;
 import com.xyc.proj.repository.ConfigRepository;
 import com.xyc.proj.repository.ScheduleRepository;
 import com.xyc.proj.repository.TimeSplitRepository;
+import com.xyc.proj.repository.UserAddressRepository;
 import com.xyc.proj.repository.UserCodeRepository;
 import com.xyc.proj.repository.VersionRepository;
 
@@ -44,7 +47,14 @@ public class ClientServiceImpl implements ClientService {
 	ScheduleRepository scheduleRepository;
 	
 	@Autowired
+	AreaRepository areaRepository;
+	
+	@Autowired
 	AyiRepository ayiRepository;
+	@Autowired
+	CommunityRepository communityRepository;
+	@Autowired
+	UserAddressRepository userAddressRepository;
 	
 	@Override
 	public void saveUserAuthCode(UserAuthCode u) {
@@ -121,8 +131,27 @@ public class ClientServiceImpl implements ClientService {
 //		
 		return tempList;
 	}
+
+	@Override
+	public List findAreaList() {
+		return areaRepository.findAll();
+	}
 	
 	
+	public List findCommunityByAreaId(Long areaId) {
+		List commList=communityRepository.findByAreaId(areaId);
+		return commList;
+	}
+	
+	public List findListByAreaIdAndName(Long areaId,String communityName){
+		communityName="%"+communityName+"%";
+		List commList=communityRepository.findListByAreaIdAndName(areaId, communityName);
+		return commList;
+	}
+	
+	public void saveUserAddress(UserAddress ua) {
+		userAddressRepository.save(ua);
+	}
 	 
 	
 }
