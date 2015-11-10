@@ -41,15 +41,26 @@
 
 <body>
 	<form th:action="@{/client/login}" method="post" id="aform">
+		<div style="display:none">
+			<input type="hidden" name="mobileNo" th:value="${order.mobileNo}"/>
+			<input type="hidden" name="userAddressId"  th:value="${order.userAddressId}"/>
+			<input type="hidden" name="fullAddress"  th:value="${order.fullAddress}"/>
+			<input type="hidden" name="serviceDate"  th:value="${order.serviceDate}"/>
+			<input type="hidden" name="duration"  th:value="${order.duration}"/>
+			<input type="hidden" name="startTime"  th:value="${order.startTime}"/>
+			<input type="hidden" name="endTime"  th:value="${order.endTime}"/>
+			<input type="hidden" name="servicetype"  th:value="${order.servicetype}"/>
+			<input type="hidden" name="cycleType"  th:value="${order.cycleType}"/>
+		</div>
 		<div class="container-fluid">
 		<div style="height:20px"></div>
 		<ul class="list-group">
   				<li class="list-group-item" onclick="toAddressSelect()">
-  					<label>地址：</label>
+  					<label>地址：</label><span th:text="${order.fullAddress}"></span>
   					<span class="badge">></span>
   				</li>
 			<li class="list-group-item" onclick="toDateSelect()">
-				<label>时间：</label>
+				<label>时间：</label><span th:text="${order.serviceDate}"></span>
   					<span class="badge">></span>
 			</li>
 		</ul>

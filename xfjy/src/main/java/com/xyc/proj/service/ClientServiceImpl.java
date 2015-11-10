@@ -72,7 +72,7 @@ public class ClientServiceImpl implements ClientService {
 	 * 先找出能预约的，然后在排除掉
 	 */
 	public List getNonReservationTimeList(Map m) {
-		String busiDate=(String)m.get("busiDate");
+		String busiDate=(String)m.get("serviceDate");
 		String serviceType=(String)m.get("serviceType");
 		
 		List<TimeSplit> timeSplitList=timeSplitRepository.findAll();

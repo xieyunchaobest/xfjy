@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.xyc.proj.utility.DateUtil;
 
@@ -34,7 +35,6 @@ public class Order {
 	@Column(name = "OPEN_ID")
 	private String openId;
 	
-	
 	@Column(name = "MOBILE_NO")
 	private String mobileNo;
 	
@@ -44,18 +44,28 @@ public class Order {
 	@Column(name = "SERVICE_DATE")
 	private String serviceDate;
 	
+
+	
 	@Column(name = "DURATION")
 	private String duration;//持续时间
 	
 	
-	@Column(name = "SERVICE_TIME")
-	private String serviceTime;
+	@Column(name = "START_TIME")
+	private String startTime;
+	
+	@Column(name = "END_TIME")
+	private String endTime;
+	
+	
+	@Column(name = "UNIT_PRICE")
+	private String unitPrice;
+	
 	
 	@Column(name = "TOTAL_FEE")
 	private Double totalFee;
 	
 	@Column(name = "TOOL_FEE_CLEAN")
-	private Double toolFeeClean;
+	private Double toolFeeClean;//工具费用
 	
 	@Column(name = "SERVICE_TYPE")
 	private String servicetype; //家政，宝洁
@@ -82,8 +92,8 @@ public class Order {
 	private Date payTime;
 	
 	 
-	
-	 
+	@Transient
+	private String fullAddress="";
 
 	public Order() {
 	}
@@ -149,16 +159,7 @@ public class Order {
 		this.serviceDate = serviceDate;
 	}
 
-
-	public String getServiceTime() {
-		return serviceTime;
-	}
-
-
-	public void setServiceTime(String serviceTime) {
-		this.serviceTime = serviceTime;
-	}
-
+ 
 
 	public String getTradeNo() {
 		return tradeNo;
@@ -261,6 +262,46 @@ public class Order {
 
 	public void setAyiId(Long ayiId) {
 		this.ayiId = ayiId;
+	}
+
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+
+	public String getUnitPrice() {
+		return unitPrice;
+	}
+
+
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+
+	public String getFullAddress() {
+		return fullAddress;
+	}
+
+
+	public void setFullAddress(String fullAddress) {
+		this.fullAddress = fullAddress;
 	}
 
 

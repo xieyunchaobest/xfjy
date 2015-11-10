@@ -10,7 +10,9 @@
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
 <script th:src="@{/app/js/public.js}"></script>
 <style type="text/css">
- 
+ .borderselected{
+ 	border:1px solid red
+ }
 </style>
 
 <script type="text/javascript">
@@ -21,10 +23,25 @@
 	 }
 	 
 	 function setDefault(){
-		 var testword = window.opener.document.getElementById("test"); 
-	       // testword.value ="mayongzhan"; 
-		 WeixinJSBridge.call('closeWindow');  
-		 
+		var userAddressId=$(".borderselected").attr('value');
+		var fullAddress=$(".borderselected").attr('fullAddress');
+		 var path = basePath+"/client/cleanIndex.html"; 
+		 $("#userAddressId").val(userAddressId);
+		 $("#fullAddress").val(fullAddress);
+		 if($("#fullAddress").val()==''  ){
+			 alert('请选择地址！');
+			 return ;
+		 }
+		 $('#aform').attr("action", path).submit();
+	 }
+	 
+	 function selected(target){
+		 if($(target).hasClass('borderselected')){
+			 $(target).removeClass('borderselected');
+		 }else{
+			 $("ul[xtype='addrsel']").removeClass('borderselected');
+			 $(target).addClass('borderselected');
+		 }
 	 }
 </script>
 
@@ -35,9 +52,21 @@
 <body>
 	<form th:action="@{/client/login}" method="post" id="aform">
 		<div class="container-fluid">
-		<div style="height:20px"></div>
+		<div style="height:20px">
+			<input type="hidden" name="userAddressId" id="userAddressId"  th:value="${order.userAddressId}"/>
+			<input type="hidden"  id="fullAddress" name="fullAddress" th:value="${order.fullAddress}"/>
+			
+			<input type="hidden" name="mobileNo" th:value="${order.mobileNo}"/>
+			<input type="hidden" name="serviceDate"  th:value="${order.serviceDate}"/>
+			<input type="hidden" name="duration"  th:value="${order.duration}"/>
+			<input type="hidden" name="startTime"  th:value="${order.startTime}"/>
+			<input type="hidden" name="endTime"  th:value="${order.endTime}"/>
+			<input type="hidden" name="servicetype"  th:value="${order.servicetype}"/>
+			<input type="hidden" name="cycleType"  th:value="${order.cycleType}"/>
+			
+		</div>
 		
-		<ul class="list-group" style="border:1px solid red" th:value="${address.id}" th:each="address : ${addressList}">
+		<ul class="list-group" xtype='addrsel' onclick="selected(this)"   th:attr="value=''+${address.id}+'',fullAddress=''+${address.fullAddress}+''"  th:each="address : ${addressList}">
 			<li class="list-group-item">
 				<label th:text="${address.areaNameAndCommunityName}"></label><br/>
 				<span th:text="${address.detailAddress}"> </span>
@@ -56,7 +85,7 @@
 			<div class="col-xs-1"/>
 			<div>
 				<button type="button" class="btn col-xs-5 btn-danger btn-lg">删除该地址</button>&nbsp;
-				<button type="button" class="btn col-xs-5  btn-primary btn-lg" onclick="setDefault()">设为默认地址</button>
+				<button type="button" class="btn col-xs-5  btn-primary btn-lg" onclick="setDefault()">选择</button>
 			</div>
 			<div class="col-xs-1"/>
 		</div>

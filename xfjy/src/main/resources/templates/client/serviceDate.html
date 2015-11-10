@@ -33,6 +33,18 @@
 		<input type="hidden" name="NonReservationTimeIdList" th:value="${NonReservationTimeIdList}"/>
 	</div>
    <div class="tab-pane fade in active" id="home">
+   	<form id="submitForm" method="post" >
+   		<input type="hidden" name="userAddressId" id="userAddressId" th:value="${order.userAddressId}"/>
+		<input type="hidden"  id="fullAddress" name="fullAddress" th:value="${order.fullAddress}"/>
+   		<input type="hidden" name="serviceDate" id="serviceDate"/>
+   		<input type="hidden" name="duration" id="duration"/>
+   		<input type="hidden" name="startTime" id="startTime"/>
+   		<input type="hidden" name="endTime" id="endTime"/>
+   		<input type="hidden" name="servicetype" id="servicetype" value="CC"/>
+   		<input type="hidden" name="cycleType" id="cycleType" />
+   		
+   		
+   	</form>
    	<form id="sgform" method="post">
    		<div class="row">
    			<div class="col-md-1"></div>
@@ -184,7 +196,24 @@ $("button[xtype='tmsel']").click(function(){
     		 }
     		//if($(this)
     	});
+    		
+    	if($("#serviceDate4sg").val()==''){
+    		$("#serviceDate4sg").val(getTomorrow(new Date()));
+    	}
+
    });
+   
+   getTomorrow = function(day)   
+   {   
+       var str = "";   
+     
+       str= day.getFullYear() ;     
+       str=str+'-'+((day.getMonth()+1)>10? (day.getMonth()+1).toString():'0' +(day.getMonth()+1));   
+       str=str+"-"+(day.getDate()>9?(day.getDate()+1).toString():'0' + (day.getDate()+1));   
+     
+       return str;   
+   }   
+   
    
    
    function fillContent(target){
@@ -234,8 +263,14 @@ $("button[xtype='tmsel']").click(function(){
    function submitsg(){
 		   var res=validate();
 		   if(res==true){
+			   $("#serviceDate").val($("#serviceDate4sg").val());
+			   $("#duration").val($("#serviceduring4sg").val());
+			   $("#startTime").val($("#durationTime4sgStart").val());
+			   $("#endTime").val($("#durationTime4sgEnd").val());
+			   $("#cycleType").val("S");
+			   
 			   var path = basePath+"/client/cleanIndex.html";  
-				$('#sgform').attr("action", path).submit();
+				$('#submitForm').attr("action", path).submit(); 
 		   }
    }
    function validate(){
@@ -261,6 +296,8 @@ $("button[xtype='tmsel']").click(function(){
 	   //if($("#validateInfo4sg"))
 	   
    }
+   
+   
 </script>
 
 </body>

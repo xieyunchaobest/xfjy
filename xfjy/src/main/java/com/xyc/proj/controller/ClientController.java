@@ -5,14 +5,18 @@ package com.xyc.proj.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cloopen.rest.sdk.CCPRestSDK;
+import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAuthCode;
+import com.xyc.proj.global.CharacterEncodingFilter;
 import com.xyc.proj.service.ClientService;
-import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
 
@@ -103,14 +108,15 @@ public class ClientController {
 	 public String serviceDate(
 	            @RequestParam(value = "areaId", required = false) String areaId,
 	            Model model,HttpServletRequest request) {
-		 String busiDate=request.getParameter("busiDate");
-		 if(StringUtil.isBlank(busiDate)) {
-			 busiDate="2015-11-10";
+		 forwardPage( model, request);
+		 String serviceDate=request.getParameter("serviceDate");
+		 if(StringUtil.isBlank(serviceDate)) {
+			 serviceDate="2015-11-10";
 		 }
 			String serviceType=request.getParameter("serviceType");
-			serviceType="CC";
+			serviceType="CC";	
 			Map m=new HashMap();
-			m.put("busiDate", busiDate);
+			m.put("serviceDate", serviceDate);
 			m.put("serviceType", serviceType);
 			List resList=clientService.getNonReservationTimeList(m);
 			String  rs="";
@@ -180,6 +186,50 @@ public class ClientController {
 		 return "client/index";
 	 }
 	 
+	 
+	 
+	 private void forwardPage(Model model,HttpServletRequest request) {
+		 
+		 String userAddressId=request.getParameter("userAddressId");
+		 userAddressId=StringUtil.isBlank(userAddressId)?"":userAddressId;
+		 
+		 String fullAddress=request.getParameter("fullAddress");
+		 fullAddress=StringUtil.isBlank(fullAddress)?"":fullAddress;
+		 
+		 String mobileNo=request.getParameter("mobileNo");
+		 mobileNo=StringUtil.isBlank(mobileNo)?"":mobileNo;
+		 
+		 String serviceDate=request.getParameter("serviceDate");
+		 serviceDate=StringUtil.isBlank(serviceDate)?"":serviceDate;
+		 
+		 String duration=request.getParameter("duration");
+		 duration=StringUtil.isBlank(duration)?"":duration;
+		 
+		 String startTime=request.getParameter("startTime");
+		 startTime=StringUtil.isBlank(startTime)?"":startTime;
+		 
+		 String endTime=request.getParameter("endTime");
+		 endTime=StringUtil.isBlank(endTime)?"":endTime;
+		 
+		 String servicetype=request.getParameter("servicetype");
+		 servicetype=StringUtil.isBlank(servicetype)?"":servicetype;
+		 
+		 String cycleType=request.getParameter("cycleType");
+		 cycleType=StringUtil.isBlank(cycleType)?"":cycleType;
+		 
+		 Order o =new Order();
+		 o.setUserAddressId(userAddressId);
+		 o.setFullAddress(fullAddress);
+		 o.setMobileNo(mobileNo);
+		 o.setServiceDate(serviceDate);
+		 o.setDuration(duration);
+		 o.setStartTime(startTime);
+		 o.setEndTime(endTime);
+		 o.setServicetype(servicetype);
+		 o.setCycleType(cycleType);
+		 
+		 model.addAttribute("order", o);
+	 }
 	 /**
 	  * 宝洁功能首页
 	  * @param model
@@ -187,6 +237,7 @@ public class ClientController {
 	  */
 	 @RequestMapping("/client/cleanIndex.html")
 	 public String cleanIndex( Model model,HttpServletRequest request) {
+		 forwardPage(model,request);
 		 return "client/cleanIndex";
 	 }
 
@@ -196,7 +247,8 @@ public class ClientController {
 	  * @return
 	  */
 	 @RequestMapping(value = "/client/addressSelect.html", method = {RequestMethod.POST, RequestMethod.GET})
-	 public String addressSelect( Model model) {
+	 public String addressSelect( Model model,HttpServletRequest request) {
+		 forwardPage(model,request);
 		 Map map=new HashMap();
 		 map.put("openId", "121212121");
 		 List addressList=clientService.findAddressByUser(map);
@@ -245,6 +297,15 @@ public class ClientController {
 		List addressList=clientService.findAddressByUser(map);
 		return "client/login";
 	}
+	
+	
+	 @Bean
+	    public FilterRegistrationBean encodingFilter() {
+	        FilterRegistrationBean registration = new FilterRegistrationBean();
+	        registration.setFilter(new CharacterEncodingFilter());
+	        registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
+	        return registration;
+	    }
 	
 
 }
