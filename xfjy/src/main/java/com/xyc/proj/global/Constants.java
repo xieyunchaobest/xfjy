@@ -27,4 +27,7 @@ public interface Constants {
 	public static final String ORDERBY="orderBys";
 	public static final String CURRENT_PAGENUM="currentPageNum";
 	
+	public static final String STATE_P="P";
+	public static final String STATE_A="A";
+	
 }

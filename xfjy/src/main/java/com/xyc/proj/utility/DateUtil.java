@@ -1,6 +1,7 @@
 package com.xyc.proj.utility;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,4 +80,15 @@ public class DateUtil {
 		return str;
 	}
 
+	public static Date strToDate(String str) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		   Date date = null;
+		   try {
+		    date = format.parse(str);
+		   } catch (ParseException e) {
+			   e.printStackTrace();
+		   }
+		   return date;
+	}
+	
 }

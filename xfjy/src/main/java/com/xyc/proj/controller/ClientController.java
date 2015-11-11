@@ -280,17 +280,34 @@ public class ClientController {
 	
 	
 	@ResponseBody
+	@RequestMapping(value="/client/getDrationListState", method = {RequestMethod.POST, RequestMethod.GET})
 	public List getNonReservationTimeList (Model model,HttpSession Session,HttpServletRequest request){
-		String busiDate=request.getParameter("busiDate");
+		String busiDate=request.getParameter("serviceDate");
 		String serviceType=request.getParameter("serviceType");
 		Map m=new HashMap();
-		m.put("busiDate", busiDate);
+		m.put("serviceDate", busiDate);
 		m.put("serviceType", serviceType);
 		List resList=clientService.getNonReservationTimeList(m);
 		return resList;
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping("/client/deleteUserAdderss")
+	public String deleteUserAdderss( 
+		        Model model,HttpSession Session,HttpServletRequest request,
+		        @RequestParam(value = "userAddressId", required = true) Long userAddressId ){
+		UserAddress ua=new UserAddress();
+		ua.setId(userAddressId);
+		String res="S";
+		try {
+			clientService.deleteUserAdderss(ua);
+		}catch(Exception e ) {
+			res="F";
+			e.printStackTrace();
+		}
+		return res;
+		
+	}
 	
 	@RequestMapping("/client/testquery")
 	public String testquery( 

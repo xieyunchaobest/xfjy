@@ -73,7 +73,8 @@ public class Order {
 	@Column(name = "CYCLE_TYPE")
 	private String cycleType;//零工，包月
 	 
-	 
+	@Column(name = "DRATION_MONTH")
+	private String durationMonth;
 	 
 	@Column(name = "STATE")
 	private String state;
@@ -302,6 +303,16 @@ public class Order {
 
 	public void setFullAddress(String fullAddress) {
 		this.fullAddress = fullAddress;
+	}
+
+
+	public String getDurationMonth() {
+		return durationMonth;
+	}
+
+
+	public void setDurationMonth(String durationMonth) {
+		this.durationMonth = durationMonth;
 	}
 
 

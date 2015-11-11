@@ -1,6 +1,9 @@
 package com.xyc.proj.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +27,7 @@ import com.xyc.proj.repository.TimeSplitRepository;
 import com.xyc.proj.repository.UserAddressRepository;
 import com.xyc.proj.repository.UserCodeRepository;
 import com.xyc.proj.repository.VersionRepository;
+import com.xyc.proj.utility.DateUtil;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -82,7 +86,7 @@ public class ClientServiceImpl implements ClientService {
 	 * 先找出能预约的，然后在排除掉
 	 */
 	public List getNonReservationTimeList(Map m) {
-		String busiDate=(String)m.get("serviceDate");
+		String serviceDate=(String)m.get("serviceDate");
 		String serviceType=(String)m.get("serviceType");
 		
 		List<TimeSplit> timeSplitList=timeSplitRepository.findAll();
@@ -100,15 +104,16 @@ public class ClientServiceImpl implements ClientService {
 			for(int j=0;j<ayisize;j++) {
 			Worker ayi=aiyiList.get(j);
 				Long aid=ayi.getId();
-				List<Schedule> scheList=scheduleRepository.findByAyiIdAndBusiDate(aid, busiDate);
+				List<Schedule> scheList=scheduleRepository.findByAyiIdAndBusiDate(aid,serviceDate);
 				int n=0;
 				int scheSize=scheList.size();
 				for(int k=0;k<scheSize;k++) {
 					Schedule schedule=scheList.get(k);
 					int sTime=schedule.getStartTime();
 					int eTime=schedule.getEndTime();
-					if(startTime<eTime && endTime>sTime) {//和某个阿姨的时间都不冲突
+					if(startTime<eTime && endTime>sTime) {//和某个阿姨的时间冲突
 						n++;
+						break;
 					}
 				}
 				if(n!=0) {//
@@ -152,6 +157,44 @@ public class ClientServiceImpl implements ClientService {
 	public void saveUserAddress(UserAddress ua) {
 		userAddressRepository.save(ua);
 	}
-	 
+	
+	
+	public void deleteUserAdderss(UserAddress ua) {
+		UserAddress u=userAddressRepository.findOne(ua.getId());
+		u.setState(com.xyc.proj.global.Constants.STATE_P);
+		userAddressRepository.save(u);
+	}
+	
+	
+	public List getScheduleList4Month(String startDate,String durationMonth,String week) {
+		List resList=new ArrayList();
+		
+		Date startD=DateUtil.strToDate(startDate);
+		Calendar startC = Calendar.getInstance();
+		startC.setTime(startD);
+		
+		int drationDay=Integer.parseInt(durationMonth)*30;
+		
+		Calendar endC = Calendar.getInstance();
+		endC.setTime(startD);
+		endC.add(Calendar.DATE, drationDay);
+		
+		while(! (endC.before(startC))) {
+			startC.add(Calendar.DATE, 1);
+			 String w = ""+(startC.get(Calendar.DAY_OF_WEEK)-1);
+			 if(week.contains(w)) {
+				String d= DateUtil.date2Str(startC.getTime());
+				System.out.println(d);
+				 Schedule sd=new Schedule();
+				 sd.setBusiDate(d);
+				 resList.add(sd);
+			 }
+		}
+		return resList;
+	}
+ 
+	public static void main(String arg[]) {
+		new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");
+	}
 	
 }

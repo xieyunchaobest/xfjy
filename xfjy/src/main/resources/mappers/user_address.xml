@@ -11,7 +11,7 @@
 	t.user_name as userName,
 	t.mobile_no as mobileNo
 	FROM xfjy.t_user_address t
-	where open_id=#{openId}) tt
+	where open_id=#{openId} and state='A' ) tt
 	</select>
  
   

@@ -23,4 +23,6 @@ public interface ClientService {
 	List findListByAreaIdAndName(Long areaId,String communityName);
 	
 	public void saveUserAddress(UserAddress ua) ;
+	
+	public void deleteUserAdderss(UserAddress ua);
 }

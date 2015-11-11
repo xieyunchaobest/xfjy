@@ -40,6 +40,9 @@ public class UserAddress {
 	@Column(name = "IS_DEFAULT")
 	private String isDefault;
 	
+	@Column(name = "STATE")
+	private String state="A";
+	
 	public UserAddress() {
 	}
 
@@ -124,6 +127,16 @@ public class UserAddress {
 
 	public void setIsDefault(String isDefault) {
 		this.isDefault = isDefault;
+	}
+
+
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
  

@@ -52,7 +52,7 @@
    				 <ul class="list-group" >
    				 <li class="list-group-item"  >
 						<label>日期:</label>&nbsp;<span id="spandate4sg"></span>
-						<input type="text" id="serviceDate4sg" style="border:0px;width:70%;" />
+						<input type="text" id="serviceDate4sg" style="border:0px;width:70%;" onchange="updateDurationState(this)"/>
 						<span class="badge">></span>
 					</li>  
 					<li class="list-group-item" onclick="showModal()">
@@ -115,14 +115,6 @@
    aria-labelledby="myModalLabel" aria-hidden="true">
    <div class="modal-dialog">
       <div class="modal-content">
-      <!--    <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" 
-               aria-hidden="true">×
-            </button>
-            <h4 class="modal-title" id="myModalLabel">
-              选择区域
-            </h4>
-         </div> -->
          <div class="modal-body">
             <ul class="list-group">
 				<li class="list-group-item" value="2" hours="2小时" onclick="fillContent(this)">
@@ -141,15 +133,7 @@
 				 	<span>6小时</span>
 				</li> 
 			</ul>
-         </div>
-         <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-default" 
-               data-dismiss="modal">关闭
-            </button>
-            <button type="button" class="btn btn-primary">
-               提交更改
-            </button>
-         </div> -->
+         </div> 
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -297,6 +281,28 @@ $("button[xtype='tmsel']").click(function(){
 	   
    }
    
+   /*<![CDATA[*/
+   function updateDurationState(target){
+	  // alert($(target).val());
+	   $.ajax({
+           type: "POST",
+           url: basePath+'/client/getDrationListState?serviceDate='+$(target).val()+'&serviceType=CC',
+           data:"",
+           success: function(data) {
+        	   console.log(data);
+        	   for(var i=0;i<data.length;i++){
+                   var tscode= data[i];
+                   $("button[xtype='tmsel']").each(function(){
+                	    if($(this).attr('code')==tscode){
+                	    	$(this).attr("disabled","disabled");
+                	    	$(this).text('已约满');
+                	    }
+                   });
+               }
+           }
+       });
+   }
+   /*]]>*/
    
 </script>
 

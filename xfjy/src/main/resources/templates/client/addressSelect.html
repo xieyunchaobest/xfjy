@@ -19,7 +19,6 @@
 	 function toAddressAdd(){
 		 var path = basePath+"/client/addAddressInit";  
 			$('#aform').attr("action", path).submit();
-		 //window.open (basePath+"/client/addAddressInit",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')   
 	 }
 	 
 	 function setDefault(){
@@ -43,6 +42,23 @@
 			 $(target).addClass('borderselected');
 		 }
 	 }
+	 
+	 function  deleteUserAddress(){
+		 var userAddressId=$(".borderselected").attr('value');
+		 if (typeof(userAddressId) == "undefined") return;
+			 $.ajax({
+	            type: "POST",
+	            url: basePath+'/client/deleteUserAdderss',
+	            data:"userAddressId="+userAddressId,
+	            success: function(data) {
+	            	if(data=="S"){
+	            		$(".borderselected").hide();
+	            	}else{
+	            		 alert('删除失败 ！');
+	            	}
+	            }
+	        }); 
+		}
 </script>
 
 
@@ -84,7 +100,7 @@
 		<div class="row">
 			<div class="col-xs-1"/>
 			<div>
-				<button type="button" class="btn col-xs-5 btn-danger btn-lg">删除该地址</button>&nbsp;
+				<button type="button" onclick="deleteUserAddress()" class="btn col-xs-5 btn-danger btn-lg">删除该地址</button>&nbsp;
 				<button type="button" class="btn col-xs-5  btn-primary btn-lg" onclick="setDefault()">选择</button>
 			</div>
 			<div class="col-xs-1"/>
