@@ -2,14 +2,14 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <body>
-	<div th:fragment="timesplitcopy2hours" >
+	<div th:fragment="timesplitcopy2hours(type)" >
 		<div style="height:10px;"></div>
    		<div class="row">
    			<div class="col-md-1"></div>
    			<div class="col-md-10">
    				<div class="btn-group btn-group-justified" role="group" aria-label="...">
 					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default" xtype="tmsel" startTime="8" endTime="10" code="0810">
+					    <button type="button" class="btn btn-default"   th:attr="ptype=${type}"     xtype="tmsel" startTime="8" endTime="10" code="0810">
 					    	8:00-10:00
 					    </button>
 					  </div>
