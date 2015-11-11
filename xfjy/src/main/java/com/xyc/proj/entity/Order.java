@@ -75,6 +75,9 @@ public class Order {
 	 
 	@Column(name = "DRATION_MONTH")
 	private String durationMonth;
+	
+	@Column(name = "REPEAT_IN_WEEK")
+	private String repeatInWeek;
 	 
 	@Column(name = "STATE")
 	private String state;
@@ -313,6 +316,16 @@ public class Order {
 
 	public void setDurationMonth(String durationMonth) {
 		this.durationMonth = durationMonth;
+	}
+
+
+	public String getRepeatInWeek() {
+		return repeatInWeek;
+	}
+
+
+	public void setRepeatInWeek(String repeatInWeek) {
+		this.repeatInWeek = repeatInWeek;
 	}
 
 

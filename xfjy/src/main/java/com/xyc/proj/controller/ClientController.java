@@ -200,6 +200,12 @@ public class ClientController {
 		 String cycleType=request.getParameter("cycleType");
 		 cycleType=StringUtil.isBlank(cycleType)?"":cycleType;
 		 
+		 String durationMonth=request.getParameter("durationMonth");
+		 durationMonth=StringUtil.isBlank(cycleType)?"":durationMonth;
+		 
+		 String repeatInWeek=request.getParameter("repeatInWeek");
+		 repeatInWeek=StringUtil.isBlank(repeatInWeek)?"":repeatInWeek;
+		 
 		 Order o =new Order();
 		 o.setUserAddressId(userAddressId);
 		 o.setFullAddress(fullAddress);
@@ -210,6 +216,8 @@ public class ClientController {
 		 o.setEndTime(endTime);
 		 o.setServicetype(servicetype);
 		 o.setCycleType(cycleType);
+		 o.setRepeatInWeek(repeatInWeek);
+		 o.setDurationMonth(durationMonth);
 		 
 		 model.addAttribute("order", o);
 	 }

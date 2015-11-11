@@ -32,19 +32,21 @@
 	<div style="margin-top:20px;">
 		<input type="hidden" name="NonReservationTimeIdList" th:value="${NonReservationTimeIdList}"/>
 	</div>
-   <div class="tab-pane fade in active" id="home">
-   	<form id="submitForm" method="post" >
+		<form id="submitForm" method="post" style="display:none">
    		<input type="hidden" name="userAddressId" id="userAddressId" th:value="${order.userAddressId}"/>
 		<input type="hidden"  id="fullAddress" name="fullAddress" th:value="${order.fullAddress}"/>
-   		<input type="hidden" name="serviceDate" id="serviceDate"/>
-   		<input type="hidden" name="duration" id="duration"/>
-   		<input type="hidden" name="startTime" id="startTime"/>
-   		<input type="hidden" name="endTime" id="endTime"/>
+   		<input type="hidden" name="serviceDate" id="serviceDate" th:value="${order.serviceDate}"/>
+   		<input type="hidden" name="duration" id="duration" th:value="${order.duration}"/>
+   		<input type="hidden" name="startTime" id="startTime" th:value="${order.startTime}"/>
+   		<input type="hidden" name="endTime" id="endTime" th:value="${order.endTime}"/>
    		<input type="hidden" name="servicetype" id="servicetype" value="CC"/>
-   		<input type="hidden" name="cycleType" id="cycleType" />
+   		<input type="hidden" name="cycleType" id="cycleType" th:value="${order.cycleType}" />
+   		<input type="hidden" name="durationMonth" id="durationMonth" th:value="${order.durationMonth}" />
+   		<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}" />
    		
    		
    	</form>
+   <div class="tab-pane fade in active" id="home">
    	<form id="sgform" method="post">
    		<div class="row">
    			<div class="col-md-1"></div>
@@ -55,7 +57,7 @@
 						<input type="text" id="serviceDate4sg" style="border:0px;width:70%;" onchange="updateDurationState(this)"/>
 						<span class="badge">></span>
 					</li>  
-					<li class="list-group-item" onclick="showModal()">
+					<li class="list-group-item" onclick="showModal('sg')">
 						<label>时长:</label>&nbsp;<span id="spanserviceDateDuring">2小时</span>
 						<input type="hidden" value="2" id="serviceduring4sg"  />
 						<span class="badge">></span>
@@ -91,23 +93,61 @@
    		</form>
    </div>
    <div class="tab-pane fade" id="ios">
-      <p>iOS is a mobile operating system developed and distributed by Apple 
-         Inc. Originally released in 2007 for the iPhone, iPod Touch, and 
-         Apple TV. iOS is derived from OS X, with which it shares the 
-         Darwin foundation. iOS is Apple's mobile version of the 
-         OS X operating system used on Apple computers.</p>
-   </div>
-   <div class="tab-pane fade" id="jmeter">
-      <p>jMeter is an Open Source testing software. It is 100% pure 
-      Java application for load and performance testing.</p>
-   </div>
-   <div class="tab-pane fade" id="ejb">
-      <p>Enterprise Java Beans (EJB) is a development architecture 
-         for building highly scalable and robust enterprise level    
-         applications to be deployed on J2EE compliant 
-         Application Server such as JBOSS, Web Logic etc.
-      </p>
-   </div>
+      <form id="byform" method="post">
+   		<div class="row">
+   			<div class="col-md-1"></div>
+   			<div class="col-md-10">
+   				 <ul class="list-group" >
+   				 <li class="list-group-item"  >
+						<label>日期:</label>&nbsp;<span id="spandate4by"></span>
+						<input type="text" id="serviceDate4by" style="border:0px;width:70%;"/>
+						<span class="badge">></span>
+					</li>  
+					<li class="list-group-item" onclick="showModal('by')">
+						<label>时长:</label>&nbsp;<span id="spanserviceDateDuring4by">2小时</span>
+						<input type="hidden" value="2" id="serviceduring4by"  />
+						<span class="badge">></span>
+					</li>  
+					<li class="list-group-item" onclick="showDrationMonthModal()">
+						<label>持续时间:</label>&nbsp;<span id="spanserviceMonthDuring4by">3个月</span>
+						<input type="hidden" value="3" id="serviceduringMonth"  />
+						<span class="badge">></span>
+					</li> 
+					<li class="list-group-item" onclick="showRepeatModal()">
+						<label>重复:</label>&nbsp;<span id="spanRepeat"></span>
+						<input type="hidden" value="" id="hdrepeatInWeek"  />
+						<span class="badge">></span>
+					</li> 
+				</ul>
+   			</div>
+   			<div class="col-md-1"></div>
+   		</div>
+   		<div class="row">
+   			<div class="col-md-1">
+   				<input type="hidden" id="durationTime4byStart" />
+   				<input type="hidden" id="durationTime4byEnd" />
+   			</div>
+   			<div class="col-md-10" id="timesplit2h4by" th:include="client/timesplit :: timesplitcopy2hours(type='BY')"></div>
+   			<div class="col-md-10" id="timesplit3h4by" style="display:none" th:include="client/timesplit :: timesplitcopy3hours(type='BY')"></div>
+   			<div class="col-md-10" id="timesplit4h4by" style="display:none" th:include="client/timesplit :: timesplitcopy4hours(type='BY')"></div>
+   			<div class="col-md-10" id="timesplit5h4by" style="display:none" th:include="client/timesplit :: timesplitcopy5hours(type='BY')"></div>
+   			<div class="col-md-10" id="timesplit6h4by"  style="display:none" th:include="client/timesplit :: timesplitcopy6hours(type='BY')"></div>
+   			<div class="col-md-1"></div>
+   		</div>
+   		<div class="row">
+   			<div class="col-md-1">&nbsp;</div>
+   			<div class="col-md-10" id="validateInfo4by" style="font-weight:bold;color:red;height:30px;"></div>
+   			<div class="col-md-1">&nbsp;</div>
+   		</div>
+   		<div class="row">
+				<div class="col-md-4">&nbsp;</div>
+				<div class="col-md-4">
+					<button class="btn btn-default btn-lg" style="width:100%" onclick="submitby()" type="button">确定</button>
+				</div>
+				<div class="col-md-4">&nbsp;</div>
+			</div>
+   		</form>
+   </div> 
 </div>
 
 	<!-- 模态框（Modal） -->
@@ -137,6 +177,103 @@
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<div class="modal fade" id="druationMonthSelectModal" tabindex="-1" role="dialog" style="margin-top:100px"
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-body">
+            <ul class="list-group">
+				<li class="list-group-item" months="一个月" value="1" onclick="fillDuringMonth(this)">
+					<span>一个月</span>
+				</li>  
+				<li class="list-group-item" months="两个月" value="2" onclick="fillDuringMonth(this)">
+				 	<span>两个月</span>
+				</li> 
+				<li class="list-group-item"  months="三个月" value="3" onclick="fillDuringMonth(this)">
+				 	<span>三个月</span>
+				</li>
+				<li class="list-group-item"  months="四个月" value="4" onclick="fillDuringMonth(this)">
+				 	<span>四个月</span>
+				</li>
+				<li class="list-group-item"  months="五个月" value="5" onclick="fillDuringMonth(this)">
+				 	<span>五个月</span>
+				</li> 
+				<li class="list-group-item"  months="六个月" value="6" onclick="fillDuringMonth(this)">
+				 	<span>六个月</span>
+				</li>
+				<li class="list-group-item"  months="七个月" value="7" onclick="fillDuringMonth(this)">
+				 	<span>七个月</span>
+				</li>
+				<li class="list-group-item"  months="八个月" value="8" onclick="fillDuringMonth(this)">
+				 	<span>八个月</span>
+				</li>
+				<li class="list-group-item"  months="九个月" value="9" onclick="fillDuringMonth(this)">
+				 	<span>九个月</span>
+				</li> 
+				<li class="list-group-item"  months="十个月" value="10" onclick="fillDuringMonth(this)">
+				 	<span>十个月</span>
+				</li>
+				<li class="list-group-item"  months="十一个月" value="11" onclick="fillDuringMonth(this)">
+				 	<span>十一个月</span>
+				</li> 
+				<li class="list-group-item"  months="十二个月" value="12" onclick="fillDuringMonth(this)">
+				 	<span>十二个月</span>
+				</li> 
+			</ul>
+         </div> 
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+	<!-- 模态框（Modal） -->
+<div class="modal fade" id="repeatInWeekSelectModal" tabindex="-1" role="dialog" style="margin-top:100px"
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-body">
+            <ul class="list-group">
+				<li class="list-group-item" week="星期一" value="1"  onclick="cbcheck(this)">
+					<span>星期一</span>
+					<input type="checkbox" style="float:right;" id="cbweek1" week="星期一"  value="1"/>
+				</li>  
+				<li class="list-group-item" week="星期二" value="2" onclick="cbcheck(this)">
+				 	<span>星期二</span>
+				 	<input type="checkbox" style="float:right" id="cbweek2" week="星期二" value="2" />
+				</li> 
+				<li class="list-group-item"  week="星期三" value="3" onclick="cbcheck(this)">
+				 	<span>星期三</span>
+				 	<input type="checkbox" style="float:right" id="cbweek3" week="星期三" value="3" />
+				</li>
+				<li class="list-group-item"  week="星期四" value="4" onclick="cbcheck(this)">
+				 	<span>星期四</span>
+				 	<input type="checkbox" style="float:right" id="cbweek4" week="星期四" value="4"/>
+				</li>
+				<li class="list-group-item"  week="星期五" value="5" onclick="cbcheck(this)">
+				 	<span>星期五</span>
+				 	<input type="checkbox" style="float:right" id="cbweek5" week="星期五" value="5"/>
+				</li> 
+				<li class="list-group-item"  week="星期六" value="6" onclick="cbcheck(this)">
+				 	<span>星期六</span>
+				 	<input type="checkbox" style="float:right" id="cbweek6" week="星期六" value="6" onclick="cbcheck(this)"/>
+				</li>
+				<li class="list-group-item"  week="星期七" value="7" onclick="cbcheck(this)">
+				 	<span>星期七</span>
+				 	<input type="checkbox" style="float:right" id="cbweek7" week="星期七" value="7"/>
+				</li> 
+			</ul>
+         </div>
+         <div class="modal-footer" style="margin:0 auto;text-align:center">
+            <button type="button" class="btn btn-primary"  onclick="fillWeak(this)">
+               确定
+            </button>
+         </div> 
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 	
 	
 
@@ -157,32 +294,51 @@
   		lang: 'zh',
   		showNow: true,
   		nowText: "今天",
-          startYear: currYear - 10, //开始年份
+          startYear: currYear, //开始年份
           endYear: currYear + 10 //结束年份
   	};
 
     	$("#serviceDate4sg").mobiscroll($.extend(opt['date'], opt['default']));
-    	
+    	$("#serviceDate4by").mobiscroll($.extend(opt['date'], opt['default']));
     	
 $("button[xtype='tmsel']").click(function(){
     		 if($(this).hasClass('btn-sucess')){
     			 $(this).removeClass('btn-sucess');
     			 $(this).addClass('btn-default');
-    			 $("#durationTime4sgStart").val('');
-    			 $("#durationTime4sgEnd").val('');
+    			 if($(this).attr('ptype')=='SG'){
+    				 $("#durationTime4sgStart").val('');
+        			 $("#durationTime4sgEnd").val('');
+    			 }else{
+    				 $("#durationTime4byStart").val('');
+        			 $("#durationTime4byEnd").val('');
+    			 }
+    			 
+    			
+    			 
     		 }else{
     			 $("button[xtype='tmsel']").removeClass('btn-sucess');
     			 $("button[xtype='tmsel']").addClass('btn-default');
     			  $(this).removeClass('btn-default');
     			 $(this).addClass('btn-sucess');
-    			 $("#durationTime4sgStart").val($(this).attr('startTime'));
-    			 $("#durationTime4sgEnd").val($(this).attr('endTime'));
+    			 if($(this).attr('ptype')=='SG'){
+    				 $("#durationTime4sgStart").val($(this).attr('startTime'));
+        			 $("#durationTime4sgEnd").val($(this).attr('endTime'));
+    			 }else{
+    				 $("#durationTime4byStart").val($(this).attr('startTime'));
+        			 $("#durationTime4byEnd").val($(this).attr('endTime'));
+    			 }
+    			 
+    			 
     		 }
     		//if($(this)
     	});
     		
     	if($("#serviceDate4sg").val()==''){
     		$("#serviceDate4sg").val(getTomorrow(new Date()));
+    	}
+    	
+    	if($("#serviceDate4by").val()==''){
+    		$("#serviceDate4by").val(getTomorrow(new Date()));
     	}
 
    });
@@ -199,51 +355,144 @@ $("button[xtype='tmsel']").click(function(){
    }   
    
    
-   
-   function fillContent(target){
-	   var hours=$(target).prop('value');
-	   $("#spanserviceDateDuring").html($(target).attr('hours'));
-	   $("#serviceduring4sg").val();
-	   $("#dateSelectModal").modal('hide');
-	   if(hours=="2"){
-		   $("#timesplit2h").show();
-		   $("#timesplit3h").hide();
-		   $("#timesplit4h").hide();
-		   $("#timesplit5h").hide();
-		   $("#timesplit6h").hide();
-	   }else if(hours=="3"){
-		   $("#timesplit2h").hide();
-		   $("#timesplit3h").show();
-		   $("#timesplit4h").hide();
-		   $("#timesplit5h").hide();
-		   $("#timesplit6h").hide();
-	   }else if(hours=="4"){
-		   $("#timesplit2h").hide();
-		   $("#timesplit3h").hide();
-		   $("#timesplit4h").show();
-		   $("#timesplit5h").hide();
-		   $("#timesplit6h").hide();
-	   }else if(hours=="5"){
-		   $("#timesplit2h").hide();
-		   $("#timesplit3h").hide();
-		   $("#timesplit4h").hide();
-		   $("#timesplit5h").show();
-		   $("#timesplit6h").hide();
-	   }else if(hours=="6"){
-		   $("#timesplit2h").hide();
-		   $("#timesplit3h").hide();
-		   $("#timesplit4h").hide();
-		   $("#timesplit5h").hide();
-		   $("#timesplit6h").show();
-	   }
-   }
-   
-   function showModal(){
+   var modealFlag="";
+   function showModal(mf){
+	   modealFlag=mf;
 		$('#dateSelectModal').modal({
 		      keyboard: true
 		   })
    }
    
+   function fillDuringMonth(target){
+	   $("#serviceduringMonth").val($(target).val());
+	   $("#spanserviceMonthDuring4by").text($(target).attr('months'));
+	   $("#druationMonthSelectModal").modal('hide');
+	  
+   }
+   
+   function showRepeatModal(){
+	   $('#repeatInWeekSelectModal').modal({
+		      keyboard: true
+		   })
+	   
+   }
+   /*<![CDATA[*/
+   function fillWeak(target){
+	   var weeksLabel="";
+	   var weeksValue="";
+	   for(var i=1;i<=7;i++){
+		   if($("#cbweek"+i).prop('checked')==true){
+			   weeksLabel= weeksLabel+$("#cbweek"+i).attr('week')+",";
+			   weeksValue=weeksValue+$("#cbweek"+i).attr('value')+",";
+		   }
+	   }
+	   if(weeksLabel.length>0){
+		   weeksLabel=weeksLabel.substring(0,weeksLabel.length-1);
+		   weeksValue=weeksValue.substring(0,weeksValue.length-1);
+	   }
+	   $("#spanRepeat").text(weeksLabel);
+	   $("#hdrepeatInWeek").val(weeksValue);
+	   
+	   $("#repeatInWeekSelectModal").modal('hide');
+   }  /*]]>*/
+   
+   function fillContent(target){
+	   var hours=$(target).prop('value');
+	  
+	   $("#dateSelectModal").modal('hide');
+	   if(modealFlag=='sg'){
+		   $("#spanserviceDateDuring").html($(target).attr('hours'));
+		   $("#serviceduring4sg").val(hours);
+		   
+		   if(hours=="2"){
+			   $("#timesplit2h").show();
+			   $("#timesplit3h").hide();
+			   $("#timesplit4h").hide();
+			   $("#timesplit5h").hide();
+			   $("#timesplit6h").hide();
+		   }else if(hours=="3"){
+			   $("#timesplit2h").hide();
+			   $("#timesplit3h").show();
+			   $("#timesplit4h").hide();
+			   $("#timesplit5h").hide();
+			   $("#timesplit6h").hide();
+		   }else if(hours=="4"){
+			   $("#timesplit2h").hide();
+			   $("#timesplit3h").hide();
+			   $("#timesplit4h").show();
+			   $("#timesplit5h").hide();
+			   $("#timesplit6h").hide();
+		   }else if(hours=="5"){
+			   $("#timesplit2h").hide();
+			   $("#timesplit3h").hide();
+			   $("#timesplit4h").hide();
+			   $("#timesplit5h").show();
+			   $("#timesplit6h").hide();
+		   }else if(hours=="6"){
+			   $("#timesplit2h").hide();
+			   $("#timesplit3h").hide();
+			   $("#timesplit4h").hide();
+			   $("#timesplit5h").hide();
+			   $("#timesplit6h").show();
+		   }
+	   }else{
+		   $("#spanserviceDateDuring4by").html($(target).attr('hours'));
+		   $("#serviceduring4by").val(hours);
+		   
+		   if(hours=="2"){
+			   $("#timesplit2h4by").show();
+			   $("#timesplit3h4by").hide();
+			   $("#timesplit4h4by").hide();
+			   $("#timesplit5h4by").hide();
+			   $("#timesplit6h4by").hide();
+		   }else if(hours=="3"){
+			   $("#timesplit2h4by").hide();
+			   $("#timesplit3h4by").show();
+			   $("#timesplit4h4by").hide();
+			   $("#timesplit5h4by").hide();
+			   $("#timesplit6h").hide();
+		   }else if(hours=="4"){
+			   $("#timesplit2h4by").hide();
+			   $("#timesplit3h4by").hide();
+			   $("#timesplit4h4by").show();
+			   $("#timesplit5h4by").hide();
+			   $("#timesplit6h4by").hide();
+		   }else if(hours=="5"){
+			   $("#timesplit2h4by").hide();
+			   $("#timesplit3h4by").hide();
+			   $("#timesplit4h4by").hide();
+			   $("#timesplit5h4by").show();
+			   $("#timesplit6h4by").hide();
+		   }else if(hours=="6"){
+			   $("#timesplit2h4by").hide();
+			   $("#timesplit3h4by").hide();
+			   $("#timesplit4h4by").hide();
+			   $("#timesplit5h4by").hide();
+			   $("#timesplit6h4by").show();
+		   }
+	   }
+	   
+	   
+   }
+   
+   function showDrationMonthModal(){
+	   $('#druationMonthSelectModal').modal({
+		      keyboard: true
+		   })
+   }
+   
+   function cbcheck(target){
+	   //var cb = $(target).find("input:last").children();
+	  var cbs = $(target).find("input[type=checkbox]");
+	   if(cbs.prop("checked")==true){
+		   cbs.prop("checked",false);
+		 }else{
+			 cbs.prop("checked",true);
+		 }
+	 }
+	 
+   
+ 
    function submitsg(){
 		   var res=validate();
 		   if(res==true){
@@ -257,6 +506,23 @@ $("button[xtype='tmsel']").click(function(){
 				$('#submitForm').attr("action", path).submit(); 
 		   }
    }
+   
+   function submitby(){
+	   var res=validateby();
+	   if(res==true){
+		   $("#serviceDate").val($("#serviceDate4by").val());
+		   $("#duration").val($("#serviceduring4by").val());
+		   $("#startTime").val($("#durationTime4byStart").val());
+		   $("#endTime").val($("#durationTime4byEnd").val());
+		   $("#cycleType").val("W");
+		   $("#durationMonth").val($("#serviceduringMonth").val());
+		   $("#repeatInWeek").val($("#hdrepeatInWeek").val());
+		   
+		   var path = basePath+"/client/cleanIndex.html";  
+			$('#submitForm').attr("action", path).submit(); 
+	   }
+   }
+   
    function validate(){
 	   var res=true;
 	   if($("#serviceDate4sg").val()==''){
@@ -281,6 +547,25 @@ $("button[xtype='tmsel']").click(function(){
 	   
    }
    
+   function validateby(){
+	   if($("#hdrepeatInWeek").val()==''){
+		   $("#validateInfo4by").text('请选择重复时间！');
+		   return false;
+	   }
+	   if($("#hdrepeatInWeek").val()==''){
+		   $("#validateInfo4by").text('请选择重复时间！');
+		   return false;
+	   }
+	   if($("#durationTime4byStart").val()==''){
+		   $("#validateInfo4by").text('请选择时间段!');
+		  return false;
+	   }
+	   
+	   return true;
+   }
+   
+   
+   
    /*<![CDATA[*/
    function updateDurationState(target){
 	  // alert($(target).val());
@@ -293,7 +578,7 @@ $("button[xtype='tmsel']").click(function(){
         	   for(var i=0;i<data.length;i++){
                    var tscode= data[i];
                    $("button[xtype='tmsel']").each(function(){
-                	    if($(this).attr('code')==tscode){
+                	    if($(this).attr('code')==tscode && $(this).attr('ptype')=='SG'){
                 	    	$(this).attr("disabled","disabled");
                 	    	$(this).text('已约满');
                 	    }
