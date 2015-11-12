@@ -78,6 +78,15 @@ public class Order {
 	
 	@Column(name = "REPEAT_IN_WEEK")
 	private String repeatInWeek;
+	
+	@Transient
+	private String repeatInWeekText;
+	
+	@Transient
+	private String durationMonthText;
+	
+	@Transient
+	private String durationText;
 	 
 	@Column(name = "STATE")
 	private String state;
@@ -95,9 +104,10 @@ public class Order {
 	@Column(name = "PAY_TIME") 
 	private Date payTime;
 	
-	 
 	@Transient
 	private String fullAddress="";
+	
+	
 
 	public Order() {
 	}
@@ -326,6 +336,36 @@ public class Order {
 
 	public void setRepeatInWeek(String repeatInWeek) {
 		this.repeatInWeek = repeatInWeek;
+	}
+
+
+	public String getRepeatInWeekText() {
+		return repeatInWeekText;
+	}
+
+
+	public void setRepeatInWeekText(String repeatInWeekText) {
+		this.repeatInWeekText = repeatInWeekText;
+	}
+
+
+	public String getDurationMonthText() {
+		return durationMonthText;
+	}
+
+
+	public void setDurationMonthText(String durationMonthText) {
+		this.durationMonthText = durationMonthText;
+	}
+
+
+	public String getDurationText() {
+		return durationText;
+	}
+
+
+	public void setDurationText(String durationText) {
+		this.durationText = durationText;
 	}
 
 

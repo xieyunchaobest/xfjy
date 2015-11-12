@@ -18,6 +18,7 @@ import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -206,6 +207,15 @@ public class ClientController {
 		 String repeatInWeek=request.getParameter("repeatInWeek");
 		 repeatInWeek=StringUtil.isBlank(repeatInWeek)?"":repeatInWeek;
 		 
+		 String repeatInWeekText=request.getParameter("repeatInWeekText");
+		 repeatInWeekText=StringUtil.isBlank(repeatInWeekText)?"":repeatInWeekText;
+		 
+		 String durationMonthText=request.getParameter("durationMonthText");
+		 durationMonthText=StringUtil.isBlank(durationMonthText)?"":durationMonthText;
+		 
+		 String durationText=request.getParameter("durationText");
+		 durationText=StringUtil.isBlank(durationText)?"":durationText;
+		 
 		 Order o =new Order();
 		 o.setUserAddressId(userAddressId);
 		 o.setFullAddress(fullAddress);
@@ -218,6 +228,9 @@ public class ClientController {
 		 o.setCycleType(cycleType);
 		 o.setRepeatInWeek(repeatInWeek);
 		 o.setDurationMonth(durationMonth);
+		 o.setRepeatInWeekText(repeatInWeekText);
+		 o.setDurationMonthText(durationMonthText);
+		 o.setDurationText(durationText);
 		 
 		 model.addAttribute("order", o);
 	 }
@@ -317,6 +330,22 @@ public class ClientController {
 		
 	}
 	
+	@ResponseBody
+	@RequestMapping("/client/saveOrder")
+	public String saveOrder(@ModelAttribute("order") Order order,
+		        Model model,HttpSession Session,HttpServletRequest request) {
+		String res="S";
+		try {
+			clientService.saveOrder(order);
+		}catch(Exception e) {
+			e.printStackTrace();
+			res="E";
+		}
+		return res;
+	}
+		        
+		        
+	
 	@RequestMapping("/client/testquery")
 	public String testquery( 
 		        Model model,HttpSession Session,HttpServletRequest request) { 
@@ -325,6 +354,8 @@ public class ClientController {
 		List addressList=clientService.findAddressByUser(map);
 		return "client/login";
 	}
+	
+	
 	
 	
 	 @Bean

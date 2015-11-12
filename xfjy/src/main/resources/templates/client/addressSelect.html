@@ -81,7 +81,9 @@
 			<input type="hidden" name="cycleType"  th:value="${order.cycleType}"/>
 			<input type="hidden" name="durationMonth" id="durationMonth" th:value="${order.durationMonth}"/>
    			<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}"/>
-			
+			<input type="hidden" name="repeatInWeekText" id="repeatInWeekText" th:value="${order.repeatInWeekText}" />
+   			<input type="hidden" name="durationMonthText" id="durationMonthText" th:value="${order.durationMonthText}" />
+   			<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
 		</div>
 		
 		<ul class="list-group" xtype='addrsel' onclick="selected(this)"   th:attr="value=''+${address.id}+'',fullAddress=''+${address.fullAddress}+''"  th:each="address : ${addressList}">

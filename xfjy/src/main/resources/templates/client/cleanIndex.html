@@ -33,6 +33,45 @@
 			$('#aform').attr("action", path).submit();
 		 // window.open (basePath+"/client/serviceDate",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 	 }
+	 
+	 
+	 function initServiceDate(){
+		 var serviceDate=$("#serviceDate").val();
+		 var drationText=$("#durationText").val();
+		 var repeatWeeks=$("#repeatInWeek").val();
+		 var repeatInWeekText=$("#repeatInWeekText").val();
+		 console.log('vvvvv='+repeatWeeks);
+		 var repeatInWeekTextRes=getWeekRepeattText(repeatInWeekText);
+		 console.log('xxxxxxxx='+repeatInWeekText);
+		 var durationMonthText=$("#durationMonthText").val();
+		 console.info(serviceDate);
+		 $("#spnServiceDate").text(serviceDate+" "+drationText+" "+repeatInWeekTextRes+" "+durationMonthText);
+		 
+	 }
+	 
+	 
+	 /*<![CDATA[*/
+	 function getWeekRepeattText(weekRepeatValue){
+		 var weeks=weekRepeatValue.split(',');
+		 var res="";
+			for(var i=0;i<weeks.length;i++){
+				var week=weeks[i];
+				if(i>0){
+					week=week.replace('星期','');
+				}
+				res=res+week+",";
+			}
+		 if(res.length>0){
+			 res=res.substring(0,res.length-1);
+		 }
+		 return res;
+	 }
+	 /*]]>*/
+	 
+	 $(function () {
+		 initServiceDate();
+	  });
+	 
 </script>
 
 
@@ -42,17 +81,21 @@
 <body>
 	<form th:action="@{/client/login}" method="post" id="aform">
 		<div style="display:none">
-			<input type="hidden" name="mobileNo" th:value="${order.mobileNo}"/>
-			<input type="hidden" name="userAddressId"  th:value="${order.userAddressId}"/>
-			<input type="hidden" name="fullAddress"  th:value="${order.fullAddress}"/>
-			<input type="hidden" name="serviceDate"  th:value="${order.serviceDate}"/>
-			<input type="hidden" name="duration"  th:value="${order.duration}"/>
-			<input type="hidden" name="startTime"  th:value="${order.startTime}"/>
-			<input type="hidden" name="endTime"  th:value="${order.endTime}"/>
-			<input type="hidden" name="servicetype"  th:value="${order.servicetype}"/>
-			<input type="hidden" name="cycleType"  th:value="${order.cycleType}"/>
-			<input type="hidden" name="durationMonth" id="durationMonth" th:value="${order.durationMonth}"/>
+			<input type="hidden" name="mobileNo" id="mobileNo"   th:value="${order.mobileNo}"/>
+			<input type="hidden" name="userAddressId"  id="userAddressId" th:value="${order.userAddressId}"/>
+			<input type="hidden" name="fullAddress" id="fullAddress" th:value="${order.fullAddress}"/>
+			<input type="hidden" name="serviceDate" id="serviceDate" th:value="${order.serviceDate}"/>
+			<input type="hidden" name="duration"  id="duration"  th:value="${order.duration}"/>
+			<input type="hidden" name="startTime"  id="startTime"  th:value="${order.startTime}"/>
+			<input type="hidden" name="endTime"  id="endTime"  th:value="${order.endTime}"/>
+			<input type="hidden" name="servicetype" id="servicetype" th:value="${order.servicetype}"/>
+			<input type="hidden" name="cycleType" id="cycleType" th:value="${order.cycleType}"/>
+			<input type="hidden" name="durationMonth" id="durationMonth"   th:value="${order.durationMonth}"/>
    			<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}"/>
+			<input type="hidden" name="repeatInWeekText" id="repeatInWeekText" th:value="${order.repeatInWeekText}" />
+   			<input type="hidden" name="durationMonthText" id="durationMonthText" th:value="${order.durationMonthText}" />
+   			<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
+   		
 		</div>
 		<div class="container-fluid">
 		<div style="height:20px"></div>
@@ -62,7 +105,7 @@
   					<span class="badge">></span>
   				</li>
 			<li class="list-group-item" onclick="toDateSelect()">
-				<label>时间：</label><span th:text="${order.serviceDate}"></span>
+				<label>服务时间：</label><span id="spnServiceDate" th:text="${order.serviceDate}"></span>
   					<span class="badge">></span>
 			</li>
 		</ul>

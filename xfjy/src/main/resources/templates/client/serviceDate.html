@@ -44,7 +44,9 @@
    		<input type="hidden" name="durationMonth" id="durationMonth" th:value="${order.durationMonth}" />
    		<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}" />
    		
-   		
+   		<input type="hidden" name="repeatInWeekText" id="repeatInWeekText" th:value="${order.repeatInWeekText}" />
+   		<input type="hidden" name="durationMonthText" id="durationMonthText" th:value="${order.durationMonthText}" />
+   		<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
    	</form>
    <div class="tab-pane fade in active" id="home">
    	<form id="sgform" method="post">
@@ -70,6 +72,7 @@
    			<div class="col-md-1">
    				<input type="hidden" id="durationTime4sgStart" />
    				<input type="hidden" id="durationTime4sgEnd" />
+   				<input type="hidden" id="durationTime4sgtext" />
    			</div>
    			<div class="col-md-10" id="timesplit2h" th:include="client/timesplit :: timesplitcopy2hours(type='SG')"></div>
    			<div class="col-md-10" id="timesplit3h" style="display:none" th:include="client/timesplit :: timesplitcopy3hours(type='SG')"></div>
@@ -126,6 +129,7 @@
    			<div class="col-md-1">
    				<input type="hidden" id="durationTime4byStart" />
    				<input type="hidden" id="durationTime4byEnd" />
+   				<input type="hidden" id="durationTime4bytext" />
    			</div>
    			<div class="col-md-10" id="timesplit2h4by" th:include="client/timesplit :: timesplitcopy2hours(type='BY')"></div>
    			<div class="col-md-10" id="timesplit3h4by" style="display:none" th:include="client/timesplit :: timesplitcopy3hours(type='BY')"></div>
@@ -308,6 +312,7 @@ $("button[xtype='tmsel']").click(function(){
     			 if($(this).attr('ptype')=='SG'){
     				 $("#durationTime4sgStart").val('');
         			 $("#durationTime4sgEnd").val('');
+        			 
     			 }else{
     				 $("#durationTime4byStart").val('');
         			 $("#durationTime4byEnd").val('');
@@ -323,9 +328,11 @@ $("button[xtype='tmsel']").click(function(){
     			 if($(this).attr('ptype')=='SG'){
     				 $("#durationTime4sgStart").val($(this).attr('startTime'));
         			 $("#durationTime4sgEnd").val($(this).attr('endTime'));
+        			 $("#durationTime4sgtext").val($(this).text());
     			 }else{
     				 $("#durationTime4byStart").val($(this).attr('startTime'));
         			 $("#durationTime4byEnd").val($(this).attr('endTime'));
+        			 $("#durationTime4bytext").val($(this).text());
     			 }
     			 
     			 
@@ -501,8 +508,15 @@ $("button[xtype='tmsel']").click(function(){
 			   $("#startTime").val($("#durationTime4sgStart").val());
 			   $("#endTime").val($("#durationTime4sgEnd").val());
 			   $("#cycleType").val("S");
+			   $("#durationText").val($("#durationTime4sgtext").val());
 			   
-			   var path = basePath+"/client/cleanIndex.html";  
+			   $("#durationMonth").val("");
+			   $("#repeatInWeek").val("");
+			   $("#repeatInWeekText").val("");
+			   $("#durationMonthText").val("");
+			  
+			   
+			  var path = basePath+"/client/cleanIndex.html";  
 				$('#submitForm').attr("action", path).submit(); 
 		   }
    }
@@ -516,7 +530,12 @@ $("button[xtype='tmsel']").click(function(){
 		   $("#endTime").val($("#durationTime4byEnd").val());
 		   $("#cycleType").val("W");
 		   $("#durationMonth").val($("#serviceduringMonth").val());
+		   $("#durationText").val($("#durationTime4bytext").val());
+		   
+		   $("#repeatInWeekText").val( $("#spanRepeat").text());
+		   $("#durationMonthText").val($("#spanserviceMonthDuring4by").text());
 		   $("#repeatInWeek").val($("#hdrepeatInWeek").val());
+		   
 		   
 		   var path = basePath+"/client/cleanIndex.html";  
 			$('#submitForm').attr("action", path).submit(); 

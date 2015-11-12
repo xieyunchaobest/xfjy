@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.TimeSplit;
 import com.xyc.proj.entity.UserAddress;
@@ -104,7 +105,7 @@ public class ClientServiceImpl implements ClientService {
 			for(int j=0;j<ayisize;j++) {
 			Worker ayi=aiyiList.get(j);
 				Long aid=ayi.getId();
-				List<Schedule> scheList=scheduleRepository.findByAyiIdAndBusiDate(aid,serviceDate);
+				List<Schedule> scheList=scheduleRepository.findByAyiIdAndBusiDateAndState(aid,serviceDate,"A");
 				int n=0;
 				int scheSize=scheList.size();
 				for(int k=0;k<scheSize;k++) {
@@ -193,6 +194,16 @@ public class ClientServiceImpl implements ClientService {
 		return resList;
 	}
  
+	
+	public double getTotalPrice(Order o) {
+		return 100.0d;
+	}
+	
+	public void saveOrder(Order order) {
+		
+	}
+	
+	
 	public static void main(String arg[]) {
 		new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");
 	}

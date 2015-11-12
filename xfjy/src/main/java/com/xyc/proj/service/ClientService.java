@@ -3,6 +3,7 @@ package com.xyc.proj.service;
 import java.util.List;
 import java.util.Map;
 
+import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
 
@@ -25,4 +26,9 @@ public interface ClientService {
 	public void saveUserAddress(UserAddress ua) ;
 	
 	public void deleteUserAdderss(UserAddress ua);
+	
+	
+	public double getTotalPrice(Order o);
+	
+	public void saveOrder(Order order);
 }

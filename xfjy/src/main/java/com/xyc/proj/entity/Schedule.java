@@ -40,6 +40,9 @@ public class Schedule {
 	@Column(name = "AYI_ID")
 	private Long ayiId;
 	
+	@Column(name = "state")
+	private String  state="P";
+	
 	
 	
 	@Column(name = "REMARK")
@@ -130,6 +133,16 @@ public class Schedule {
 
 	public void setEndTime(Integer endTime) {
 		this.endTime = endTime;
+	}
+
+
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
  
