@@ -31,4 +31,6 @@ public interface ClientService {
 	public double getTotalPrice(Order o);
 	
 	public void saveOrder(Order order);
+	
+	public List getCleanToolsList();
 }

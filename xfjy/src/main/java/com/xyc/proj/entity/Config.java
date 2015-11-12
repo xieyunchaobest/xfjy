@@ -27,6 +27,9 @@ public class Config {
 	
 	@Column(name = "CONFIG_CODE")
 	private String configCode; 
+	
+	@Column(name = "REMARK")
+	private String remark; 
 
 
 	public Config() {
@@ -70,6 +73,16 @@ public class Config {
 
 	public void setConfigCode(String configCode) {
 		this.configCode = configCode;
+	}
+
+
+	public String getRemark() {
+		return remark;
+	}
+
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 

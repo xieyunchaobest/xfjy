@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>宝洁</title>
+<title>订单确认</title>
 <link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
 <meta content="IE=edge" http-equiv="X-UA-Compatible" />
@@ -84,8 +84,8 @@
 			 $("#spnwarngin").text('请输入联系方式！');
 			 return;
 		 }
-		 $("#mobileNo").val($("#txtmobileNo").val());
-		 var path = basePath+"/client/cleanOrderConfirm.html";  
+		 $("#txtmobileNo").val($("#mobileNo").val());
+		 var path = basePath+"/client/orderConfirm.html";  
 		$('#aform').attr("action", path).submit();
 		 
 	 }
@@ -117,28 +117,30 @@
 		</div>
 		<div class="container-fluid">
 		<div style="height:20px"></div>
+		
 		<ul class="list-group">
   				<li class="list-group-item" onclick="toAddressSelect()">
-  					<label>地址：</label><span th:text="${order.fullAddress}"></span>
-  					<span class="badge">></span>
+  					<label>订单金额：</label>
+  					<span style="font-weight:bold;color:red">100元 </span>
+  				</li>
+		</ul>
+		
+		
+		<ul class="list-group">
+  				<li class="list-group-item" >
+  					<label>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：</label><span th:text="${order.fullAddress}"></span>
   				</li>
 			<li class="list-group-item" onclick="toDateSelect()">
-				<label>服务时间：</label><span id="spnServiceDate" th:text="${order.serviceDate}"></span>
-  					<span class="badge">></span>
+				<label>服务时间：</label>
+				<span id="spnServiceDate" th:text="${order.serviceDate}"></span>
 			</li>
 		</ul>
 		<ul class="list-group">
 			<li class="list-group-item">
-				<input type="text" placeholder="请输入联系方式"   name="txtmobileNo" class="form-control" id="txtmobileNo"/>
+				<label>联系方式：</label>
+				<span id="spnServiceDate" th:text="${order.mobileNo}"></span>
 			</li> 
-		</ul>
-		<ul class="list-group" >
-			<li class="list-group-item">
-				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">宝洁用品(+99元)</font></label> 
-				<span  onclick="cbcheck()" style="width:30%;display:inline-block">&nbsp;</span>
-				<input type="checkbox" style="float:right" id="cbprovide"/>
-			</li> 
-		</ul>
+		</ul> 
 		<div class="row" id="warnginInfo">
 				<div class="col-xs-1"/>
 				<div>
@@ -151,7 +153,7 @@
 		<div class="row">
 			<div class="col-xs-2"/>
 			<div>
-				<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 btn-default btn-lg">确定</button>
+				<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 btn-default btn-lg">支付</button>
 			</div>
 			<div class="col-xs-2"/>
 		</div>

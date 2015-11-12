@@ -242,6 +242,8 @@ public class ClientController {
 	 @RequestMapping("/client/cleanIndex.html")
 	 public String cleanIndex( Model model,HttpServletRequest request) {
 		 forwardPage(model,request);
+		 List cleanList=clientService.getCleanToolsList();
+		 model.addAttribute("cleanToolsList", cleanList);
 		 return "client/cleanIndex";
 	 }
 
@@ -345,6 +347,16 @@ public class ClientController {
 	}
 		        
 		        
+	
+
+	@RequestMapping("/client/cleanOrderConfirm.html")
+	public String orderConfirm( 
+		        Model model,HttpSession Session,HttpServletRequest request,
+		        @ModelAttribute("order") Order order) { 
+		model.addAttribute("order", order);
+		return "client/cleanOrderConfirm";
+	}
+	
 	
 	@RequestMapping("/client/testquery")
 	public String testquery( 

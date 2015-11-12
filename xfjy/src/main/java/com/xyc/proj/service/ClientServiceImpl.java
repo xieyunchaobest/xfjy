@@ -1,6 +1,5 @@
 package com.xyc.proj.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +20,7 @@ import com.xyc.proj.entity.Worker;
 import com.xyc.proj.mapper.UserAddressMapper;
 import com.xyc.proj.repository.AreaRepository;
 import com.xyc.proj.repository.AyiRepository;
+import com.xyc.proj.repository.CleanToolsRepository;
 import com.xyc.proj.repository.CommunityRepository;
 import com.xyc.proj.repository.ConfigRepository;
 import com.xyc.proj.repository.ScheduleRepository;
@@ -40,8 +40,7 @@ public class ClientServiceImpl implements ClientService {
     
 	
 	@Autowired
-    ConfigRepository configRepository;
-     
+    ConfigRepository configRepository; 
 	@Lazy
 	@Autowired
 	UserAddressMapper userAddressMapper;
@@ -50,6 +49,8 @@ public class ClientServiceImpl implements ClientService {
 	TimeSplitRepository timeSplitRepository;
 	@Autowired
 	ScheduleRepository scheduleRepository;
+	@Autowired
+	CleanToolsRepository cleanToolsRepository;
 	
 	@Autowired
 	AreaRepository areaRepository;
@@ -203,6 +204,10 @@ public class ClientServiceImpl implements ClientService {
 		
 	}
 	
+	
+	public List getCleanToolsList() {
+		return cleanToolsRepository.findAll();
+	}
 	
 	public static void main(String arg[]) {
 		new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");

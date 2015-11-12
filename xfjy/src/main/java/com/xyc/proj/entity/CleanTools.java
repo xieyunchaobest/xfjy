@@ -18,25 +18,25 @@ import com.xyc.proj.utility.DateUtil;
 
 
 @Entity
-@Table(name = "T_CLEAN_TOOLS")
+@Table(name = "t_clean_tools")
 public class CleanTools {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column(name = "USER_ID")
-	private Long userId;
+	@Column(name = "TOOL_NAME")
+	private String toolName;
 	
-	@Column(name = "AREA_ID")
-	private Long areaId;
+	@Column(name = "AMOUNT")
+	private String amount;
 	
 	
-	@Column(name = "COMMUNITY_ID")
-	private Long communityId;
+	@Column(name = "UNIT")
+	private String unit;
 	
-	@Column(name = "DETAIL_ADDRESS")
-	private String detailAddress; 
+	@Column(name = "SPECIFICATION")
+	private String specification; 
 	 
 
 	public CleanTools() {
@@ -50,6 +50,46 @@ public class CleanTools {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+
+	public String getToolName() {
+		return toolName;
+	}
+
+
+	public void setToolName(String toolName) {
+		this.toolName = toolName;
+	}
+
+
+	public String getAmount() {
+		return amount;
+	}
+
+
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+
+	public String getUnit() {
+		return unit;
+	}
+
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+
+	public String getSpecification() {
+		return specification;
+	}
+
+
+	public void setSpecification(String specification) {
+		this.specification = specification;
 	}
 
 	 
