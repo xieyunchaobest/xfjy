@@ -26,16 +26,16 @@ public class Schedule {
 	private long id;
 	
 	@Column(name = "ORDER_ID")
-	private Long orderId;
+	private String orderId;
 	
 	@Column(name = "BUSI_DATE")
 	private String busiDate="";
 	
 	@Column(name = "START_TIME")
-	private Integer startTime;
+	private String startTime;
 	
 	@Column(name = "END_TIME")
-	private Integer endTime;
+	private String endTime;
 	
 	@Column(name = "AYI_ID")
 	private Long ayiId;
@@ -66,12 +66,12 @@ public class Schedule {
 	}
 
 
-	public Long getOrderId() {
+	public String getOrderId() {
 		return orderId;
 	}
 
 
-	public void setOrderId(Long orderId) {
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 
@@ -115,23 +115,26 @@ public class Schedule {
 		this.remark = remark;
 	}
 
+ 
 
-	public Integer getStartTime() {
+ 
+
+	public String getStartTime() {
 		return startTime;
 	}
 
 
-	public void setStartTime(Integer startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
 
-	public Integer getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
 
-	public void setEndTime(Integer endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 

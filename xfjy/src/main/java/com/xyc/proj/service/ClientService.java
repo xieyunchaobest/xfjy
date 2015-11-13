@@ -27,10 +27,9 @@ public interface ClientService {
 	
 	public void deleteUserAdderss(UserAddress ua);
 	
-	
-	public double getTotalPrice(Order o);
-	
 	public void saveOrder(Order order);
 	
-	public List getCleanToolsList();
+	public List getCleanToolsList(String serviceType);
+	
+	public Order getConfirmOrder(Order o);
 }

@@ -22,6 +22,9 @@ public interface Constants {
 	public static final String OPT_FLAG_ADD="A";
 	public static final String OPT_FLAG_UPDATE="U";
 	
+	public static final String YES="Y";
+	public static final String NO="N";
+	
 	public static final int DEFAULT_PAGE_SIZE=15;
 	
 	public static final String ORDERBY="orderBys";
@@ -29,5 +32,25 @@ public interface Constants {
 	
 	public static final String STATE_P="P";
 	public static final String STATE_A="A";
+	
+	public static final String SERVICE_TYPE_CC="CC";//普通宝洁
+	public static final String SERVICE_TYPE_DBJ="DBJ";//大宝洁
+	public static final String SERVICE_TYPE_KH="KH";//开荒
+	public static final String SERVICE_TYPE_CBL="CBL";//插玻璃
+	
+	public static final String CYCLE_TYPE_SG="SG";//散工
+	public static final String CYCLE_TYPE_BY="BY";//包月
+	
+	public static final String CONFIG_PTBJDJ="PTBJDJ";//普通宝洁单价
+	public static final String CONFIG_DBJDJ="DBJDJ";//大宝洁单价
+	public static final String CONFIG_CNCDJ="CNCDJ";//插内窗单价
+	public static final String CONFIG_CYTDJ="CYTDJ";//插阳台单价
+	public static final String CONFIG_KHDJ="KHDJ";//开荒单价
+	
+	public static final String CONFIG_CLEAN_TOOLS_FEE4PTBJ="QJGJFY4PTBJ";//普通清洁工具费用
+	public static final String CONFIG_CLEAN_TOOLS_FEE4DBJ="QJGJFY4DBJ";//大宝洁工具费用
+	public static final String CONFIG_CLEAN_TOOLS_FEE4CBL="QJGJFY4CBL";//插播里工具费用
+	public static final String CONFIG_CLEAN_TOOLS_FEE4KH="QJGJFY4KH";//开荒里工具费用
+	
 	
 }

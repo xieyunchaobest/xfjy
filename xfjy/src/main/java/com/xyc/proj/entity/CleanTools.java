@@ -38,6 +38,8 @@ public class CleanTools {
 	@Column(name = "SPECIFICATION")
 	private String specification; 
 	 
+	@Column(name = "SERVICE_TYPE")
+	private String servieType; 
 
 	public CleanTools() {
 	}
@@ -90,6 +92,16 @@ public class CleanTools {
 
 	public void setSpecification(String specification) {
 		this.specification = specification;
+	}
+
+
+	public String getServieType() {
+		return servieType;
+	}
+
+
+	public void setServieType(String servieType) {
+		this.servieType = servieType;
 	}
 
 	 

@@ -26,6 +26,9 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@Column(name = "ORDER_ID")
+	private String orderId="";
+	
 	@Column(name = "TRADE_NO")
 	private String tradeNo="";
 	
@@ -44,11 +47,20 @@ public class Order {
 	@Column(name = "SERVICE_DATE")
 	private String serviceDate;
 	
-
+	@Column(name = "WINDOW_COUNT")
+	private String windowCount;
+	
+	@Column(name = "BALCONY_COUNT")
+	private String balconyCount;
+	
+	
+	
 	
 	@Column(name = "DURATION")
 	private String duration;//持续时间
 	
+	@Column(name = "AREA")
+	private String area;//面积
 	
 	@Column(name = "START_TIME")
 	private String startTime;
@@ -59,6 +71,12 @@ public class Order {
 	
 	@Column(name = "UNIT_PRICE")
 	private String unitPrice;
+	
+	@Column(name = "UNIT_PRICE_WINDOW")
+	private String unitPriceWindow;
+	
+	@Column(name = "UNIT_PRICE_BALCONY")
+	private String unitPriceBalcony;
 	
 	
 	@Column(name = "TOTAL_FEE")
@@ -106,6 +124,9 @@ public class Order {
 	
 	@Transient
 	private String fullAddress="";
+	
+	@Transient
+	private String isProviceCleanTools="";
 	
 	
 
@@ -366,6 +387,76 @@ public class Order {
 
 	public void setDurationText(String durationText) {
 		this.durationText = durationText;
+	}
+
+
+	public String getIsProviceCleanTools() {
+		return isProviceCleanTools;
+	}
+
+
+	public void setIsProviceCleanTools(String isProviceCleanTools) {
+		this.isProviceCleanTools = isProviceCleanTools;
+	}
+
+
+	public String getArea() {
+		return area;
+	}
+
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+
+	public String getWindowCount() {
+		return windowCount;
+	}
+
+
+	public void setWindowCount(String windowCount) {
+		this.windowCount = windowCount;
+	}
+
+
+	public String getBalconyCount() {
+		return balconyCount;
+	}
+
+
+	public void setBalconyCount(String balconyCount) {
+		this.balconyCount = balconyCount;
+	}
+
+
+	public String getUnitPriceWindow() {
+		return unitPriceWindow;
+	}
+
+
+	public void setUnitPriceWindow(String unitPriceWindow) {
+		this.unitPriceWindow = unitPriceWindow;
+	}
+
+
+	public String getUnitPriceBalcony() {
+		return unitPriceBalcony;
+	}
+
+
+	public void setUnitPriceBalcony(String unitPriceBalcony) {
+		this.unitPriceBalcony = unitPriceBalcony;
+	}
+
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 
