@@ -3,10 +3,12 @@ package com.xyc.proj.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,9 @@ import com.xyc.proj.repository.UserCodeRepository;
 import com.xyc.proj.repository.VersionRepository;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.StringUtil;
+
+
+
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -281,12 +286,39 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	
+	
+	public String getConfigValue(String configCode) {
+		return configRepository.findByConfigCode(configCode).getConfigValue();
+	}
+	
+	
 	public List getCleanToolsList(String serviceType) {
 		return cleanToolsRepository.findByServieType(serviceType);
 	}
 	
 	public static void main(String arg[]) {
 		//new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");
+		String info = null;
+		try{
+			String content="质控消息:患者大是病历书写不合格,请查看!";
+			HttpClient httpclient = new HttpClient();
+			PostMethod post = new PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
+			post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
+			post.addParameter("SpCode", "217289");
+			post.addParameter("LoginName", "tj_xfjy");
+			post.addParameter("Password", "helloWORLD123");
+			post.addParameter("MessageContent", content);
+			post.addParameter("UserNumber", "18611298927");
+			post.addParameter("SerialNumber", "12345678901234567890");
+			post.addParameter("ScheduleTime", "");
+			post.addParameter("ExtendAccessNum", "");
+			post.addParameter("f", "1");
+			httpclient.executeMethod(post);
+			info = new String(post.getResponseBody(),"gbk");
+			System.out.println(info);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

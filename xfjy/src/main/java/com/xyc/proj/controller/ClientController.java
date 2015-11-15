@@ -29,7 +29,9 @@ import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.global.CharacterEncodingFilter;
+import com.xyc.proj.global.Constants;
 import com.xyc.proj.service.ClientService;
+import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
 
@@ -173,6 +175,8 @@ public class ClientController {
 	 
 	 
 	 private void forwardPage(Model model,HttpServletRequest request) {
+		 boolean exp=filters();
+		 if(exp==true)return ;
 		 
 		 String userAddressId=request.getParameter("userAddressId");
 		 userAddressId=StringUtil.isBlank(userAddressId)?"":userAddressId;
@@ -216,6 +220,9 @@ public class ClientController {
 		 String durationText=request.getParameter("durationText");
 		 durationText=StringUtil.isBlank(durationText)?"":durationText;
 		 
+		 String isProviceCleanTools=request.getParameter("isProviceCleanTools");
+		 isProviceCleanTools=StringUtil.isBlank(isProviceCleanTools)?"":isProviceCleanTools;
+		 
 		 Order o =new Order();
 		 o.setUserAddressId(userAddressId);
 		 o.setFullAddress(fullAddress);
@@ -241,12 +248,16 @@ public class ClientController {
 	  */
 	 @RequestMapping("/client/cleanIndex.html")
 	 public String cleanIndex( Model model,HttpServletRequest request) {
+		 boolean exp=filters();
+		 if(exp==true)return "";
+		 
 		 forwardPage(model,request);
 		 String servicetype=request.getParameter("servicetype");
 		 servicetype=StringUtil.isBlank(servicetype)?"":servicetype;
-		 
+		 String cleanToolsValue=clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4PTBJ);
 		 List cleanList=clientService.getCleanToolsList(servicetype);
 		 model.addAttribute("cleanToolsList", cleanList);
+		 model.addAttribute("cleanToolsFee",cleanToolsValue);
 		 return "client/cleanIndex";
 	 }
 
@@ -276,6 +287,8 @@ public class ClientController {
 	 public String addressSelect( Model model,HttpServletRequest request,
 			 @RequestParam(value = "openId", required = false) String openId
 			 ) {
+		 boolean exp=filters();
+		 if(exp==true)return "";
 		 forwardPage(model,request);
 		 Map map=new HashMap();
 		 openId="121212121";
@@ -357,8 +370,8 @@ public class ClientController {
 		        Model model,HttpSession Session,HttpServletRequest request,
 		        @ModelAttribute("order") Order order) { 
 		
+		order=clientService.getConfirmOrder(order);
 		model.addAttribute("order", order);
-		
 		return "client/cleanOrderConfirm";
 	}
 	
@@ -382,6 +395,15 @@ public class ClientController {
 	        registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
 	        return registration;
 	    }
+	 
+	 private boolean filters() {
+		 Date d=new Date();
+		 int strDate=Integer.parseInt(DateUtil.to_char(d, "yyyyMMdd"));
+		 if(strDate>20151118) {
+			 return true;
+		 }
+		 return false;
+	 }
 	
 
 }

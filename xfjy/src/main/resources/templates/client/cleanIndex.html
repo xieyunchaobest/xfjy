@@ -85,6 +85,12 @@
 			 return;
 		 }
 		 $("#mobileNo").val($("#txtmobileNo").val());
+		 if($("#cbprovide").prop('checked')==true){
+			 $("#isProviceCleanTools").val('Y');
+		 }
+		 
+		 
+		 
 		 var path = basePath+"/client/cleanOrderConfirm.html";  
 		$('#aform').attr("action", path).submit();
 		 
@@ -113,6 +119,8 @@
 			<input type="hidden" name="repeatInWeekText" id="repeatInWeekText" th:value="${order.repeatInWeekText}" />
    			<input type="hidden" name="durationMonthText" id="durationMonthText" th:value="${order.durationMonthText}" />
    			<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
+   			<input type="hidden" name="isProviceCleanTools" id="isProviceCleanTools" th:value="${order.isProviceCleanTools}" />
+   			
    		
 		</div>
 		<div class="container-fluid">
@@ -134,7 +142,9 @@
 		</ul>
 		<ul class="list-group" >
 			<li class="list-group-item">
-				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">宝洁用品(+99元)</font></label> 
+				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">宝洁用品(</font>
+					<span style="color:red" th:text="${cleanToolsFee}"></span><span  style="color:red">元)</span>
+				</label> 
 				<span  onclick="cbcheck()" style="width:30%;display:inline-block">&nbsp;</span>
 				<input type="checkbox" style="float:right" id="cbprovide"/>
 			</li> 

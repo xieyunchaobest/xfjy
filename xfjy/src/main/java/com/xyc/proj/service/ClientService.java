@@ -32,4 +32,6 @@ public interface ClientService {
 	public List getCleanToolsList(String serviceType);
 	
 	public Order getConfirmOrder(Order o);
+	
+	public String getConfigValue(String code);
 }

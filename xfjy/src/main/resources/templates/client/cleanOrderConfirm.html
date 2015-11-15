@@ -119,9 +119,9 @@
 		<div style="height:20px"></div>
 		
 		<ul class="list-group">
-  				<li class="list-group-item" onclick="toAddressSelect()">
+  				<li class="list-group-item">
   					<label>订单金额：</label>
-  					<span style="font-weight:bold;color:red">100元 </span>
+  					<span style="font-weight:bold;color:red" th:text="${order.totalFee}"></span>
   				</li>
 		</ul>
 		
@@ -130,7 +130,7 @@
   				<li class="list-group-item" >
   					<label>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：</label><span th:text="${order.fullAddress}"></span>
   				</li>
-			<li class="list-group-item" onclick="toDateSelect()">
+			<li class="list-group-item">
 				<label>服务时间：</label>
 				<span id="spnServiceDate" th:text="${order.serviceDate}"></span>
 			</li>
