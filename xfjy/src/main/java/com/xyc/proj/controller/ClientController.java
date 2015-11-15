@@ -3,6 +3,7 @@
  */
 package com.xyc.proj.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -100,11 +101,14 @@ public class ClientController {
 			 serviceDate="2015-11-10";
 		 }
 			String serviceType=request.getParameter("serviceType");
-			serviceType="CC";	
 			Map m=new HashMap();
 			m.put("serviceDate", serviceDate);
 			m.put("serviceType", serviceType);
-			List resList=clientService.getNonReservationTimeList(m);
+			List resList=new ArrayList();
+			if(Constants.SERVICE_TYPE_CC.equals(serviceType)) {
+				resList=clientService.getNonReservationTimeList(m);
+
+			}
 			String  rs="";
 			for(int i=0;i<resList.size();i++) {
 				String code=(String)resList.get(i);
@@ -199,7 +203,7 @@ public class ClientController {
 		 String endTime=request.getParameter("endTime");
 		 endTime=StringUtil.isBlank(endTime)?"":endTime;
 		 
-		 String servicetype=request.getParameter("servicetype");
+		 String servicetype=request.getParameter("serviceType");
 		 servicetype=StringUtil.isBlank(servicetype)?"":servicetype;
 		 
 		 String cycleType=request.getParameter("cycleType");
@@ -223,6 +227,15 @@ public class ClientController {
 		 String isProviceCleanTools=request.getParameter("isProviceCleanTools");
 		 isProviceCleanTools=StringUtil.isBlank(isProviceCleanTools)?"":isProviceCleanTools;
 		 
+		 String area=request.getParameter("area");
+		 area=StringUtil.isBlank(area)?"":area;
+		 
+		 String balconyCount=request.getParameter("balconyCount");
+		 balconyCount=StringUtil.isBlank(balconyCount)?"":balconyCount;
+		 
+		 String windowCount=request.getParameter("windowCount");
+		 windowCount=StringUtil.isBlank(windowCount)?"":windowCount;
+		 
 		 Order o =new Order();
 		 o.setUserAddressId(userAddressId);
 		 o.setFullAddress(fullAddress);
@@ -231,13 +244,16 @@ public class ClientController {
 		 o.setDuration(duration);
 		 o.setStartTime(startTime);
 		 o.setEndTime(endTime);
-		 o.setServicetype(servicetype);
+		 o.setServiceType(servicetype);
 		 o.setCycleType(cycleType);
 		 o.setRepeatInWeek(repeatInWeek);
 		 o.setDurationMonth(durationMonth);
 		 o.setRepeatInWeekText(repeatInWeekText);
 		 o.setDurationMonthText(durationMonthText);
 		 o.setDurationText(durationText);
+		 o.setArea(area);
+		 o.setWindowCount(windowCount);
+		 o.setBalconyCount(balconyCount);
 		 
 		 model.addAttribute("order", o);
 	 }
@@ -247,19 +263,75 @@ public class ClientController {
 	  * @return
 	  */
 	 @RequestMapping("/client/cleanIndex.html")
-	 public String cleanIndex( Model model,HttpServletRequest request) {
+	 public String cleanIndex( Model model,HttpServletRequest request,
+			 @RequestParam(value = "serviceType", required = true) String  serviceType) {
 		 boolean exp=filters();
 		 if(exp==true)return "";
 		 
 		 forwardPage(model,request);
-		 String servicetype=request.getParameter("servicetype");
+		 String servicetype=request.getParameter("serviceType");
 		 servicetype=StringUtil.isBlank(servicetype)?"":servicetype;
-		 String cleanToolsValue=clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4PTBJ);
+		 String cleanToolsValue="";
+		 if(Constants.SERVICE_TYPE_CC.equals(servicetype)) {
+			 cleanToolsValue=clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4PTBJ);
+		 }else {
+			 cleanToolsValue=clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4DBJ);
+		 }
+		 
 		 List cleanList=clientService.getCleanToolsList(servicetype);
 		 model.addAttribute("cleanToolsList", cleanList);
 		 model.addAttribute("cleanToolsFee",cleanToolsValue);
+		 
 		 return "client/cleanIndex";
 	 }
+	 
+	 /**
+	  * 开荒首页
+	  * @param model
+	  * @return
+	  */
+	 @RequestMapping("/client/khIndex.html")
+	 public String khIndex( Model model,HttpServletRequest request,
+			 @RequestParam(value = "serviceType", required = true,defaultValue="KH") String  serviceType) {
+		 boolean exp=filters();
+		 if(exp==true)return "";
+		 
+		 forwardPage(model,request);
+		 String servicetype=request.getParameter("serviceType");
+		 servicetype=StringUtil.isBlank(servicetype)?"":servicetype;
+		 String cleanToolsValue=clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4KH);
+		 
+		 List cleanList=clientService.getCleanToolsList(servicetype);
+		 model.addAttribute("cleanToolsList", cleanList);
+		 model.addAttribute("cleanToolsFee",cleanToolsValue);
+		 
+		 return "client/khIndex";
+	 }
+	 
+	 
+	 /**
+	  * 擦玻璃首页
+	  * @param model
+	  * @return
+	  */
+	 @RequestMapping("/client/cblIndex.html")
+	 public String cblIndex( Model model,HttpServletRequest request,
+			 @RequestParam(value = "serviceType", required = true,defaultValue="CBL") String  serviceType) {
+		 boolean exp=filters();
+		 if(exp==true)return "";
+		 
+		 forwardPage(model,request);
+		 String servicetype=request.getParameter("serviceType");
+		 servicetype=StringUtil.isBlank(servicetype)?"":servicetype;
+		 String cleanToolsFee=clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4CBL);
+		 
+		 List cleanList=clientService.getCleanToolsList(servicetype);
+		 model.addAttribute("cleanToolsList", cleanList);
+		 model.addAttribute("cleanToolsFee",cleanToolsFee);
+		 
+		 return "client/cblIndex";
+	 }
+	 
 
 	 @RequestMapping(value = "/client/addAddress.html", method = {RequestMethod.POST, RequestMethod.GET})
 	 public String addAddress( Model model,HttpServletRequest request,
@@ -361,6 +433,31 @@ public class ClientController {
 		}
 		return res;
 	}
+	
+	
+	@RequestMapping("/client/notifyOrder")
+	public String notifyOrder(@ModelAttribute("order") Order order,
+		        Model model,HttpSession Session,HttpServletRequest request) {
+		return "";
+	}
+	
+	
+	@RequestMapping("/client/queryOrder")
+	public String notifyOrder(
+		        Model model,HttpSession Session,HttpServletRequest request,
+		        @RequestParam(value = "queryType", required = true) String queryType) {
+		return "";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/client/deposit")
+	public String deposit(
+	        Model model,HttpSession Session,HttpServletRequest request,
+	        @RequestParam(value = "queryType", required = true) String queryType) {
+	return "";
+	}
+	
+		        
 		        
 		        
 	
@@ -374,6 +471,28 @@ public class ClientController {
 		model.addAttribute("order", order);
 		return "client/cleanOrderConfirm";
 	}
+	
+	
+	@RequestMapping("/client/khOrderConfirm.html")
+	public String khOrderConfirm( 
+		        Model model,HttpSession Session,HttpServletRequest request,
+		        @ModelAttribute("order") Order order) { 
+		
+		order=clientService.getConfirmOrder(order);
+		model.addAttribute("order", order);
+		return "client/khOrderConfirm";
+	}
+	
+	@RequestMapping("/client/cblOrderConfirm.html")
+	public String cblOrderConfirm( 
+		        Model model,HttpSession Session,HttpServletRequest request,
+		        @ModelAttribute("order") Order order) { 
+		order=clientService.getConfirmOrder(order);
+		model.addAttribute("order", order);
+		return "client/cblOrderConfirm";
+	}
+	
+	
 	
 	
 	@RequestMapping("/client/testquery")

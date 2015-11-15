@@ -24,7 +24,17 @@
 	 function setDefault(){
 		var userAddressId=$(".borderselected").attr('value');
 		var fullAddress=$(".borderselected").attr('fullAddress');
-		 var path = basePath+"/client/cleanIndex.html"; 
+		var serviceType=$("#serviceType").val();
+		 var path = '';
+		 console.info('serviceType====='+serviceType);
+		if(serviceType=='CC'){
+			path=basePath+"/client/cleanIndex.html"; 
+		}else if(serviceType=='KH'){
+			path=basePath+"/client/khIndex.html"; 
+		}else if(serviceType=='CBL'){
+			path=basePath+"/client/cblIndex.html"; 
+		}
+		 
 		 $("#userAddressId").val(userAddressId);
 		 $("#fullAddress").val(fullAddress);
 		 if($("#fullAddress").val()==''  ){
@@ -77,7 +87,7 @@
 			<input type="hidden" name="duration"  th:value="${order.duration}"/>
 			<input type="hidden" name="startTime"  th:value="${order.startTime}"/>
 			<input type="hidden" name="endTime"  th:value="${order.endTime}"/>
-			<input type="hidden" name="servicetype"  th:value="${order.servicetype}"/>
+			<input type="hidden" name="serviceType" id="serviceType" th:value="${order.serviceType}"/>
 			<input type="hidden" name="cycleType"  th:value="${order.cycleType}"/>
 			<input type="hidden" name="durationMonth" id="durationMonth" th:value="${order.durationMonth}"/>
    			<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}"/>

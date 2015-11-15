@@ -44,8 +44,17 @@
 		 var repeatInWeekTextRes=getWeekRepeattText(repeatInWeekText);
 		 console.log('xxxxxxxx='+repeatInWeekText);
 		 var durationMonthText=$("#durationMonthText").val();
+		 var serviceType=$("#serviceType").val();
+		 if(serviceType=='CC'){
+			 $("#spnServiceDate").text(serviceDate+" "+drationText+" "+repeatInWeekTextRes+" "+durationMonthText);
+		 }else{
+			 var startTime=$("#startTime").val();
+			 if(startTime!==''){
+				 $("#spnServiceDate").text(serviceDate+" "+startTime+":00");
+			 }
+		 }
 		 console.info(serviceDate);
-		 $("#spnServiceDate").text(serviceDate+" "+drationText+" "+repeatInWeekTextRes+" "+durationMonthText);
+		
 		 
 	 }
 	 
@@ -112,7 +121,7 @@
 			<input type="hidden" name="duration"  id="duration"  th:value="${order.duration}"/>
 			<input type="hidden" name="startTime"  id="startTime"  th:value="${order.startTime}"/>
 			<input type="hidden" name="endTime"  id="endTime"  th:value="${order.endTime}"/>
-			<input type="hidden" name="servicetype" id="servicetype" th:value="${order.servicetype}"/>
+			<input type="hidden" name="serviceType" id="serviceType" th:value="${order.serviceType}"/>
 			<input type="hidden" name="cycleType" id="cycleType" th:value="${order.cycleType}"/>
 			<input type="hidden" name="durationMonth" id="durationMonth"   th:value="${order.durationMonth}"/>
    			<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}"/>

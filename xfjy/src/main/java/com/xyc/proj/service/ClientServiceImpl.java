@@ -204,9 +204,9 @@ public class ClientServiceImpl implements ClientService {
  
 	
 	public double getTotalPrice(Order o) {
-		if(StringUtil.isBlank(o.getServicetype()))return-1000d;
+		if(StringUtil.isBlank(o.getServiceType()))return-1000d;
 		double res=-10000d;
-		if(Constants.SERVICE_TYPE_CC.equals(o.getServicetype())) {//普通宝洁
+		if(Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {//普通宝洁
 			double dprice=Double.parseDouble(configRepository.findByConfigCode(Constants.CONFIG_PTBJDJ).getConfigValue());
 			int iduration=Integer.parseInt(o.getDuration());
 			double cleanToolsfee=0.0d;
@@ -220,7 +220,7 @@ public class ClientServiceImpl implements ClientService {
 				int times=getScheduleList4Month(o).size();
 				res=iduration*dprice*times+cleanToolsfee;
 			}
-		}else if(Constants.SERVICE_TYPE_DBJ.equals(o.getServicetype())) {//dabaojie
+		}else if(Constants.SERVICE_TYPE_DBJ.equals(o.getServiceType())) {//dabaojie
 			double dprice=Double.parseDouble(configRepository.findByConfigCode(Constants.CONFIG_DBJDJ).getConfigValue());
 			int area=Integer.parseInt(o.getArea());
 			double cleanToolsfee=0.0d;
@@ -234,7 +234,7 @@ public class ClientServiceImpl implements ClientService {
 				int times=getScheduleList4Month(o).size();
 				res=area*dprice*times+cleanToolsfee;
 			}
-		}else if(Constants.SERVICE_TYPE_CBL.equals(o.getServicetype())) {//cbl
+		}else if(Constants.SERVICE_TYPE_CBL.equals(o.getServiceType())) {//cbl
 			double cleanToolsfee=0.0d;
 			if(Constants.YES.equals(o.getIsProviceCleanTools())) {
 				cleanToolsfee=Double.parseDouble(configRepository.findByConfigCode(Constants.CONFIG_CLEAN_TOOLS_FEE4CBL).getConfigValue());
@@ -245,7 +245,7 @@ public class ClientServiceImpl implements ClientService {
 			double cncdprice=Double.parseDouble(configRepository.findByConfigCode(Constants.CONFIG_CNCDJ).getConfigValue());
 			int incCount=Integer.parseInt(o.getWindowCount());
 			res=cytdprice*iytCount+cncdprice*incCount+cleanToolsfee;
-		}else if(Constants.SERVICE_TYPE_KH.equals(o.getServicetype())) {
+		}else if(Constants.SERVICE_TYPE_KH.equals(o.getServiceType())) {
 			double dprice=Double.parseDouble(configRepository.findByConfigCode(Constants.CONFIG_KHDJ).getConfigValue());
 			int area=Integer.parseInt(o.getArea());
 			double cleanToolsfee=0.0d;

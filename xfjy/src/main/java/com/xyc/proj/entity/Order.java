@@ -54,8 +54,6 @@ public class Order {
 	private String balconyCount;
 	
 	
-	
-	
 	@Column(name = "DURATION")
 	private String duration;//持续时间
 	
@@ -86,7 +84,7 @@ public class Order {
 	private Double toolFeeClean;//工具费用
 	
 	@Column(name = "SERVICE_TYPE")
-	private String servicetype; //家政，宝洁
+	private String serviceType; //家政，宝洁
 	
 	@Column(name = "CYCLE_TYPE")
 	private String cycleType;//零工，包月
@@ -260,13 +258,15 @@ public class Order {
 	}
 
 
-	public String getServicetype() {
-		return servicetype;
+ 
+
+	public String getServiceType() {
+		return serviceType;
 	}
 
 
-	public void setServicetype(String servicetype) {
-		this.servicetype = servicetype;
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
 	}
 
 

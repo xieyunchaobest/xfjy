@@ -162,7 +162,7 @@
                         offset++;
                         w[s.minuteText] = {};
                         for (i = 0; i < 60; i += stepM) {
-                            w[s.minuteText][i] = tord.match(/ii/) && i < 10 ? '0' + i : i;
+                            w[s.minuteText][i] = '00';
                         }
                     } else if (k == o.s) {
                         offset++;

@@ -39,7 +39,7 @@
    		<input type="hidden" name="duration" id="duration" th:value="${order.duration}"/>
    		<input type="hidden" name="startTime" id="startTime" th:value="${order.startTime}"/>
    		<input type="hidden" name="endTime" id="endTime" th:value="${order.endTime}"/>
-   		<input type="hidden" name="servicetype" id="servicetype" value="CC"/>
+   		<input type="hidden" name="serviceType" id="serviceType" th:value="${order.serviceType}"/>
    		<input type="hidden" name="cycleType" id="cycleType" th:value="${order.cycleType}" />
    		<input type="hidden" name="durationMonth" id="durationMonth" th:value="${order.durationMonth}" />
    		<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}" />
@@ -59,16 +59,21 @@
 						<input type="text" id="serviceDate4sg" style="border:0px;width:70%;" onchange="updateDurationState(this)"/>
 						<span class="badge">></span>
 					</li>  
-					<li class="list-group-item" onclick="showModal('sg')">
+					<li class="list-group-item" onclick="showModal('sg')" id="lisc">
 						<label>时长:</label>&nbsp;<span id="spanserviceDateDuring">2小时</span>
 						<input type="hidden" value="2" id="serviceduring4sg"  />
+						<span class="badge">></span>
+					</li>  
+					<li class="list-group-item" onclick="showTimeModal('sg')" id="liStartTimeSg">
+						<label>时间:</label>&nbsp;<span id="spanserviceTimesg"></span>
+						<input type="hidden" value="" id="serviceTime4sg"  />
 						<span class="badge">></span>
 					</li>  
 				</ul>
    			</div>
    			<div class="col-md-1"></div>
    		</div>
-   		<div class="row">
+   		<div class="row" id="divdrutingtext">
    			<div class="col-md-1">
    				<input type="hidden" id="durationTime4sgStart" />
    				<input type="hidden" id="durationTime4sgEnd" />
@@ -106,9 +111,14 @@
 						<input type="text" id="serviceDate4by" style="border:0px;width:70%;"/>
 						<span class="badge">></span>
 					</li>  
-					<li class="list-group-item" onclick="showModal('by')">
+					<li class="list-group-item" onclick="showModal('by')" id="lidruation">
 						<label>时长:</label>&nbsp;<span id="spanserviceDateDuring4by">2小时</span>
 						<input type="hidden" value="2" id="serviceduring4by"  />
+						<span class="badge">></span>
+					</li>  
+					<li class="list-group-item" onclick="showTimeModal('by')" id="liStartTimeBy">
+						<label>时间:</label>&nbsp;<span id="spanserviceTime4by"></span>
+						<input type="hidden" value="" id="serviceTime4by"  />
 						<span class="badge">></span>
 					</li>  
 					<li class="list-group-item" onclick="showDrationMonthModal()">
@@ -125,7 +135,7 @@
    			</div>
    			<div class="col-md-1"></div>
    		</div>
-   		<div class="row">
+   		<div class="row" id="divdruation">
    			<div class="col-md-1">
    				<input type="hidden" id="durationTime4byStart" />
    				<input type="hidden" id="durationTime4byEnd" />
@@ -231,6 +241,51 @@
    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal fade" id="serviceTimeSelectModal" tabindex="-1" role="dialog" style="margin-top:100px;"  
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-body"  style="height:300px;overflow:scroll">
+            <ul class="list-group">
+				<li class="list-group-item"  value="8" onclick="fillServiceTime(this)" txt="8:00">
+					<span>8:00</span>
+				</li>  
+				<li class="list-group-item"  value="9" onclick="fillServiceTime(this)"  txt="9:00">
+				 	<span>9:00</span>
+				</li> 
+				<li class="list-group-item"   value="10" onclick="fillServiceTime(this)" txt="10:00">
+				 	<span>10:00</span>
+				</li>
+				<li class="list-group-item"  value="11" onclick="fillServiceTime(this)" txt="11:00">
+				 	<span>11:00</span>
+				</li>
+				<li class="list-group-item"  value="12" onclick="fillServiceTime(this)" txt="12:00">
+				 	<span>12:00</span>
+				</li> 
+				<li class="list-group-item"   value="13" onclick="fillServiceTime(this)" txt="13:00">
+				 	<span>13:00</span>
+				</li>
+				<li class="list-group-item"    value="14" onclick="fillServiceTime(this)" txt="14:00">
+				 	<span>14:00</span>
+				</li>
+				<li class="list-group-item"   value="15" onclick="fillServiceTime(this)" txt="15:00">
+				 	<span>15:00</span>
+				</li>
+				<li class="list-group-item"  value="16"   onclick="fillServiceTime(this)" txt="16:00">
+				 	<span>16:00</span>
+				</li> 
+				<li class="list-group-item"  value="17"   onclick="fillServiceTime(this)" txt="17:00">
+				 	<span>17:00</span>
+				</li>
+				<li class="list-group-item"  value="18"   onclick="fillServiceTime(this)" txt="18:00">
+				 	<span>18:00</span>
+				</li> 
+			</ul>
+         </div> 
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 
 	<!-- 模态框（Modal） -->
@@ -302,8 +357,6 @@
           endYear: currYear + 10 //结束年份
   	};
 
-    	$("#serviceDate4sg").mobiscroll($.extend(opt['date'], opt['default']));
-    	$("#serviceDate4by").mobiscroll($.extend(opt['date'], opt['default']));
     	
 $("button[xtype='tmsel']").click(function(){
     		 if($(this).hasClass('btn-sucess')){
@@ -347,6 +400,21 @@ $("button[xtype='tmsel']").click(function(){
     	if($("#serviceDate4by").val()==''){
     		$("#serviceDate4by").val(getTomorrow(new Date()));
     	}
+    	
+    	$("#serviceDate4sg").mobiscroll($.extend(opt['date'], opt['default']));
+    	$("#serviceDate4by").mobiscroll($.extend(opt['date'], opt['default']));
+    	
+    	if($("#serviceType").val()=='DBJ'){
+    		$("#lisc").hide();
+    		$("#divdrutingtext").hide();
+    		$("#divdruation").hide();
+    		$("#lidruation").hide();
+    	}else{
+    		$("#liStartTimeSg").hide();
+    		$("#liStartTimeBy").hide();  
+    	}
+    	
+    	
 
    });
    
@@ -502,10 +570,14 @@ $("button[xtype='tmsel']").click(function(){
  
    function submitsg(){
 		   var res=validate();
+		   var serviceType=$("#serviceType").val();
 		   if(res==true){
-			   $("#serviceDate").val($("#serviceDate4sg").val());
+				$("#serviceDate").val($("#serviceDate4sg").val());
+			   
 			   $("#duration").val($("#serviceduring4sg").val());
-			   $("#startTime").val($("#durationTime4sgStart").val());
+			   if(serviceType=='CC'){
+				   $("#startTime").val($("#durationTime4sgStart").val());
+			   }
 			   $("#endTime").val($("#durationTime4sgEnd").val());
 			   $("#cycleType").val("SG");
 			   $("#durationText").val($("#durationTime4sgtext").val());
@@ -544,23 +616,34 @@ $("button[xtype='tmsel']").click(function(){
    
    function validate(){
 	   var res=true;
+	   var serviceType=$("#serviceType").val();
 	   if($("#serviceDate4sg").val()==''){
 		   $("#validateInfo4sg").text('请选择日期!');
 		   res=false;
 		   return res;
 	   }
 	   
-	   if($("#serviceduring4sg").val()==''){
-		   $("#validateInfo4sg").text('请选择时长!');
-		  res=false;
-		  return res;
+	   if(serviceType=='CC'){
+		   if($("#serviceduring4sg").val()==''){
+			   $("#validateInfo4sg").text('请选择时长!');
+			  res=false;
+			  return res;
+		   }
+		   
+		   if($("#durationTime4sgStart").val()==''){
+			   $("#validateInfo4sg").text('请选择时间段!');
+			   res=false;
+			   return res;
+		   }
+	   }else{
+		   if($("#spanserviceTimesg").text()==''  ){
+			   $("#validateInfo4sg").text('请选择时间!');
+			   res=false;
+			   return res;
+		   }
+		   
 	   }
 	   
-	   if($("#durationTime4sgStart").val()==''){
-		   $("#validateInfo4sg").text('请选择时间段!');
-		   res=false;
-		   return res;
-	   }
 	  return res;
 	   //if($("#validateInfo4sg"))
 	   
@@ -571,15 +654,18 @@ $("button[xtype='tmsel']").click(function(){
 		   $("#validateInfo4by").text('请选择重复时间！');
 		   return false;
 	   }
-	   if($("#hdrepeatInWeek").val()==''){
-		   $("#validateInfo4by").text('请选择重复时间！');
-		   return false;
-	   }
-	   if($("#durationTime4byStart").val()==''){
-		   $("#validateInfo4by").text('请选择时间段!');
-		  return false;
-	   }
 	   
+	   if($("#serviceType").val()=='CC'){
+		   if($("#durationTime4byStart").val()==''){
+			   $("#validateInfo4by").text('请选择时间段!');
+			  return false;
+		   }
+	   }else{
+		   if($("#spanserviceTime4by").text()==''){
+			   $("#validateInfo4by").text('请选择时间!');
+			   return false;
+		   }
+	   }
 	   return true;
    }
    
@@ -588,25 +674,53 @@ $("button[xtype='tmsel']").click(function(){
    /*<![CDATA[*/
    function updateDurationState(target){
 	  // alert($(target).val());
-	   $.ajax({
-           type: "POST",
-           url: basePath+'/client/getDrationListState?serviceDate='+$(target).val()+'&serviceType=CC',
-           data:"",
-           success: function(data) {
-        	   console.log(data);
-        	   for(var i=0;i<data.length;i++){
-                   var tscode= data[i];
-                   $("button[xtype='tmsel']").each(function(){
-                	    if($(this).attr('code')==tscode && $(this).attr('ptype')=='SG'){
-                	    	$(this).attr("disabled","disabled");
-                	    	$(this).text('已约满');
-                	    }
-                   });
-               }
-           }
-       });
+	  var serviceType=$("#serviceType").val();
+
+	  console.log('serviceDate='+serviceDate);
+	  if(serviceType=='CC'){
+		  $.ajax({
+	           type: "POST",
+	           url: basePath+'/client/getDrationListState?serviceDate='+serviceDate+'&serviceType='+serviceType,
+	           data:"",
+	           success: function(data) {
+	        	   console.log(data);
+	        	   for(var i=0;i<data.length;i++){
+	                   var tscode= data[i];
+	                   $("button[xtype='tmsel']").each(function(){
+	                	    if($(this).attr('code')==tscode && $(this).attr('ptype')=='SG'){
+	                	    	$(this).attr("disabled","disabled");
+	                	    	$(this).text('已约满');
+	                	    }
+	                   });
+	               }
+	           }
+	       });
+	  }
    }
+   
    /*]]>*/
+   var flagStartTime='';
+   function showTimeModal(flag){
+	   if(flag=='sg'){
+		   flagStartTime='sg';
+	   }else{
+		   flagStartTime='by';
+	   }
+	   $("#serviceTimeSelectModal").modal({
+		      keyboard: true
+	   })
+   }
+   
+   function fillServiceTime(target){
+	   $("#startTime").val($(target).attr('value'));
+	   $("#serviceTimeSelectModal").modal('hide');
+	   if(flagStartTime=='sg'){
+		   $("#spanserviceTimesg").text($(target).attr('txt'));
+	   }else{
+		   $("#spanserviceTime4by").text($(target).attr('txt'));
+	   }
+	  
+   }
    
 </script>
 
