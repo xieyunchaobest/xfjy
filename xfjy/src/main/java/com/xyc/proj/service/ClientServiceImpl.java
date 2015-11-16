@@ -3,16 +3,15 @@ package com.xyc.proj.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.xyc.proj.entity.DepositLog;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.TimeSplit;
@@ -27,6 +26,7 @@ import com.xyc.proj.repository.AyiRepository;
 import com.xyc.proj.repository.CleanToolsRepository;
 import com.xyc.proj.repository.CommunityRepository;
 import com.xyc.proj.repository.ConfigRepository;
+import com.xyc.proj.repository.DepositLogRepository;
 import com.xyc.proj.repository.OrderRepository;
 import com.xyc.proj.repository.ScheduleRepository;
 import com.xyc.proj.repository.TimeSplitRepository;
@@ -46,7 +46,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     VersionRepository versionRepository;
-    
 	
 	@Autowired
     ConfigRepository configRepository; 
@@ -72,6 +71,8 @@ public class ClientServiceImpl implements ClientService {
 	UserAddressRepository userAddressRepository;
 	@Autowired
 	OrderRepository orderRepository;
+	@Autowired
+	DepositLogRepository depositLogRepository;
 	
 	@Override
 	public void saveUserAuthCode(UserAuthCode u) {
@@ -296,29 +297,93 @@ public class ClientServiceImpl implements ClientService {
 		return cleanToolsRepository.findByServieType(serviceType);
 	}
 	
-	public static void main(String arg[]) {
-		//new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");
-		String info = null;
-		try{
-			String content="质控消息:患者大是病历书写不合格,请查看!";
-			HttpClient httpclient = new HttpClient();
-			PostMethod post = new PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
-			post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
-			post.addParameter("SpCode", "217289");
-			post.addParameter("LoginName", "tj_xfjy");
-			post.addParameter("Password", "helloWORLD123");
-			post.addParameter("MessageContent", content);
-			post.addParameter("UserNumber", "18611298927");
-			post.addParameter("SerialNumber", "12345678901234567890");
-			post.addParameter("ScheduleTime", "");
-			post.addParameter("ExtendAccessNum", "");
-			post.addParameter("f", "1");
-			httpclient.executeMethod(post);
-			info = new String(post.getResponseBody(),"gbk");
-			System.out.println(info);
-		}catch (Exception e) {
-			e.printStackTrace();
+//	public static void main(String arg[]) {
+//		//new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");
+//		String info = null;
+//		try{
+//			String content="质控消息:患者大是病历书写不合格,请查看!";
+//			HttpClient httpclient = new HttpClient();
+//			PostMethod post = new PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
+//			post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
+//			post.addParameter("SpCode", "217289");
+//			post.addParameter("LoginName", "tj_xfjy");
+//			post.addParameter("Password", "helloWORLD123");
+//			post.addParameter("MessageContent", content);
+//			post.addParameter("UserNumber", "18611298927");
+//			post.addParameter("SerialNumber", "12345678901234567890");
+//			post.addParameter("ScheduleTime", "");
+//			post.addParameter("ExtendAccessNum", "");
+//			post.addParameter("f", "1");
+//			httpclient.executeMethod(post);
+//			info = new String(post.getResponseBody(),"gbk");
+//			System.out.println(info);
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
+	
+	public Map getOrderMap(String openId) {
+		Map resMap=new HashMap();
+		List<Order> orderList=getOrderList(openId);
+		
+		List unFinishedList=new ArrayList();
+		List finishedList=new ArrayList();
+		
+		if(orderList!=null) {
+			for(int i=0;i<orderList.size();i++) {
+				Order o=orderList.get(i);
+				if(Constants.ORDER_STATE_FINISH.equals(o.getState())) {
+					finishedList.add(o);
+				}else {
+					unFinishedList.add(o);
+				}
+			}
 		}
+		resMap.put("finishedOrders", finishedList);
+		resMap.put("unFinishedOrders", unFinishedList);
+		return resMap;
+	}
+	
+	public List<Order> getOrderList(String openId) {
+		List<Order> orderList=orderRepository.findByOpenId(openId);
+		if(orderList!=null) {
+			for(int i=0;i<orderList.size();i++) {
+				Order o=orderList.get(i);
+				if(Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
+					o.setServiceTypeText("普通宝洁");
+				}else if(Constants.SERVICE_TYPE_DBJ.equals(o.getServiceType())) {
+					o.setServiceTypeText("大宝洁");
+				}else if(Constants.SERVICE_TYPE_CBL.equals(o.getServiceType())) {
+					o.setServiceTypeText("擦玻璃");
+				}else if(Constants.SERVICE_TYPE_KH.equals(o.getServiceType())) {
+					o.setServiceTypeText("开荒");
+				}
+				
+				if(Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
+					o.setCycleTypeText("包月");
+				}else {
+					o.setCycleTypeText("零工");
+				}
+				
+				if(Constants.ORDER_STATE_UNPAY.equals(o.getState())) {
+					o.setStateText("未支付");
+				}else if(Constants.ORDER_STATE_PAYED.equals(o.getState())) {
+					o.setStateText("已支付");
+				}else if(Constants.ORDER_STATE_CONFIRMED.equals(o.getState())) {
+					o.setStateText("已确认");
+				}else if(Constants.ORDER_STATE_FINISH.equals(o.getState())) {
+					o.setStateText("已完成");
+				}
+			}
+		}
+		return orderList;
+	}
+	
+	public void deposit(String openId,double amount) {
+		DepositLog ds=new DepositLog();
+		ds.setDepositAmount(amount);
+		depositLogRepository.save(ds);
 	}
 	
 }

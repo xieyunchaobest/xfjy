@@ -34,4 +34,10 @@ public interface ClientService {
 	public Order getConfirmOrder(Order o);
 	
 	public String getConfigValue(String code);
+	
+	public Map getOrderMap(String openId);
+	
+	public List getOrderList(String openId);
+	
+	public void deposit(String openId,double amount);
 }

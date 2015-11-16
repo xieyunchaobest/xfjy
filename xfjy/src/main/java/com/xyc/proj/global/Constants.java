@@ -53,4 +53,10 @@ public interface Constants {
 	public static final String CONFIG_CLEAN_TOOLS_FEE4KH="QJGJFY4KH";//开荒里工具费用
 	
 	
+	public static final String ORDER_STATE_UNPAY="U";//未支付
+	public static final String ORDER_STATE_PAYED="P";//已支付
+	public static final String ORDER_STATE_CONFIRMED="C";//已经确认
+	public static final String ORDER_STATE_FINISH="F";//完成
+	
+	
 }

@@ -41,6 +41,9 @@ public class Order {
 	@Column(name = "MOBILE_NO")
 	private String mobileNo;
 	
+	@Column(name = "PAY_MODE")
+	private String payMode;
+	
 	@Column(name = "USER_ADDRESS_ID")
 	private String userAddressId;
 	
@@ -52,6 +55,9 @@ public class Order {
 	
 	@Column(name = "BALCONY_COUNT")
 	private String balconyCount;
+	
+	@Column(name = "LAST_DAY")
+	private String lastDay;
 	
 	
 	@Column(name = "DURATION")
@@ -86,8 +92,14 @@ public class Order {
 	@Column(name = "SERVICE_TYPE")
 	private String serviceType; //家政，宝洁
 	
+	@Transient
+	private String serviceTypeText; //家政，宝洁
+	
 	@Column(name = "CYCLE_TYPE")
 	private String cycleType;//零工，包月
+	
+	@Transient
+	private String cycleTypeText;//零工，包月
 	 
 	@Column(name = "DRATION_MONTH")
 	private String durationMonth;
@@ -107,6 +119,9 @@ public class Order {
 	@Column(name = "STATE")
 	private String state;
 	 
+	@Transient
+	private String stateText;
+	
 	
 	@Column(name = "AYI_ID")
 	private Long ayiId; 
@@ -457,6 +472,56 @@ public class Order {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+
+
+	public String getPayMode() {
+		return payMode;
+	}
+
+
+	public void setPayMode(String payMode) {
+		this.payMode = payMode;
+	}
+
+
+	public String getLastDay() {
+		return lastDay;
+	}
+
+
+	public void setLastDay(String lastDay) {
+		this.lastDay = lastDay;
+	}
+
+
+	public String getServiceTypeText() {
+		return serviceTypeText;
+	}
+
+
+	public void setServiceTypeText(String serviceTypeText) {
+		this.serviceTypeText = serviceTypeText;
+	}
+
+
+	public String getCycleTypeText() {
+		return cycleTypeText;
+	}
+
+
+	public void setCycleTypeText(String cycleTypeText) {
+		this.cycleTypeText = cycleTypeText;
+	}
+
+
+	public String getStateText() {
+		return stateText;
+	}
+
+
+	public void setStateText(String stateText) {
+		this.stateText = stateText;
 	}
 
 

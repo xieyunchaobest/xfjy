@@ -443,17 +443,20 @@ public class ClientController {
 	
 	
 	@RequestMapping("/client/queryOrder")
-	public String notifyOrder(
+	public String queryOrder(
 		        Model model,HttpSession Session,HttpServletRequest request,
-		        @RequestParam(value = "queryType", required = true) String queryType) {
-		return "";
+		        @RequestParam(value = "openId", required = true) String openId) {
+		Map resMap=clientService.getOrderMap(openId);
+		model.addAttribute("resMap", resMap);
+		return "client/queryOrder";
 	}
 	
+	//充值
 	@ResponseBody
 	@RequestMapping("/client/deposit")
 	public String deposit(
 	        Model model,HttpSession Session,HttpServletRequest request,
-	        @RequestParam(value = "queryType", required = true) String queryType) {
+	        @RequestParam(value = "openId", required = true) String openId) {
 	return "";
 	}
 	
@@ -466,7 +469,6 @@ public class ClientController {
 	public String orderConfirm( 
 		        Model model,HttpSession Session,HttpServletRequest request,
 		        @ModelAttribute("order") Order order) { 
-		
 		order=clientService.getConfirmOrder(order);
 		model.addAttribute("order", order);
 		return "client/cleanOrderConfirm";
