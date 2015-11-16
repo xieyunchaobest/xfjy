@@ -7,4 +7,5 @@ import com.xyc.proj.entity.DepositSummary;
 
 
 public interface DepositSummaryRepository extends JpaRepository<DepositSummary, Long> {
+	DepositSummary findByOpenId(String openId);
 }

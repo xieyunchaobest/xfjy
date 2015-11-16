@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.xyc.proj.entity.ClientUser;
 import com.xyc.proj.entity.DepositLog;
+import com.xyc.proj.entity.DepositSummary;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.TimeSplit;
@@ -24,9 +26,11 @@ import com.xyc.proj.mapper.UserAddressMapper;
 import com.xyc.proj.repository.AreaRepository;
 import com.xyc.proj.repository.AyiRepository;
 import com.xyc.proj.repository.CleanToolsRepository;
+import com.xyc.proj.repository.ClientUserRepository;
 import com.xyc.proj.repository.CommunityRepository;
 import com.xyc.proj.repository.ConfigRepository;
 import com.xyc.proj.repository.DepositLogRepository;
+import com.xyc.proj.repository.DepositSummaryRepository;
 import com.xyc.proj.repository.OrderRepository;
 import com.xyc.proj.repository.ScheduleRepository;
 import com.xyc.proj.repository.TimeSplitRepository;
@@ -73,6 +77,10 @@ public class ClientServiceImpl implements ClientService {
 	OrderRepository orderRepository;
 	@Autowired
 	DepositLogRepository depositLogRepository;
+	@Autowired
+	DepositSummaryRepository depositSummaryRepository;
+	@Autowired
+	ClientUserRepository clientUserRepository;
 	
 	@Override
 	public void saveUserAuthCode(UserAuthCode u) {
@@ -381,9 +389,31 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	public void deposit(String openId,double amount) {
+		DepositSummary sum=depositSummaryRepository.findByOpenId(openId);
+		if(sum==null) {
+			sum=new DepositSummary();
+			sum.setFee(0d);
+			sum=depositSummaryRepository.save(sum);
+		}
+		
 		DepositLog ds=new DepositLog();
 		ds.setDepositAmount(amount);
+		ds.setBalance(sum.getFee()+amount);
 		depositLogRepository.save(ds);
+	}
+	
+	public Map personalCenter(String openId) {
+		Map resMap=new HashMap();
+		ClientUser cu=clientUserRepository.findByOpenId(openId);
+		DepositSummary ds=depositSummaryRepository.findByOpenId(openId);
+		
+//		Map parmMap=new HashMap();
+//		parmMap.put("openId", openId);
+//		List addressList=userAddressMapper.findAddressByUser(parmMap);
+		
+		resMap.put("clientUser", cu);
+		resMap.put("depositSummary", ds);
+		return resMap;
 	}
 	
 }

@@ -456,13 +456,11 @@ public class ClientController {
 	@RequestMapping("/client/deposit")
 	public String deposit(
 	        Model model,HttpSession Session,HttpServletRequest request,
-	        @RequestParam(value = "openId", required = true) String openId) {
-	return "";
+	        @RequestParam(value = "openId", required = true) String openId,
+	        @RequestParam(value = "amount", required = true) double amount) {
+		clientService.deposit(openId,amount) ;
+		return "";
 	}
-	
-		        
-		        
-		        
 	
 
 	@RequestMapping("/client/cleanOrderConfirm.html")
@@ -494,7 +492,16 @@ public class ClientController {
 		return "client/cblOrderConfirm";
 	}
 	
-	
+	@RequestMapping("/client/personalCenter.html")
+	public String personalCenter(Model model,HttpSession Session,
+			HttpServletRequest request,
+			 @RequestParam(value = "openId", required = true) String openId
+	      ) { 
+		Map resMap=clientService.personalCenter(openId);
+		model.addAttribute("resMap", resMap);
+		return "client/personalCenter";
+	}
+			
 	
 	
 	@RequestMapping("/client/testquery")
@@ -505,6 +512,8 @@ public class ClientController {
 		List addressList=clientService.findAddressByUser(map);
 		return "client/login";
 	}
+	
+	
 	
 	
 	

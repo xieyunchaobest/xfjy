@@ -40,4 +40,6 @@ public interface ClientService {
 	public List getOrderList(String openId);
 	
 	public void deposit(String openId,double amount);
+	
+	public Map personalCenter(String openId);
 }

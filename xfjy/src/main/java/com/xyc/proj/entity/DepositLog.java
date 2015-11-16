@@ -81,6 +81,26 @@ public class DepositLog {
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
+
+
+	public Double getBalance() {
+		return balance;
+	}
+
+
+	public void setBalance(Double balance) {
+		this.balance = balance;
+	}
+
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
  
  
 	 

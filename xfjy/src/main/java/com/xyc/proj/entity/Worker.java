@@ -30,17 +30,42 @@ public class Worker {
 	@Column(name = "BIRTHDAY")
 	private String birthday;
 	
+	@Column(name = "AREA_ID")
+	private Long areaId; 
+	
+	@Column(name = "SUB_AREA_ID")
+	private Long subAreaId; 
+	
 	@Column(name = "NATIVE_PLACE")
 	private String nativePlace;
 	
-	@Column(name = "SERVICE_TYPE")
-	private String serviceType; //服务类型，家政/保捷等
+	@Column(name = "EDUCATION")
+	private String education;
+	
+	@Column(name = "PHONE")
+	private String phone; 
+	
+	@Column(name = "SERVICE_TYPE_ONE")
+	private String serviceTypeOne; //服务类型，家政
+	
+	@Column(name = "SERVICE_TYPE_TWO")
+	private String serviceTypeTwo; //服务类型，家政
+	
+	@Column(name = "ROLE")
+	private String role; //老师，阿姨
+	
+	@Column(name = "TEACHER_ID")
+	private Long teacherId; 
+	
+	@Column(name = "WORK_TIME")
+	private String workTime; //白班，24H
+	
+	@Column(name = "STORE_ID")
+	private Long storeId; 
 	
 	@Column(name = "CONSTELLATION")
 	private String constellation;//星座
 	
-	@Column(name = "EDUCATION")
-	private String education;
 	
 	@Column(name = "ADDRESS")
 	private String address;
@@ -165,15 +190,95 @@ public class Worker {
 	}
 
 
-	public String getServiceType() {
-		return serviceType;
+	public String getNativePlace() {
+		return nativePlace;
 	}
 
 
-	public void setServiceType(String serviceType) {
-		this.serviceType = serviceType;
+	public void setNativePlace(String nativePlace) {
+		this.nativePlace = nativePlace;
 	}
 
-	
+
+	public String getServiceTypeOne() {
+		return serviceTypeOne;
+	}
+
+
+	public void setServiceTypeOne(String serviceTypeOne) {
+		this.serviceTypeOne = serviceTypeOne;
+	}
+
+
+	public String getServiceTypeTwo() {
+		return serviceTypeTwo;
+	}
+
+
+	public void setServiceTypeTwo(String serviceTypeTwo) {
+		this.serviceTypeTwo = serviceTypeTwo;
+	}
+
+
+	public String getRole() {
+		return role;
+	}
+
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+
+	public Long getTeacherId() {
+		return teacherId;
+	}
+
+
+	public void setTeacherId(Long teacherId) {
+		this.teacherId = teacherId;
+	}
+
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+
+	public Long getStoreId() {
+		return storeId;
+	}
+
+
+	public void setStoreId(Long storeId) {
+		this.storeId = storeId;
+	}
+
+
+	public Long getAreaId() {
+		return areaId;
+	}
+
+
+	public void setAreaId(Long areaId) {
+		this.areaId = areaId;
+	}
+
+
+	public Long getSubAreaId() {
+		return subAreaId;
+	}
+
+
+	public void setSubAreaId(Long subAreaId) {
+		this.subAreaId = subAreaId;
+	}
+
+
 	 
 }
