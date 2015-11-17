@@ -9,5 +9,5 @@ import com.xyc.proj.entity.Worker;
 
 
 public interface AyiRepository extends JpaRepository<Worker, Long> {
-	List findByServiceType(String type);
+	List serviceTypeOne(String type);
 }

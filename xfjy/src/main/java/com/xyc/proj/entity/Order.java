@@ -45,7 +45,7 @@ public class Order {
 	private String payMode;
 	
 	@Column(name = "USER_ADDRESS_ID")
-	private String userAddressId;
+	private Long userAddressId;
 	
 	@Column(name = "SERVICE_DATE")
 	private String serviceDate;
@@ -71,6 +71,7 @@ public class Order {
 	
 	@Column(name = "END_TIME")
 	private String endTime;
+	
 	
 	
 	@Column(name = "UNIT_PRICE")
@@ -113,8 +114,8 @@ public class Order {
 	@Transient
 	private String durationMonthText;
 	
-	@Transient
-	private String durationText;
+	@Column(name = "DURATION_TEXT")
+	private String durationText="";
 	 
 	@Column(name = "STATE")
 	private String state;
@@ -135,7 +136,7 @@ public class Order {
 	@Column(name = "PAY_TIME") 
 	private Date payTime;
 	
-	@Transient
+	@Column(name = "full_address") 
 	private String fullAddress="";
 	
 	@Transient
@@ -188,12 +189,12 @@ public class Order {
 	}
 
 
-	public String getUserAddressId() {
+	public Long getUserAddressId() {
 		return userAddressId;
 	}
 
 
-	public void setUserAddressId(String userAddressId) {
+	public void setUserAddressId(Long userAddressId) {
 		this.userAddressId = userAddressId;
 	}
 

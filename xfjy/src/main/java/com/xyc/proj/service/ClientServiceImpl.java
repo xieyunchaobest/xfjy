@@ -120,7 +120,7 @@ public class ClientServiceImpl implements ClientService {
 			int startTime=ts.getStartTime();
 			int endTime=ts.getEndTime();
 			
-			List<Worker> aiyiList=ayiRepository.findByServiceType(serviceType);
+			List<Worker> aiyiList=ayiRepository.serviceTypeOne(serviceType);
 			int ayisize=aiyiList.size();
 			int ayin=0;
 			for(int j=0;j<ayisize;j++) {
@@ -333,7 +333,7 @@ public class ClientServiceImpl implements ClientService {
 	
 	public Map getOrderMap(String openId) {
 		Map resMap=new HashMap();
-		List<Order> orderList=getOrderList(openId);
+		List<Order> orderList=getOrderList(openId,null);
 		
 		List unFinishedList=new ArrayList();
 		List finishedList=new ArrayList();
@@ -353,8 +353,18 @@ public class ClientServiceImpl implements ClientService {
 		return resMap;
 	}
 	
-	public List<Order> getOrderList(String openId) {
-		List<Order> orderList=orderRepository.findByOpenId(openId);
+	//避免方法重写，让按照主键查询和openId查询共用一个方法体
+	public List<Order> getOrderList(String openId,Long oid) {
+		Map parmMap=new HashMap();
+		parmMap.put("openId", openId);
+		
+		List<Order> orderList=new ArrayList();
+		if(!StringUtil.isBlank(openId)) {
+			orderList=orderRepository.findByOpenId(openId);
+		}else {
+			orderList=orderRepository.findById(oid);
+		}
+		
 		if(orderList!=null) {
 			for(int i=0;i<orderList.size();i++) {
 				Order o=orderList.get(i);
@@ -382,7 +392,7 @@ public class ClientServiceImpl implements ClientService {
 					o.setStateText("已确认");
 				}else if(Constants.ORDER_STATE_FINISH.equals(o.getState())) {
 					o.setStateText("已完成");
-				}
+				} 
 			}
 		}
 		return orderList;
@@ -414,6 +424,16 @@ public class ClientServiceImpl implements ClientService {
 		resMap.put("clientUser", cu);
 		resMap.put("depositSummary", ds);
 		return resMap;
+	}
+	
+	
+	public Order getOrder(Long id) {
+		List orderList= this.getOrderList(null, id);
+		if(orderList==null || orderList.size()==0) {
+			return new Order();
+		}else {
+			return (Order)orderList.get(0);
+		}
 	}
 	
 }
