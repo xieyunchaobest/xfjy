@@ -18,6 +18,9 @@ public class Store {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@Column(name = "AREA_ID")
+	private String areaId;
+	
 	@Column(name = "ADDRESS")
 	private String address;
 	
@@ -81,6 +84,16 @@ public class Store {
 
 	public void setStorePhone(String storePhone) {
 		this.storePhone = storePhone;
+	}
+
+
+	public String getAreaId() {
+		return areaId;
+	}
+
+
+	public void setAreaId(String areaId) {
+		this.areaId = areaId;
 	}
 
  

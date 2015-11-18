@@ -58,5 +58,22 @@ public interface Constants {
 	public static final String ORDER_STATE_CONFIRMED="C";//已经确认
 	public static final String ORDER_STATE_FINISH="F";//完成
 	
+	public static final String EDUCATIONAL_LEVEL_MIDDLE="M";//中学以及以下
+	public static final String EDUCATIONAL_LEVEL_ZK="Z";//专科
+	public static final String EDUCATIONAL_LEVEL_BK="B";//本科
+	public static final String EDUCATIONAL_LEVEL_SS="S";//硕士
+	
+	
+	public static final String WORK_SERVICE_TYPE_CLEAN="C";//宝洁
+	public static final String WORK_SERVICE_YS="YS";//YUE SHAO
+	public static final String WORK_SERVICE_YY_YE="YY";//孕婴&育儿嫂
+	public static final String WORK_SERVICE_YL="YY";//养老护工
+	public static final String WORK_SERVICE_JZ="JZ";//家政&小时工
+	
+	public static final String WORK_ROLE_ROLE_AY="A";//阿姨
+	public static final String WORK_ROLE_ROLE_TEACHER="T";//老师
+	
+	public static final String WORK_TIME_DAY="D";//白班
+	public static final String WORK_TIME_24H="H";//24XIAOSHI
 	
 }

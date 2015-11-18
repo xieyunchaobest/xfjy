@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "T_WORKER")
@@ -33,8 +34,10 @@ public class Worker {
 	@Column(name = "AREA_ID")
 	private Long areaId; 
 	
-	@Column(name = "SUB_AREA_ID")
-	private Long subAreaId; 
+	private String areaName;
+	
+	@Column(name = "SUB_AREA")
+	private String subArea; 
 	
 	@Column(name = "NATIVE_PLACE")
 	private String nativePlace;
@@ -42,11 +45,20 @@ public class Worker {
 	@Column(name = "EDUCATION")
 	private String education;
 	
+	@Transient
+	private String educationText;
+	
 	@Column(name = "PHONE")
 	private String phone; 
 	
 	@Column(name = "SERVICE_TYPE_ONE")
 	private String serviceTypeOne; //服务类型，家政
+	
+	@Transient
+	private String serviceTypeOneName; //服务类型，家政
+	
+	@Transient
+	private String serviceTypeTwoName; //服务类型，家政
 	
 	@Column(name = "SERVICE_TYPE_TWO")
 	private String serviceTypeTwo; //服务类型，家政
@@ -54,14 +66,24 @@ public class Worker {
 	@Column(name = "ROLE")
 	private String role; //老师，阿姨
 	
+	@Transient
+	private String roleName; 
+	
+	
 	@Column(name = "TEACHER_ID")
 	private Long teacherId; 
 	
 	@Column(name = "WORK_TIME")
 	private String workTime; //白班，24H
 	
+	@Transient
+	private String workTimeName; //白班，24H
+	
 	@Column(name = "STORE_ID")
 	private Long storeId; 
+	
+	@Transient
+	private String storeName;
 	
 	@Column(name = "CONSTELLATION")
 	private String constellation;//星座
@@ -75,6 +97,10 @@ public class Worker {
 	
 	@Column(name = "SALARY")
 	private Double salary;
+	
+	@Column(name = "STATE")
+	private String state;
+	
 	 
 	public Worker() {
 	}
@@ -270,13 +296,106 @@ public class Worker {
 	}
 
 
-	public Long getSubAreaId() {
-		return subAreaId;
+ 
+
+
+	public String getSubArea() {
+		return subArea;
 	}
 
 
-	public void setSubAreaId(Long subAreaId) {
-		this.subAreaId = subAreaId;
+	public void setSubArea(String subArea) {
+		this.subArea = subArea;
+	}
+
+
+	public String getEducationText() {
+		return educationText;
+	}
+
+
+	public void setEducationText(String educationText) {
+		this.educationText = educationText;
+	}
+
+
+	public String getWorkTime() {
+		return workTime;
+	}
+
+
+	public void setWorkTime(String workTime) {
+		this.workTime = workTime;
+	}
+
+
+	public String getAreaName() {
+		return areaName;
+	}
+
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+
+	public String getServiceTypeOneName() {
+		return serviceTypeOneName;
+	}
+
+
+	public void setServiceTypeOneName(String serviceTypeOneName) {
+		this.serviceTypeOneName = serviceTypeOneName;
+	}
+
+
+	public String getServiceTypeTwoName() {
+		return serviceTypeTwoName;
+	}
+
+
+	public void setServiceTypeTwoName(String serviceTypeTwoName) {
+		this.serviceTypeTwoName = serviceTypeTwoName;
+	}
+
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+
+	public String getWorkTimeName() {
+		return workTimeName;
+	}
+
+
+	public void setWorkTimeName(String workTimeName) {
+		this.workTimeName = workTimeName;
+	}
+
+
+	public String getStoreName() {
+		return storeName;
+	}
+
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+
+
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 
