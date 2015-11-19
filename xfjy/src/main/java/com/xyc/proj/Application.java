@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.xyc.proj.utility.Properties;
 
@@ -22,6 +23,7 @@ import com.xyc.proj.utility.Properties;
 @EnableAutoConfiguration
 @EnableJpaRepositories(basePackages = "com.xyc.proj.repository")
 @EnableConfigurationProperties({Properties.class}) 
+@EnableScheduling
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {

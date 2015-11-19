@@ -35,6 +35,7 @@ import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
+import com.xyc.proj.utility.WeixinUtil;
 
 /**
  * 幸福加缘客户端控制类
@@ -129,10 +130,32 @@ public class ClientController {
 	  */
 	 @RequestMapping("/client/login.html")
 	 public String toLogin(
-	            @RequestParam(value = "areaId", required = false) String areaId,
+	            @RequestParam(value = "code", required = false) String code,
 	            Model model) {
 		 return "client/login";
 	 }
+	 
+	 
+	 /**
+	  *
+	  * @param areaId
+	  * @param model
+	  * @return
+	  */
+	 @RequestMapping("/client/loginAuth.html")
+	 public String toLoginAuth(
+	            Model model) {
+		 //判断是否已经注册
+		 
+		String loginurl="http://weixin.tjxfjz.com/xfjy/client/login.html";
+		String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+	           +Constants.WE_CHAT_APPID+"&redirect_uri="+loginurl+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect"; 
+		System.out.println("urlurlurl=="+url);
+		return "redirect:"+url;
+	 }
+	 
+	 
+	 
 	 
 	 /**
 	  * 获取短信校验码
@@ -375,18 +398,39 @@ public class ClientController {
 		 return "client/test";
 	 }
 	 
+	 
+	@ResponseBody
 	@RequestMapping("/client/login")
 	public String getLatestUserByMobile( 
 		        Model model,HttpSession Session,HttpServletRequest request) { 
-		String mobileNo=request.getParameter("mobileNo");
-		String authCode=request.getParameter("authCode");
-			List ulist=clientService.getUserListByMobileNoAndAuthCode(mobileNo,authCode);
-			if(ulist!=null && ulist.size()>0) {
-				 return "client/index";
-			}else {
-				return "client/login";
-			}
+		String res="S";
+		List ulist=new ArrayList();
+		try {
+			String mobileNo=request.getParameter("mobileNo");
+			String authCode=request.getParameter("authCode");
+			String code=request.getParameter("code");
 			
+			code="asfafsfasfasdfafasdf";
+			String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
+					"appid="+Constants.WE_CHAT_APPID+"&secret="+Constants.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
+			com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
+			String jsonstr=tokenJson.toString();
+			System.out.println("token json is ====="+jsonstr); 
+			String accessToken=tokenJson.getString("access_token");
+			String expiresIn=tokenJson.getString("expires_in");
+			String refreshToken=tokenJson.getString("refresh_token");
+			String openId=tokenJson.getString("openid");
+			
+			String urlGetUserInfo="https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid="+openId;
+			com.alibaba.fastjson.JSONObject userInfoJson=WeixinUtil.httpRequest(urlGetUserInfo, "GET", null);
+			
+			String nickName=userInfoJson.getString("nickName");
+			ulist=clientService.getUserListByMobileNoAndAuthCode(mobileNo,authCode);
+		}catch(Exception e) {
+			e.printStackTrace();
+			res="E";
+		}
+		return res;
 		}
 	
 	
