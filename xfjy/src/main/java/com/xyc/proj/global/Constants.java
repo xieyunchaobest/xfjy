@@ -76,7 +76,7 @@ public interface Constants {
 	public static final String WORK_TIME_DAY="D";//白班
 	public static final String WORK_TIME_24H="H";//24XIAOSHI
 	
-	public static final String WE_CHAT_APPID="wxce20c658c1eb222f";
-	public static final String WE_CHAT_APPSECRET="032c3861e23d03907d6eda5a2a79ead0";
+	public static final String WE_CHAT_APPID="";
+	public static final String WE_CHAT_APPSECRET="";
 	
 }
