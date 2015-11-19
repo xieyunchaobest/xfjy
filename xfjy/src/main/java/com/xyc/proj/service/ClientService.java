@@ -37,9 +37,11 @@ public interface ClientService {
 	
 	public Map getOrderMap(String openId);
 	
-	public List getOrderList(String openId);
+	public List getOrderList(String openId,Long oid);
 	
 	public void deposit(String openId,double amount);
 	
 	public Map personalCenter(String openId);
+	
+	public Order getOrder(Long id) ;
 }

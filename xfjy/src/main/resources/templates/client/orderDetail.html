@@ -1,0 +1,87 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>订单</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+<style type="text/css">
+ 
+</style>
+
+<script type="text/javascript">
+$(function(){
+    $('#myCarousel').carousel({
+ interval: 3000
+});
+    
+    
+  });
+ 
+ 
+ function showOrHide(){
+	 var serviceType=$("#serviceType").val();
+	 if(serviceType=='CC' || serviceType='DBJ'){
+		 $('#liArea').hide();
+		 $('#liBalconyCount').hide();
+		 $('#liWindowCount').hide();
+	 }else if(serviceType=='CBL'){
+		 
+	 }else if(servieType='KH'){
+		 
+		 
+	 }
+ }
+</script>
+</head>
+<body>
+   <div style="margin-top:10px">
+   	<input type="hidden" th:value="${order.serviceType}" name="serviceType" id="serviceType"/>
+   </div>
+   <div class="panel panel-default" style="margin-left:5px">
+   <div class="panel-heading"  >
+   	<h3 class="panel-title" >
+   		<span  th:text="__${order.serviceTypeText}__+'('+${order.cycleTypeText}+')'"></span>
+      </h3>
+   </div>    
+   <ul class="list-group">
+    <li class="list-group-item" >
+   	  	<labe>订单号：</labe>  
+   	  	<span th:text="${order.orderId}"></span>
+   	  </li>
+   	  <li class="list-group-item" >
+   	  	<labe>金额：</labe>  
+   	  	<span th:text="__${order.totalFee}__+'元'"></span>
+   	  </li>
+   	  <li class="list-group-item"  >
+   	  	<label>下单时间：</label>
+   	  	<span  th:text="${order.payTime}"></span>
+   	   </li>
+      <li class="list-group-item"  id="liserviceTime">
+      	<label>服务时间：</label>
+   	  	<span  th:text="__${order.serviceDate}__+' '+${order.durationText} "></span>
+       </li>
+      <li class="list-group-item"  >
+      	<label>地址：</label>
+   	  	<span th:text="${order.fullAddress}"></span>
+      </li>
+      <li class="list-group-item"  id="liArea">
+      	<label>面积：</label>
+   	  	<span th:text="${order.area!=null}?${order.area}:''"></span><span>平米</span>
+      </li>
+       <li class="list-group-item" id="liBalconyCount" >
+      	<label>阳台：</label>
+   	  	<span th:text="${order.balconyCount!=null}?${order.balconyCount}:''"></span><span>个</span>
+      </li>
+        <li class="list-group-item"  id="liWindowCount">
+      	<label>内窗：</label>
+   	  	<span th:text="${order.windowCount!=null}?${order.windowCount}:''"></span><span>个</span>
+      </li>
+   </ul>
+</div>
+</body>
+</html>

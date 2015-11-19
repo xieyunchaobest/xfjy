@@ -237,7 +237,7 @@ public class ClientController {
 		 windowCount=StringUtil.isBlank(windowCount)?"":windowCount;
 		 
 		 Order o =new Order();
-		 o.setUserAddressId(userAddressId);
+		 o.setUserAddressId(Long.parseLong(userAddressId));
 		 o.setFullAddress(fullAddress);
 		 o.setMobileNo(mobileNo);
 		 o.setServiceDate(serviceDate);
@@ -502,6 +502,17 @@ public class ClientController {
 		return "client/personalCenter";
 	}
 			
+	
+	
+	@RequestMapping("/client/orderDetail.html")
+	public String orderDetail(Model model,HttpSession Session,
+			HttpServletRequest request,
+			 @RequestParam(value = "oid", required = true) Long oid
+	      ) { 
+		Order o=clientService.getOrder(oid);
+		model.addAttribute("order", o);
+		return "client/orderDetail";
+	}
 	
 	
 	@RequestMapping("/client/testquery")
