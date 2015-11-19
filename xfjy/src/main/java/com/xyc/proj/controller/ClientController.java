@@ -3,6 +3,9 @@
  */
 package com.xyc.proj.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
@@ -11,7 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.DispatcherType;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cloopen.rest.sdk.CCPRestSDK;
+import com.xyc.proj.entity.Msg;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
@@ -36,6 +42,7 @@ import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
 import com.xyc.proj.utility.WeixinUtil;
+import com.xyc.proj.utility.WeChatMessageUtil;
 
 /**
  * 幸福加缘客户端控制类
@@ -49,6 +56,81 @@ public class ClientController {
 	Properties properties;  
 	@Autowired
 	ClientService clientService;
+	
+	
+	
+	
+	 /**
+	  * 登录
+	  * @param areaId
+	  * @param model
+	  * @return
+	  */
+	 @RequestMapping("/client/login.html")
+	 public String toLogin(
+	            @RequestParam(value = "code", required = false) String code,
+	            Model model) {
+		 try {
+			 System.out.println("xxxxxxxxxxxxxxxxxxxxxxx="+code);
+			 String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
+						"appid="+Constants.WE_CHAT_APPID+"&secret="+Constants.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
+				com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
+				String jsonstr=tokenJson.toString();
+				System.out.println("token json is ====="+jsonstr); 
+				String accessToken=tokenJson.getString("access_token");
+				String expiresIn=tokenJson.getString("expires_in");
+				String refreshToken=tokenJson.getString("refresh_token");
+				String openId=tokenJson.getString("openid");
+				
+				System.out.println("yyyyyyyyyyyyyyyyyyy="+openId);
+			 model.addAttribute("code", code);
+		 }catch(Exception e) {
+			 e.printStackTrace();
+		 }
+	
+		 return "client/login";
+	 }
+	 
+	 
+	 
+	 
+		@ResponseBody
+		@RequestMapping(value="/client/login",method = {RequestMethod.POST, RequestMethod.GET})
+		public String getLatestUserByMobile( 
+			        Model model,HttpSession Session,HttpServletRequest request) { 
+			String res="S";
+			List ulist=new ArrayList();
+			try {
+				String mobileNo=request.getParameter("mobileNo");
+				String authCode=request.getParameter("authCode");
+				String code=request.getParameter("code");
+				System.out.println("code=============="+code);
+				code="asfafsfasfasdfafasdf";
+				String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
+						"appid="+Constants.WE_CHAT_APPID+"&secret="+Constants.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
+				com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
+				String jsonstr=tokenJson.toString();
+				System.out.println("token json is ====="+jsonstr); 
+				String accessToken=tokenJson.getString("access_token");
+				String expiresIn=tokenJson.getString("expires_in");
+				String refreshToken=tokenJson.getString("refresh_token");
+				String openId=tokenJson.getString("openid");
+				
+				System.out.println("openId=============="+openId);
+				String urlGetUserInfo="https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid="+openId;
+				com.alibaba.fastjson.JSONObject userInfoJson=WeixinUtil.httpRequest(urlGetUserInfo, "GET", null);
+				
+				String nickName=userInfoJson.getString("nickName");
+				ulist=clientService.getUserListByMobileNoAndAuthCode(mobileNo,authCode);
+			}catch(Exception e) {
+				e.printStackTrace();
+				res="E";
+			}
+			return res;
+			}
+		
+		
+		
 	
 
 	/** 
@@ -122,18 +204,8 @@ public class ClientController {
 		 return "client/serviceDate";
 	 }
 	 
-	 /**
-	  * 登录
-	  * @param areaId
-	  * @param model
-	  * @return
-	  */
-	 @RequestMapping("/client/login.html")
-	 public String toLogin(
-	            @RequestParam(value = "code", required = false) String code,
-	            Model model) {
-		 return "client/login";
-	 }
+
+		
 	 
 	 
 	 /**
@@ -398,40 +470,6 @@ public class ClientController {
 		 return "client/test";
 	 }
 	 
-	 
-	@ResponseBody
-	@RequestMapping("/client/login")
-	public String getLatestUserByMobile( 
-		        Model model,HttpSession Session,HttpServletRequest request) { 
-		String res="S";
-		List ulist=new ArrayList();
-		try {
-			String mobileNo=request.getParameter("mobileNo");
-			String authCode=request.getParameter("authCode");
-			String code=request.getParameter("code");
-			
-			code="asfafsfasfasdfafasdf";
-			String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
-					"appid="+Constants.WE_CHAT_APPID+"&secret="+Constants.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
-			com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
-			String jsonstr=tokenJson.toString();
-			System.out.println("token json is ====="+jsonstr); 
-			String accessToken=tokenJson.getString("access_token");
-			String expiresIn=tokenJson.getString("expires_in");
-			String refreshToken=tokenJson.getString("refresh_token");
-			String openId=tokenJson.getString("openid");
-			
-			String urlGetUserInfo="https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid="+openId;
-			com.alibaba.fastjson.JSONObject userInfoJson=WeixinUtil.httpRequest(urlGetUserInfo, "GET", null);
-			
-			String nickName=userInfoJson.getString("nickName");
-			ulist=clientService.getUserListByMobileNoAndAuthCode(mobileNo,authCode);
-		}catch(Exception e) {
-			e.printStackTrace();
-			res="E";
-		}
-		return res;
-		}
 	
 	
 	@ResponseBody
@@ -544,7 +582,43 @@ public class ClientController {
 		Map resMap=clientService.personalCenter(openId);
 		model.addAttribute("resMap", resMap);
 		return "client/personalCenter";
+	} 
+	
+	@RequestMapping(value="/client/receiveMsg",method = {RequestMethod.POST, RequestMethod.GET})
+	public void receiveMsg(Model model,HttpSession Session,
+			HttpServletRequest request,HttpServletResponse response
+	      ) throws IOException { 
+		System.err.println("asdfasfsfsafasfs");
+		String str=request.getParameter("echostr");
+		if(!StringUtil.isBlank(str)) {
+			write(response,str);
+		}else {
+			String data=getData(request);
+			System.err.println("data========="+data); 
+			System.out.println("xxxxx");
+			Msg msg=WeChatMessageUtil.recevieMsg(data);
+			Msg m=new Msg(); 
+			m.setToUserName(msg.getFromUserName());
+			m.setContent("Msg Test!");
+			String sendxml=WeChatMessageUtil.getResponeTxt(m);
+			System.out.println("send xml is======"+sendxml);
+			write(response, sendxml);
+		}
 	}
+	
+	public static void write(HttpServletResponse response, String str) {
+		try {
+				response.setCharacterEncoding("GBK");
+				response.setContentLength(str.length());
+				response.getOutputStream().write(str.getBytes());
+				response.getOutputStream().flush();
+				response.getOutputStream().close();
+			}   catch (Exception e) {
+			System.err.println("reponse data error!");
+			e.printStackTrace();
+		}
+	}
+	
 			
 	
 	
@@ -589,6 +663,20 @@ public class ClientController {
 		 }
 		 return false;
 	 }
+	 
+	 
+	 private String getData(HttpServletRequest request) throws IOException{
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					(ServletInputStream) request.getInputStream(), "UTF-8"));
+			StringBuffer sb = new StringBuffer("");
+			String temp;
+			while ((temp = br.readLine()) != null) {
+				sb.append(temp);
+			}
+			br.close();
+			return sb.toString();
+		}
+
 	
 
 }
