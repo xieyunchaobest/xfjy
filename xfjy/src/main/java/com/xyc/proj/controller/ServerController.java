@@ -26,6 +26,18 @@ public class ServerController {
 	@Autowired
 	ServerService serverService;
 	
+	 @RequestMapping(value="/server/login.html",method = {RequestMethod.POST,RequestMethod.GET})
+	 public String loginInit() {
+		 return "login";
+	 }
+	
+	 
+	 @RequestMapping(value="/server/doLogin",method = {RequestMethod.POST,RequestMethod.GET})
+	 public String doLogin() {
+		 return "login";
+	 }
+	
+	
 	 @RequestMapping(value="/server/queryWorker.html",method = {RequestMethod.POST,RequestMethod.GET})
 	 public String addAddressInit(
 	            @RequestParam(value = "areaId", required = false) String areaId,
@@ -82,5 +94,50 @@ public class ServerController {
 		 }
 		 return res;
 	 }
+	 
+	 
+	 @RequestMapping(value="/server/queryOrder.html",method = {RequestMethod.POST,RequestMethod.GET})
+	 public String queryOrder(Model model,
+			 @RequestParam(value = "areaId", required = false,defaultValue="0") Long areaId,
+			 @RequestParam(value = "startTime", required = false) String startTime,
+			 @RequestParam(value = "endTime", required = false) String endTime,
+			 @RequestParam(value = "serviceDate", required = false) String serviceDate,
+			 @RequestParam(value = "serviceType", required = false) String serviceType,
+			 @RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum,
+			@RequestParam(value = "orderByStr", required = false, defaultValue = "name,desc") String orderBy
+			 ) {
+		Map<String, Object> parmMap = new HashMap<String, Object>();
+		parmMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
+		parmMap.put(Constants.ORDERBY, StringUtil.formatSortBy(orderBy));
+		parmMap.put("areaId", areaId);
+		parmMap.put("startTime", startTime);
+		parmMap.put("endTime", endTime);
+		parmMap.put("serviceDate", serviceDate);
+		parmMap.put("serviceType", serviceType);
+		PageView pageView = serverService.getOrderPageView(parmMap);
+		model.addAttribute("pageView", pageView);
+		model.addAttribute("parms", parmMap);
+		 return "server/updateWorkInit";
+	 }
+	 
+	 
+	 @ResponseBody
+	 @RequestMapping(value="/server/dispatchOrder.html",method = {RequestMethod.POST,RequestMethod.GET})
+	 public String dispatch(Model model,
+			 @RequestParam(value = "orderIds", required = true) String orderIds,
+			 @RequestParam(value = "ayiId", required = true) Long aiyiId
+			) {
+		 String res="S";
+		 try {
+			 serverService.dispatchOrder(orderIds, aiyiId);
+		 }catch(Exception e) {
+			 e.printStackTrace();
+			 res="E";
+		 }
+		 return res;
+	 }
+	 
+	 
+	 
 
 }

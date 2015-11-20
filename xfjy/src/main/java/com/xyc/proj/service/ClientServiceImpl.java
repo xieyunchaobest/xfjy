@@ -353,6 +353,36 @@ public class ClientServiceImpl implements ClientService {
 		return resMap;
 	}
 	
+	
+	public Order fillOrder(Order o) {
+		if(Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
+			o.setServiceTypeText("普通宝洁");
+		}else if(Constants.SERVICE_TYPE_DBJ.equals(o.getServiceType())) {
+			o.setServiceTypeText("大宝洁");
+		}else if(Constants.SERVICE_TYPE_CBL.equals(o.getServiceType())) {
+			o.setServiceTypeText("擦玻璃");
+		}else if(Constants.SERVICE_TYPE_KH.equals(o.getServiceType())) {
+			o.setServiceTypeText("开荒");
+		}
+		
+		if(Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
+			o.setCycleTypeText("包月");
+		}else {
+			o.setCycleTypeText("零工");
+		}
+		
+		if(Constants.ORDER_STATE_UNPAY.equals(o.getState())) {
+			o.setStateText("未支付");
+		}else if(Constants.ORDER_STATE_PAYED.equals(o.getState())) {
+			o.setStateText("已支付");
+		}else if(Constants.ORDER_STATE_CONFIRMED.equals(o.getState())) {
+			o.setStateText("已确认");
+		}else if(Constants.ORDER_STATE_FINISH.equals(o.getState())) {
+			o.setStateText("已完成");
+		} 
+		return o;
+	}
+	
 	//避免方法重写，让按照主键查询和openId查询共用一个方法体
 	public List<Order> getOrderList(String openId,Long oid) {
 		Map parmMap=new HashMap();
@@ -368,31 +398,7 @@ public class ClientServiceImpl implements ClientService {
 		if(orderList!=null) {
 			for(int i=0;i<orderList.size();i++) {
 				Order o=orderList.get(i);
-				if(Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
-					o.setServiceTypeText("普通宝洁");
-				}else if(Constants.SERVICE_TYPE_DBJ.equals(o.getServiceType())) {
-					o.setServiceTypeText("大宝洁");
-				}else if(Constants.SERVICE_TYPE_CBL.equals(o.getServiceType())) {
-					o.setServiceTypeText("擦玻璃");
-				}else if(Constants.SERVICE_TYPE_KH.equals(o.getServiceType())) {
-					o.setServiceTypeText("开荒");
-				}
-				
-				if(Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
-					o.setCycleTypeText("包月");
-				}else {
-					o.setCycleTypeText("零工");
-				}
-				
-				if(Constants.ORDER_STATE_UNPAY.equals(o.getState())) {
-					o.setStateText("未支付");
-				}else if(Constants.ORDER_STATE_PAYED.equals(o.getState())) {
-					o.setStateText("已支付");
-				}else if(Constants.ORDER_STATE_CONFIRMED.equals(o.getState())) {
-					o.setStateText("已确认");
-				}else if(Constants.ORDER_STATE_FINISH.equals(o.getState())) {
-					o.setStateText("已完成");
-				} 
+				o=fillOrder(o);
 			}
 		}
 		return orderList;
@@ -435,5 +441,14 @@ public class ClientServiceImpl implements ClientService {
 			return (Order)orderList.get(0);
 		}
 	}
+	
+	public void saveClientUser(ClientUser cu) {
+		clientUserRepository.save(cu);
+	}
+	
+	public ClientUser getClientUser(String openId) {
+		return clientUserRepository.findByOpenId(openId);
+	}
+	
 	
 }

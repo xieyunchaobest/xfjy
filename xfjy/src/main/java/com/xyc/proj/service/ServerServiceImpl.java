@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
+import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.WorkerMapper;
+import com.xyc.proj.repository.OrderRepository;
 import com.xyc.proj.repository.WorkerRepository;
 import com.xyc.proj.utility.PageView;
 
@@ -19,10 +22,16 @@ public class ServerServiceImpl implements ServerService {
 	
 	@Autowired
 	WorkerRepository workerRepository;
+	@Autowired
+	OrderRepository orderRepository;
 	
 	@Lazy
 	@Autowired
 	WorkerMapper workerMapper;
+	
+	@Lazy
+	@Autowired
+	OrderMapper orderMapper;
 	
 	public PageView getWorkPage(Map m) {
 		PageView pv = new PageView((Integer) m.get("currentPageNum"));
@@ -90,6 +99,30 @@ public class ServerServiceImpl implements ServerService {
 			Worker w=workerRepository.findOne(id);
 			w.setState(Constants.STATE_P);
 			workerRepository.save(w);
+		}
+	}
+	
+	public List findOrderList(Map m) {
+		return orderMapper.getOrderPage(m);
+	}
+	
+	public PageView getOrderPageView(Map m) {
+		PageView pv = new PageView((Integer) m.get("currentPageNum"));
+		m.put("start", pv.getStart());
+		m.put("end", pv.getCurrentMaxCnt());
+		pv.setResultList(findOrderList(m));
+		pv.setTotalRecord(orderMapper.getOrderPageCount(m));
+		return pv;
+	}
+	
+	public void dispatchOrder(String orderIds,Long ayiId){
+		String orderIdArr[]=orderIds.split(",");
+		//List orderIdList=Arrays.asList(orderIdArr);
+		for(int i=0;i<orderIdArr.length;i++) {
+			Long oid=Long.parseLong(orderIdArr[i]);
+			Order o=orderRepository.findOne(oid);
+			o.setAyiId(ayiId);
+			orderRepository.save(o);
 		}
 	}
 }

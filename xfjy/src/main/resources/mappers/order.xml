@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.xyc.proj" >
+<mapper namespace="com.xyc.proj.mapper." >
   
  
-  <select id="getOrderPage" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+  <select id="getOrderPage" resultType="java.util.HashMap" parameterType="com.xyc.proj.entity.Order">
  	<include refid="queryOrder"/>
     <include refid="queryOrderCondition"/>      
  <![CDATA[ limit  #{start} , #{end} ]]>
@@ -12,7 +12,38 @@
  
   
   <sql id="queryOrder">
-  	 select o.*,s.STORE_NAME,c.model from t_order o left join t_store s on o.store_Id=s.id , t_electric_car c where o.car_Id=c.id 
+  	  select 
+  	  	ID as id,
+  	  	ORDER_ID as orderId,
+  	  	TRADE_NO as tradeNo,
+  	  	OUT_TRADE_NO as outTradeNo,
+  	  	OPEN_ID as openId,
+  	  	MOBILE_NO as mobileNo,
+  	  	PAY_MODE as payMode,
+  	  	USER_ADDRESS_ID as userAddressId,
+  	  	SERVICE_DATE as servcieDate,
+  	  	WINDOW_COUNT as windowCount,
+  	  	BALCONY_COUNT as balconyCount,
+  	  	LAST_DAY as lastDay,
+  	  	DURATION as duration,
+  	  	AREA as area,
+  	  	START_TIME as startTime,
+  	  	END_TIME as endTime,
+  	  	UNIT_PRICE as unitPrice,
+  	  	UNIT_PRICE_WINDOW as unitPriceWindow,
+  	  	UNIT_PRICE_BALCONY as unitPriceBalcony,
+  	  	TOTAL_FEE as totalFee,
+  	  	TOOL_FEE_CLEAN as toolFeeClean,
+  	  	SERVICE_TYPE as serviceType,
+  	  	CYCLE_TYPE as cycleType,
+  	  	DRATION_MONTH as dration,
+  	  	REPEAT_IN_WEEK as repeatInWeek,
+  	  	DURATION_TEXT as durationText,
+  	  	STATE as state,
+  	  	AYI_ID as ayiId,
+  	  	CREATE_TIME as createTime,
+  	  	PAY_TIME as payTime
+  	  from T_Order 
   </sql>
   
     <select id="getOrderPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
@@ -23,12 +54,21 @@
   </select> 
   
   <sql id="queryOrderCondition">
-  	 <if test="startTime != null and startTime !=''">
+   	  <if test="areaId != null and areaId !=''">
+			 <![CDATA[ and   areaId =#{areaId}  ]]>
+	  </if>
+  	  <if test="startTime != null and startTime !=''">
 			 <![CDATA[ and   pay_time >=#{startTime}  ]]>
-		</if>
-		<if test="endTime != null and endTime !=''">
+	  </if>
+	  <if test="endTime != null and endTime !=''">
 			 <![CDATA[ and    pay_time <=#{endTime}  ]]>
-		</if>
+	  </if>
+	   <if test="serviceDate != null and serviceDate !=''">
+			 <![CDATA[ and    service_date <=#{serviceDate}  ]]>
+	  </if>
+	  <if test="serviceType != null and serviceType !=''">
+			 <![CDATA[ and    service_type =#{serviceType}  ]]>
+	  </if>
   </sql>
   
 </mapper>

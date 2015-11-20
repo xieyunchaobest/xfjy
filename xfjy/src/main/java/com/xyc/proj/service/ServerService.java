@@ -14,5 +14,9 @@ public interface ServerService {
 	public Worker getWorker(Long workerId);
 	
 	public void deleteWorker(String workIds);
+	
+	public PageView getOrderPageView(Map m);
+	
+	public void dispatchOrder(String orderIds,Long ayiId); 
 
 }

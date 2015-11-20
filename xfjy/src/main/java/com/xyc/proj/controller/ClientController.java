@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cloopen.rest.sdk.CCPRestSDK;
+import com.xyc.proj.entity.ClientUser;
 import com.xyc.proj.entity.Msg;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
@@ -70,6 +71,7 @@ public class ClientController {
 	 public String toLogin(
 	            @RequestParam(value = "code", required = false) String code,
 	            Model model) {
+		 String res="client/index";
 		 try {
 			 System.out.println("xxxxxxxxxxxxxxxxxxxxxxx="+code);
 			 String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
@@ -81,14 +83,18 @@ public class ClientController {
 				String expiresIn=tokenJson.getString("expires_in");
 				String refreshToken=tokenJson.getString("refresh_token");
 				String openId=tokenJson.getString("openid");
-				
 				System.out.println("yyyyyyyyyyyyyyyyyyy="+openId);
-			 model.addAttribute("code", code);
+				ClientUser cu=clientService.getClientUser(openId);
+				if(cu==null || cu.getId()==0l) {
+					res="client/login";
+				}
+				
+			 model.addAttribute("openId", openId);
 		 }catch(Exception e) {
 			 e.printStackTrace();
 		 }
 	
-		 return "client/login";
+		 return res;
 	 }
 	 
 	 
@@ -103,25 +109,35 @@ public class ClientController {
 			try {
 				String mobileNo=request.getParameter("mobileNo");
 				String authCode=request.getParameter("authCode");
-				String code=request.getParameter("code");
-				System.out.println("code=============="+code);
-				code="asfafsfasfasdfafasdf";
-				String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
-						"appid="+Constants.WE_CHAT_APPID+"&secret="+Constants.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
-				com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
-				String jsonstr=tokenJson.toString();
-				System.out.println("token json is ====="+jsonstr); 
-				String accessToken=tokenJson.getString("access_token");
-				String expiresIn=tokenJson.getString("expires_in");
-				String refreshToken=tokenJson.getString("refresh_token");
-				String openId=tokenJson.getString("openid");
-				
-				System.out.println("openId=============="+openId);
-				String urlGetUserInfo="https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid="+openId;
-				com.alibaba.fastjson.JSONObject userInfoJson=WeixinUtil.httpRequest(urlGetUserInfo, "GET", null);
-				
-				String nickName=userInfoJson.getString("nickName");
+				String openId=request.getParameter("openId");
+//				String code=request.getParameter("code");
+//				System.out.println("code=============="+code);
+//				code="asfafsfasfasdfafasdf";
+//				String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
+//						"appid="+Constants.WE_CHAT_APPID+"&secret="+Constants.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
+//				com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
+//				String jsonstr=tokenJson.toString();
+//				System.out.println("token json is ====="+jsonstr); 
+//				String accessToken=tokenJson.getString("access_token");
+//				String expiresIn=tokenJson.getString("expires_in");
+//				String refreshToken=tokenJson.getString("refresh_token");
+//				String openId=tokenJson.getString("openid");
+//				
+//				System.out.println("openId=============="+openId);
+//				String urlGetUserInfo="https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid="+openId;
+//				com.alibaba.fastjson.JSONObject userInfoJson=WeixinUtil.httpRequest(urlGetUserInfo, "GET", null);
+//				
+//				String nickName=userInfoJson.getString("nickName");
 				ulist=clientService.getUserListByMobileNoAndAuthCode(mobileNo,authCode);
+				if(ulist!=null && ulist.size()>0) {
+					ClientUser cu=new ClientUser();
+					cu.setMobileNo(mobileNo);
+					cu.setOpenId(openId);
+					clientService.saveClientUser(cu);
+					res="S";
+				}else {
+					res="E";
+				}
 			}catch(Exception e) {
 				e.printStackTrace();
 				res="E";

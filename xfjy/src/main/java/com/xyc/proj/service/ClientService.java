@@ -3,6 +3,7 @@ package com.xyc.proj.service;
 import java.util.List;
 import java.util.Map;
 
+import com.xyc.proj.entity.ClientUser;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
@@ -44,4 +45,8 @@ public interface ClientService {
 	public Map personalCenter(String openId);
 	
 	public Order getOrder(Long id) ;
+	
+	public void saveClientUser(ClientUser cu);
+	
+	public ClientUser getClientUser(String openId) ;
 }
