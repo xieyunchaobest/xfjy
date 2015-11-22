@@ -6,6 +6,7 @@ package com.xyc.proj.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
@@ -18,6 +19,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.xml.sax.SAXException;
 
 import com.cloopen.rest.sdk.CCPRestSDK;
 import com.xyc.proj.entity.ClientUser;
@@ -38,6 +41,8 @@ import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
 import com.xyc.proj.global.CharacterEncodingFilter;
 import com.xyc.proj.global.Constants;
+import com.xyc.proj.pay.Configure;
+import com.xyc.proj.pay.XMLParser;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
@@ -75,7 +80,7 @@ public class ClientController {
 		 try {
 			 System.out.println("xxxxxxxxxxxxxxxxxxxxxxx="+code);
 			 String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
-						"appid="+Constants.WE_CHAT_APPID+"&secret="+Constants.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
+						"appid="+Configure.appID+"&secret="+Configure.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
 				com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
 				String jsonstr=tokenJson.toString();
 				System.out.println("token json is ====="+jsonstr); 
@@ -133,6 +138,7 @@ public class ClientController {
 					ClientUser cu=new ClientUser();
 					cu.setMobileNo(mobileNo);
 					cu.setOpenId(openId);
+					model.addAttribute("openId",openId);
 					clientService.saveClientUser(cu);
 					res="S";
 				}else {
@@ -237,7 +243,7 @@ public class ClientController {
 		 
 		String loginurl="http://weixin.tjxfjz.com/xfjy/client/login.html";
 		String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-	           +Constants.WE_CHAT_APPID+"&redirect_uri="+loginurl+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect"; 
+	           +Configure.appID+"&redirect_uri="+loginurl+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect"; 
 		System.out.println("urlurlurl=="+url);
 		return "redirect:"+url;
 	 }
@@ -258,19 +264,19 @@ public class ClientController {
 		        Model model,HttpSession Session,HttpServletRequest request) {
 			String mobileNo=request.getParameter("mobileNo");
 			String randomCode=String.valueOf((int)(Math.random()*9000+1000));
-			CCPRestSDK restAPI = new CCPRestSDK();
-			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
-			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
-			restAPI.setAppId(properties.getSmsappid());// 初始化应用ID
-			String templeId=properties.getSmstemplateId();
-			Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new String[]{randomCode});
-			if("000000".equals(result.get("statusCode"))) {
+//			CCPRestSDK restAPI = new CCPRestSDK();
+//			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
+//			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
+//			restAPI.setAppId(properties.getSmsappid());// 初始化应用ID
+//			String templeId=properties.getSmstemplateId();
+//			Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new String[]{randomCode});
+			//if("000000".equals(result.get("statusCode"))) {
 				UserAuthCode u=new UserAuthCode();
 				u.setAuthCode(randomCode);
 				u.setMobileNo(mobileNo);
 				u.setCreatedTime(new Date());
 				clientService.saveUserAuthCode(u);
-			}
+			//}
 			return  new HashMap();
 		}
 	 
@@ -282,8 +288,9 @@ public class ClientController {
 	  */
 	 @RequestMapping("/client/index.html")
 	 public String index(
-	            @RequestParam(value = "areaId", required = false) String areaId,
+	            @RequestParam(value = "openId", required = true) String openId,
 	            Model model) {
+		 model.addAttribute("openId", openId);
 		 return "client/index";
 	 }
 	 
@@ -292,9 +299,11 @@ public class ClientController {
 	 private void forwardPage(Model model,HttpServletRequest request) {
 		 boolean exp=filters();
 		 if(exp==true)return ;
+		 String openId=request.getParameter("openId");
+		 openId=StringUtil.isBlank(openId)?"":openId;
 		 
 		 String userAddressId=request.getParameter("userAddressId");
-		 userAddressId=StringUtil.isBlank(userAddressId)?"":userAddressId;
+		 userAddressId=StringUtil.isBlank(userAddressId)?"0":userAddressId;
 		 
 		 String fullAddress=request.getParameter("fullAddress");
 		 fullAddress=StringUtil.isBlank(fullAddress)?"":fullAddress;
@@ -348,6 +357,7 @@ public class ClientController {
 		 windowCount=StringUtil.isBlank(windowCount)?"":windowCount;
 		 
 		 Order o =new Order();
+		 o.setOpenId(openId);
 		 o.setUserAddressId(Long.parseLong(userAddressId));
 		 o.setFullAddress(fullAddress);
 		 o.setMobileNo(mobileNo);
@@ -375,7 +385,9 @@ public class ClientController {
 	  */
 	 @RequestMapping("/client/cleanIndex.html")
 	 public String cleanIndex( Model model,HttpServletRequest request,
-			 @RequestParam(value = "serviceType", required = true) String  serviceType) {
+			 @RequestParam(value = "serviceType", required = true) String  serviceType,
+			 @RequestParam(value = "openId", required = true) String  openId
+			 ) {
 		 boolean exp=filters();
 		 if(exp==true)return "";
 		 
@@ -392,7 +404,6 @@ public class ClientController {
 		 List cleanList=clientService.getCleanToolsList(servicetype);
 		 model.addAttribute("cleanToolsList", cleanList);
 		 model.addAttribute("cleanToolsFee",cleanToolsValue);
-		 
 		 return "client/cleanIndex";
 	 }
 	 
@@ -403,7 +414,8 @@ public class ClientController {
 	  */
 	 @RequestMapping("/client/khIndex.html")
 	 public String khIndex( Model model,HttpServletRequest request,
-			 @RequestParam(value = "serviceType", required = true,defaultValue="KH") String  serviceType) {
+			 @RequestParam(value = "serviceType", required = true,defaultValue="KH") String  serviceType,
+			 @RequestParam(value = "openId", required = true) String  openId) {
 		 boolean exp=filters();
 		 if(exp==true)return "";
 		 
@@ -427,7 +439,8 @@ public class ClientController {
 	  */
 	 @RequestMapping("/client/cblIndex.html")
 	 public String cblIndex( Model model,HttpServletRequest request,
-			 @RequestParam(value = "serviceType", required = true,defaultValue="CBL") String  serviceType) {
+			 @RequestParam(value = "serviceType", required = true,defaultValue="CBL") String  serviceType,
+			 @RequestParam(value = "openId", required = true,defaultValue="openId") String  openId) {
 		 boolean exp=filters();
 		 if(exp==true)return "";
 		 
@@ -570,6 +583,74 @@ public class ClientController {
 		return "client/cleanOrderConfirm";
 	}
 	
+
+	@ResponseBody
+	@RequestMapping("/client/paytest")
+	public String payTest( Model model,HttpSession Session,HttpServletRequest request) {
+		System.out.println("getgetgetgetgetgetgetgetgetgetgetgetgetgetgetget");
+		String res="";
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					(ServletInputStream) request.getInputStream(), "UTF-8"));
+			StringBuffer sb = new StringBuffer("");
+			String temp;
+			while ((temp = br.readLine()) != null) {
+				sb.append(temp);
+			}
+			br.close();
+			System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrr="+sb.toString());
+			Map m=XMLParser.getMapFromXML(sb.toString());
+			if(m.containsKey("result_code") && m.containsKey("return_code")) {
+				String resCode=(String)m.get("result_code");
+				String retrunCode=(String)m.get("return_code");
+				if("SUCCESS".equals(resCode) && "SUCCESS".equals(retrunCode)) {
+					String orderId=(String)m.get("transaction_id");
+					String outTradeNo=(String)m.get("out_trade_no");
+					clientService.notifyOrder(outTradeNo, orderId);
+					
+					res=XMLParser.setXML("SUCCESS", "");
+				}
+			}else {
+				
+			}
+			
+			System.out.println("mapmapmapmapmapmapmap="+m);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		return res;
+		
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping("/client/createOrder")
+	public Map createOrder( 
+		        Model model,HttpSession Session,HttpServletRequest request,
+		        @ModelAttribute("order") Order order) { 
+		Map resMap=new HashMap();
+		try {
+			Map paraMap=new HashMap();
+			String spBillCreateIP = request.getHeader("X-Forwarded-For");
+			paraMap.put("spBillCreateIP", spBillCreateIP);
+			String openId=order.getOpenId();
+			paraMap.put("openId", openId);		
+			resMap=clientService.createOrder(order, paraMap);
+		}catch(Exception e) {
+			e.printStackTrace();
+			resMap.put("resultCode", "E");
+		}
+		
+		return resMap;
+	}
+	
+	
 	
 	@RequestMapping("/client/khOrderConfirm.html")
 	public String khOrderConfirm( 
@@ -674,7 +755,7 @@ public class ClientController {
 	 private boolean filters() {
 		 Date d=new Date();
 		 int strDate=Integer.parseInt(DateUtil.to_char(d, "yyyyMMdd"));
-		 if(strDate>20151118) {
+		 if(strDate>20151210) {
 			 return true;
 		 }
 		 return false;

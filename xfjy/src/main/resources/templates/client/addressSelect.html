@@ -27,7 +27,7 @@
 		var serviceType=$("#serviceType").val();
 		 var path = '';
 		 console.info('serviceType====='+serviceType);
-		if(serviceType=='CC'){
+		if(serviceType=='CC' || serviceType=='DBJ'){
 			path=basePath+"/client/cleanIndex.html"; 
 		}else if(serviceType=='KH'){
 			path=basePath+"/client/khIndex.html"; 
@@ -79,6 +79,7 @@
 	<form th:action="@{/client/login}" method="post" id="aform">
 		<div class="container-fluid">
 		<div style="height:20px">
+			<input type="hidden" name="openId" id="openId"   th:value="${order.openId}"/>
 			<input type="hidden" name="userAddressId" id="userAddressId"  th:value="${order.userAddressId}"/>
 			<input type="hidden"  id="fullAddress" name="fullAddress" th:value="${order.fullAddress}"/>
 			

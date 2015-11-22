@@ -7,6 +7,16 @@ package com.xyc.proj.global;
  *
  */
 public interface Constants {
+	public static final String URL_PRE_PAY="https://api.mch.weixin.qq.com/pay/unifiedorder";
+	public static final String certLocalPath="/Users/xieyunchao/Downloads/cert/apiclient_cert.p12";
+	//public static final String certLocalPath="/home/diuser/resource/apiclient_cert.p12";
+	
+	
+	
+	
+	
+	
+	
 	
 	// baseDao中获取mybatis配置文件中mapper的查询语句id的前缀
 	public static final String MYBATIS_MAPPER_PRIX = "com.xyc.proj.";
@@ -58,6 +68,11 @@ public interface Constants {
 	public static final String ORDER_STATE_CONFIRMED="C";//已经确认
 	public static final String ORDER_STATE_FINISH="F";//完成
 	
+	public static final String ORDER_PAY_MODE_WECHAT="W";//支付方式，微信
+	public static final String ORDER_PAY_MODE_YUE="Y";//余额
+	
+	
+	
 	public static final String EDUCATIONAL_LEVEL_MIDDLE="M";//中学以及以下
 	public static final String EDUCATIONAL_LEVEL_ZK="Z";//专科
 	public static final String EDUCATIONAL_LEVEL_BK="B";//本科
@@ -76,7 +91,10 @@ public interface Constants {
 	public static final String WORK_TIME_DAY="D";//白班
 	public static final String WORK_TIME_24H="H";//24XIAOSHI
 	
-	public static final String WE_CHAT_APPID="";
-	public static final String WE_CHAT_APPSECRET="";
 	
+	
+	
+	
+	public static String key = "";
+ 
 }

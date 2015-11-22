@@ -26,7 +26,7 @@ public class Schedule {
 	private long id;
 	
 	@Column(name = "ORDER_ID")
-	private String orderId;
+	private Long orderId;
 	
 	@Column(name = "BUSI_DATE")
 	private String busiDate="";
@@ -66,12 +66,12 @@ public class Schedule {
 	}
 
 
-	public String getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
 

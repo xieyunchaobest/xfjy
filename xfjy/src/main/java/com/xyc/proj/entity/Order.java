@@ -42,7 +42,11 @@ public class Order {
 	private String mobileNo;
 	
 	@Column(name = "PAY_MODE")
-	private String payMode;
+	private String payMode="W";
+	
+	@Transient
+	private String payModeText="";
+	
 	
 	@Column(name = "USER_ADDRESS_ID")
 	private Long userAddressId;
@@ -523,6 +527,16 @@ public class Order {
 
 	public void setStateText(String stateText) {
 		this.stateText = stateText;
+	}
+
+
+	public String getPayModeText() {
+		return payModeText;
+	}
+
+
+	public void setPayModeText(String payModeText) {
+		this.payModeText = payModeText;
 	}
 
 

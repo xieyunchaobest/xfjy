@@ -39,8 +39,25 @@
 	            	 
 	            }
 	        });
-		
 	}
+	
+	function doLogin(){
+		$.ajax({
+            type: "POST",
+            url: basePath+'/client/login',
+            data:$("#loginForm").serialize(),
+            success: function(data) {
+            	alert(data);
+            	if(data="S"){
+            		var openId=$("#openId").val();
+            	 	window.location.href=basePath+'/client/index.html?openId='+openId;
+            	}else{
+            		$("#spnwarngin").text('登录失败，请检查输入！');
+            	}
+            }
+        }); 
+	}
+	
 </script>
 
 
@@ -74,11 +91,21 @@
 				</div>
 				<div class="col-md-1"></div>
 			</div>
-			<div style="height:30px;"></div>
+			
+			<div class="row" id="warnginInfo">
+				<div class="col-xs-1"/>
+				<div>
+					 <span id="spnwarngin" style="font-weight:bold;color:red"></span>
+				</div>
+				<div class="col-xs-1"/>
+			</div>
+			
 			<div class="row">
-				<div class="col-md-4">&nbsp;</div>
+				<div class="col-md-4">&nbsp;
+					
+				</div>
 				<div class="col-md-4">
-					<button class="btn btn-default btn-lg" style="width:100%" type="submit">登录</button>
+					<button class="btn btn-default btn-lg" style="width:100%" onclick="doLogin()" type="button">登录</button>
 				</div>
 				<div class="col-md-4">&nbsp;</div>
 			</div>

@@ -8,6 +8,8 @@ import java.util.Date;
 
 public class DateUtil {
 	
+	public static String format1="yyyyMMddHHmmss";
+	
 	public static String getNow() {
 		Calendar cal = Calendar.getInstance();
 		String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal
@@ -89,6 +91,28 @@ public class DateUtil {
 			   e.printStackTrace();
 		   }
 		   return date;
+	}
+	
+	public static String Time2Str(Date date,String format) {
+		if(date==null)return "";
+		String str = new SimpleDateFormat(format).format(date);
+		return str;
+	}
+	
+	public static String getDiffDate(int hour) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.HOUR, hour);
+		String day = new SimpleDateFormat(format1).format(cal
+				.getTime());
+		return day;
+	}
+	
+	
+	public static String getTimeStamp() {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String str = sdf.format(date);
+		return str;
 	}
 	
 }

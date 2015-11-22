@@ -34,6 +34,7 @@ public class Worker {
 	@Column(name = "AREA_ID")
 	private Long areaId; 
 	
+	@Transient
 	private String areaName;
 	
 	@Column(name = "SUB_AREA")

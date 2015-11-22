@@ -81,7 +81,7 @@ function showTimeModal(){
 		 var windowCount=$("#txtWindowCount").val();
 		 var alconyCount=$("#txtBalconyCount").val();
 		 var mobileNo=$("#txtmobileNo").val();
-		 if(address==''){
+		 if(address=='' || address=='0'){
 			 $("#spnwarngin").text('请选择地址！');
 			 return false;
 		 }
@@ -97,14 +97,25 @@ function showTimeModal(){
 			 $("#spnwarngin").text('请内窗数量，如无请填写0！');
 			 return false;
 		 }else{
+			 if(isNaN(windowCount)){
+				 $("#spnwarngin").text('请正确填写内窗数量！');
+				 return false;
+			 }
+			 
 			 if(windowCount<2){
 				 $("#spnwarngin").text('室内窗至少为2！');
+				 return false;
 			 }
 		 }
 		 if(alconyCount==''){
 			 $("#spnwarngin").text('请阳台数量，如无请填写0！');
 			 return false;
 		 }
+		 if(isNaN(alconyCount)){
+			 $("#spnwarngin").text('请正确填写阳台数量！');
+			 return false;
+		 }
+		 
 		 
 		 if(alconyCount==0 && windowCount==0){
 			 $("#spnwarngin").text('内窗、阳台不能都填写0！');
@@ -113,6 +124,15 @@ function showTimeModal(){
 		
 		 if(mobileNo==''){
 			 $("#spnwarngin").text('请填写联系方式！');
+			 return false;
+		 }
+		 if(isNaN(mobileNo)){
+			 $("#spnwarngin").text('请输入正确的联系方式！');
+			 return false;
+		 }
+		 
+		 if(mobileNo.length!=8 && mobileNo.length!=11){
+			 $("#spnwarngin").text('请输入正确的联系方式！');
 			 return false;
 		 }
 		 return true;
@@ -124,7 +144,7 @@ function showTimeModal(){
 		 if(vald==false)return;
 		 
 		 var serviceDate=$("#txtServiceDate").val();
-		 var serviceTime=$("#spnServiceTime").text();
+		 var serviceTime=$("#hdServiceTime").val();
 		 var windowCount=$("#txtWindowCount").val();
 		 var balconyCount=$("#txtBalconyCount").val();
 		 var mobileNo=$("#txtmobileNo").val();
@@ -161,6 +181,7 @@ function showTimeModal(){
 <body>
 	<form th:action="@{/client/login}" method="post" id="aform">
 		<div style="display:none">
+			<input type="hidden" name="openId" id="openId"   th:value="${order.openId}"/>
 			<input type="hidden" name="mobileNo" id="mobileNo"   th:value="${order.mobileNo}"/>
 			<input type="hidden" name="userAddressId"  id="userAddressId" th:value="${order.userAddressId}"/>
 			<input type="hidden" name="fullAddress" id="fullAddress" th:value="${order.fullAddress}"/>

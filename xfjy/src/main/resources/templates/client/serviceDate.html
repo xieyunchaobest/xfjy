@@ -33,6 +33,7 @@
 		<input type="hidden" name="NonReservationTimeIdList" th:value="${NonReservationTimeIdList}"/>
 	</div>
 		<form id="submitForm" method="post" style="display:none">
+		<input type="hidden" name="openId" id="openId"   th:value="${order.openId}"/>
    		<input type="hidden" name="userAddressId" id="userAddressId" th:value="${order.userAddressId}"/>
 		<input type="hidden"  id="fullAddress" name="fullAddress" th:value="${order.fullAddress}"/>
    		<input type="hidden" name="serviceDate" id="serviceDate" th:value="${order.serviceDate}"/>

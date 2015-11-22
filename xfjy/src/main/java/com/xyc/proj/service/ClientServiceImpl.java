@@ -6,10 +6,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xyc.proj.entity.ClientUser;
 import com.xyc.proj.entity.DepositLog;
@@ -23,6 +27,12 @@ import com.xyc.proj.entity.Version;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.mapper.UserAddressMapper;
+import com.xyc.proj.pay.Configure;
+import com.xyc.proj.pay.RandomStringGenerator;
+import com.xyc.proj.pay.ScanPayReqData;
+import com.xyc.proj.pay.ScanPayService;
+import com.xyc.proj.pay.Signature;
+import com.xyc.proj.pay.XMLParser;
 import com.xyc.proj.repository.AreaRepository;
 import com.xyc.proj.repository.AyiRepository;
 import com.xyc.proj.repository.CleanToolsRepository;
@@ -203,7 +213,7 @@ public class ClientServiceImpl implements ClientService {
 				 sd.setCreatedTime(new Date());
 				 sd.setStartTime(o.getStartTime());
 				 sd.setEndTime(o.getEndTime());
-				 sd.setOrderId(o.getOrderId());
+				 sd.setOrderId(o.getId());
 				 sd.setState(Constants.STATE_P);
 				 resList.add(sd);
 			 }
@@ -271,14 +281,30 @@ public class ClientServiceImpl implements ClientService {
 	public Order getConfirmOrder(Order o) {
 		double totalFee=getTotalPrice(o);
 		o.setTotalFee(totalFee);
+		String durationText="";
+		if(!StringUtil.isBlank(o.getStartTime())) {
+			Integer iStartTime=Integer.parseInt(o.getStartTime());
+			durationText=iStartTime+"";
+			if(!StringUtil.isBlank(o.getEndTime())) {
+				Integer iEndTime=Integer.parseInt(o.getEndTime());
+				durationText=durationText+":"+iEndTime;
+			}
+		}
+		o.setDurationText(durationText);
 		return o;
 	}
 	
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void saveOrder(Order order) {
-		orderRepository.save(order);
-		saveSchedule(order);
+		Order o=orderRepository.save(order);
+		if(Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
+			saveSchedule(o);
+		}
+		
 	}
 	
+	
+	@Transactional(propagation=Propagation.NESTED)
 	public void saveSchedule(Order o ) {
 		if(Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
 			List scheduleList=getScheduleList4Month(o);
@@ -288,8 +314,8 @@ public class ClientServiceImpl implements ClientService {
 			sd.setBusiDate(o.getServiceDate());
 			sd.setCreatedTime(new Date());
 			sd.setStartTime(o.getStartTime());
-			sd.setEndTime(o.getStartTime());
-			sd.setOrderId(o.getOrderId());
+			sd.setEndTime(o.getEndTime());
+			sd.setOrderId(o.getId());
 			scheduleRepository.save(sd);
 		}
 	}
@@ -370,6 +396,12 @@ public class ClientServiceImpl implements ClientService {
 		}else {
 			o.setCycleTypeText("零工");
 		}
+		if(Constants.ORDER_PAY_MODE_WECHAT.equals(o.getPayMode())) {
+			o.setPayModeText("微信");
+		}else {
+			o.setPayModeText("余额");
+		}
+		
 		
 		if(Constants.ORDER_STATE_UNPAY.equals(o.getState())) {
 			o.setStateText("未支付");
@@ -451,4 +483,80 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	
+	public Map createOrder(Order o,Map paraMap) {
+		Map resMap=new HashMap();
+		resMap.put("resultCode", "S");
+		
+		Order order=getConfirmOrder(o);
+		
+
+		String outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
+		order.setOutTradeNo(outTradeNo);
+		order.setPayMode(Constants.ORDER_PAY_MODE_WECHAT);
+		saveOrder(order);
+		
+		int totalFee = 1;
+		//totalFee=order.getTotalFee().intValue()*100;
+		
+		String timeStart = DateUtil.Time2Str(new Date(),DateUtil.format1);
+		String timeExpire = DateUtil.getDiffDate(1);
+		//String openId="o74xjw9vCvp6Wxa5zPEPu4ghP8gA";
+		String openId=(String)paraMap.get("openId");
+		String spBillCreateIP=(String)paraMap.get("spBillCreateIP");
+		
+		ScanPayReqData scanPayReqData = new ScanPayReqData(outTradeNo, totalFee, spBillCreateIP,
+				timeStart, timeExpire,openId);
+		try {
+			String res=new ScanPayService().request(scanPayReqData);
+			Map rm=XMLParser.getMapFromXML(res);
+			if(rm.containsKey("prepay_id")) {
+				String prepay_id=(String)rm.get("prepay_id");
+				SortedMap pm=new TreeMap();
+				resMap.put("prepay_id",prepay_id);
+				
+				pm.put("appId", Configure.appID);
+				String tmp= DateUtil.getTimeStamp();
+				pm.put("timeStamp",tmp);
+				String nonceStr=RandomStringGenerator.getRandomStringByLength(32);
+				pm.put("nonceStr", nonceStr);
+				pm.put("package", "prepay_id="+prepay_id);
+				pm.put("signType", "MD5");
+				String sign=Signature.getSign(pm);
+				pm.put("paySign", sign);
+				
+				resMap.put("parm", pm);
+				
+				
+				System.out.println("parmssssssssss is ="+pm);
+				
+			}else {
+				resMap.put("resultCode", "E");
+			}
+			System.out.println("res======"+res);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			resMap.put("resultCode", "E");
+		} catch (InstantiationException e) {
+			resMap.put("resultCode", "E");
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			resMap.put("resultCode", "E");
+			e.printStackTrace();
+		} catch (Exception e) {
+			resMap.put("resultCode", "E");
+			e.printStackTrace();
+		}
+		System.out.println("resMap======="+resMap);
+		return resMap;
+	}
+	
+	public void notifyOrder(String outTradeNo,String orderId) {
+		Order order=orderRepository.findByOutTradeNo(outTradeNo);
+		if(order!=null) {
+			order.setOrderId(orderId);
+			order.setState(Constants.ORDER_STATE_PAYED);
+			order.setPayTime(new Date());
+			orderRepository.save(order);
+		}
+	}
 }

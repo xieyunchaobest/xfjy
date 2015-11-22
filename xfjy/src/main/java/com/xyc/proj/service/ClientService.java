@@ -3,6 +3,8 @@ package com.xyc.proj.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.xyc.proj.entity.ClientUser;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
@@ -49,4 +51,8 @@ public interface ClientService {
 	public void saveClientUser(ClientUser cu);
 	
 	public ClientUser getClientUser(String openId) ;
+	
+	public Map createOrder(Order o,Map paraMap);
+	
+	public void notifyOrder(String outTradeNo,String orderId);
 }

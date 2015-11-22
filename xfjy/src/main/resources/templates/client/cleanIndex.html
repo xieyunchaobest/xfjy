@@ -75,10 +75,11 @@
 		 }
 		 return res;
 	 }
-	 /*]]>*/
+	
 	 
 	 $(function () {
 		 initServiceDate();
+		 showOrHide();
 	  });
 	 
 	 function showCleanTools(){
@@ -87,24 +88,64 @@
 		   })
 	 }
 	 
+	 function showOrHide(){
+		 if($("#serviceType").val()=='DBJ'){
+			 $("#ularea").show();
+		 }
+	 }
+	 
 	 
 	 function toOrderConfirm(){
+		 
+		 if($("#userAddressId").val()=='' || $("#userAddressId").val()=='0'){
+			 $("#spnwarngin").text('请选择地址！');
+			 return;
+		 }
+		 
+		 if($("#serviceDate").val()==''){
+			 $("#spnwarngin").text('请选择服务时间！');
+			 return;
+		 }
+		 
 		 if($("#txtmobileNo").val()==''){
 			 $("#spnwarngin").text('请输入联系方式！');
 			 return;
 		 }
+		 if(isNaN($("#txtmobileNo").val())){
+			 $("#spnwarngin").text('请输入正确的联系方式！');
+			 return;
+		 }
+		 
+		 if($("#txtmobileNo").val().length!=8 && $("#txtmobileNo").val().length!=11){
+			 $("#spnwarngin").text('请输入正确的联系方式！');
+			 return;
+		 }
+		 
 		 $("#mobileNo").val($("#txtmobileNo").val());
+		 
+		 if($("#serviceType").val()=='DBJ'){
+			 if($("#txtArea").val()==''){
+				 $("#spnwarngin").text('请输入宝洁面积！');
+				 return;
+			 }
+			 if(isNaN($("#txtArea").val())){
+				 $("#spnwarngin").text('宝洁面积只能为数字！');
+				 return;
+			 }
+			 $("#area").val($("#txtArea").val());
+		 }
+		 
+		 
 		 if($("#cbprovide").prop('checked')==true){
 			 $("#isProviceCleanTools").val('Y');
 		 }
-		 
 		 
 		 
 		 var path = basePath+"/client/cleanOrderConfirm.html";  
 		$('#aform').attr("action", path).submit();
 		 
 	 }
-	 
+	 /*]]>*/
 </script>
 
 
@@ -114,6 +155,7 @@
 <body>
 	<form th:action="@{/client/login}" method="post" id="aform">
 		<div style="display:none">
+			<input type="hidden" name="openId" id="openId"   th:value="${order.openId}"/>
 			<input type="hidden" name="mobileNo" id="mobileNo"   th:value="${order.mobileNo}"/>
 			<input type="hidden" name="userAddressId"  id="userAddressId" th:value="${order.userAddressId}"/>
 			<input type="hidden" name="fullAddress" id="fullAddress" th:value="${order.fullAddress}"/>
@@ -129,7 +171,7 @@
    			<input type="hidden" name="durationMonthText" id="durationMonthText" th:value="${order.durationMonthText}" />
    			<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
    			<input type="hidden" name="isProviceCleanTools" id="isProviceCleanTools" th:value="${order.isProviceCleanTools}" />
-   			
+   			<input type="hidden" name="area" id="area" th:value="${order.area}" />
    		
 		</div>
 		<div class="container-fluid">
@@ -144,9 +186,14 @@
   					<span class="badge">></span>
 			</li>
 		</ul>
+		<ul class="list-group" id="ularea" style="display:none">
+			<li class="list-group-item">
+				<input type="text" placeholder="请输入宝洁面积,单位：平方米"   name="txtArea" class="form-control" id="txtArea"/>
+			</li> 
+		</ul>
 		<ul class="list-group">
 			<li class="list-group-item">
-				<input type="text" placeholder="请输入联系方式"   name="txtmobileNo" class="form-control" id="txtmobileNo"/>
+				<input type="text" placeholder="请输入联系方式"   name="txtmobileNo" value="12345678"  class="form-control" id="txtmobileNo"/>
 			</li> 
 		</ul>
 		<ul class="list-group" >

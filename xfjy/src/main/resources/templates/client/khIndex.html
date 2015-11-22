@@ -72,14 +72,14 @@ function showTimeModal(){
 		   })
 	 }
 	 
-	 
+	 /*<![CDATA[*/
 	 function validate(){
 		 var address=$("#userAddressId").val();
 		 var serviceDate=$("#txtServiceDate").val();
 		 var serviceTime=$("#spnServiceTime").text();
 		 var area=$("#txtArea").val();
 		 var mobileNo=$("#txtmobileNo").val();
-		 if(address==''){
+		 if(address==''|| address=='0'){
 			 $("#spnwarngin").text('请选择地址！');
 			 return false;
 		 }
@@ -96,19 +96,34 @@ function showTimeModal(){
 			 $("#spnwarngin").text('请填写宝洁面积！');
 			 return false;
 		 }
+		 if(isNaN(area)){
+			 $("#spnwarngin").text('宝洁面积只能为数字！');
+			 return false;
+		 }
+		 
 		 if(mobileNo==''){
 			 $("#spnwarngin").text('请填写联系方式！');
 			 return false;
 		 }
+		 if(isNaN(mobileNo)){
+			 $("#spnwarngin").text('请输入正确的联系方式！');
+			 return false;
+		 }
+		 
+		 if(mobileNo.length!=8 && mobileNo.length!=11){
+			 $("#spnwarngin").text('请输入正确的联系方式！');
+			 return false;
+		 }
+		 
 		 return true;
 	 }
-	 
+	 /*]]>*/
 	 function toOrderConfirm(){
 		 var vald=validate();
 		 if(vald==false)return;
 		 
 		 var serviceDate=$("#txtServiceDate").val();
-		 var serviceTime=$("#spnServiceTime").text();
+		 var serviceTime=$("#hdServiceTime").val();
 		 var area=$("#txtArea").val();
 		 var mobileNo=$("#txtmobileNo").val();
 		 var cbprovide=$("#cbprovide").prop('checked');
@@ -143,6 +158,7 @@ function showTimeModal(){
 <body>
 	<form th:action="@{/client/login}" method="post" id="aform">
 		<div style="display:none">
+			<input type="hidden" name="openId" id="openId"   th:value="${order.openId}"/>
 			<input type="hidden" name="mobileNo" id="mobileNo"   th:value="${order.mobileNo}"/>
 			<input type="hidden" name="userAddressId"  id="userAddressId" th:value="${order.userAddressId}"/>
 			<input type="hidden" name="fullAddress" id="fullAddress" th:value="${order.fullAddress}"/>
@@ -184,7 +200,7 @@ function showTimeModal(){
 				<input type="text" placeholder="请输入宝洁面积(单位：平米)"   name="txtArea" class="form-control" id="txtArea"/>
 			</li>
 			<li class="list-group-item">
-				<input type="text" placeholder="请输入联系方式"   name="txtmobileNo" class="form-control" id="txtmobileNo"/>
+				<input type="text" placeholder="请输入联系方式"   value="12121121" name="txtmobileNo" class="form-control" id="txtmobileNo"/>
 			</li> 
 		</ul>
 		<ul class="list-group" >

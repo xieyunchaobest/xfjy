@@ -60,11 +60,23 @@ $(function(){
     $('#myCarousel').carousel({
  interval: 3000
 });
+    
+    $(".imgs img").addClass("carousel-inner img-responsive img-rounded");
   });
   
-	 function toclean(){
-		 window.location.href=basePath+"/client/cleanIndex.html";
+/*<![CDATA[*/
+	 function forward(serviceType){
+		 var openId=$("#openId").val();
+		 if(serviceType=='CC' || serviceType=='DBJ'){
+			 window.location.href=basePath+"/client/cleanIndex.html?openId="+openId+"&serviceType="+serviceType;
+		 }else if(serviceType=='KH' ){
+			 window.location.href=basePath+"/client/khIndex.html?openId="+openId+"&serviceType="+serviceType;
+		 }else{
+			 window.location.href=basePath+"/client/cblIndex.html?openId="+openId+"&serviceType="+serviceType;
+		 }
+		 
 	 }
+	 /*]]>*/
 </script>
 
 
@@ -74,60 +86,86 @@ $(function(){
 <body>
 	<form th:action="@{/client/login}" method="post" id="loginForm">
 		<div class="container-fluid">
-			<div style="height:20px"></div>
-			<div class="row" id="image">
-				<div class="col-md-1 col-sm-1 col-xs-1 col-lg-1" />
-				
-				<div id="myCarousel" class="carousel slide col-md-10 col-sm-10 col-xs-10 col-lg-10">
-   <!-- 轮播（Carousel）指标 -->
-   <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-   </ol>   
-   <!-- 轮播（Carousel）项目 -->
-   <div class="carousel-inner">
-      <div class="item active">
-         <img src="http://preview.quanjing.com/east001/east-ep-a51-2391832.jpg" style="height:250px;width:auto" alt="First slide" />
-         <div class="carousel-caption" style="margin-top:55px">优惠1</div>
-      </div>
-      <div class="item">
-         <img src="http://preview.quanjing.com/is025/is099r4id.jpg" style="height:250px;width:auto" alt="Second slide" />
-         <div class="carousel-caption" style="margin-top:55px">优惠 2</div>
-      </div>
-      <div class="item">
-         <img src="http://preview.quanjing.com/auto/car-0684.jpg" style="height:250px;width:auto" alt="Third slide" />
-         <div class="carousel-caption" style="margin-top:55px">优惠 3</div>
-      </div>
-   </div>
-   <!-- 轮播（Carousel）导航 -->
-   <a class="carousel-control left" href="#myCarousel" 
-      data-slide="prev">&lsaquo;</a>
-   <a class="carousel-control right" href="#myCarousel" 
-      data-slide="next">&rsaquo;</a>
-</div> 
-
-				<div class="col-md-1 col-sm-1 col-xs-1 col-lg-1"/>
+			<div style="height:20px">
+				<input type="hidden" name="openId" id="openId" th:value="${openId}" /> 
 			</div>
-			<div class="row" id="func">
-				<div class="col-md-1 col-sm-1 col-lg-1 col-xs-1" />
-				<div class="col-md-5 col-sm-5 col-lg-5 col-xs-5" style="height:100px;border:1px solid red"  onclick="toclean()">
+			<div class="row" id="image" style="margin-right:15px;">
+				<div id="myCarousel" class="carousel slide col-md-12 col-sm-12 col-xs-12 col-lg-12" style="margin-left:15px">
+			   <!-- 轮播（Carousel）指标 -->
+			   <ol class="carousel-indicators">
+			      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			      <li data-target="#myCarousel" data-slide-to="1"></li>
+			      <li data-target="#myCarousel" data-slide-to="2"></li>
+			   </ol>   
+			   <!-- 轮播（Carousel）项目 -->
+			   <div class="carousel-inner"   >
+			      <div class="item active">
+			         <img class="imgs" src="http://preview.quanjing.com/east001/east-ep-a51-2391832.jpg" style="height:250px;width:350px" alt="First slide" />
+			         <div class="carousel-caption" style="margin-top:55px">优惠1</div>
+			      </div>
+			      <div class="item">
+			         <img class="imgs" src="http://preview.quanjing.com/is025/is099r4id.jpg" style="height:250px;width:350px" alt="Second slide" />
+			         <div class="carousel-caption" style="margin-top:55px">优惠 2</div>
+			      </div>
+			      <div class="item">
+			         <img class="imgs" src="http://preview.quanjing.com/auto/car-0684.jpg" style="height:250px;width:350px" alt="Third slide" />
+			         <div class="carousel-caption" style="margin-top:55px">优惠 3</div>
+			      </div>
+			   </div>
+			</div> 
+			</div>
+			
+			<div class="row" id="func" style="margin-left:15px;margin-right:15px;border:1px solid red">
+				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red"  onclick="forward('CC')">
+					<div style="width:60px;float:left" >
+						<img  alt=""   th:src="@{/app/img/icon_func1.gif}" />
+					</div>
+					<div style="width:100px">
+						普通保洁
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red" onclick="forward('DBJ')">
 					<div style="width:60px;float:left" >
 						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
 					</div>
 					<div style="width:100px">
-						保洁
+						大保洁
 					</div>
 				</div>
-				<div class="col-md-5 col-sm-5 col-lg-5 col-xs-5" style="height:100px;border:1px solid red">
+				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red" onclick="forward('CBL')">
+					<div style="width:60px;float:left" >
+						<img  alt=""   th:src="@{/app/img/icon_func1.gif}" />
+					</div>
+					<div style="width:100px">
+						擦玻璃
+					</div>
+				</div>
+			</div>
+			<div class="row" id="func" style="margin-left:15px;margin-right:15px;">
+				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red"  onclick="forward('KH')">
 					<div style="width:60px;float:left" >
 						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
 					</div>
 					<div style="width:100px">
-						家政
+						开荒
 					</div>
 				</div>
-				<div class="col-md-1 col-sm-1 col-lg-1 col-xs-1" />
+				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red">
+					<div style="width:60px;float:left" >
+						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
+					</div>
+					<div style="width:100px">
+						
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red">
+					<div style="width:60px;float:left" >
+						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
+					</div>
+					<div style="width:100px">
+						 
+					</div>
+				</div>
 			</div>
 			<div>
 			</div>

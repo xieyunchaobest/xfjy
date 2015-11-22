@@ -10,6 +10,9 @@ public class Properties {
 	private String smsaccountToken;
 	private String smsappid;
 	private String smstemplateId;
+	private String certLocalPath;
+	
+	
 	
 	
 	private String fileuploadpath;
@@ -62,6 +65,12 @@ public class Properties {
 	}
 	public void setServeraddress(String serveraddress) {
 		this.serveraddress = serveraddress;
+	}
+	public String getCertLocalPath() {
+		return certLocalPath;
+	}
+	public void setCertLocalPath(String certLocalPath) {
+		this.certLocalPath = certLocalPath;
 	}
 	
 	
