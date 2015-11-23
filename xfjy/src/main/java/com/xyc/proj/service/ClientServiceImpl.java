@@ -486,14 +486,20 @@ public class ClientServiceImpl implements ClientService {
 	public Map createOrder(Order o,Map paraMap) {
 		Map resMap=new HashMap();
 		resMap.put("resultCode", "S");
-		
-		Order order=getConfirmOrder(o);
-		
+		Order order=new Order();
+		String outTradeNo="";
+		if(StringUtil.isBlank(o.getOutTradeNo())) { //第一次支付，需要保存
+			order=getConfirmOrder(o);
+			order.setState(Constants.URL_PRE_PAY);
 
-		String outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
-		order.setOutTradeNo(outTradeNo);
-		order.setPayMode(Constants.ORDER_PAY_MODE_WECHAT);
-		saveOrder(order);
+			outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
+			order.setOutTradeNo(outTradeNo);
+			order.setPayMode(Constants.ORDER_PAY_MODE_WECHAT);
+			saveOrder(order);
+		}else {//从未完成订单中，不需要重新创建订单
+			outTradeNo=o.getOutTradeNo();
+			order=orderRepository.findByOutTradeNo(outTradeNo);
+		}
 		
 		int totalFee = 1;
 		//totalFee=order.getTotalFee().intValue()*100;

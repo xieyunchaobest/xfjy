@@ -4,7 +4,10 @@
 package com.xyc.proj.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
@@ -21,6 +25,7 @@ import com.xyc.proj.utility.PageView;
 import com.xyc.proj.utility.StringUtil;
 
 @Controller
+@SessionAttributes("user")
 public class ServerController {
 	
 	@Autowired
@@ -28,13 +33,27 @@ public class ServerController {
 	
 	 @RequestMapping(value="/server/login.html",method = {RequestMethod.POST,RequestMethod.GET})
 	 public String loginInit() {
-		 return "login";
+		 return "server/login";
 	 }
 	
 	 
 	 @RequestMapping(value="/server/doLogin",method = {RequestMethod.POST,RequestMethod.GET})
-	 public String doLogin() {
-		 return "login";
+	 public String doLogin( @RequestParam(value = "code", required = true) String code,
+			 HttpSession session,
+	         @RequestParam(value = "password", required = true) String password,
+	         Model model) {
+		 List workList=serverService.findByCodeAndPassword(code, password);
+		 String res="server/index";
+		 if(workList==null || workList.size()==0) {
+			 model.addAttribute("error", "用户名或密码错误！");
+			 return "server/login";
+		 }else {
+			 Worker w=(Worker)workList.get(0);
+			 session.setAttribute("user", w);
+			 model.addAttribute("user", w);
+		 }
+		 
+		 return res;
 	 }
 	
 	

@@ -125,4 +125,8 @@ public class ServerServiceImpl implements ServerService {
 			orderRepository.save(o);
 		}
 	}
+	
+	public List findByCodeAndPassword(String code,String pwd) {
+		return workerRepository.findByCodeAndPassword(code, pwd);
+	}
 }

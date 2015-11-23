@@ -18,29 +18,106 @@ $(function(){
     $('#myCarousel').carousel({
  interval: 3000
 });
-    
+    showOrHide();
     
   });
  
  
  function showOrHide(){
 	 var serviceType=$("#serviceType").val();
-	 if(serviceType=='CC' || serviceType='DBJ'){
+	 if(serviceType=='CC' || serviceType=='DBJ'){
 		 $('#liArea').hide();
 		 $('#liBalconyCount').hide();
 		 $('#liWindowCount').hide();
 	 }else if(serviceType=='CBL'){
-		 
-	 }else if(servieType='KH'){
-		 
-		 
+		
+	 }else if(serviceType=='KH'){
+		 $('#liBalconyCount').hide();
+		 $('#liWindowCount').hide();
+	 }
+	 
+	 if($("#state").val()=='U'){
+		 $("#divpay").show();
 	 }
  }
+ 
+ var prepay_id=''; 
+ var appId='';
+ var timeStamp='';
+ var nonceStr='';
+ var packages='';
+ var signType='';
+ var paySign='';
+ function createOrder(){
+ 	$("#btnPay").text('支付中...');
+ 	$("#btnPay").attr("disabled",true); 
+ 	 $.ajax({
+             type: "POST",
+             url: basePath+'/client/createOrder',
+             data:$("#aform").serialize(),
+             success: function(data) {
+             	if(data.resultCode=="S"){
+             		prepay_id=data.prepay_id;
+             		appId=data.parm.appId;
+             		timeStamp=data.parm.timeStamp;
+             		nonceStr=data.parm.nonceStr;
+             		packages=data.parm.package;
+             		paySign=data.parm.paySign;
+             		pay();
+             	}else{
+             		 alert('订单处理失败！');
+             	}
+             }
+         }); 
+ }
+  
+  
+
+ /*<![CDATA[*/
+ function onBridgeReady(){
+ 	   WeixinJSBridge.invoke(
+ 	       'getBrandWCPayRequest',{
+ 	           "appId" : appId,     //公众号名称，由商户传入     
+ 	           "timeStamp":timeStamp,         //时间戳，自1970年以来的秒数     
+ 	           "nonceStr" : nonceStr, //随机串     
+ 	           "package" : packages,     
+ 	           "signType" : 'MD5',         //微信签名方式：     
+ 	           "paySign" :paySign //微信签名 
+ 	       },
+ 	       function(res){  
+ 	           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+ 	        	   $("#btnPay").text('已支付');
+ 	        	   alert('支付成功！');
+ 	           }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+ 	       }
+ 	   ); 
+ 	}
+
+
+ /*]]>*/
+ function pay(){
+ 	if (typeof WeixinJSBridge == "undefined"){
+ 	   if( document.addEventListener ){
+ 	       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+ 	   }else if (document.attachEvent){
+ 	       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+ 	       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+ 	   }
+ 	}else{
+ 	   onBridgeReady();
+ 	}
+ }
+ 
 </script>
 </head>
 <body>
    <div style="margin-top:10px">
-   	<input type="hidden" th:value="${order.serviceType}" name="serviceType" id="serviceType"/>
+   	<form method="post" id="aform">
+	   	<input type="hidden" th:value="${order.serviceType}" name="serviceType" id="serviceType"/>
+	   	<input type="hidden" th:value="${order.outTradeNo}" name="outTradeNo" id="outTradeNo"/>
+	   	<input type="hidden" th:value="${order.openId}" name="openId" id="openId"/>
+	   	<input type="hidden" th:value="${order.state}" name="state" id="state"/>
+   	</form>
    </div>
    <div class="panel panel-default" style="margin-left:5px">
    <div class="panel-heading"  >
@@ -51,7 +128,7 @@ $(function(){
    <ul class="list-group">
     <li class="list-group-item" >
    	  	<labe>订单号：</labe>  
-   	  	<span th:text="${order.orderId}"></span>
+   	  	<span th:text="${order.outTradeNo}"></span>
    	  </li>
    	  <li class="list-group-item" >
    	  	<labe>金额：</labe>  
@@ -83,5 +160,13 @@ $(function(){
       </li>
    </ul>
 </div>
+
+	<div class="row" id="divpay" style="display:none">
+			<div class="col-xs-2"/>
+			<div>
+				<button type="button" onclick="createOrder()" id="btnPay" class="btn col-xs-8 btn-default btn-lg">支付</button>
+			</div>
+			<div class="col-xs-2"/>
+		</div>
 </body>
 </html>

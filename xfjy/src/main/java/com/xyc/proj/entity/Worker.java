@@ -102,6 +102,10 @@ public class Worker {
 	@Column(name = "STATE")
 	private String state;
 	
+	
+	@Column(name = "PASS_WORD")
+	private String password;
+	
 	 
 	public Worker() {
 	}
@@ -397,6 +401,16 @@ public class Worker {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 

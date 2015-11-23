@@ -10,8 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import com.xyc.proj.mapper.UserAddressMapper;
 import com.xyc.proj.global.Constants;
+import com.xyc.proj.mapper.OrderMapper;
+import com.xyc.proj.mapper.UserAddressMapper;
 
 /**
  * 获取第二个数据库的连接信息，在application.properties中配置，并指定特定的前缀
@@ -32,7 +33,9 @@ public class MyBatisConfiguration {
 	
 	@Autowired
 	private UserAddressMapper userAddressMapper; 
- 
+	@Autowired
+	OrderMapper orderMapper;
+	
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate() {
 		return new SqlSessionTemplate(sqlSessionFactory);
@@ -43,6 +46,11 @@ public class MyBatisConfiguration {
 	@Bean
 	public UserAddressMapper uniqueUserStatMap() {
 		return sessionTemplate.getMapper(UserAddressMapper.class);
+	}
+	
+	@Bean
+	public OrderMapper orderMapper() {
+		return sessionTemplate.getMapper(OrderMapper.class);
 	}
 	
     

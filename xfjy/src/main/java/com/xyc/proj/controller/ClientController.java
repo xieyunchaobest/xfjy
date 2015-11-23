@@ -114,25 +114,7 @@ public class ClientController {
 			try {
 				String mobileNo=request.getParameter("mobileNo");
 				String authCode=request.getParameter("authCode");
-				String openId=request.getParameter("openId");
-//				String code=request.getParameter("code");
-//				System.out.println("code=============="+code);
-//				code="asfafsfasfasdfafasdf";
-//				String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
-//						"appid="+Constants.WE_CHAT_APPID+"&secret="+Constants.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
-//				com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
-//				String jsonstr=tokenJson.toString();
-//				System.out.println("token json is ====="+jsonstr); 
-//				String accessToken=tokenJson.getString("access_token");
-//				String expiresIn=tokenJson.getString("expires_in");
-//				String refreshToken=tokenJson.getString("refresh_token");
-//				String openId=tokenJson.getString("openid");
-//				
-//				System.out.println("openId=============="+openId);
-//				String urlGetUserInfo="https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid="+openId;
-//				com.alibaba.fastjson.JSONObject userInfoJson=WeixinUtil.httpRequest(urlGetUserInfo, "GET", null);
-//				
-//				String nickName=userInfoJson.getString("nickName");
+				String openId=request.getParameter("openId"); 
 				ulist=clientService.getUserListByMobileNoAndAuthCode(mobileNo,authCode);
 				if(ulist!=null && ulist.size()>0) {
 					ClientUser cu=new ClientUser();
@@ -263,7 +245,8 @@ public class ClientController {
 		public Map getAuthCode( 
 		        Model model,HttpSession Session,HttpServletRequest request) {
 			String mobileNo=request.getParameter("mobileNo");
-			String randomCode=String.valueOf((int)(Math.random()*9000+1000));
+			//String randomCode=String.valueOf((int)(Math.random()*9000+1000));
+			String randomCode="1111";
 //			CCPRestSDK restAPI = new CCPRestSDK();
 //			restAPI.init(properties.getSmsurl(), properties.getSmsport());// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
 //			restAPI.setAccount(properties.getSmsaccountId(), properties.getSmsaccountToken());// 初始化主帐号名称和主帐号令牌
@@ -553,12 +536,13 @@ public class ClientController {
 	}
 	
 	
-	@RequestMapping("/client/queryOrder")
+	@RequestMapping("/client/queryOrder.html")
 	public String queryOrder(
 		        Model model,HttpSession Session,HttpServletRequest request,
 		        @RequestParam(value = "openId", required = true) String openId) {
 		Map resMap=clientService.getOrderMap(openId);
 		model.addAttribute("resMap", resMap);
+		System.out.println("resMapresMapresMap="+resMap);
 		return "client/queryOrder";
 	}
 	
@@ -636,12 +620,13 @@ public class ClientController {
 		        @ModelAttribute("order") Order order) { 
 		Map resMap=new HashMap();
 		try {
-			Map paraMap=new HashMap();
-			String spBillCreateIP = request.getHeader("X-Forwarded-For");
-			paraMap.put("spBillCreateIP", spBillCreateIP);
-			String openId=order.getOpenId();
-			paraMap.put("openId", openId);		
-			resMap=clientService.createOrder(order, paraMap);
+			String outTradeNo=order.getOutTradeNo();
+				Map paraMap=new HashMap();
+				String spBillCreateIP = request.getHeader("X-Forwarded-For");
+				paraMap.put("spBillCreateIP", spBillCreateIP);
+				String openId=order.getOpenId();
+				paraMap.put("openId", openId);		
+				resMap=clientService.createOrder(order, paraMap);
 		}catch(Exception e) {
 			e.printStackTrace();
 			resMap.put("resultCode", "E");

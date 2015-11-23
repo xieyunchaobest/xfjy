@@ -32,11 +32,11 @@
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form  th:action="@{/login}" autocomplete="on" method="post"> 
+                            <form  th:action="@{/server/doLogin}" autocomplete="on" method="post"> 
                                 <h1>Log in</h1> 
                                 <p> 
                                     <label for="username" class="uname"   >用户名</label>
-                                    <input id="name" name="name" required="required" type="text"  />
+                                    <input id="code" name="code" required="required" type="text"  />
                                 </p>
                                 <p> 
                                     <label for="password" class="youpasswd" >密码</label>

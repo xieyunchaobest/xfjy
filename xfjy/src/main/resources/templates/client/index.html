@@ -77,6 +77,10 @@ $(function(){
 		 
 	 }
 	 /*]]>*/
+	 
+	 function toOrderList(){
+		 window.location.href=basePath+"/client/queryOrder.html?openId=o74xjw45fgARrXqMYXR9mathUbPE";
+	 }
 </script>
 
 
@@ -173,14 +177,16 @@ $(function(){
 				<div id="ftt"></div>
 				<div id="fttc">
 					<div  style="line-height:60px">
-						<div class="col-xs-2" style="border:1px solid red;text-align:center">
-						 	<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
+						<div class="col-xs-4" style="border:1px solid red;text-align:center" onclick="toOrderList()">
+						 	<span>订单</span>
 						</div>
-						<div class="col-xs-8" style="border:1px solid red;text-align:center">
-							<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
+						<div class="col-xs-4" style="border:1px solid red;text-align:center">
+							<!-- <img alt=""   th:src="@{/app/img/icon_func1.gif}" /> -->
+							<span>充值</span>
 						</div>
-						<div class="col-xs-2" style="border:1px solid red;text-align:center">
-							<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
+						<div class="col-xs-4" style="border:1px solid red;text-align:center">
+						<!-- 	<img alt=""   th:src="@{/app/img/icon_func1.gif}" /> -->
+							<span>个人中心</span>
 						</div>
 					</div>
 				</div>

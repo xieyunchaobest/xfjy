@@ -31,6 +31,7 @@
 	/*]]>*/
 
 	function getAuthCode(){
+		if(validateMobile()==false)return;
 			$.ajax({
 	            type: "POST",
 	            url: basePath+'/client/getAuthCode',
@@ -41,14 +42,51 @@
 	        });
 	}
 	
+	function validateMobile(){
+		if($("#mobileNo").val()==''){
+			 $("#spnwarngin").text('请输入手机号！');
+			 return false;
+		 }
+		
+		 if(isNaN($("#mobileNo").val())){
+			 $("#spnwarngin").text('请输入正确的手机号！');
+			 return false;
+		 }
+		 
+		 if($("#mobileNo").val().length!=11){
+			 $("#spnwarngin").text('请输入正确的手机号！');
+			 return false;
+		 }
+		 return true;
+	}
+	
+	function validate(){
+		if(validateMobile()==false)return false;
+		 
+		 if($("#authCode").val()==''){
+			 $("#spnwarngin").text('请输入校验码！');
+			 return false;
+		 }
+		 if(isNaN($("#authCode").val())){
+			 $("#spnwarngin").text('请输入正确的校验码！');
+			 return false;
+		 }
+		 if($("#authCode").val().length!=4){
+			 $("#spnwarngin").text('请输入正确的校验码！');
+			 return false;
+		 }
+		 return true;
+	}
+	
+	
 	function doLogin(){
+		if(validate()==false)return;
 		$.ajax({
             type: "POST",
             url: basePath+'/client/login',
             data:$("#loginForm").serialize(),
             success: function(data) {
-            	alert(data);
-            	if(data="S"){
+            	if(data=="S"){
             		var openId=$("#openId").val();
             	 	window.location.href=basePath+'/client/index.html?openId='+openId;
             	}else{
@@ -80,12 +118,12 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<div class="input-group input-group-lg ">
-						<input type="text" value="18611298927" name="mobileNo" placeholder="请输入手机号" class="form-control" /><span class="input-group-btn">
+						<input type="text"   name="mobileNo" id="mobileNo" placeholder="请输入手机号" class="form-control" /><span class="input-group-btn">
 							<button class="btn btn-default" type="button" onclick="checkAuthCode(this)">获取验证码</button>
 						</span> 
 					</div><br/>
 					<div>
-						<input type="text" value="8103" class="form-control input-lg" name="authCode" placeholder="请输入校验码" /> 
+						<input type="text" value="" class="form-control input-lg" name="authCode" id="authCode" placeholder="请输入校验码" /> 
 					</div>
 					<!-- /input-group -->
 				</div>
