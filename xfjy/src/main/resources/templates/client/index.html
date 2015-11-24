@@ -10,10 +10,14 @@
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
 <script th:src="@{/app/js/public.js}"></script>
 <style type="text/css">
+
+body{
+ background-color: #8dcb2f
+}
 #ftt {
 	position: fixed;
 	bottom: 0;
-	background: #f36923;
+	background: #8dcb2f;
 	width: 100%;
 	height: 60px;
 	line-height: 23px;
@@ -49,7 +53,7 @@
  
 
 #ftt a {
-	color: #fff;
+	color: #8dcb2f;
 	font-size: 13px;
 	letter-spacing: 2px;
 }
@@ -79,7 +83,8 @@ $(function(){
 	 /*]]>*/
 	 
 	 function toOrderList(){
-		 window.location.href=basePath+"/client/queryOrder.html?openId=o74xjw45fgARrXqMYXR9mathUbPE";
+		 var openId=$("#openId").val();
+		 window.location.href=basePath+"/client/queryOrder.html?openId="+openId;
 	 }
 </script>
 
@@ -104,72 +109,37 @@ $(function(){
 			   <!-- 轮播（Carousel）项目 -->
 			   <div class="carousel-inner"   >
 			      <div class="item active">
-			         <img class="imgs" src="http://preview.quanjing.com/east001/east-ep-a51-2391832.jpg" style="height:250px;width:350px" alt="First slide" />
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpeg}" style="height:150px;width:350px" alt="First slide" />
 			         <div class="carousel-caption" style="margin-top:55px">优惠1</div>
 			      </div>
 			      <div class="item">
-			         <img class="imgs" src="http://preview.quanjing.com/is025/is099r4id.jpg" style="height:250px;width:350px" alt="Second slide" />
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpeg}" style="height:150px;width:350px" alt="Second slide" />
 			         <div class="carousel-caption" style="margin-top:55px">优惠 2</div>
 			      </div>
 			      <div class="item">
-			         <img class="imgs" src="http://preview.quanjing.com/auto/car-0684.jpg" style="height:250px;width:350px" alt="Third slide" />
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpeg}" style="height:150px;width:350px" alt="Third slide" />
 			         <div class="carousel-caption" style="margin-top:55px">优惠 3</div>
 			      </div>
 			   </div>
 			</div> 
 			</div>
 			
-			<div class="row" id="func" style="margin-left:15px;margin-right:15px;border:1px solid red">
-				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red"  onclick="forward('CC')">
-					<div style="width:60px;float:left" >
-						<img  alt=""   th:src="@{/app/img/icon_func1.gif}" />
-					</div>
-					<div style="width:100px">
-						普通保洁
-					</div>
+			<div class="row" id="func" style="margin-left:15px;margin-right:15px;border:1px solid white;">
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid white;padding:0 0 0 0 ;margin:0 0 0 0 "  onclick="forward('CC')">
+					<img alt="" th:src="@{/app/img/idx_rcbj.jpg}"  style="width:100%;height:100%" />
 				</div>
-				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red" onclick="forward('DBJ')">
-					<div style="width:60px;float:left" >
-						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
-					</div>
-					<div style="width:100px">
-						大保洁
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red" onclick="forward('CBL')">
-					<div style="width:60px;float:left" >
-						<img  alt=""   th:src="@{/app/img/icon_func1.gif}" />
-					</div>
-					<div style="width:100px">
-						擦玻璃
-					</div>
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid white;;padding:0 0 0 0 ;margin:0 0 0 0 " onclick="forward('DBJ')">
+					<img alt="" th:src="@{/app/img/idx_dbj.jpg}"  style="width:100%;height:100%"/>
 				</div>
 			</div>
-			<div class="row" id="func" style="margin-left:15px;margin-right:15px;">
-				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red"  onclick="forward('KH')">
-					<div style="width:60px;float:left" >
-						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
-					</div>
-					<div style="width:100px">
-						开荒
-					</div>
+			<div class="row" id="func" style="margin-left:15px;margin-right:15px;border:1px solid white;;border-top:0px">
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid white;;padding:0 0 0 0 ;margin:0 0 0 0 "  onclick="forward('KH')">
+					  <img alt="" th:src="@{/app/img/idx_kh.jpg}"  style="width:100%;height:100%"/>
 				</div>
-				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red">
-					<div style="width:60px;float:left" >
-						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
-					</div>
-					<div style="width:100px">
-						
-					</div>
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid white;">
+					   <img alt="" th:src="@{/app/img/idx_cbl.jpg}"  style="width:100%;height:100%"/>
 				</div>
-				<div class="col-md-4 col-sm-4 col-lg-4 col-xs-4" style="height:100px;border:1px solid red">
-					<div style="width:60px;float:left" >
-						<img alt=""   th:src="@{/app/img/icon_func1.gif}" />
-					</div>
-					<div style="width:100px">
-						 
-					</div>
-				</div>
+				 
 			</div>
 			<div>
 			</div>
@@ -177,16 +147,14 @@ $(function(){
 				<div id="ftt"></div>
 				<div id="fttc">
 					<div  style="line-height:60px">
-						<div class="col-xs-4" style="border:1px solid red;text-align:center" onclick="toOrderList()">
-						 	<span>订单</span>
+						<div class="col-xs-4" style="border:1px solid white;text-align:center;padding:0 0 0 0 " onclick="toOrderList()">
+						 	  <img alt="" th:src="@{/app/img/idx_bottom_dd.jpg}" style="height:58px;width:auto" />
 						</div>
-						<div class="col-xs-4" style="border:1px solid red;text-align:center">
-							<!-- <img alt=""   th:src="@{/app/img/icon_func1.gif}" /> -->
-							<span>充值</span>
+						<div class="col-xs-4" style="border:1px solid white;text-align:center;padding:0 0 0 0 ">
+							  <img alt="" th:src="@{/app/img/idx_bottom_cz.jpg}"  style="height:58px;width:auto" />
 						</div>
-						<div class="col-xs-4" style="border:1px solid red;text-align:center">
-						<!-- 	<img alt=""   th:src="@{/app/img/icon_func1.gif}" /> -->
-							<span>个人中心</span>
+						<div class="col-xs-4" style="border:1px solid white;text-align:center;padding:0 0 0 0 ">
+							 <img alt="" th:src="@{/app/img/idx_bottom_grzx.jpg}"  style="height:58px;width:auto" />
 						</div>
 					</div>
 				</div>

@@ -163,10 +163,12 @@ public class ClientController {
 	 @RequestMapping(value="/client/addAddressInit",method = {RequestMethod.POST,RequestMethod.GET})
 	 public String addAddressInit(
 	            @RequestParam(value = "areaId", required = false) String areaId,
+	            @RequestParam(value = "openId", required = true) String openId,
+	            HttpServletRequest request,
 	            Model model) {
+		 forwardPage( model, request);
 		 List areaList=clientService.findAreaList();
 		 model.addAttribute("areaList", areaList);
-		 
 		 return "client/addAddress";
 		 
 	 }
@@ -423,7 +425,7 @@ public class ClientController {
 	 @RequestMapping("/client/cblIndex.html")
 	 public String cblIndex( Model model,HttpServletRequest request,
 			 @RequestParam(value = "serviceType", required = true,defaultValue="CBL") String  serviceType,
-			 @RequestParam(value = "openId", required = true,defaultValue="openId") String  openId) {
+			 @RequestParam(value = "openId", required = true) String  openId) {
 		 boolean exp=filters();
 		 if(exp==true)return "";
 		 
@@ -451,7 +453,7 @@ public class ClientController {
 		 ua.setAreaId(areaId);
 		 ua.setCommunityId(communityId);
 		 ua.setDetailAddress(addressDetail);
-		 ua.setOpenId("121212121");
+		 ua.setOpenId(openId);
 		 clientService.saveUserAddress(ua);
 		 return  "forward:/client/addressSelect.html";
 		 
@@ -470,7 +472,6 @@ public class ClientController {
 		 if(exp==true)return "";
 		 forwardPage(model,request);
 		 Map map=new HashMap();
-		 openId="121212121";
 		 map.put("openId", openId);
 		 List addressList=clientService.findAddressByUser(map);
 		 model.addAttribute("addressList",addressList);
@@ -719,7 +720,6 @@ public class ClientController {
 	public String testquery( 
 		        Model model,HttpSession Session,HttpServletRequest request) { 
 		Map map=new HashMap();
-		map.put("openId", "121212121");
 		List addressList=clientService.findAddressByUser(map);
 		return "client/login";
 	}

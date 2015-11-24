@@ -78,11 +78,15 @@
 
       return items ? this.process(items) : this
     }
-
-  , process: function (items,target) {
+//add by xyc
+  , process: function (items,target1,target2) {
 	 if(items==''){
-		$(target).attr("real-value","");
+		$(target1).attr("real-value","");
+		$(target2).text('没有检索到该小区，请联系客服83451638');
+	 }else{
+		 $(target2).text('');
 	 }
+	 
       var that = this
       if (!items.length) {
         return this.shown ? this.hide() : this

@@ -19,7 +19,7 @@ $().ready(function() {
             var communityName=$('#autocompleteInput').val();
             $.post(
             		basePath+"/client/getCommunitys?areaId="+areaId+'&communityName='+communityName,{"matchInfo":query,"matchCount":matchCount},function(respData){
-                return process(respData,$('#autocompleteInput'));
+                return process(respData,$('#autocompleteInput'),$("#spnwarngin"));
             });
         },
         formatItem:function(item){
@@ -101,7 +101,10 @@ function fillContent(target){
 <body>
 	<form action="/saveInfo" id="aform" method="post">
 		<div class="container-fluid">
-			<div class="row" id="image" style="height:20px;" />
+			<div class="row" id="image" style="height:20px;" >
+				<input type="hidden" name="openId" th:value="${order.openId}" id="openId" />
+				<input type="hidden" name="serviceType" th:value="${order.serviceType}" id="openId" />
+			</div>
 			<ul class="list-group" style="display:none">
 				<li class="list-group-item">
 					<input type="text" placeholder="请输入您的姓名" class="form-control" id="userName"/>
