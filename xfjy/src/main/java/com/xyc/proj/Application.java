@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.xyc.proj.global.ApplicationStartup;
 import com.xyc.proj.utility.Properties;
 
 /**
@@ -28,6 +29,7 @@ public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(Application.class);
+		app.addListeners(new ApplicationStartup());
 		app.run(args);
 		//SpringApplication.run(Application.class, args);
 	}

@@ -17,6 +17,7 @@ public class Properties {
 	
 	private String fileuploadpath;
 	private String serveraddress;
+	private String wechatkey;
 	
 	public String getSmsurl() {
 		return smsurl;
@@ -71,6 +72,12 @@ public class Properties {
 	}
 	public void setCertLocalPath(String certLocalPath) {
 		this.certLocalPath = certLocalPath;
+	}
+	public String getWechatkey() {
+		return wechatkey;
+	}
+	public void setWechatkey(String wechatkey) {
+		this.wechatkey = wechatkey;
 	}
 	
 	

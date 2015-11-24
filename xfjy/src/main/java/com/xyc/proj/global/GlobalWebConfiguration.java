@@ -19,8 +19,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.xyc.proj.interceptor.TestUrlInterceptor;
-
 @Configuration
 public class GlobalWebConfiguration extends WebMvcConfigurerAdapter {
 	
@@ -108,7 +106,7 @@ public class GlobalWebConfiguration extends WebMvcConfigurerAdapter {
 	}
 	
 	public void addInterceptors(InterceptorRegistry registry) {
-//		registry.addInterceptor(new TestUrlInterceptor());
+		registry.addInterceptor(new TestUrlInterceptor());
 	}
 	
 	/**

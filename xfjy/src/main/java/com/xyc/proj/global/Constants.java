@@ -8,7 +8,7 @@ import com.xyc.proj.pay.Configure;
  * @since 2015.7.14
  *
  */
-public interface Constants {
+public class Constants {
 	public static final String URL_PRE_PAY="https://api.mch.weixin.qq.com/pay/unifiedorder";
 	public static final String certLocalPath="/Users/xieyunchao/Downloads/cert/apiclient_cert.p12";
 	//public static final String certLocalPath="/home/diuser/resource/apiclient_cert.p12";
@@ -27,7 +27,7 @@ public interface Constants {
 	public static final String MYBATIS_MAPPER_PRIX = "com.xyc.proj.";
 	
 	// mybatis配置文件路径
-	String MYBATIS_CONFIG_FILE_PATH = "classpath:/mappers/*.xml";
+	public static String MYBATIS_CONFIG_FILE_PATH = "classpath:/mappers/*.xml";
 	public static final String MENU_MANAGE = "manage";
 	
 	
@@ -101,5 +101,6 @@ public interface Constants {
 	
 	
 	public static String key = "";
- 
+	public static String wechatkey="";
+	public static String shanghu_key = "!QAZ@WSX#EDC$RFV%TGB^YHN&UJM";  
 }
