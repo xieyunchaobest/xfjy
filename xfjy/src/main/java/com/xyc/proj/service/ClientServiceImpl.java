@@ -565,4 +565,37 @@ public class ClientServiceImpl implements ClientService {
 			orderRepository.save(order);
 		}
 	}
+	
+	public static  String createWeChatMenu() {
+		Map mainMap=new HashMap();
+		List menuList=new ArrayList();
+		
+		Map item1=new HashMap();
+		item1.put("type", "view");
+		item1.put("name", "约工");
+		item1.put("url", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce20c658c1eb222f&redirect_uri=http://weixin.tjxfjz.com/xfjy/client/login.html&response_type=code&scope=snsapi_userinfo&state=1&connect_redirect=1#wechat_redirect");
+		
+		
+		Map item2=new HashMap();
+		item2.put("type", "view");
+		item2.put("name", "帮助");
+		item2.put("url", "http://www.baidu.com");
+		
+		menuList.add(item1);
+		menuList.add(item2);
+		
+		mainMap.put("button", menuList);
+		
+		String json=com.alibaba.fastjson.JSONObject.toJSONString(mainMap);
+		
+		System.out.println("json is===="+json);
+		return json;
+	}
+	
+	public static void main(String args[]) {
+		com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
+		String accessToken=tokenJson.getString("access_token");
+		com.alibaba.fastjson.JSONObject res=WeixinUtil.httpRequest(Constants.URL_CREATE_MENU+accessToken, "POST", createWeChatMenu());
+		System.out.println("res==="+res);
+	}
 }
