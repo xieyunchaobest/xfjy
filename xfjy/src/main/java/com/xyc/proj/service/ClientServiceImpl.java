@@ -49,6 +49,7 @@ import com.xyc.proj.repository.UserCodeRepository;
 import com.xyc.proj.repository.VersionRepository;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.StringUtil;
+import com.xyc.proj.utility.WeixinUtil;
 
 
 
