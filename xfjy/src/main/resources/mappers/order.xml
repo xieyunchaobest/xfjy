@@ -3,7 +3,7 @@
 <mapper namespace="com.xyc.proj.mapper.OrderMapper" >
   
  
-  <select id="getOrderPage" resultType="java.util.HashMap" parameterType="com.xyc.proj.entity.Order">
+  <select id="getOrderPage" resultType="com.xyc.proj.entity.Order" parameterType="com.xyc.proj.entity.Order">
  	<include refid="queryOrder"/>
     <include refid="queryOrderCondition"/>      
  <![CDATA[ limit  #{start} , #{end} ]]>
@@ -12,7 +12,7 @@
  
   
   <sql id="queryOrder">
-  	  select 
+  	 select * from ( select 
   	  	ID as id,
   	  	ORDER_ID as orderId,
   	  	TRADE_NO as tradeNo,
@@ -21,12 +21,13 @@
   	  	MOBILE_NO as mobileNo,
   	  	PAY_MODE as payMode,
   	  	USER_ADDRESS_ID as userAddressId,
-  	  	SERVICE_DATE as servcieDate,
+  	  	SERVICE_DATE as serviceDate,
   	  	WINDOW_COUNT as windowCount,
   	  	BALCONY_COUNT as balconyCount,
   	  	LAST_DAY as lastDay,
   	  	DURATION as duration,
   	  	AREA as area,
+  	  	full_address as fullAddress,
   	  	START_TIME as startTime,
   	  	END_TIME as endTime,
   	  	UNIT_PRICE as unitPrice,
@@ -37,13 +38,15 @@
   	  	SERVICE_TYPE as serviceType,
   	  	CYCLE_TYPE as cycleType,
   	  	DRATION_MONTH as dration,
+  	  	DRATION_MONTH as durationMonth,
   	  	REPEAT_IN_WEEK as repeatInWeek,
   	  	DURATION_TEXT as durationText,
   	  	STATE as state,
   	  	AYI_ID as ayiId,
   	  	CREATE_TIME as createTime,
-  	  	PAY_TIME as payTime
-  	  from T_Order 
+  	  	PAY_TIME as payTime,
+  	  	(select ua.area_Id from t_user_address ua where ua.ID=o.user_address_id) as areaId
+  	  from T_Order o ) tt  where 1=1 
   </sql>
   
     <select id="getOrderPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
@@ -58,16 +61,16 @@
 			 <![CDATA[ and   areaId =#{areaId}  ]]>
 	  </if>
   	  <if test="startTime != null and startTime !=''">
-			 <![CDATA[ and   pay_time >=#{startTime}  ]]>
+			 <![CDATA[ and   payTime >=#{startTime}  ]]>
 	  </if>
 	  <if test="endTime != null and endTime !=''">
-			 <![CDATA[ and    pay_time <=#{endTime}  ]]>
+			 <![CDATA[ and    payTime <=#{endTime}  ]]>
 	  </if>
 	   <if test="serviceDate != null and serviceDate !=''">
-			 <![CDATA[ and    service_date <=#{serviceDate}  ]]>
+			 <![CDATA[ and    serviceDate =#{serviceDate}  ]]>
 	  </if>
 	  <if test="serviceType != null and serviceType !=''">
-			 <![CDATA[ and    service_type =#{serviceType}  ]]>
+			 <![CDATA[ and    servicetype =#{serviceType}  ]]>
 	  </if>
   </sql>
   

@@ -55,4 +55,6 @@ public interface ClientService {
 	public Map createOrder(Order o,Map paraMap);
 	
 	public void notifyOrder(String outTradeNo,String orderId);
+	
+	public Order fillOrder(Order o);
 }

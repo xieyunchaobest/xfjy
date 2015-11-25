@@ -6,5 +6,5 @@ import java.util.Map;
 public interface WorkerMapper {
 	List getWorkPageList(Map m);
 	
-	Integer getWorkerCount(Map m);
+	Long getWorkerCount(Map m);
 }

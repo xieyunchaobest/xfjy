@@ -6,5 +6,5 @@ import java.util.Map;
 public interface OrderMapper {
 	List getOrderPage(Map m);
 	
-	Integer getOrderPageCount(Map m);
+	Long getOrderPageCount(Map m);
 }

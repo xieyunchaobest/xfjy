@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
+import com.xyc.proj.service.ClientService;
 import com.xyc.proj.service.ServerService;
 import com.xyc.proj.utility.PageView;
 import com.xyc.proj.utility.StringUtil;
@@ -30,6 +31,8 @@ public class ServerController {
 	
 	@Autowired
 	ServerService serverService;
+	@Autowired
+	ClientService clientService;
 	
 	 @RequestMapping(value="/server/login.html",method = {RequestMethod.POST,RequestMethod.GET})
 	 public String loginInit() {
@@ -58,7 +61,7 @@ public class ServerController {
 	
 	
 	 @RequestMapping(value="/server/queryWorker.html",method = {RequestMethod.POST,RequestMethod.GET})
-	 public String addAddressInit(
+	 public String queryWorker(
 	            @RequestParam(value = "areaId", required = false) String areaId,
 	            @RequestParam(value = "storeId", required = false) String storeId,
 	            @RequestParam(value = "name", required = false) String name,
@@ -72,11 +75,13 @@ public class ServerController {
 		parmMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
 		parmMap.put(Constants.ORDERBY, StringUtil.formatSortBy(orderBy));
 			
-		 if(areaId!="") {
+		 if(!StringUtil.isBlank(areaId)) {
 			 long lAreaId=Long.parseLong(areaId);
 			 parmMap.put("areaId", lAreaId);
+		 }else {
+			 parmMap.put("areaId", "");
 		 }
-		 if(storeId!="") {
+		 if(!StringUtil.isBlank(storeId)) {
 			 long lstoreId=Long.parseLong(storeId);
 			 parmMap.put("storeId", lstoreId);
 		 }
@@ -89,7 +94,11 @@ public class ServerController {
 		 model.addAttribute("pageView", pageView);
 		 model.addAttribute("parms", parmMap);
 		 
-		 return "client/addAddress";
+		 List areaList=clientService.findAreaList();
+		 List storeList=serverService.findStore();
+		 model.addAttribute("areaList", areaList);
+		 model.addAttribute("storeList", storeList);
+		 return "server/queryWorker";
 	 }
 	 
 	 @RequestMapping(value="/server/updateWorkInit.html",method = {RequestMethod.POST,RequestMethod.GET})
@@ -133,10 +142,18 @@ public class ServerController {
 		parmMap.put("endTime", endTime);
 		parmMap.put("serviceDate", serviceDate);
 		parmMap.put("serviceType", serviceType);
+		List areaList=clientService.findAreaList();
+		
 		PageView pageView = serverService.getOrderPageView(parmMap);
 		model.addAttribute("pageView", pageView);
 		model.addAttribute("parms", parmMap);
-		 return "server/updateWorkInit";
+		model.addAttribute("areaId", areaId);
+		model.addAttribute("areaList", areaList);
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		model.addAttribute("serviceDate", serviceDate);
+		model.addAttribute("serviceType", serviceType);
+		 return "server/queryOrder";
 	 }
 	 
 	 

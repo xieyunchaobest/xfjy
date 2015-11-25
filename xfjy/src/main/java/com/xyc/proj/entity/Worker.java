@@ -85,7 +85,19 @@ public class Worker {
 	
 	@Transient
 	private String storeName;
+	@Transient
+	private String teacherName;
 	
+	public String getTeacherName() {
+		return teacherName;
+	}
+
+
+	public void setTeacherName(String teacherName) {
+		this.teacherName = teacherName;
+	}
+
+
 	@Column(name = "CONSTELLATION")
 	private String constellation;//星座
 	
@@ -93,8 +105,8 @@ public class Worker {
 	@Column(name = "ADDRESS")
 	private String address;
 	
-	@Column(name = "DESCRIBE")
-	private String describe;
+	@Column(name = "DESCR")
+	private String descr;
 	
 	@Column(name = "SALARY")
 	private Double salary;
@@ -201,13 +213,16 @@ public class Worker {
 	}
 
 
-	public String getDescribe() {
-		return describe;
+ 
+
+
+	public String getDescr() {
+		return descr;
 	}
 
 
-	public void setDescribe(String describe) {
-		this.describe = describe;
+	public void setDescr(String descr) {
+		this.descr = descr;
 	}
 
 

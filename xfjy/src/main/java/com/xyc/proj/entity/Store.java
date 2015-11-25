@@ -18,6 +18,10 @@ public class Store {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+
+	@Column(name = "NAME")
+	private String name;
+	
 	@Column(name = "AREA_ID")
 	private String areaId;
 	

@@ -13,6 +13,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.UserAddressMapper;
+import com.xyc.proj.mapper.WorkerMapper;
 
 /**
  * 获取第二个数据库的连接信息，在application.properties中配置，并指定特定的前缀
@@ -36,6 +37,9 @@ public class MyBatisConfiguration {
 	@Autowired
 	OrderMapper orderMapper;
 	
+	@Autowired
+	WorkerMapper workerMapper;
+	
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate() {
 		return new SqlSessionTemplate(sqlSessionFactory);
@@ -51,6 +55,11 @@ public class MyBatisConfiguration {
 	@Bean
 	public OrderMapper orderMapper() {
 		return sessionTemplate.getMapper(OrderMapper.class);
+	}
+	
+	@Bean
+	public WorkerMapper workerMapper() {
+		return sessionTemplate.getMapper(WorkerMapper.class);
 	}
 	
     

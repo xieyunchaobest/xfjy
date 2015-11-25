@@ -4,16 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.xyc.proj.mapper.WorkerMapper" >
-   	<select id="getWorkPageList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
-    WITH query AS
- (SELECT inner_query.*,
-         ROW_NUMBER() OVER(ORDER BY ${orderBys}) as rn
-    FROM (
-             <include refid="queryWorker"/>  
-           ) inner_query)
-SELECT   *
-  FROM query
- <![CDATA[ WHERE rn  >= #{start} AND rn  <= #{end} ]]>
+   	<select id="getWorkPageList" resultType="com.xyc.proj.entity.Worker" parameterType="java.util.HashMap">
+   <include refid="queryWorker"/>
+    <include refid="getWorkerCondition"/>      
+ <![CDATA[ limit  #{start} , #{end} ]]>
+
   </select>
   
   
@@ -34,15 +29,15 @@ SELECT   *
 	    SERVICE_TYPE_TWO as serviceTypeTwo,
 	    role as role,
 	    TEACHER_ID as teacherId   ,
-	    (select w1.name from worker w1 where w1.id=w.teacher_id ) as teacherName,
+	    (select w1.name from t_worker w1 where w1.id=w.teacher_id ) as teacherName,
 	    WORK_TIME as workTime,
 	    STORE_ID as storeId,
 	    (select name from t_store s where s.id=w.store_id) as storeName,
 	    CONSTELLATION as constellation,
 	    address as address,
-	    describe as describe,
+	    descr as descr,
 	    salary as salary 
-	    from Worker w  where state='A'  
+	    from t_Worker w  where state='A'  
   <include refid="getWorkerCondition"/> 
 	</sql>
 	

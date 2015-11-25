@@ -1,6 +1,5 @@
 package com.xyc.proj.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +13,7 @@ import com.xyc.proj.global.Constants;
 import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.WorkerMapper;
 import com.xyc.proj.repository.OrderRepository;
+import com.xyc.proj.repository.StoreRepository;
 import com.xyc.proj.repository.WorkerRepository;
 import com.xyc.proj.utility.PageView;
 
@@ -32,6 +32,11 @@ public class ServerServiceImpl implements ServerService {
 	@Lazy
 	@Autowired
 	OrderMapper orderMapper;
+	
+	@Autowired
+	ClientService clientService;
+	@Autowired
+	StoreRepository storeRepository;
 	
 	public PageView getWorkPage(Map m) {
 		PageView pv = new PageView((Integer) m.get("currentPageNum"));
@@ -103,7 +108,13 @@ public class ServerServiceImpl implements ServerService {
 	}
 	
 	public List findOrderList(Map m) {
-		return orderMapper.getOrderPage(m);
+		List orderList=orderMapper.getOrderPage(m);
+		for(int i=0;i<orderList.size();i++) {
+			Order o=(Order)orderList.get(i);
+			o=clientService.fillOrder(o);
+		}
+		
+		return orderList;
 	}
 	
 	public PageView getOrderPageView(Map m) {
@@ -128,5 +139,9 @@ public class ServerServiceImpl implements ServerService {
 	
 	public List findByCodeAndPassword(String code,String pwd) {
 		return workerRepository.findByCodeAndPassword(code, pwd);
+	}
+	
+	public List findStore() {
+		return storeRepository.findAll();
 	}
 }

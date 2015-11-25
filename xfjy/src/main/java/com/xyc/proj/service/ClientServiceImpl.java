@@ -495,7 +495,7 @@ public class ClientServiceImpl implements ClientService {
 		String outTradeNo="";
 		if(StringUtil.isBlank(o.getOutTradeNo())) { //第一次支付，需要保存
 			order=getConfirmOrder(o);
-			order.setState(Constants.URL_PRE_PAY);
+			order.setState(Constants.ORDER_STATE_UNPAY);
 
 			outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
 			order.setOutTradeNo(outTradeNo);
