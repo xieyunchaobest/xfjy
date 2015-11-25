@@ -14,10 +14,11 @@ public class Constants {
 	//public static final String certLocalPath="/home/diuser/resource/apiclient_cert.p12";
 	
 	
-	public static final String URL_GET_TOKEN="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+Configure.appID+"&secret="+Configure.WE_CHAT_APPSECRET;
-	public static final String URL_CREATE_MENU=" https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";
-	
-	
+	public static   String URL_GET_TOKEN="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+Configure.appID+"&secret="+Configure.WE_CHAT_APPSECRET;
+	public static   String URL_CREATE_MENU=" https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";
+	public static   String URL_SEND_TEMPLEATE_MSG="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
+	public static   String MSG_KF_TEMPLATE_ID="3uFcnQniJnbO-W_JNakYo9gEiZlsNESM6Iv0d4-r7nk";
+	public static   String WE_CHAT_ACCESS_TOKEN="";
 	
 	
 	

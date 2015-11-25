@@ -12,6 +12,7 @@ import com.xyc.proj.controller.ClientController;
 import com.xyc.proj.pay.Configure;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.TestMain;
+import com.xyc.proj.utility.WeixinUtil;
 
 public class ApplicationStartup implements ApplicationListener<ContextRefreshedEvent> {
  
@@ -28,6 +29,11 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
     		Configure.key="";
     	}
         System.out.println("proppropprop="+prop.getWechatkey());
+        
+        com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
+		String accessToken=tokenJson.getString("access_token");
+		Constants.WE_CHAT_ACCESS_TOKEN=accessToken;
+		System.out.println("accessTokenaccessToken="+accessToken);
     }
     
     public static  boolean getLocalFilter(String encrypt) {
@@ -55,5 +61,7 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 		String str = format.format(date);
 		return str;
 	}
+    
+    
     
 }

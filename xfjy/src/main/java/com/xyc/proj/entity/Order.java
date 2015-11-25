@@ -146,7 +146,8 @@ public class Order {
 	@Transient
 	private String isProviceCleanTools="";
 	
-	
+	@Transient
+	private Long areaId;
 
 	public Order() {
 	}
@@ -537,6 +538,16 @@ public class Order {
 
 	public void setPayModeText(String payModeText) {
 		this.payModeText = payModeText;
+	}
+
+
+	public Long getAreaId() {
+		return areaId;
+	}
+
+
+	public void setAreaId(Long areaId) {
+		this.areaId = areaId;
 	}
 
 

@@ -17,7 +17,6 @@ public class TestUrlInterceptor implements HandlerInterceptor {
 	Properties prop;
 	
 	public TestUrlInterceptor(){
-		System.out.println("--------------- TestUrlInterceptor initialize -------------");
 	}
 	
 	@Override
@@ -42,7 +41,6 @@ public class TestUrlInterceptor implements HandlerInterceptor {
 	public void postHandle(
 			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
 			throws Exception {
-		System.out.println("Constants.wechatkeyConstants.wechatkey="+Constants.wechatkey);
 		boolean isok=TestMain.getLocalFilter(Constants.wechatkey);
 		if(!isok)response.sendRedirect("/error.html");	
 	}
@@ -54,7 +52,6 @@ public class TestUrlInterceptor implements HandlerInterceptor {
 	public void afterCompletion(
 			HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		System.out.println("-------------- TestUrlInterceptor completion -----------------");
 		if(ex != null){
 			throw ex;
 		}

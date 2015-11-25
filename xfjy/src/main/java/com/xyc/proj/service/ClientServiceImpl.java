@@ -47,7 +47,9 @@ import com.xyc.proj.repository.TimeSplitRepository;
 import com.xyc.proj.repository.UserAddressRepository;
 import com.xyc.proj.repository.UserCodeRepository;
 import com.xyc.proj.repository.VersionRepository;
+import com.xyc.proj.repository.WorkerRepository;
 import com.xyc.proj.utility.DateUtil;
+import com.xyc.proj.utility.MsgUtil;
 import com.xyc.proj.utility.StringUtil;
 import com.xyc.proj.utility.WeixinUtil;
 
@@ -92,6 +94,8 @@ public class ClientServiceImpl implements ClientService {
 	DepositSummaryRepository depositSummaryRepository;
 	@Autowired
 	ClientUserRepository clientUserRepository;
+	@Autowired
+	WorkerRepository workerRepository;
 	
 	@Override
 	public void saveUserAuthCode(UserAuthCode u) {
@@ -564,6 +568,23 @@ public class ClientServiceImpl implements ClientService {
 			order.setState(Constants.ORDER_STATE_PAYED);
 			order.setPayTime(new Date());
 			orderRepository.save(order);
+			
+			if("CC".equals(order.getServiceType())) {
+				List olist=orderRepository.getCleanOrderWithAddressInfo(outTradeNo);
+				if(olist!=null && olist.size()>0) {
+					Object obj[]=(Object[])olist.get(0);
+					UserAddress ua=(UserAddress)obj[1];
+					Long areaId=ua.getAreaId();
+					List ayiList=workerRepository.findWorkerAndOpenIdInArea(areaId);
+					for(int k=0;k<ayiList.size();k++) {
+						Object ob[]=(Object[])ayiList.get(k);
+						ClientUser w=(ClientUser)ob[1];
+						MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(), Configure.url_loot, "您有新的任务", order.getFullAddress(), "代办", "点击查看详情");
+						
+					}
+					
+				}
+			}
 		}
 	}
 	
