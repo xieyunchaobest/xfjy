@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.xyc.proj.global.Constants;
+import com.xyc.proj.mapper.ClientUserMapper;
+import com.xyc.proj.mapper.CommunityMapper;
 import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.UserAddressMapper;
 import com.xyc.proj.mapper.WorkerMapper;
@@ -40,6 +42,12 @@ public class MyBatisConfiguration {
 	@Autowired
 	WorkerMapper workerMapper;
 	
+	@Autowired
+	CommunityMapper communityMapper;
+	
+	@Autowired
+	ClientUserMapper clientUserMapper;
+	
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate() {
 		return new SqlSessionTemplate(sqlSessionFactory);
@@ -60,6 +68,17 @@ public class MyBatisConfiguration {
 	@Bean
 	public WorkerMapper workerMapper() {
 		return sessionTemplate.getMapper(WorkerMapper.class);
+	}
+	
+	@Bean
+	public CommunityMapper communityMapper() {
+		return sessionTemplate.getMapper(CommunityMapper.class);
+	}
+	
+	
+	@Bean
+	public ClientUserMapper clientUserMapper() {
+		return sessionTemplate.getMapper(ClientUserMapper.class);
 	}
 	
     

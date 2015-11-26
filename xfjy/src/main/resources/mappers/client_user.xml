@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xyc.proj.mapper.ClientUserMapper" >
+  
+ 
+  <select id="getClientUserPage" resultType="com.xyc.proj.entity.ClientUser" parameterType="com.xyc.proj.entity.ClientUser">
+ 	<include refid="queryClientUser"/>
+    <include refid="queryClientUserCondition"/>      
+ <![CDATA[ limit  #{start} , #{end} ]]>
+
+  </select>
+ 
+  
+  <sql id="queryClientUser">
+  	  select
+  	  t1.mobile_no as mobileNo,
+  	  t2.fee as fee
+  	  from T_CLIENT_USER t1 ,T_DEPOSIT_SUMMARY t2 
+  	  where t1.open_i=t2.open_id 
+  </sql>
+  
+    <select id="getClientUserPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+	select count(1) from (
+		<include refid="queryClientUser"/>
+		<include refid="queryClientUserCondition"/>
+	) as c
+  </select> 
+  
+  <sql id="queryClientUserCondition">
+   	  <if test="mobileNo != null and mobileNo !=''">
+			 <![CDATA[ and   t1.mobile_No =#{areaId}  ]]>
+	  </if>
+  </sql>
+  
+</mapper>

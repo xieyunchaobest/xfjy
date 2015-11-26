@@ -21,5 +21,9 @@ public interface ServerService {
 	
 	public List findByCodeAndPassword(String code,String pwd);
 	public List findStore();
+	
+	public PageView getCommunityPage(Map parm);
+	
+	public PageView getClientUserPage(Map parm);
 
 }

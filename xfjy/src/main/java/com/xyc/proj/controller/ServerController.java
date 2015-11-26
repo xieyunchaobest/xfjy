@@ -173,7 +173,37 @@ public class ServerController {
 		 return res;
 	 }
 	 
+	 @RequestMapping(value="/server/queryCommunity.html",method = {RequestMethod.POST,RequestMethod.GET})
+	 public String queryCommunity(Model model,
+			 @RequestParam(value = "areaId", required = false) Long areaId,
+			 @RequestParam(value = "name", required = false) String name,
+			 @RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum
+			) {
+		 Map<String, Object> parmMap = new HashMap<String, Object>();
+			parmMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
+			parmMap.put("areaId", areaId);
+			parmMap.put("name", name);
+			List areaList=clientService.findAreaList();
+			
+			PageView pageView = serverService.getCommunityPage(parmMap);
+			model.addAttribute("pageView", pageView);
+			model.addAttribute("parms", parmMap);
+			model.addAttribute("areaList", areaList);
+			 return "server/queryCommunity";
+	 }
 	 
-	 
-
+	 @RequestMapping(value="/server/queryClientUser.html",method = {RequestMethod.POST,RequestMethod.GET})
+	 public String queryCommunity(Model model,
+			 @RequestParam(value = "mobileNo", required = false) String mobileNo,
+			 @RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum
+			) {
+		 Map<String, Object> parmMap = new HashMap<String, Object>();
+			parmMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
+			parmMap.put("mobileNo", mobileNo);
+			
+			PageView pageView = serverService.getCommunityPage(parmMap);
+			model.addAttribute("pageView", pageView);
+			model.addAttribute("parms", parmMap);
+			 return "server/queryCommunity";
+	 }
 }

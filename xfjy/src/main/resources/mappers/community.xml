@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xyc.proj.mapper.CommunityMapper" >
+  
+ 
+  <select id="getCommunityPage" resultType="com.xyc.proj.entity.Community" parameterType="com.xyc.proj.entity.Community">
+ 	<include refid="queryCommunity"/>
+    <include refid="queryCommunityCondition"/>      
+ <![CDATA[ limit  #{start} , #{end} ]]>
+
+  </select>
+ 
+  
+  <sql id="queryCommunity">
+  	  select 
+  	  id as id,
+  	  name as name,
+  	  SPELL_NAME as spellName,
+  	  AREA_ID as areaId,
+  	  (select name from t_area a where a.id=t.area_id) as areaName
+  	  from	T_COMMUNITY t where 1=1 and state='A'
+  </sql>
+  
+    <select id="getCommunityPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+	select count(1) from (
+		<include refid="queryCommunity"/>
+		<include refid="queryCommunityCondition"/>
+	) as c
+  </select> 
+  
+  <sql id="queryCommunityCondition">
+   	  <if test="areaId != null and areaId !=''">
+			 <![CDATA[ and   areaId =#{areaId}  ]]>
+	  </if>
+  	  <if test="name != null and name !=''">
+			 <![CDATA[ and   name  like   '%'+#{name}+'%' ]]>
+	  </if>
+  </sql>
+  
+</mapper>

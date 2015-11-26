@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
+import com.xyc.proj.mapper.ClientUserMapper;
+import com.xyc.proj.mapper.CommunityMapper;
 import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.WorkerMapper;
 import com.xyc.proj.repository.OrderRepository;
@@ -32,6 +34,14 @@ public class ServerServiceImpl implements ServerService {
 	@Lazy
 	@Autowired
 	OrderMapper orderMapper;
+	
+	@Lazy
+	@Autowired
+	CommunityMapper communityMapper;
+	
+	@Lazy
+	@Autowired
+	ClientUserMapper clientUserMapper;
 	
 	@Autowired
 	ClientService clientService;
@@ -143,5 +153,24 @@ public class ServerServiceImpl implements ServerService {
 	
 	public List findStore() {
 		return storeRepository.findAll();
+	}
+	
+	
+	public PageView getCommunityPage(Map parm) {
+		PageView pv = new PageView((Integer) parm.get("currentPageNum"));
+		parm.put("start", pv.getStart());
+		parm.put("end", pv.getCurrentMaxCnt());
+		pv.setResultList(communityMapper.getCommunityPage(parm));
+		pv.setTotalRecord(communityMapper.getCommunityPageCount(parm));
+		return pv;
+	}
+	
+	public PageView getClientUserPage(Map parm) {
+		PageView pv = new PageView((Integer) parm.get("currentPageNum"));
+		parm.put("start", pv.getStart());
+		parm.put("end", pv.getCurrentMaxCnt());
+		pv.setResultList(clientUserMapper.getClientUserPage(parm));
+		pv.setTotalRecord(clientUserMapper.getClientUserPageCount(parm));
+		return pv;
 	}
 }

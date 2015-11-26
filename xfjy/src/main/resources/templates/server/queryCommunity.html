@@ -1,0 +1,124 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+	<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>小区查询</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/font-awesome.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-datetimepicker.css}" />
+
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:inline="javascript" th:src="@{/app/js/commonSort.js}"></script>
+<script th:inline="javascript" th:src="@{/app/js/commonPage.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap-datetimepicker.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+
+<script type="text/javascript">
+ 	function exportExcel(){
+		var path = basePath+"/stat/exportAlbumAndMusicWithCouponStat";  
+		$('#orderByForm').attr("action", path).submit();
+ 	}
+ 	
+ 	function query(){
+ 		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
+		$('#orderByForm').attr("action", path).submit();
+ 	}
+ 	
+ 	function resetAction(){
+ 		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
+		$('#orderByForm').attr("action", path);
+ 	}
+</script>
+</head>
+<body>
+	<div class="container-fluid">
+		<form id="orderByForm" th:action="@{/server/queryOrder.html}" method="post">
+			<input type="hidden" id="orderByStr" name="orderByStr"   th:value="${orderBy}"/>
+		 <div class="row" id="qry" style="margin-right:15px;">
+		 	<div  class="col-xs-12" style="padding:10px;border:solid 1px #cccccc;margin:15px 15px;padding:10px 10px">
+		 		<div class="col-xs-4" style="width:220px">
+		 			<label>地区:</label>
+		 			<select  name="areaId" style="height:30px;width:120px" >
+		 				<option value="">全部</option>
+							<option th:each="area : ${areaList}"
+								th:value="${area.id}" th:text="${area.name}"
+								th:selected="${parms.areaId == area.id}"></option>
+					</select>
+		 		</div>
+		 		<div class="col-xs-4" style="width:250px">
+		 		<label>小区名称:</label>
+		 		<input name="name" class="input-append date" id="name"      th:value="${parms.name}"/>
+		 		</div>	
+		 		<div class="col-xs-2">
+		 			<button type="submit" class="btn btn-primary"   name="btnQuery" id="btnQuery"  >查询</button> 
+		 		</div>
+		 	</div>
+		 </div>
+		 <div id="tbdata" style="width:100%;overflow: scroll">
+			<table class="table table-bordered table-striped" style="width:2000px">
+				<thead>
+					<tr>
+						<th>地区</th>
+						<th>小区名称</th>
+						<th>地址</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr  th:each="item : ${pageView.resultList}">
+						<td style="width:35px" th:text="${item.areaName}"></td>
+						<td th:text="${item.name}"></td>
+						<td th:text="${item.address}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<div>
+				<div style="border:1px solid #fffff">
+					 <nav id="tslCommon-Page"  style="float:right">
+			  			<input type="hidden" name="currentPageNum" th:value="${pageView.currentPageNum}"/>
+			  			<input type="hidden" name="totalPageCnt" th:value="${pageView.totalPageCnt}"/>
+			  			<input type="hidden" name="totalRecord" th:value="${pageView.totalRecord}"/>
+					</nav>
+				</div> 
+			</div>
+		</div>
+	</form>
+	</div>
+<script th:inline="javascript">
+        /*<![CDATA[*/
+            $('#startTime').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false,
+                minView:2
+            });
+        
+            $('#endTime').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false ,
+                minView:2
+            });
+            
+            $('#serviceDate').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false ,
+                minView:2
+            });
+            
+            
+        /*]]>*/
+    </script>
+
+</body>
+</html>

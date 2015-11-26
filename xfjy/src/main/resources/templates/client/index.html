@@ -12,7 +12,7 @@
 <style type="text/css">
 
 body{
- background-color: #8dcb2f
+ background-color: #EBEBEB
 }
 #ftt {
 	position: fixed;
@@ -37,6 +37,7 @@ body{
 }
 
  #fttc {
+ background-color:#8dcb2f;
 	position: fixed;
 	bottom: 0;
 	width: 100%;
@@ -92,14 +93,14 @@ $(function(){
 
 </head>
 
-<body>
+<body style="margin:0 0 ;padding:0  0 ">
 	<form th:action="@{/client/login}" method="post" id="loginForm">
-		<div class="container-fluid">
+		<div class="container-fluid" style="margin:0 0 ;padding:0 0 ">
 			<div style="height:20px">
 				<input type="hidden" name="openId" id="openId" th:value="${openId}" /> 
 			</div>
-			<div class="row" id="image" style="margin-right:15px;">
-				<div id="myCarousel" class="carousel slide col-md-12 col-sm-12 col-xs-12 col-lg-12" style="margin-left:15px">
+			<div class="row" id="image"  >
+				<div id="myCarousel" class="carousel slide col-md-12 col-sm-12 col-xs-12 col-lg-12"  >
 			   <!-- 轮播（Carousel）指标 -->
 			   <ol class="carousel-indicators">
 			      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -109,34 +110,34 @@ $(function(){
 			   <!-- 轮播（Carousel）项目 -->
 			   <div class="carousel-inner"   >
 			      <div class="item active">
-			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpeg}" style="height:150px;width:350px" alt="First slide" />
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpg}" style="height:150px;width:100%" alt="First slide" />
 			         <div class="carousel-caption" style="margin-top:55px">优惠1</div>
 			      </div>
 			      <div class="item">
-			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpeg}" style="height:150px;width:350px" alt="Second slide" />
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpg}" style="height:150px;width:100%" alt="Second slide" />
 			         <div class="carousel-caption" style="margin-top:55px">优惠 2</div>
 			      </div>
 			      <div class="item">
-			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpeg}" style="height:150px;width:350px" alt="Third slide" />
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpg}" style="height:150px;width:100%" alt="Third slide" />
 			         <div class="carousel-caption" style="margin-top:55px">优惠 3</div>
 			      </div>
 			   </div>
 			</div> 
 			</div>
 			
-			<div class="row" id="func" style="margin-left:15px;margin-right:15px;border:1px solid white;">
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid white;padding:0 0 0 0 ;margin:0 0 0 0 "  onclick="forward('CC')">
+			<div class="row" id="func" style="border:1px solid #8dcb2f;">
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid #8dcb2f;padding:0 0 0 0 ;margin:0 0 0 0 "  onclick="forward('CC')">
 					<img alt="" th:src="@{/app/img/idx_rcbj.jpg}"  style="width:100%;height:100%" />
 				</div>
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid white;;padding:0 0 0 0 ;margin:0 0 0 0 " onclick="forward('DBJ')">
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid #8dcb2f;;padding:0 0 0 0 ;margin:0 0 0 0 " onclick="forward('DBJ')">
 					<img alt="" th:src="@{/app/img/idx_dbj.jpg}"  style="width:100%;height:100%"/>
 				</div>
 			</div>
-			<div class="row" id="func" style="margin-left:15px;margin-right:15px;border:1px solid white;;border-top:0px">
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid white;;padding:0 0 0 0 ;margin:0 0 0 0 "  onclick="forward('KH')">
+			<div class="row" id="func" style="border:1px solid #8dcb2f;;border-top:0px">
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid #8dcb2f;padding:0 0 0 0 ;margin:0 0 0 0 "  onclick="forward('KH')">
 					  <img alt="" th:src="@{/app/img/idx_kh.jpg}"  style="width:100%;height:100%"/>
 				</div>
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid white;">
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:150px;border:1px solid #8dcb2f;padding:0 0 0 0 ;margin:0 0 0 0 ">
 					   <img alt="" th:src="@{/app/img/idx_cbl.jpg}"  style="width:100%;height:100%"/>
 				</div>
 				 

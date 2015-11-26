@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "T_COMMUNITY")
@@ -36,6 +37,15 @@ public class Community {
 	@Column(name = "CREATE_TIME") 
 	private Date createdTime;
 	 
+	@Transient
+	private String areaName;
+	
+	@Column(name = "ADDRESS")
+	private Long address;
+
+	
+	@Column(name = "STATE")
+	private Long state;
 
 	public Community() {
 	}
@@ -90,6 +100,36 @@ public class Community {
 
 	public void setSpellName(String spellName) {
 		this.spellName = spellName;
+	}
+
+
+	public String getAreaName() {
+		return areaName;
+	}
+
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+
+	public Long getState() {
+		return state;
+	}
+
+
+	public void setState(Long state) {
+		this.state = state;
+	}
+
+
+	public Long getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(Long address) {
+		this.address = address;
 	}
  
 
