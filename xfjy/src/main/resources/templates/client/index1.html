@@ -11,7 +11,7 @@
 <script th:src="@{/app/js/public.js}"></script>
 <style type="text/css">
 html{
-margin:auto 0;
+margin:0 0;
 padding:0 0;
 }
 body{
@@ -35,7 +35,7 @@ body{
 	_position: absolute;
 	_top: expression(eval(document.documentElement.scrollTop + 
 		 document.documentElement.clientHeight-this.offsetHeight- ( parseInt(this.currentStyle.marginTop
-		, 30)||30)-(parseInt(this.currentStyle.marginBottom, 10)||10)));
+		, 10)||10)-(parseInt(this.currentStyle.marginBottom, 10)||10)));
 	filter: alpha(opacity = 50);
 	-moz-opacity: 0.5;
 	-khtml-opacity: 0.5;
@@ -65,12 +65,6 @@ body{
 	color: #8dcb2f;
 	font-size: 13px;
 	letter-spacing: 2px;
-}
-
-*{
-	margin:0px;
-	border:0px;
-	padding:0px;
 }
 </style>
 
@@ -107,14 +101,14 @@ $(function(){
 
 </head>
 
-<body  style="overflow-y:hidden;overflow-x:hidden">
+<body>
 	<form th:action="@{/client/login}" method="post" id="loginForm" style="margin:0 0;padding:0 0 ">
 		<div class="container-fluid" style="margin:0 0 0 0 ;padding:0 0 0 0  ">
 			<div style="height:0px">
 				<input type="hidden" name="openId" id="openId" th:value="${openId}" /> 
 			</div>
 			<div class="row" id="image"  >
-				<div id="myCarousel" class="carousel slide col-md-12 col-sm-12 col-xs-12 col-lg-12"  >
+				<div id="myCarousel" class="carousel slide col-md-12 col-sm-12 col-xs-12 col-lg-12" style="margin:0 0;padding:0 0" >
 			   <!-- 轮播（Carousel）指标 -->
 			   <ol class="carousel-indicators">
 			      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -140,35 +134,35 @@ $(function(){
 			</div>
 			
 			<div class="row" id="func" style="border:1px solid #e6e6e6;border-bottom:1px;padding:0 0 0 0 ;margin:0 0 0 0">
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:120px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px;background-color:white;text-align:center"  onclick="forward('CC')">
-					<img alt="" th:src="@{/app/img/idx_rcbj.jpg}"  style="height:120px;width:auto" />
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:180px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px;background-color:white;text-align:center"  onclick="forward('CC')">
+					<img alt="" th:src="@{/app/img/idx_rcbj.jpg}"  style="height:180px;width:auto" />
 				</div>
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:120px;border:1px solid #e6e6e6;;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px ;background-color:white;text-align:center" onclick="forward('DBJ')">
-					<img alt="" th:src="@{/app/img/idx_dbj.jpg}"  style="height:120px;width:auto"/>
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:180px;border:1px solid #e6e6e6;;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px ;background-color:white;text-align:center" onclick="forward('DBJ')">
+					<img alt="" th:src="@{/app/img/idx_dbj.jpg}"  style="height:180px;width:auto"/>
 				</div>
 			</div>
 			<div class="row" id="func" style="border:1px solid #e6e6e6;border-top:0px;padding:0 0 0 0 ;margin:0 0 0 0">
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:120px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;background-color:white;text-align:center;border-bottom:0px "  onclick="forward('KH')">
-					  <img alt="" th:src="@{/app/img/idx_kh.jpg}"  style="height:119px;width:auto"/>
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:180px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;background-color:white;text-align:center;border-bottom:0px "  onclick="forward('KH')">
+					  <img alt="" th:src="@{/app/img/idx_kh.jpg}"  style="height:179px;width:auto"/>
 				</div>
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:120px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;background-color:white ;text-align:center;border-bottom:0px"  onclick="forward('CBL')">
-					   <img alt="" th:src="@{/app/img/idx_cbl.jpg}" style="height:119px;width:auto"/>
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:180px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;background-color:white ;text-align:center;border-bottom:0px">
+					   <img alt="" th:src="@{/app/img/idx_cbl.jpg}" style="height:179px;width:auto"/>
 				</div>
 				 
 			</div>
 			<div>
 			</div>
-			<div class="row" style="margin:0 0 ;pading:0 0 ">
+			<div class="row">
 				<div id="ftt"></div>
 				<div id="fttc">
-					<div  style="line-height:60px;margin:0 0;padding:0 0 ">
-						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 " onclick="toOrderList()">
+					<div  style="line-height:60px;margin:0 0;padding 0 0">
+						<div class="col-xs-4" style="border:1px solid white;text-align:center;padding:0 0 0 0 " onclick="toOrderList()">
 						 	  <img alt="" th:src="@{/app/img/idx_bottom_dd.jpg}" style="height:58px;width:auto" />
 						</div>
-						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 ">
+						<div class="col-xs-4" style="border:1px solid white;text-align:center;padding:0 0 0 0 ">
 							  <img alt="" th:src="@{/app/img/idx_bottom_cz.jpg}"  style="height:58px;width:auto" />
 						</div>
-						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 ;margin:0 0 ">
+						<div class="col-xs-4" style="border:1px solid white;text-align:center;padding:0 0 0 0 ;margin:0 0 ">
 							 <img alt="" th:src="@{/app/img/idx_bottom_grzx.jpg}"  style="height:58px;width:auto" />
 						</div>
 					</div>
