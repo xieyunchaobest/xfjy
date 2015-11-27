@@ -32,6 +32,11 @@
  		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
 		$('#orderByForm').attr("action", path);
  	}
+ 	
+ 	function showModal(){
+ 		var path = basePath+"/server/queryWorker.html?orderId=1";
+ 		window.open(path,'win',"height=300,width=500,top=300,left=300,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no")
+ 	}
 </script>
 </head>
 <body>
@@ -120,6 +125,10 @@
 			  			<input type="hidden" name="totalPageCnt" th:value="${pageView.totalPageCnt}"/>
 			  			<input type="hidden" name="totalRecord" th:value="${pageView.totalRecord}"/>
 					</nav>
+				</div> 
+				<div style="float: left; margin-right: 15px;">
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="showModal()">派单</button>
 				</div> 
 			</div>
 		</div>

@@ -579,7 +579,7 @@ public class ClientServiceImpl implements ClientService {
 					for(int k=0;k<ayiList.size();k++) {
 						Object ob[]=(Object[])ayiList.get(k);
 						ClientUser w=(ClientUser)ob[1];
-						MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(), Configure.url_loot, "您有新的任务", order.getFullAddress(), "代办", "点击查看详情");
+						MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(),Constants.URL_SEND_TEMPLEATE_MSG, "您有新的任务", order.getFullAddress(), "代办", "点击查看详情");
 						
 					}
 					

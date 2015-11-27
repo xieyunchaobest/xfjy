@@ -68,6 +68,7 @@ public class ServerController {
 	            @RequestParam(value = "serviceTypeTwo", required = false) String serviceTypeTwo,
 	            @RequestParam(value = "role", required = false) String role,
 	            @RequestParam(value = "workTime", required = false) String workTime,
+	            @RequestParam(value = "orderId", required = false) String orderId,
 	            @RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum,
 				@RequestParam(value = "orderByStr", required = false, defaultValue = "name,desc") String orderBy,
 	            Model model) {
@@ -98,7 +99,12 @@ public class ServerController {
 		 List storeList=serverService.findStore();
 		 model.addAttribute("areaList", areaList);
 		 model.addAttribute("storeList", storeList);
-		 return "server/queryWorker";
+		 if(StringUtil.isBlank(orderId)) {
+			 return "server/queryWorker";
+		 }else {
+			 return "server/orderDispatch";
+		 }
+		
 	 }
 	 
 	 @RequestMapping(value="/server/updateWorkInit.html",method = {RequestMethod.POST,RequestMethod.GET})
@@ -153,14 +159,16 @@ public class ServerController {
 		model.addAttribute("endTime", endTime);
 		model.addAttribute("serviceDate", serviceDate);
 		model.addAttribute("serviceType", serviceType);
-		 return "server/queryOrder";
+			return "server/queryOrder";
+		 
+		 
 	 }
 	 
 	 
 	 @ResponseBody
 	 @RequestMapping(value="/server/dispatchOrder.html",method = {RequestMethod.POST,RequestMethod.GET})
 	 public String dispatch(Model model,
-			 @RequestParam(value = "orderIds", required = true) String orderIds,
+			 @RequestParam(value = "orderId", required = true) String orderIds,
 			 @RequestParam(value = "ayiId", required = true) Long aiyiId
 			) {
 		 String res="S";
