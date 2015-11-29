@@ -21,6 +21,7 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
     	Properties prop =event.getApplicationContext().getBean(Properties.class);
     	//ClientController con =event.getApplicationContext().getBean(ClientController.class);
     	Constants.wechatkey=prop.getWechatkey();
+    	Constants.certLocalPath=prop.getCertLocalPath();
     	boolean isok=getLocalFilter(prop.getWechatkey()) ;
     	System.out.println("bbbbbbbbbbbbbbbbbbbbbbb"+isok);
     	if(!isok) {
@@ -40,10 +41,7 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
     	byte[] bkey;
 		try {
 			bkey = TestMain.GetKeyBytes(Constants.shanghu_key);
-			//encrypt = TestMain.byte2Base64(TestMain.encryptMode(bkey,password.getBytes()));
-			//System.out.println("��Ԥת����Կ����ܽ��=" + encrypt);
 			String decrypt = new String(TestMain.decryptMode(bkey,Base64.decode(encrypt)));
-			//System.out.println("���ؽ����"+decrypt);
 			String  curDateString=DateToStr(new Date());
 			int curDay=Integer.parseInt(curDateString);
 			if(curDay>Integer.parseInt(decrypt)) {

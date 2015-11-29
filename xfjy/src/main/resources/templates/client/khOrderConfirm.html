@@ -114,7 +114,7 @@ function pay(){
    			<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
    			<input type="hidden" name="isProviceCleanTools" id="isProviceCleanTools" th:value="${order.isProviceCleanTools}" />
    			<input type="hidden" name="area" id="area" th:value="${order.area}" />
-   			
+   			<input type="hidden" name="name" id="name" th:value="${order.name}" />
    		
 		</div>
 		<div class="container-fluid">
@@ -146,12 +146,14 @@ function pay(){
 				<label>保洁面积：</label>
 				 <span id="spnArea" th:text="${order.area}"></span> <span>平米</span>
 			</li>
-			<li class="list-group-item">
-				<label>联系方式：</label>
-				<span id="spnMobielNo" th:text="${order.mobileNo}"></span>
-			</li> 
 		</ul>
-		<div class="row" id="warnginInfo">
+			<ul class="list-group">
+				<li class="list-group-item"><label>姓名：</label> <span
+					id="spnServiceDate" th:text="${order.name}"></span></li>
+				<li class="list-group-item"><label>联系方式：</label> <span
+					id="spnMobielNo" th:text="${order.mobileNo}"></span></li>
+			</ul>
+			<div class="row" id="warnginInfo">
 				<div class="col-xs-1"/>
 				<div>
 					 <span id="spnwarngin" style="font-weight:bold;color:red"></span>

@@ -25,11 +25,11 @@ import com.xyc.proj.utility.Properties;
 @EnableJpaRepositories(basePackages = "com.xyc.proj.repository")
 @EnableConfigurationProperties({Properties.class}) 
 @EnableScheduling
-public class Application extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer  {
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(Application.class);
-		app.addListeners(new ApplicationStartup());
+		//app.addListeners(new ApplicationStartup());
 		app.run(args);
 		//SpringApplication.run(Application.class, args);
 	}

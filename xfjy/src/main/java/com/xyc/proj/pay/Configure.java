@@ -28,9 +28,9 @@ public class Configure {
 	
 	public static String nonce_str=RandomStringGenerator.getRandomStringByLength(32);
 	
-	public static String body="幸福家缘家政宝洁服务";
+	public static String body="幸福家缘家政保洁服务";
 	
-	public static String detail="幸福家缘家政宝洁服务";
+	public static String detail="幸福家缘家政保洁服务";
 	public static String attach="天津";
 	public static String out_trade_no=RandomStringGenerator.getRandomStringByLength(32);
 	public static String fee_type="CNY";

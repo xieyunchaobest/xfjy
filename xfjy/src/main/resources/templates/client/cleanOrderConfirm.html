@@ -145,6 +145,7 @@
    			<input type="hidden" name="durationMonthText" id="durationMonthText" th:value="${order.durationMonthText}" />
    			<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
    			<input type="hidden" name="area" id="area" th:value="${order.area}" />
+   			<input type="hidden" name="name" id="name" th:value="${order.name}" />
 		</div>
 		<div class="container-fluid">
 		<div style="height:20px"></div>
@@ -167,6 +168,10 @@
 			</li>
 		</ul>
 		<ul class="list-group">
+			<li class="list-group-item">
+				<label>姓名：</label>
+				<span id="spnServiceDate" th:text="${order.name}"></span>
+			</li> 
 			<li class="list-group-item">
 				<label>联系方式：</label>
 				<span id="spnServiceDate" th:text="${order.mobileNo}"></span>

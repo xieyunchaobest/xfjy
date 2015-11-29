@@ -18,24 +18,17 @@
 <script th:src="@{/app/js/public.js}"></script>
 
 <script type="text/javascript">
- 	function exportExcel(){
-		var path = basePath+"/stat/exportAlbumAndMusicWithCouponStat";  
-		$('#orderByForm').attr("action", path).submit();
- 	}
- 	
- 	function query(){
- 		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
-		$('#orderByForm').attr("action", path).submit();
- 	}
- 	
- 	function resetAction(){
- 		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
-		$('#orderByForm').attr("action", path);
- 	}
+ 	 
  	
  	function showModal(){
- 		var path = basePath+"/server/queryWorker.html?orderId=1";
- 		window.open(path,'win',"height=300,width=500,top=300,left=300,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no")
+ 		var len=$('input:checked').length;
+ 		  
+ 		if(len==1){
+ 			var val=$('input:checked').val();
+ 			var path = basePath+"/server/queryWorker.html?orderId="+val;
+ 	 		window.open(path,'win',"height=300,width=500,top=300,left=300,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
+		}
+ 		
  	}
 </script>
 </head>
@@ -67,8 +60,8 @@
 		 		<label>服务类型:</label>
 		 		 <select  name="serviceType" style="height:30px;width:120px" >
 		 				<option value="">全部</option>
-							<option value="CC" th:selected="${serviceType == 'CC'}">日常宝洁</option>
-							<option value="DBJ" th:selected="${serviceType == 'DBJ'}">大宝洁</option>
+							<option value="CC" th:selected="${serviceType == 'CC'}">日常保洁</option>
+							<option value="DBJ" th:selected="${serviceType == 'DBJ'}">大保洁</option>
 							<option value="KH" th:selected="${serviceType == 'KH'}">开荒</option>
 							<option value="CBL" th:selected="${serviceType == 'CBL'}">擦玻璃</option>
 					</select>
@@ -83,7 +76,8 @@
 			<table class="table table-bordered table-striped" style="width:2000px">
 				<thead>
 					<tr>
-						<th>订单号</th>
+						<th></th>
+						<th>交易号</th>
 						<th>手机号</th>
 						<th>地址</th>
 						<th>支付金额</th>
@@ -100,7 +94,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr  th:each="item : ${pageView.resultList}">
+					<tr  th:each="item : ${orderPageView.resultList}">
+						<td style="width:20px">
+							<input type="checkbox" id="cbchooseworker" name="orderId" th:value="${item.id}"/>
+						</td>
 						<td style="width:35px" th:text="${item.outTradeNo}"></td>
 						<td th:text="${item.mobileNo}"></td>
 						<td th:text="${item.fullAddress}"></td>
@@ -121,9 +118,9 @@
 			<div>
 				<div style="border:1px solid #fffff">
 					 <nav id="tslCommon-Page"  style="float:right">
-			  			<input type="hidden" name="currentPageNum" th:value="${pageView.currentPageNum}"/>
-			  			<input type="hidden" name="totalPageCnt" th:value="${pageView.totalPageCnt}"/>
-			  			<input type="hidden" name="totalRecord" th:value="${pageView.totalRecord}"/>
+			  			<input type="hidden" name="currentPageNum" th:value="${orderPageView.currentPageNum}"/>
+			  			<input type="hidden" name="totalPageCnt" th:value="${orderPageView.totalPageCnt}"/>
+			  			<input type="hidden" name="totalRecord" th:value="${orderPageView.totalRecord}"/>
 					</nav>
 				</div> 
 				<div style="float: left; margin-right: 15px;">

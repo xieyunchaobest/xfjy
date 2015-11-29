@@ -10,8 +10,8 @@ import com.xyc.proj.pay.Configure;
  */
 public class Constants {
 	public static final String URL_PRE_PAY="https://api.mch.weixin.qq.com/pay/unifiedorder";
-		public static final String certLocalPath="/home/diuser/resource/apiclient_cert.p12";
-		 
+	//public static final String certLocalPath="/home/diuser/resource/apiclient_cert.p12";
+	public static  String certLocalPath="";	 
 	
 	public static   String URL_GET_TOKEN="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+Configure.appID+"&secret="+Configure.WE_CHAT_APPSECRET;
 	public static   String URL_CREATE_MENU=" https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";

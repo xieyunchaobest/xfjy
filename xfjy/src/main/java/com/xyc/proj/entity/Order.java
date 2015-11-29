@@ -38,8 +38,12 @@ public class Order {
 	@Column(name = "OPEN_ID")
 	private String openId;
 	
+	@Column(name = "NAME")
+	private String name="";
+	
+	
 	@Column(name = "MOBILE_NO")
-	private String mobileNo;
+	private String mobileNo="";
 	
 	@Column(name = "PAY_MODE")
 	private String payMode="W";
@@ -126,10 +130,7 @@ public class Order {
 	 
 	@Transient
 	private String stateText;
-	
-	
-	@Column(name = "AYI_ID")
-	private Long ayiId; 
+ 
 	  
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -237,6 +238,16 @@ public class Order {
 
   
 
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
 	public String getPayTime() {
 		return DateUtil.Time2Str(payTime);
 	}
@@ -310,16 +321,6 @@ public class Order {
 		this.duration = duration;
 	}
  
-
-	public Long getAyiId() {
-		return ayiId;
-	}
-
-
-	public void setAyiId(Long ayiId) {
-		this.ayiId = ayiId;
-	}
-
 
 	public String getStartTime() {
 		return startTime;

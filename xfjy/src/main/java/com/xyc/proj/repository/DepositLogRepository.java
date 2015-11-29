@@ -7,4 +7,6 @@ import com.xyc.proj.entity.DepositLog;
 
 
 public interface DepositLogRepository extends JpaRepository<DepositLog, Long> {
+	DepositLog findByOutTradeNo(String outTradeNo);
+	
 }

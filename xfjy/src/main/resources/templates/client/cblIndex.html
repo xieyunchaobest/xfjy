@@ -135,6 +135,13 @@ function showTimeModal(){
 			 $("#spnwarngin").text('请输入正确的联系方式！');
 			 return false;
 		 }
+		 
+		 
+		 if($("#txtName").val()==''){
+			 $("#spnwarngin").text('请输入姓名！');
+			 return;
+		 }
+		 
 		 return true;
 	 }
 	 
@@ -149,7 +156,7 @@ function showTimeModal(){
 		 var balconyCount=$("#txtBalconyCount").val();
 		 var mobileNo=$("#txtmobileNo").val();
 		 var cbprovide=$("#cbprovide").prop('checked');
-		 
+		 $("#name").val($("#txtName").val());
 		 
 		 $("#serviceDate").val(serviceDate);
 		 $("#startTime").val(serviceTime);
@@ -200,6 +207,7 @@ function showTimeModal(){
    			<input type="hidden" name="area" id="area" th:value="${order.area}" />
    			<input type="hidden" name="windowCount" id="windowCount" th:value="${order.windowCount}" />
    			<input type="hidden" name="balconyCount" id="balconyCount" th:value="${order.balconyCount}" />
+   			<input type="hidden" name="name" id="name" />
 		</div>
 		<div class="container-fluid">
 		<div style="height:20px"></div>
@@ -230,12 +238,15 @@ function showTimeModal(){
 		</ul>
 		<ul class="list-group">
 			<li class="list-group-item">
+				<input type="text" placeholder="请输入姓名"   name="txtName" value=""  class="form-control" id="txtName"/>
+			</li> 
+			<li class="list-group-item">
 				<input type="text" placeholder="请输入联系方式"   name="txtmobileNo" class="form-control" id="txtmobileNo"/>
 			</li> 
 		</ul>
 		<ul class="list-group" >
 			<li class="list-group-item">
-				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">宝洁用品(</font>
+				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">保洁用品(</font>
 					<span style="color:red" th:text="${cleanToolsFee}"></span><span  style="color:red">元)</span>
 				</label> 
 				<span  onclick="cbcheck()" style="width:30%;display:inline-block">&nbsp;</span>

@@ -1,0 +1,190 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>充值</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script> 
+<style type="text/css">
+ .borderc{
+  border:2px solid #888888;
+ }
+ 
+</style>
+
+<script type="text/javascript">
+var prepay_id=''; 
+var appId='';
+var timeStamp='';
+var nonceStr='';
+var packages='';
+var signType='';
+var paySign='';
+
+ function changecolor(target){
+	 if($(target).hasClass('borderc')){
+		 $(target).removeClass('borderc');
+		 $("#amount").val("");
+	 }else{
+		 $("div[xtype='amountsel']").removeClass('borderc');
+		 $(target).addClass('borderc');
+		 $("#amount").val($(target).attr('amount'));
+	 }
+ }
+ 
+ 
+ 
+ /*<![CDATA[*/
+ function dopsit(){
+	
+	 if(isNaN($("#txtAmount").val())){
+		 $("#spnwarngin").text('金额只能为数字！');
+		 return false;
+	 }
+	 
+	 var iamount=parseInt($("#txtAmount").val());
+	 if(iamount<500){
+		 $("#spnwarngin").text('充值金额最少为500元！'); 
+		 return ;
+	 }
+	 
+	 
+	 if($("#txtAmount").val()!=''){
+		 $("#amount").val($("#txtAmount").val());
+	 }
+	 
+	 if( $("#amount").val()==''){
+		 $("#spnwarngin").text('请选择或者输入金额');
+		 return;
+	 }
+	 
+	 
+	 
+	 $("#btnPay").text('支付中...');
+	$("#btnPay").attr("disabled",true); 
+	 $.ajax({
+         type: "POST",
+         url: basePath+'/client/deposit',
+         data:$("#aform").serialize(),
+         success: function(data) {
+        	 console.info(data);
+         	if(data.resultCode=="S"){
+         		prepay_id=data.prepay_id;
+         		appId=data.parm.appId;
+         		timeStamp=data.parm.timeStamp;
+         		nonceStr=data.parm.nonceStr;
+         		packages=data.parm.package;
+         		paySign=data.parm.paySign;
+         		pay();
+         	}else{
+         		 alert('订单处理失败！');
+         	}
+         }
+     }); 
+ }
+ /*]]>*/
+
+ /*<![CDATA[*/
+ function onBridgeReady(){
+ 	   WeixinJSBridge.invoke(
+ 	       'getBrandWCPayRequest',{
+ 	           "appId" : appId,     //公众号名称，由商户传入     
+ 	           "timeStamp":timeStamp,         //时间戳，自1970年以来的秒数     
+ 	           "nonceStr" : nonceStr, //随机串     
+ 	           "package" : packages,     
+ 	           "signType" : 'MD5',         //微信签名方式：     
+ 	           "paySign" :paySign //微信签名 
+ 	       },
+ 	       function(res){  
+ 	           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+ 	        	   $("#btnPay").text('已支付');
+ 	        	   alert('支付成功！');
+ 	           }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+ 	       }
+ 	   ); 
+ 	}
+
+
+ /*]]>*/
+ function pay(){
+ 	if (typeof WeixinJSBridge == "undefined"){
+ 	   if( document.addEventListener ){
+ 	       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+ 	   }else if (document.attachEvent){
+ 	       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+ 	       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+ 	   }
+ 	}else{
+ 	   onBridgeReady();
+ 	}
+ }
+ 
+ 
+</script>
+
+</head>
+
+<body>
+	<form th:action="@{/client/login}" method="post" id="aform">
+		<div style="display:none">
+			<input type="hidden" name="openId" id="openId"   th:value="${openId}"/>
+			<input type="hidden" name="amount" id="amount"   />
+		</div>
+		<div class="container-fluid">
+		<div style="height:20px"></div>
+		<ul class="list-group">
+  				<li class="list-group-item" >
+  					<label>余额：</label><font color="red"><span th:text="${ds.fee}"  ></span></font>
+  				</li> 
+		</ul> 
+		
+		<div class="row" style="margin:0 15px;margin-left:25px">
+				<div class="panel panel-default col-xs-3" style="padding:0 0 " xtype='amountsel' amount="500" onclick="changecolor(this)">
+					<div class="panel-body">500元</div>
+				</div>
+				<div class=" col-xs-1">&nbsp;</div>
+				<div class="panel panel-default col-xs-3" style="padding:0 0 " xtype='amountsel' amount="1000" onclick="changecolor(this);">
+					<div class="panel-body">1000元</div>
+				</div>
+				<div class=" col-xs-1">&nbsp;</div>
+				<div class="panel panel-default col-xs-3" style="padding:0 0 " xtype='amountsel' amount="2000" onclick="changecolor(this);">
+					<div class="panel-body">2000元</div>
+				</div>
+		</div>
+
+		<div class="row" >
+			<div class=" col-xs-2"></div>
+			<div class=" col-xs-8">
+				<input type="text"   name="txtAmount" id="txtAmount" placeholder="其他金额，单位：元" class="form-control" />
+			</div>
+			<div class=" col-xs-2"></div>
+		</div>
+		
+		<div class="row" id="warnginInfo" style="margin-top:15px;">
+				<div class="col-xs-1"/>
+				<div>
+					 <span id="spnwarngin" style="font-weight:bold;color:red"></span>
+				</div>
+				<div class="col-xs-1"/>
+			</div>
+			
+		
+		<div class="row">
+			<div class="col-xs-2"/>
+			<div>
+				<button type="button" onclick="dopsit()" id="btnPay" class="btn col-xs-8 btn-default btn-lg">确定</button>
+			</div>
+			<div class="col-xs-2"/>
+		</div>
+		 
+		</div>
+	</form>
+	
+ 
+ 
+</body>
+</html>

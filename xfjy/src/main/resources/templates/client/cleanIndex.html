@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>宝洁</title>
+<title>保洁</title>
 <link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
 <meta content="IE=edge" http-equiv="X-UA-Compatible" />
@@ -121,26 +121,31 @@
 			 return;
 		 }
 		 
-		 $("#mobileNo").val($("#txtmobileNo").val());
+		
 		 
 		 if($("#serviceType").val()=='DBJ'){
 			 if($("#txtArea").val()==''){
-				 $("#spnwarngin").text('请输入宝洁面积！');
+				 $("#spnwarngin").text('请输入保洁面积！');
 				 return;
 			 }
 			 if(isNaN($("#txtArea").val())){
-				 $("#spnwarngin").text('宝洁面积只能为数字！');
+				 $("#spnwarngin").text('保洁面积只能为数字！');
 				 return;
 			 }
 			 $("#area").val($("#txtArea").val());
 		 }
 		 
+		 if($("#txtName").val()==''){
+			 $("#spnwarngin").text('请输入姓名！');
+			 return;
+		 }
 		 
 		 if($("#cbprovide").prop('checked')==true){
 			 $("#isProviceCleanTools").val('Y');
 		 }
 		 
-		 
+		 $("#mobileNo").val($("#txtmobileNo").val());
+		 $("#name").val($("#txtName").val());
 		 var path = basePath+"/client/cleanOrderConfirm.html";  
 		$('#aform').attr("action", path).submit();
 		 
@@ -172,6 +177,7 @@
    			<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
    			<input type="hidden" name="isProviceCleanTools" id="isProviceCleanTools" th:value="${order.isProviceCleanTools}" />
    			<input type="hidden" name="area" id="area" th:value="${order.area}" />
+   			<input type="hidden" name="name" id="name" />
    		
 		</div>
 		<div class="container-fluid">
@@ -188,17 +194,20 @@
 		</ul>
 		<ul class="list-group" id="ularea" style="display:none">
 			<li class="list-group-item">
-				<input type="text" placeholder="请输入宝洁面积,单位：平方米"   name="txtArea" class="form-control" id="txtArea"/>
+				<input type="text" placeholder="请输入保洁面积,单位：平方米"   name="txtArea" class="form-control" id="txtArea"/>
 			</li> 
 		</ul>
 		<ul class="list-group">
 			<li class="list-group-item">
-				<input type="text" placeholder="请输入联系方式"   name="txtmobileNo" value="12345678"  class="form-control" id="txtmobileNo"/>
+				<input type="text" placeholder="请输入姓名"   name="txtName" value=""  class="form-control" id="txtName"/>
+			</li> 
+			<li class="list-group-item">
+				<input type="text" placeholder="请输入联系方式"   name="txtmobileNo" value=""  class="form-control" id="txtmobileNo"/>
 			</li> 
 		</ul>
 		<ul class="list-group" >
 			<li class="list-group-item">
-				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">宝洁用品(</font>
+				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">保洁用品(</font>
 					<span style="color:red" th:text="${cleanToolsFee}"></span><span  style="color:red">元)</span>
 				</label> 
 				<span  onclick="cbcheck()" style="width:30%;display:inline-block">&nbsp;</span>

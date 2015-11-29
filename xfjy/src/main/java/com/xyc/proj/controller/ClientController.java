@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jws.WebParam.Mode;
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import com.xyc.proj.entity.ClientUser;
+import com.xyc.proj.entity.DepositSummary;
 import com.xyc.proj.entity.Msg;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
@@ -46,8 +48,8 @@ import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
-import com.xyc.proj.utility.WeixinUtil;
 import com.xyc.proj.utility.WeChatMessageUtil;
+import com.xyc.proj.utility.WeixinUtil;
 
 /**
  * 幸福加缘客户端控制类
@@ -340,6 +342,9 @@ public class ClientController {
 		 String windowCount=request.getParameter("windowCount");
 		 windowCount=StringUtil.isBlank(windowCount)?"":windowCount;
 		 
+		 String name=request.getParameter("name");
+		 name=StringUtil.isBlank(name)?"":name;
+		 
 		 Order o =new Order();
 		 o.setOpenId(openId);
 		 o.setUserAddressId(Long.parseLong(userAddressId));
@@ -359,7 +364,7 @@ public class ClientController {
 		 o.setArea(area);
 		 o.setWindowCount(windowCount);
 		 o.setBalconyCount(balconyCount);
-		 
+		 o.setName(name);
 		 model.addAttribute("order", o);
 	 }
 	 /**
@@ -549,13 +554,36 @@ public class ClientController {
 	//充值
 	@ResponseBody
 	@RequestMapping("/client/deposit")
-	public String deposit(
+	public Map deposit(
 	        Model model,HttpSession Session,HttpServletRequest request,
 	        @RequestParam(value = "openId", required = true) String openId,
 	        @RequestParam(value = "amount", required = true) double amount) {
-		clientService.deposit(openId,amount) ;
-		return "";
+		Map res=new HashMap();
+		try {
+			res=clientService.deposit(openId,amount) ;
+		}catch(Exception e) {
+			res.put("resultCode", "E");
+			e.printStackTrace();
+		}
+		
+		return res;
 	}
+	
+	@RequestMapping("/client/depositInit.html")
+	public String depositInit(
+	        Model model,HttpSession Session,HttpServletRequest request,
+	        @RequestParam(value = "openId", required = true) String openId ) {
+		DepositSummary ds=clientService.getBalance(openId);
+		if(ds==null) {
+			ds=new DepositSummary();
+			ds.setFee(0d);
+		}
+		model.addAttribute("ds", ds);
+		model.addAttribute("openId", openId);
+		return "client/depositInit";
+	}
+	
+	
 	
 
 	@RequestMapping("/client/cleanOrderConfirm.html")
@@ -663,6 +691,7 @@ public class ClientController {
 	      ) { 
 		Map resMap=clientService.personalCenter(openId);
 		model.addAttribute("resMap", resMap);
+		model.addAttribute("openId", openId);
 		return "client/personalCenter";
 	} 
 	

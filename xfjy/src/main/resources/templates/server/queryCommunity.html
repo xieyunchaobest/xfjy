@@ -18,25 +18,12 @@
 <script th:src="@{/app/js/public.js}"></script>
 
 <script type="text/javascript">
- 	function exportExcel(){
-		var path = basePath+"/stat/exportAlbumAndMusicWithCouponStat";  
-		$('#orderByForm').attr("action", path).submit();
- 	}
- 	
- 	function query(){
- 		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
-		$('#orderByForm').attr("action", path).submit();
- 	}
- 	
- 	function resetAction(){
- 		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
-		$('#orderByForm').attr("action", path);
- 	}
+  
 </script>
 </head>
 <body>
 	<div class="container-fluid">
-		<form id="orderByForm" th:action="@{/server/queryOrder.html}" method="post">
+		<form id="orderByForm" th:action="@{/server/queryCommunity.html}" method="post">
 			<input type="hidden" id="orderByStr" name="orderByStr"   th:value="${orderBy}"/>
 		 <div class="row" id="qry" style="margin-right:15px;">
 		 	<div  class="col-xs-12" style="padding:10px;border:solid 1px #cccccc;margin:15px 15px;padding:10px 10px">

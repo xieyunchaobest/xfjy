@@ -114,7 +114,7 @@ function pay(){
    			<input type="hidden" name="area" id="area" th:value="${order.area}" />
    			<input type="hidden" name="windowCount" id="windowCount" th:value="${order.windowCount}" />
    			<input type="hidden" name="balconyCount" id="balconyCount" th:value="${order.balconyCount}" />
-   		
+   			<input type="hidden" name="name" id="name" th:value="${order.name}" />
 		</div>
 		<div class="container-fluid">
 		<div style="height:20px"></div>
@@ -151,6 +151,10 @@ function pay(){
 			</li> 
 		</ul>
 		<ul class="list-group">
+			<li class="list-group-item">
+				<label>姓名：</label>
+				<span id="spnServiceDate" th:text="${order.name}"></span>
+			</li>
 			<li class="list-group-item">
 				<label>联系方式：</label>
 				<span id="spnMobielNo" th:text="${order.mobileNo}"></span>

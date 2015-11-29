@@ -102,6 +102,7 @@ public class ServerController {
 		 if(StringUtil.isBlank(orderId)) {
 			 return "server/queryWorker";
 		 }else {
+			 model.addAttribute("orderId", orderId);
 			 return "server/orderDispatch";
 		 }
 		
@@ -147,11 +148,11 @@ public class ServerController {
 		parmMap.put("startTime", startTime);
 		parmMap.put("endTime", endTime);
 		parmMap.put("serviceDate", serviceDate);
-		parmMap.put("serviceType", serviceType);
+		parmMap.put("serviceType", serviceType); 
 		List areaList=clientService.findAreaList();
 		
 		PageView pageView = serverService.getOrderPageView(parmMap);
-		model.addAttribute("pageView", pageView);
+		model.addAttribute("orderPageView", pageView);
 		model.addAttribute("parms", parmMap);
 		model.addAttribute("areaId", areaId);
 		model.addAttribute("areaList", areaList);
@@ -168,12 +169,12 @@ public class ServerController {
 	 @ResponseBody
 	 @RequestMapping(value="/server/dispatchOrder.html",method = {RequestMethod.POST,RequestMethod.GET})
 	 public String dispatch(Model model,
-			 @RequestParam(value = "orderId", required = true) String orderIds,
-			 @RequestParam(value = "ayiId", required = true) Long aiyiId
+			 @RequestParam(value = "orderId", required = true) String orderId,
+			 @RequestParam(value = "ayiIds", required = true) String aiyiIds
 			) {
 		 String res="S";
 		 try {
-			 serverService.dispatchOrder(orderIds, aiyiId);
+			 serverService.dispatchOrder(orderId, aiyiIds);
 		 }catch(Exception e) {
 			 e.printStackTrace();
 			 res="E";
@@ -201,7 +202,7 @@ public class ServerController {
 	 }
 	 
 	 @RequestMapping(value="/server/queryClientUser.html",method = {RequestMethod.POST,RequestMethod.GET})
-	 public String queryCommunity(Model model,
+	 public String queryClientUser(Model model,
 			 @RequestParam(value = "mobileNo", required = false) String mobileNo,
 			 @RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum
 			) {
@@ -209,9 +210,9 @@ public class ServerController {
 			parmMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
 			parmMap.put("mobileNo", mobileNo);
 			
-			PageView pageView = serverService.getCommunityPage(parmMap);
+			PageView pageView = serverService.getClientUserPage(parmMap);
 			model.addAttribute("pageView", pageView);
 			model.addAttribute("parms", parmMap);
-			 return "server/queryCommunity";
+			 return "server/queryClientUser";
 	 }
 }

@@ -30,10 +30,10 @@
   
   <sql id="queryCommunityCondition">
    	  <if test="areaId != null and areaId !=''">
-			 <![CDATA[ and   areaId =#{areaId}  ]]>
+			 <![CDATA[ and   area_Id =#{areaId}  ]]>
 	  </if>
   	  <if test="name != null and name !=''">
-			 <![CDATA[ and   name  like   '%'+#{name}+'%' ]]>
+			 <![CDATA[ and   name  like    CONCAT('%','${name}','%' )    ]]>   
 	  </if>
   </sql>
   

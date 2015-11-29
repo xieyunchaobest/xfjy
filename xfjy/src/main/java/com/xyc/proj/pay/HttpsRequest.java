@@ -60,6 +60,8 @@ public class HttpsRequest implements IServiceRequest{
 
     //HTTP请求器
     private CloseableHttpClient httpClient;
+    
+    
 
     public HttpsRequest() throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         init();

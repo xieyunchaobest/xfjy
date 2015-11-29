@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.xyc.proj.entity.Order;
+import com.xyc.proj.entity.OrderWorker;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.mapper.ClientUserMapper;
@@ -15,6 +16,7 @@ import com.xyc.proj.mapper.CommunityMapper;
 import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.WorkerMapper;
 import com.xyc.proj.repository.OrderRepository;
+import com.xyc.proj.repository.OrderWorkerRepository;
 import com.xyc.proj.repository.StoreRepository;
 import com.xyc.proj.repository.WorkerRepository;
 import com.xyc.proj.utility.PageView;
@@ -47,6 +49,8 @@ public class ServerServiceImpl implements ServerService {
 	ClientService clientService;
 	@Autowired
 	StoreRepository storeRepository;
+	@Autowired
+	OrderWorkerRepository orderWorkerRepository;
 	
 	public PageView getWorkPage(Map m) {
 		PageView pv = new PageView((Integer) m.get("currentPageNum"));
@@ -136,14 +140,20 @@ public class ServerServiceImpl implements ServerService {
 		return pv;
 	}
 	
-	public void dispatchOrder(String orderIds,Long ayiId){
-		String orderIdArr[]=orderIds.split(",");
+	public void dispatchOrder(String orderId,String ayiId){
+		List oList=orderWorkerRepository.findByOrderId(Long.parseLong(orderId));
+		if(oList!=null && oList.size()>0) {
+			orderWorkerRepository.delete(oList);
+		}
+		
+		String ayiIdArr[]=ayiId.split(",");
 		//List orderIdList=Arrays.asList(orderIdArr);
-		for(int i=0;i<orderIdArr.length;i++) {
-			Long oid=Long.parseLong(orderIdArr[i]);
-			Order o=orderRepository.findOne(oid);
-			o.setAyiId(ayiId);
-			orderRepository.save(o);
+		for(int i=0;i<ayiIdArr.length;i++) {
+			Long aid=Long.parseLong(ayiIdArr[i]);
+			OrderWorker ow=new OrderWorker();
+			ow.setOrderId(Long.parseLong(orderId));
+			ow.setWorkerId(aid);
+			orderWorkerRepository.save(ow);
 		}
 	}
 	

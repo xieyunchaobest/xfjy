@@ -387,9 +387,9 @@ public class ClientServiceImpl implements ClientService {
 	
 	public Order fillOrder(Order o) {
 		if(Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
-			o.setServiceTypeText("普通宝洁");
+			o.setServiceTypeText("普通保洁");
 		}else if(Constants.SERVICE_TYPE_DBJ.equals(o.getServiceType())) {
-			o.setServiceTypeText("大宝洁");
+			o.setServiceTypeText("大保洁");
 		}else if(Constants.SERVICE_TYPE_CBL.equals(o.getServiceType())) {
 			o.setServiceTypeText("擦玻璃");
 		}else if(Constants.SERVICE_TYPE_KH.equals(o.getServiceType())) {
@@ -441,24 +441,82 @@ public class ClientServiceImpl implements ClientService {
 		return orderList;
 	}
 	
-	public void deposit(String openId,double amount) {
-		DepositSummary sum=depositSummaryRepository.findByOpenId(openId);
-		if(sum==null) {
-			sum=new DepositSummary();
-			sum.setFee(0d);
-			sum=depositSummaryRepository.save(sum);
-		}
+	public Map deposit(String openId,double amount) {
 		
-		DepositLog ds=new DepositLog();
-		ds.setDepositAmount(amount);
-		ds.setBalance(sum.getFee()+amount);
-		depositLogRepository.save(ds);
+		Map resMap=new HashMap();
+		try {
+			
+			DepositLog ds=new DepositLog();
+			ds.setDepositAmount(amount);
+			//ds.setBalance(sum.getFee()+amount);
+			ds.setOpenId(openId);
+			ds.setState(Constants.STATE_P);
+			
+			
+			//int aamount=(int)amount*100;
+			int aamount=1;
+			String outTradeNo = RandomStringGenerator.getRandomStringByLength(18);
+			String spBillCreateIP="127.0.0.1";
+			String timeStart = DateUtil.Time2Str(new Date(),DateUtil.format1);
+			String timeExpire = DateUtil.getDiffDate(1);
+			ds.setOutTradeNo(outTradeNo);
+			
+			depositLogRepository.save(ds);
+			
+			ScanPayReqData scanPayReqData = new ScanPayReqData(outTradeNo,aamount, spBillCreateIP,
+					timeStart, timeExpire,openId);
+			
+			
+			String res = new ScanPayService().request(scanPayReqData);
+			Map rm=XMLParser.getMapFromXML(res);
+			System.out.println("rmmmmmmmmmmmm="+rm);
+			if(rm.containsKey("prepay_id")) {
+				resMap.put("resultCode", "S");
+				
+				String prepay_id=(String)rm.get("prepay_id");
+				SortedMap pm=new TreeMap();
+				resMap.put("prepay_id",prepay_id);
+				
+				pm.put("appId", Configure.appID);
+				String tmp= DateUtil.getTimeStamp();
+				pm.put("timeStamp",tmp);
+				String nonceStr=RandomStringGenerator.getRandomStringByLength(32);
+				pm.put("nonceStr", nonceStr);
+				pm.put("package", "prepay_id="+prepay_id);
+				pm.put("signType", "MD5");
+				String sign=Signature.getSign(pm);
+				pm.put("paySign", sign);
+				
+				resMap.put("parm", pm);
+			}else {
+				resMap.put("resultCode", "E");
+			}
+		} catch (IllegalAccessException e) {
+			resMap.put("resultCode", "E");
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			resMap.put("resultCode", "E");
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			resMap.put("resultCode", "E");
+			e.printStackTrace();
+		} catch (Exception e) {
+			resMap.put("resultCode", "E");
+			e.printStackTrace();
+		}
+		return resMap;
 	}
+	
+ 
 	
 	public Map personalCenter(String openId) {
 		Map resMap=new HashMap();
 		ClientUser cu=clientUserRepository.findByOpenId(openId);
 		DepositSummary ds=depositSummaryRepository.findByOpenId(openId);
+		if(ds==null) {
+			ds=new DepositSummary();
+			ds.setFee(0d);
+		}
 		
 //		Map parmMap=new HashMap();
 //		parmMap.put("openId", openId);
@@ -562,30 +620,55 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	public void notifyOrder(String outTradeNo,String orderId) {
-		Order order=orderRepository.findByOutTradeNo(outTradeNo);
-		if(order!=null) {
-			order.setOrderId(orderId);
-			order.setState(Constants.ORDER_STATE_PAYED);
-			order.setPayTime(new Date());
-			orderRepository.save(order);
-			
-			if("CC".equals(order.getServiceType())) {
-				List olist=orderRepository.getCleanOrderWithAddressInfo(outTradeNo);
-				if(olist!=null && olist.size()>0) {
-					Object obj[]=(Object[])olist.get(0);
-					UserAddress ua=(UserAddress)obj[1];
-					Long areaId=ua.getAreaId();
-					List ayiList=workerRepository.findWorkerAndOpenIdInArea(areaId);
-					for(int k=0;k<ayiList.size();k++) {
-						Object ob[]=(Object[])ayiList.get(k);
-						ClientUser w=(ClientUser)ob[1];
-						MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(),Constants.URL_SEND_TEMPLEATE_MSG, "您有新的任务", order.getFullAddress(), "代办", "点击查看详情");
-						
+		if(outTradeNo.length()==32) {//消费
+			Order order=orderRepository.findByOutTradeNo(outTradeNo);
+			if(order!=null) {
+				order.setOrderId(orderId);
+				order.setState(Constants.ORDER_STATE_PAYED);
+				order.setPayTime(new Date());
+				orderRepository.save(order);
+				
+				if("CC".equals(order.getServiceType())) {
+					List olist=orderRepository.getCleanOrderWithAddressInfo(outTradeNo);
+					if(olist!=null && olist.size()>0) {
+						Object obj[]=(Object[])olist.get(0);
+						UserAddress ua=(UserAddress)obj[1];
+						Long areaId=ua.getAreaId();
+						List ayiList=workerRepository.findWorkerAndOpenIdInArea(areaId);
+						for(int k=0;k<ayiList.size();k++) {
+							Object ob[]=(Object[])ayiList.get(k);
+							ClientUser w=(ClientUser)ob[1];
+							MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(),Constants.URL_SEND_TEMPLEATE_MSG, "您有新的任务", order.getFullAddress(), "代办", "点击查看详情");
+						}
 					}
-					
 				}
 			}
+		}else {//充值
+			DepositLog log=depositLogRepository.findByOutTradeNo(outTradeNo);
+			if(log!=null) {
+				log.setOrderId(orderId);
+				log.setState(Constants.STATE_A);
+				log.setPayTime(new Date());
+				depositLogRepository.save(log);
+				
+				String openId=log.getOpenId();
+				double amount=log.getDepositAmount();
+				
+				DepositSummary sum=depositSummaryRepository.findByOpenId(openId);
+				if(sum==null) {
+					sum=new DepositSummary();
+					sum.setFee(amount);
+					sum.setOpenId(openId);
+					sum=depositSummaryRepository.save(sum);
+				}else {
+					sum.setFee(sum.getFee()+amount);
+					sum.setOpenId(openId);
+					sum=depositSummaryRepository.save(sum);
+				}
+			}
+			
 		}
+		
 	}
 	
 	public static  String createWeChatMenu() {
@@ -614,10 +697,21 @@ public class ClientServiceImpl implements ClientService {
 		return json;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public DepositSummary getBalance(String openId) {
+		DepositSummary ds=depositSummaryRepository.findByOpenId(openId);
+		return ds;
+	}
+	
 	public static void main(String args[]) {
 		com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
 		String accessToken=tokenJson.getString("access_token");
 		com.alibaba.fastjson.JSONObject res=WeixinUtil.httpRequest(Constants.URL_CREATE_MENU+accessToken, "POST", createWeChatMenu());
 		System.out.println("res==="+res);
 	}
+	
+	
 }

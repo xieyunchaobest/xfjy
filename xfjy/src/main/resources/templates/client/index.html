@@ -97,9 +97,16 @@ $(function(){
 	 }
 	 /*]]>*/
 	 
-	 function toOrderList(){
+	 function menuForward(flag){
 		 var openId=$("#openId").val();
-		 window.location.href=basePath+"/client/queryOrder.html?openId="+openId;
+		 if(flag=='O'){
+			 window.location.href=basePath+"/client/queryOrder.html?openId="+openId;
+		 }else if(flag=='D'){
+			 window.location.href=basePath+"/client/depositInit.html?openId="+openId;
+		 }else{
+			 window.location.href=basePath+"/client/personalCenter.html?openId="+openId;
+		 }
+		 
 	 }
 </script>
 
@@ -162,13 +169,13 @@ $(function(){
 				<div id="ftt"></div>
 				<div id="fttc">
 					<div  style="line-height:60px;margin:0 0;padding:0 0 ">
-						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 " onclick="toOrderList()">
+						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 " onclick="menuForward('O')">
 						 	  <img alt="" th:src="@{/app/img/idx_bottom_dd.jpg}" style="height:58px;width:auto" />
 						</div>
-						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 ">
+						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 " onclick="menuForward('D')">
 							  <img alt="" th:src="@{/app/img/idx_bottom_cz.jpg}"  style="height:58px;width:auto" />
 						</div>
-						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 ;margin:0 0 ">
+						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 ;margin:0 0 " onclick="menuForward('P')">
 							 <img alt="" th:src="@{/app/img/idx_bottom_grzx.jpg}"  style="height:58px;width:auto" />
 						</div>
 					</div>

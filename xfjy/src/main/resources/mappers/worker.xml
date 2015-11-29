@@ -67,7 +67,7 @@
 		 	<![CDATA[ and   role= #{role}  ]]>
 		</if> 
 		<if test="workTime != null and workTime !=''">
-		 	<![CDATA[ and WORK_TIME= #{workTime}  ]]>
+		 	<![CDATA[ and WORK_TIME=    CONCAT('%','${workTime}','%' )  ]]>
 		</if> 
 	</sql>
  

@@ -3,9 +3,8 @@ package com.xyc.proj.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.xyc.proj.entity.ClientUser;
+import com.xyc.proj.entity.DepositSummary;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
@@ -42,7 +41,7 @@ public interface ClientService {
 	
 	public List getOrderList(String openId,Long oid);
 	
-	public void deposit(String openId,double amount);
+	public Map deposit(String openId,double amount);
 	
 	public Map personalCenter(String openId);
 	
@@ -57,4 +56,6 @@ public interface ClientService {
 	public void notifyOrder(String outTradeNo,String orderId);
 	
 	public Order fillOrder(Order o);
+	
+	public DepositSummary getBalance(String openId);
 }
