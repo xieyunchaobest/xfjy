@@ -58,7 +58,7 @@
 			 <![CDATA[ and    store_id  =#{storeId}  ]]>
 		</if> 
 		<if test="name != null and name !=''">
-		 	<![CDATA[ and   name like   '%'+#{name}+'%'  ]]>
+		 	<![CDATA[ and   name like     CONCAT('%','${name}','%' )    ]]>
 		</if> 
 		<if test="serviceTypeTwo != null and serviceTypeTwo !=''">
 		 	<![CDATA[ and   service_type_two= #{serviceTypeTwo}  ]]>
@@ -67,7 +67,7 @@
 		 	<![CDATA[ and   role= #{role}  ]]>
 		</if> 
 		<if test="workTime != null and workTime !=''">
-		 	<![CDATA[ and WORK_TIME=    CONCAT('%','${workTime}','%' )  ]]>
+		 	<![CDATA[ and WORK_TIME=  #{workTime}  ]]>
 		</if> 
 	</sql>
  

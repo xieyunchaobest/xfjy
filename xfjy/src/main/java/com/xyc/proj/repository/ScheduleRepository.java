@@ -11,4 +11,6 @@ import com.xyc.proj.entity.Schedule;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 	List findByAyiIdAndBusiDateAndState(Long ayid,String busiDate,String state);
+	
+	List findByOrderId(Long oid);
 }

@@ -19,6 +19,7 @@ import com.xyc.proj.entity.ClientUser;
 import com.xyc.proj.entity.DepositLog;
 import com.xyc.proj.entity.DepositSummary;
 import com.xyc.proj.entity.Order;
+import com.xyc.proj.entity.OrderWorker;
 import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.TimeSplit;
 import com.xyc.proj.entity.UserAddress;
@@ -42,6 +43,7 @@ import com.xyc.proj.repository.ConfigRepository;
 import com.xyc.proj.repository.DepositLogRepository;
 import com.xyc.proj.repository.DepositSummaryRepository;
 import com.xyc.proj.repository.OrderRepository;
+import com.xyc.proj.repository.OrderWorkerRepository;
 import com.xyc.proj.repository.ScheduleRepository;
 import com.xyc.proj.repository.TimeSplitRepository;
 import com.xyc.proj.repository.UserAddressRepository;
@@ -96,6 +98,8 @@ public class ClientServiceImpl implements ClientService {
 	ClientUserRepository clientUserRepository;
 	@Autowired
 	WorkerRepository workerRepository;
+	@Autowired
+	OrderWorkerRepository orderWorkerRepository;
 	
 	@Override
 	public void saveUserAuthCode(UserAuthCode u) {
@@ -135,7 +139,7 @@ public class ClientServiceImpl implements ClientService {
 			int startTime=ts.getStartTime();
 			int endTime=ts.getEndTime();
 			
-			List<Worker> aiyiList=ayiRepository.serviceTypeOne(serviceType);
+			List<Worker> aiyiList=ayiRepository.serviceTypeOne(Constants.WORK_SERVICE_TYPE_CLEAN);
 			int ayisize=aiyiList.size();
 			int ayin=0;
 			for(int j=0;j<ayisize;j++) {
@@ -299,18 +303,19 @@ public class ClientServiceImpl implements ClientService {
 		return o;
 	}
 	
+	
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void saveOrder(Order order) {
+	public Order saveOrder(Order order) {
 		Order o=orderRepository.save(order);
 		if(Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
 			saveSchedule(o);
 		}
-		
+		return o;
 	}
 	
 	
 	@Transactional(propagation=Propagation.NESTED)
-	public void saveSchedule(Order o ) {
+	public void saveSchedule(Order o) {
 		if(Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
 			List scheduleList=getScheduleList4Month(o);
 			scheduleRepository.save(scheduleList);
@@ -558,24 +563,61 @@ public class ClientServiceImpl implements ClientService {
 			outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
 			order.setOutTradeNo(outTradeNo);
 			order.setPayMode(Constants.ORDER_PAY_MODE_WECHAT);
-			saveOrder(order);
+			order=saveOrder(order);
 		}else {//从未完成订单中，不需要重新创建订单
-			outTradeNo=o.getOutTradeNo();
+			outTradeNo=o.getOutTradeNo(); 
 			order=orderRepository.findByOutTradeNo(outTradeNo);
+			//删除余额日志，避免重复创建
+			DepositLog dl=depositLogRepository.findByOutTradeNo(outTradeNo);
+			if(dl!=null) {
+				depositLogRepository.delete(dl);
+			}
 		}
 		
 		int totalFee = 1;
-		//totalFee=order.getTotalFee().intValue()*100;
-		
-		String timeStart = DateUtil.Time2Str(new Date(),DateUtil.format1);
-		String timeExpire = DateUtil.getDiffDate(1);
-		//String openId="o74xjw9vCvp6Wxa5zPEPu4ghP8gA";
-		String openId=(String)paraMap.get("openId");
-		String spBillCreateIP=(String)paraMap.get("spBillCreateIP");
-		
-		ScanPayReqData scanPayReqData = new ScanPayReqData(outTradeNo, totalFee, spBillCreateIP,
-				timeStart, timeExpire,openId);
+		//int totalFee=order.getTotalFee().intValue()*100;
+		//int totalFee=5;
+		//判断是否用了余额，如果是，减去余额
+		String useBalance=order.getUseBalance();
+		boolean goWechat=true;//是否还需要走微信支付
+		boolean isMix=false;//是否余额和微信同时用
+		double fee=0;
+		if(useBalance!=null) {//如果使用，取这个人的余额
+			DepositSummary ds=getBalance(o.getOpenId());
+			if(ds!=null) {
+				 fee=ds.getFee();
+				// fee=0.02d;
+				if(fee*100<totalFee) { //余额不足，还是需要走微信接口
+					System.out.println("余额不足，走微信");
+					totalFee=(int) (totalFee-fee*100);
+					goWechat=true;
+					isMix=true;
+				}else {
+					goWechat=false;
+				}
+			}
+		}
 		try {
+		if(goWechat==true) {
+			resMap.put("payMode", "W");
+			if(isMix) {
+				DepositLog dl=new DepositLog();
+				dl.setDepositAmount(0-fee);
+				dl.setOpenId(order.getOpenId());
+				dl.setOrderId(order.getOrderId());
+				dl.setOutTradeNo(order.getOutTradeNo());
+				dl.setState(Constants.STATE_P);
+				depositLogRepository.save(dl);
+			}
+			
+			String timeStart = DateUtil.Time2Str(new Date(),DateUtil.format1);
+			String timeExpire = DateUtil.getDiffDate(1);
+			//String openId="o74xjw9vCvp6Wxa5zPEPu4ghP8gA";
+			String openId=(String)paraMap.get("openId");
+			String spBillCreateIP=(String)paraMap.get("spBillCreateIP");
+			
+			ScanPayReqData scanPayReqData = new ScanPayReqData(outTradeNo, totalFee, spBillCreateIP,
+					timeStart, timeExpire,openId);
 			String res=new ScanPayService().request(scanPayReqData);
 			Map rm=XMLParser.getMapFromXML(res);
 			if(rm.containsKey("prepay_id")) {
@@ -602,6 +644,22 @@ public class ClientServiceImpl implements ClientService {
 				resMap.put("resultCode", "E");
 			}
 			System.out.println("res======"+res);
+		}else {
+			resMap.put("payMode", "B");
+			DepositLog dl=new DepositLog();
+			dl.setDepositAmount(0d-totalFee/100);
+			dl.setOpenId(order.getOpenId());
+			dl.setOrderId(String.valueOf(order.getId()));
+			dl.setOutTradeNo(order.getOutTradeNo());
+			dl.setState(Constants.STATE_A);
+			depositLogRepository.save(dl);
+			DepositSummary ds=depositSummaryRepository.findByOpenId(order.getOpenId());
+			ds.setFee(ds.getFee()-totalFee/100);
+			depositSummaryRepository.save(ds);
+			order.setState(Constants.ORDER_STATE_PAYED);
+			order.setPayTime(new Date());
+			orderRepository.save(order);
+		}
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			resMap.put("resultCode", "E");
@@ -632,16 +690,59 @@ public class ClientServiceImpl implements ClientService {
 					List olist=orderRepository.getCleanOrderWithAddressInfo(outTradeNo);
 					if(olist!=null && olist.size()>0) {
 						Object obj[]=(Object[])olist.get(0);
+						Order o=(Order)obj[0];
+						String startTime=o.getStartTime();
+						String endTime=o.getEndTime();
+						String serviceDate=o.getServiceDate();
 						UserAddress ua=(UserAddress)obj[1];
 						Long areaId=ua.getAreaId();
 						List ayiList=workerRepository.findWorkerAndOpenIdInArea(areaId);
+						List confictList=new ArrayList();
+						for(int k=0;k<ayiList.size();k++) {
+							Object ob[]=(Object[])ayiList.get(k);
+							Worker w=(Worker)ob[0];
+							List sl=scheduleRepository.findByAyiIdAndBusiDateAndState(w.getId(), serviceDate, "A");
+							if(sl!=null) {
+								for(int l=0;l<sl.size();l++) {
+									Schedule s=(Schedule)sl.get(l);
+									String sTime=s.getStartTime();
+									String eTime=s.getEndTime();
+									if((int)Integer.parseInt(startTime) <(int)Integer.parseInt(eTime)  && 
+											(int)Integer.parseInt(endTime) >(int)Integer.parseInt(sTime)	
+											) {
+										confictList.add(ob);
+										break;
+									}
+								}
+							}
+						}
+						
+						ayiList.removeAll(confictList);
 						for(int k=0;k<ayiList.size();k++) {
 							Object ob[]=(Object[])ayiList.get(k);
 							ClientUser w=(ClientUser)ob[1];
-							MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(),Constants.URL_SEND_TEMPLEATE_MSG, "您有新的任务", order.getFullAddress(), "代办", "点击查看详情");
+							String loginurl="http://weixin.tjxfjz.com/xfjy/client/workerTask.html";
+							String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+						           +Configure.appID+"&redirect_uri="+loginurl+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect"; 
+							
+							
+							MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(),url, "您有新的任务", order.getFullAddress(), "待办", "点击查看详情");
 						}
 					}
 				}
+				//处理余额信息，用于一半用了微信，一半用了余额
+				DepositLog dl=depositLogRepository.findByOutTradeNo(outTradeNo);
+				if(dl!=null) {
+					System.out.println("发现使用了余额");
+					dl.setState(Constants.STATE_A);
+					String openId=dl.getOpenId();
+					double amount=dl.getDepositAmount();
+					DepositSummary ds=depositSummaryRepository.findByOpenId(openId);
+					ds.setFee(ds.getFee()+amount); //加上一个负值
+					depositLogRepository.save(dl);
+					depositSummaryRepository.save(ds);
+				}
+				
 			}
 		}else {//充值
 			DepositLog log=depositLogRepository.findByOutTradeNo(outTradeNo);
@@ -706,6 +807,73 @@ public class ClientServiceImpl implements ClientService {
 		return ds;
 	}
 	
+	 
+	public Map getWorkerTask(String openId,String serviceDate) {
+		Map resMap=new HashMap();
+		System.out.println("ppppppppppppppppppp"+openId);
+		ClientUser cu=clientUserRepository.findByOpenId(openId);
+		String phone=cu.getMobileNo();
+		Worker worker=workerRepository.findByPhone(phone);
+		Long areaId=worker.getAreaId();
+		List waitedOrderList=new ArrayList();
+		List objList=orderRepository.findByAreaIdAndStateAndServiceType("P","CC",areaId);
+		if(waitedOrderList!=null) {
+			for(int i=0;i<objList.size();i++) {
+				Object obj[]=(Object[])objList.get(i);
+				
+				Order o=(Order)obj[0];
+				o=fillOrder(o);
+				waitedOrderList.add(o);
+			}
+		}
+		
+		resMap.put("waitOrderList", waitedOrderList);//需要抢的
+		
+		List todoOrderList=new ArrayList();
+		if(StringUtil.isBlank(serviceDate)) {
+			todoOrderList=orderRepository.findByWorkerIdAndState(worker.getId());
+		}else {
+			todoOrderList=orderRepository.findByWorkerIdAndState(worker.getId(),serviceDate);
+		}
+		
+		for(int i=0;i<todoOrderList.size();i++) {
+			Order o=(Order)todoOrderList.get(i);
+			o=fillOrder(o);
+		}
+		resMap.put("todoOrderList", todoOrderList);//需要做的
+		
+		return resMap;
+		
+	}
+	
+	public synchronized   String fightOrder(Long oid,String openId) {
+		String res="S";
+		Order o=getOrder(oid);
+		if(o.getState().equals(Constants.ORDER_STATE_CONFIRMED)) {
+			res="L";
+			return res;
+		}
+		
+		o.setState(Constants.ORDER_STATE_CONFIRMED);
+		orderRepository.save(o);
+		//插入日程
+		ClientUser cu=clientUserRepository.findByOpenId(openId);
+		Worker w=workerRepository.findByPhone(cu.getMobileNo());
+		OrderWorker ow=new OrderWorker();
+		ow.setWorkerId(w.getId());
+		ow.setOrderId(oid);
+		orderWorkerRepository.save(ow);
+		//修改时间表
+		List scheduleList=scheduleRepository.findByOrderId(oid);
+		for(int i=0;i<scheduleList.size();i++) {
+			Schedule s=(Schedule)scheduleList.get(i);
+			s.setAyiId(w.getId());
+			s.setState(Constants.STATE_A);
+			scheduleRepository.save(s);
+		}
+		
+		return res;
+	}
 	public static void main(String args[]) {
 		com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
 		String accessToken=tokenJson.getString("access_token");

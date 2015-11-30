@@ -28,13 +28,19 @@
 	            data:$("#aform").serialize(),
 	            success: function(data) {
 	            	if(data.resultCode=="S"){
-	            		prepay_id=data.prepay_id;
-	            		appId=data.parm.appId;
-	            		timeStamp=data.parm.timeStamp;
-	            		nonceStr=data.parm.nonceStr;
-	            		packages=data.parm.package;
-	            		paySign=data.parm.paySign;
-	            		pay();
+	            		if(data.payMode=='W'){
+	            			prepay_id=data.prepay_id;
+		            		appId=data.parm.appId;
+		            		timeStamp=data.parm.timeStamp;
+		            		nonceStr=data.parm.nonceStr;
+		            		packages=data.parm.package;
+		            		paySign=data.parm.paySign;
+		            		pay();
+	            		}else{
+	            			 alert('订单已成功处理！');
+	            			 $("#btnPay").text('支付成功');
+	            		}
+	            		
 	            	}else{
 	            		 alert('订单处理失败！');
 	            	}
@@ -79,6 +85,7 @@
 	 
 	 $(function () {
 		 initServiceDate();
+		 disable();
 	  });
 	 
  
@@ -119,6 +126,23 @@
 		}else{
 		   onBridgeReady();
 		}
+	 }
+	 
+	 function cbcheck(){
+		 if($("#useBalance").prop("checked")==true){
+			 $("#useBalance").prop("checked",false);
+		 }else{
+			 $("#useBalance").prop("checked",true);
+		 }
+	 }
+	 
+	
+	 function disable(){
+		 var balance= $("#spnfee").text();
+		 var iba=parseInt(balance);
+		 if(iba==0){
+			 $("#useBalance").attr("disabled",true); 
+		 }
 	 }
 </script>
 
@@ -177,6 +201,11 @@
 				<span id="spnServiceDate" th:text="${order.mobileNo}"></span>
 			</li> 
 		</ul> 
+		<div style="mragin-top:15px;height:40px;">
+			<input type="checkbox" style="float:left" id="useBalance" name="useBalance" />
+			<span onclick="cbcheck()">使用余额(</span><span th:text="${ds.fee}" id="spnfee" onclick="cbcheck()"></span><span  onclick="cbcheck()">)元</span>
+			<span  onclick="cbcheck()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		</div>
 		<div class="row" id="warnginInfo">
 				<div class="col-xs-1"/>
 				<div>

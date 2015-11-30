@@ -44,6 +44,7 @@ import com.xyc.proj.global.CharacterEncodingFilter;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.pay.Configure;
 import com.xyc.proj.pay.XMLParser;
+import com.xyc.proj.repository.OrderRepository;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
@@ -591,11 +592,19 @@ public class ClientController {
 		        Model model,HttpSession Session,HttpServletRequest request,
 		        @ModelAttribute("order") Order order) { 
 		order=clientService.getConfirmOrder(order);
+		String openId=request.getParameter("openId");
+		DepositSummary ds=clientService.getBalance(openId);
+		if(ds==null) {
+			ds=new DepositSummary();
+			ds.setFee(0d);
+		}
 		model.addAttribute("order", order);
+		model.addAttribute("ds", ds);
 		return "client/cleanOrderConfirm";
 	}
 	
 
+	//异步通知
 	@ResponseBody
 	@RequestMapping("/client/paytest")
 	public String payTest( Model model,HttpSession Session,HttpServletRequest request) {
@@ -672,6 +681,14 @@ public class ClientController {
 		
 		order=clientService.getConfirmOrder(order);
 		model.addAttribute("order", order);
+		String openId=request.getParameter("openId");
+		DepositSummary ds=clientService.getBalance(openId);
+		if(ds==null) {
+			ds=new DepositSummary();
+			ds.setFee(0d);
+		}
+		model.addAttribute("ds", ds);
+		
 		return "client/khOrderConfirm";
 	}
 	
@@ -680,6 +697,13 @@ public class ClientController {
 		        Model model,HttpSession Session,HttpServletRequest request,
 		        @ModelAttribute("order") Order order) { 
 		order=clientService.getConfirmOrder(order);
+		String openId=request.getParameter("openId");
+		DepositSummary ds=clientService.getBalance(openId);
+		if(ds==null) {
+			ds=new DepositSummary();
+			ds.setFee(0d);
+		}
+		model.addAttribute("ds", ds);
 		model.addAttribute("order", order);
 		return "client/cblOrderConfirm";
 	}
@@ -753,9 +777,67 @@ public class ClientController {
 	}
 	
 	
+	/**
+	 * 客户端阿姨枪弹，查看任务等
+	 * @param model
+	 * @param Session
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/client/workerTask.html")
+	public String workerTask( 
+		        Model model,HttpSession Session,HttpServletRequest request,
+		        @RequestParam(value = "code", required = true) String code,
+		        @RequestParam(value = "serviceDate", required = false) String serviceDate,
+		        @RequestParam(value = "openId", required = false) String openId
+			) { 
+		
+		
+		System.out.println("code==============="+code);
+		if(StringUtil.isBlank(openId)) {
+			System.out.println("没有发现openId========");
+			String url="https://api.weixin.qq.com/sns/oauth2/access_token?" +
+					"appid="+Configure.appID+"&secret="+Configure.WE_CHAT_APPSECRET+"&code="+code+"&grant_type=authorization_code";
+			com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(url, "GET", null);
+			System.out.println("tokenJsontokenJsontokenJson="+tokenJson.toJSONString());
+			openId=tokenJson.getString("openid");
+		}
+		System.out.println("openId======="+openId);
+		Map resMap=clientService.getWorkerTask(openId, serviceDate) ;
+		model.addAttribute("resMap",resMap);
+		model.addAttribute("openId",openId);
+		return "client/workerTask";
+	}
+	
+	//抢单
+	 @ResponseBody
+	 @RequestMapping(value="/client/fightOrder.html",method = {RequestMethod.POST, RequestMethod.GET})
+	 public String getOrder( @RequestParam(value = "oid", required = true) Long oid,
+			 @RequestParam(value = "openId", required = true) String  openId,
+	            Model model) {
+		 String res="S";
+		 try {
+			 res=clientService.fightOrder(oid, openId);
+		 }catch(Exception e) {
+			 e.printStackTrace();
+			 res="E";
+		 }
+		 
+		 return res;
+	 }
 	
 	
+	 @RequestMapping("/client/workerAuth.html")
+	 public String workerAuth(
+	            Model model) {
+		String loginurl="http://weixin.tjxfjz.com/xfjy/client/workerTask.html";
+		String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+	           +Configure.appID+"&redirect_uri="+loginurl+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect"; 
+		System.out.println("urlurlurl=="+url);
+		return "redirect:"+url;
+	 }
 	
+	 
 	
 	 @Bean
 	    public FilterRegistrationBean encodingFilter() {

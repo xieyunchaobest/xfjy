@@ -45,7 +45,7 @@ public class Community {
 
 	
 	@Column(name = "STATE")
-	private Long state;
+	private String state;
 
 	public Community() {
 	}
@@ -113,12 +113,12 @@ public class Community {
 	}
 
 
-	public Long getState() {
+	public String getState() {
 		return state;
 	}
 
 
-	public void setState(Long state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 

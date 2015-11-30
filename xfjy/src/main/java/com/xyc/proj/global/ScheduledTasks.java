@@ -114,4 +114,11 @@ public class ScheduledTasks {
 
 		}
 	    
+		
+		public static void main(String args[]) {
+			String loginurl="http://weixin.tjxfjz.com/xfjy/client/workerTask.html";
+			String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+		           +Configure.appID+"&redirect_uri="+loginurl+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect"; 
+			MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, "o74xjw45fgARrXqMYXR9mathUbPE",url, "您有新的任务", "地址", "代办", "点击查看详情");
+		}
 }

@@ -29,7 +29,7 @@ public interface ClientService {
 	
 	public void deleteUserAdderss(UserAddress ua);
 	
-	public void saveOrder(Order order);
+	public Order saveOrder(Order order);
 	
 	public List getCleanToolsList(String serviceType);
 	
@@ -58,4 +58,8 @@ public interface ClientService {
 	public Order fillOrder(Order o);
 	
 	public DepositSummary getBalance(String openId);
+	
+	public Map getWorkerTask(String openId,String serviceDate) ;
+	
+	public String fightOrder(Long oid,String openId);
 }

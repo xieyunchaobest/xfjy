@@ -149,6 +149,9 @@ public class Order {
 	
 	@Transient
 	private Long areaId;
+	
+	@Transient
+	private String useBalance;
 
 	public Order() {
 	}
@@ -549,6 +552,16 @@ public class Order {
 
 	public void setAreaId(Long areaId) {
 		this.areaId = areaId;
+	}
+
+
+	public String getUseBalance() {
+		return useBalance;
+	}
+
+
+	public void setUseBalance(String useBalance) {
+		this.useBalance = useBalance;
 	}
 
 

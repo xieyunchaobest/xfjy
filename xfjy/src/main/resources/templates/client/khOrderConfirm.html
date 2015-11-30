@@ -87,6 +87,25 @@ function pay(){
 	}
 }
  
+$(function(){
+	disable();
+});
+
+function disable(){
+	 var balance= $("#spnfee").text();
+	 var iba=parseInt(balance);
+	 if(iba==0){
+		 $("#useBalance").attr("disabled",true); 
+	 }
+}
+
+function cbcheck(){
+	 if($("#useBalance").prop("checked")==true){
+		 $("#useBalance").prop("checked",false);
+	 }else{
+		 $("#useBalance").prop("checked",true);
+	 }
+}
 	 
 </script>
 
@@ -153,6 +172,14 @@ function pay(){
 				<li class="list-group-item"><label>联系方式：</label> <span
 					id="spnMobielNo" th:text="${order.mobileNo}"></span></li>
 			</ul>
+
+			<div style="mragin-top: 15px; height: 40px;">
+				<input type="checkbox" style="float: left" id="useBalance"
+					name="useBalance" /> <span onclick="cbcheck()">使用余额(</span><span
+					th:text="${ds.fee}" id="spnfee" onclick="cbcheck()"></span><span
+					onclick="cbcheck()">)元</span> <span onclick="cbcheck()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</div>
+
 			<div class="row" id="warnginInfo">
 				<div class="col-xs-1"/>
 				<div>
