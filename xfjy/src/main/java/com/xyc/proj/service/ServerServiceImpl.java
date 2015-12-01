@@ -1,7 +1,12 @@
 package com.xyc.proj.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -9,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.OrderWorker;
+import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.mapper.ClientUserMapper;
@@ -17,8 +23,10 @@ import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.WorkerMapper;
 import com.xyc.proj.repository.OrderRepository;
 import com.xyc.proj.repository.OrderWorkerRepository;
+import com.xyc.proj.repository.ScheduleRepository;
 import com.xyc.proj.repository.StoreRepository;
 import com.xyc.proj.repository.WorkerRepository;
+import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.PageView;
 
 @Service
@@ -51,6 +59,8 @@ public class ServerServiceImpl implements ServerService {
 	StoreRepository storeRepository;
 	@Autowired
 	OrderWorkerRepository orderWorkerRepository;
+	@Autowired
+	ScheduleRepository scheduleRepository;
 	
 	public PageView getWorkPage(Map m) {
 		PageView pv = new PageView((Integer) m.get("currentPageNum"));
@@ -182,5 +192,77 @@ public class ServerServiceImpl implements ServerService {
 		pv.setResultList(clientUserMapper.getClientUserPage(parm));
 		pv.setTotalRecord(clientUserMapper.getClientUserPageCount(parm));
 		return pv;
+	}
+	
+	//查询某个订单分配的对象
+	public List getDispatchedWorkerByOrderId(Long orderId) {
+		List workerList=workerRepository.findWorkeByOrderId(orderId);
+		return workerList;
+	}
+	
+	
+	
+	public String getDispatchedWorkerName(Long orderId) {
+		List resList=getDispatchedWorkerByOrderId(orderId);
+		if(resList==null || resList.size()==0) return "";
+		String res="";
+		for(int i=0;i<resList.size();i++) {
+			Worker w=(Worker) resList.get(i);
+			String name=w.getName();
+			res = (i == resList.size() - 1) ? res + name
+					: res +name + ",";
+		}
+		return res;
+	}
+	
+	//查询某个阿姨的时间表
+	public List getWorkerScheduleList(Long workerId) {
+		String curDate=DateUtil.getToday();
+		List schList=scheduleRepository.findByAyiIdAndServiceDate(workerId,curDate);
+		return schList;
+	}
+	
+	
+	public List getWorkerTimeSheet(Long workerId) {
+		List schList= getWorkerScheduleList(workerId);
+		//创建7天的日程
+		List dayList=new ArrayList();
+		for(int i=0;i<=7;i++) {
+			Map dayMap=new HashMap();
+			String day=DateUtil.getDiffDate(new Date(),i+1);
+			dayMap.put("day", day);
+			for(int j=8;j<=20;j++) {
+				dayMap.put(j+"", j+"");
+				dayMap.put("free"+j, "Y");
+			}
+			dayList.add(dayMap);
+		}
+		
+		if(schList!=null && schList.size()>0) {
+			for(int i=0;i<schList.size();i++) {
+				Schedule s=(Schedule)schList.get(i);
+				String serviceDate=s.getBusiDate();
+				int startTime=Integer.parseInt(s.getStartTime());
+				int endTime=Integer.parseInt(s.getEndTime());
+				for(int j=startTime;j<endTime;j++) {
+					for(int k=0;k<dayList.size();k++) {
+						Map md=(Map)dayList.get(k);
+						String day=(String)md.get("day");
+						if(day.equals(serviceDate)) {
+							Set set = md.entrySet();         
+							Iterator it = set.iterator();         
+							while(it.hasNext()){      
+							     Map.Entry<String, String> entry1=(Map.Entry<String, String>)it.next();    
+							     if(entry1.getValue().equals(j+"")) {
+							    	 md.put("free"+j, "N");
+							     }
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		return dayList;
 	}
 }

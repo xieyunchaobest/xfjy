@@ -45,7 +45,7 @@
   	  	CREATE_TIME as createTime,
   	  	PAY_TIME as payTime,
   	  	(select ua.area_Id from t_user_address ua where ua.ID=o.user_address_id) as areaId
-  	  from T_Order o ) tt  where 1=1 
+  	  from t_order o ) tt  where 1=1 
   </sql>
   
     <select id="getOrderPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">

@@ -25,5 +25,11 @@ public interface ServerService {
 	public PageView getCommunityPage(Map parm);
 	
 	public PageView getClientUserPage(Map parm);
+	
+	public String getDispatchedWorkerName(Long orderId);
+	
+	public List getDispatchedWorkerByOrderId(Long orderId);
+	
+	public List getWorkerTimeSheet(Long workerId) ;
 
 }

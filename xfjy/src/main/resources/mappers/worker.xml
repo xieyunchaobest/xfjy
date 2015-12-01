@@ -20,7 +20,7 @@
 	    w.ID_NO as idNo,
 	    w.birthday as birthday,
 	    w.AREA_ID as areaId,
-	    (select a.name from  T_AREA A where a.id=w.area_id ) as areaName,
+	    (select a.name from  t_area a where a.id=w.area_id ) as areaName,
 	    SUB_AREA as subArea,
 	    NATIVE_PLACE as nativePlace,
 	    EDUCATION as education,
@@ -37,7 +37,7 @@
 	    address as address,
 	    descr as descr,
 	    salary as salary 
-	    from t_Worker w  where state='A'  
+	    from t_worker w  where state='A'  
   <include refid="getWorkerCondition"/> 
 	</sql>
 	

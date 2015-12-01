@@ -19,17 +19,22 @@
 
 <script type="text/javascript">
  	 
- 	
+/*<![CDATA[*/
  	function showModal(){
  		var len=$('input:checked').length;
- 		  
+ 		 
  		if(len==1){
  			var val=$('input:checked').val();
- 			var path = basePath+"/server/queryWorker.html?orderId="+val;
- 	 		window.open(path,'win',"height=300,width=500,top=300,left=300,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
+ 			var state=$('input:checked').attr('state');
+ 			if(state!='P' &&  state!='C'){
+ 				alert('订单状态不符合分配要求！');
+ 				return;
+ 			}
+ 			var path = basePath+"/server/dispatchInit.html?orderId="+val;
+ 	 		window.open(path,'win',"height=700,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
 		}
- 		
  	}
+ 	 /*]]>*/
 </script>
 </head>
 <body>
@@ -96,7 +101,7 @@
 				<tbody>
 					<tr  th:each="item : ${orderPageView.resultList}">
 						<td style="width:20px">
-							<input type="checkbox" id="cbchooseworker" name="orderId" th:value="${item.id}"/>
+							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+''" />
 						</td>
 						<td style="width:35px" th:text="${item.outTradeNo}"></td>
 						<td th:text="${item.mobileNo}"></td>

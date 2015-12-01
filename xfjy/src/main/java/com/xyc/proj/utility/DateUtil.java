@@ -115,4 +115,17 @@ public class DateUtil {
 		return str;
 	}
 	
+	/**
+	 * 获取指定日期前后的某天
+	 * @param date
+	 * @return
+	 */
+	public static String getDiffDate(Date date,int diff) {
+	    Calendar c = Calendar.getInstance();
+	    c.setTime(date);
+	    c.add(Calendar.DATE, diff);
+	    Date myDate = c.getTime();
+	    return date2Str(myDate);
+	}
+	
 }

@@ -19,4 +19,7 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
 	List findWorkerAndOpenIdInArea(Long areaId);
 	
 	Worker findByPhone(String phone);
+	
+	@Query("select  w from Worker w ,Order o ,OrderWorker  ow  where w.id=ow.workerId and o.id=ow.orderId and  o.id=?1") 
+	List findWorkeByOrderId(Long orderId);
 }
