@@ -3,10 +3,12 @@
  */
 package com.xyc.proj.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.service.ClientService;
@@ -184,7 +187,8 @@ public class ServerController {
 			 @RequestParam(value = "workerId", required = true) Long  workerId
 			 ) {
 		List timeList= serverService.getWorkerTimeSheet(workerId);
-		 return null;
+		model.addAttribute("timesheet", timeList);
+		return "server/timesheet";
 	 }
 	 
 	 
@@ -226,12 +230,30 @@ public class ServerController {
 	 @ResponseBody
 	 @RequestMapping(value="/server/dispatchOrder.html",method = {RequestMethod.POST,RequestMethod.GET})
 	 public String dispatch(Model model,
-			 @RequestParam(value = "orderId", required = true) String orderId,
-			 @RequestParam(value = "ayiIds", required = true) String aiyiIds
+			 HttpServletRequest request,
+			 @RequestParam(value = "orderId", required = true) Long orderId,
+			 @RequestParam(value = "ayiIds", required = true) String aiyiIds,
+			 @RequestParam(value = "busiDate", required = true) String busiDate,
+			 @RequestParam(value = "startTime", required = true) String startTime
 			) {
 		 String res="S";
 		 try {
-			 serverService.dispatchOrder(orderId, aiyiIds);
+			 List scList=new ArrayList();
+			 for(int i=0;i<10;i++) {
+				 String aid=request.getParameter("aid"+i);
+				 if(!StringUtil.isBlank(aid)) {
+					 Schedule  sc=new Schedule();
+					 String druation=request.getParameter("aid"+i);
+					 String endTime=Integer.parseInt(startTime)+Integer.parseInt(druation)+"";
+					 sc.setAyiId(Long.parseLong(aid));
+					 sc.setBusiDate(busiDate);
+					 sc.setStartTime(startTime);
+					 sc.setEndTime(endTime);
+					 sc.setOrderId(orderId);
+					 scList.add(sc);
+				 }
+			 }
+			 serverService.dispatchOrder(orderId, scList);
 		 }catch(Exception e) {
 			 e.printStackTrace();
 			 res="E";

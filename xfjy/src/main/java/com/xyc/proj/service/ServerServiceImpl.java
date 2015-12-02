@@ -150,21 +150,13 @@ public class ServerServiceImpl implements ServerService {
 		return pv;
 	}
 	
-	public void dispatchOrder(String orderId,String ayiId){
-		List oList=orderWorkerRepository.findByOrderId(Long.parseLong(orderId));
+	public void dispatchOrder(Long orderId,List scList){
+		//先删除，后添加
+		List oList=orderWorkerRepository.findByOrderId(orderId);
 		if(oList!=null && oList.size()>0) {
 			orderWorkerRepository.delete(oList);
 		}
-		
-		String ayiIdArr[]=ayiId.split(",");
-		//List orderIdList=Arrays.asList(orderIdArr);
-		for(int i=0;i<ayiIdArr.length;i++) {
-			Long aid=Long.parseLong(ayiIdArr[i]);
-			OrderWorker ow=new OrderWorker();
-			ow.setOrderId(Long.parseLong(orderId));
-			ow.setWorkerId(aid);
-			orderWorkerRepository.save(ow);
-		}
+		orderWorkerRepository.save(scList);
 	}
 	
 	public List findByCodeAndPassword(String code,String pwd) {
@@ -232,7 +224,7 @@ public class ServerServiceImpl implements ServerService {
 			String day=DateUtil.getDiffDate(new Date(),i+1);
 			dayMap.put("day", day);
 			for(int j=8;j<=20;j++) {
-				dayMap.put(j+"", j+"");
+				dayMap.put("hour"+j+"", j+"");
 				dayMap.put("free"+j, "Y");
 			}
 			dayList.add(dayMap);

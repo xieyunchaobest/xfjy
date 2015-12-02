@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+	<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>员工时间表</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/font-awesome.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-datetimepicker.css}" />
+
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:inline="javascript" th:src="@{/app/js/commonPage.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap-datetimepicker.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+
+<script type="text/javascript">
+
+</script>
+</head>
+<body>
+	<div class="container-fluid">
+		<form id="orderByForm" th:action="@{/server/queryWorker.html}" method="post">
+			<input type="hidden" id="orderId" name="orderId"   th:value="${orderId}"/>
+			 
+			<div id="tbdata" style="width:100%;overflow: scroll;margin-top:10px">
+			<table class="table table-bordered table-striped" >
+				<tbody>
+					<tr  th:each="item : ${timesheet}">
+						<td th:text="${item.day}" ></td>
+						<td th:text="${item.hour8}" th:style="${item.free8}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour9}" th:style="${item.free9}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour10}" th:style="${item.free10}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour11}" th:style="${item.free11}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour12}" th:style="${item.free12}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour13}" th:style="${item.free13}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour14}" th:style="${item.free14}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour15}" th:style="${item.free15}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour16}" th:style="${item.free16}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour17}" th:style="${item.free17}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour18}" th:style="${item.free18}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour19}" th:style="${item.free19}=='Y'?'background-color:green':'background-color:red' "></td>
+						<td th:text="${item.hour20}" th:style="${item.free20}=='Y'?'background-color:green':'background-color:red' "></td>
+					</tr>
+				</tbody>
+			</table> 
+		</div>
+		<div style="width:100%;height:20px;">
+		<labe>日程表</labe>
+		</div>
+		<div style="width:100%;border:1px solid #ddd;height:200px;">
+		
+		</div>
+	</form>
+	</div>
+
+</body>
+</html>
