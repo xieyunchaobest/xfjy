@@ -17,7 +17,7 @@ public interface ServerService {
 	
 	public PageView getOrderPageView(Map m);
 	
-	public void dispatchOrder(Long orderId,List scList); 
+	public void dispatchOrder(Long orderId,List scList,List orderWorkerList); 
 	
 	public List findByCodeAndPassword(String code,String pwd);
 	public List findStore();

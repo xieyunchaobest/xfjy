@@ -20,6 +20,17 @@
 	function dispatchOrder(){
 		 var len=$('input:checked').length;
 		if(len>=1){
+			var res=true;
+			$("input[xtype=drua]").each(function(){
+				if($(this).prop('disabled')==false){
+					if($(this).val()==''){
+						alert('请填写时长！');
+						res=false;
+						return false;
+					}
+				}
+			  });
+			if(res==false)return; 
 			 $.ajax({
 		            type: "POST",
 		            url: basePath+'/server/dispatchOrder.html',
@@ -39,9 +50,16 @@
 	}
 	
 	function refreshTimesheet(target){
+		var trNode = $(target).parent().parent(); //获取input的“爷爷”--tr  
+		var forthChildTdNode =  trNode.children().eq(5);//获取第四个td  
+		var firstInput = forthChildTdNode.children(); //获取第一个input 
+		
 		var aid=$(target).val();
 		if($(target).prop('checked')==true){
 			$("#timesheetPage").attr("src",basePath+'/server/getWorkerTimeSheet.html?workerId='+aid); 
+			 $(firstInput).prop('disabled',false);
+		}else{
+			 $(firstInput).prop('disabled',true);
 		}
 	}
 </script>
@@ -50,6 +68,8 @@
 	<div class="container-fluid">
 		<form id="orderByForm" th:action="@{/server/queryWorker.html}" method="post">
 			<input type="hidden" id="orderId" name="orderId"   th:value="${orderId}"/>
+			<input type="hidden" id="busiDate" name="busiDate"   th:value="${busiDate}"/>
+			<input type="hidden" id="startTime" name="startTime"   th:value="${startTime}"/>
 			<div style="border: solid 1px #cccccc; margin: 5px 0px; height: 50px">
 			  <div style="width:100%;float:left">
 				<div id="qry" class="row" style="margin-top: 10px;margin-left:0px">
@@ -78,17 +98,21 @@
 						<th>联系方式</th>
 						<th>门店</th>
 						<th>工作时间</th>
+						<th>时长</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr  th:each="item,itemStat : ${pageView.resultList}">
 						<td style="width:20px">
-							<input type="checkbox" id="cbchooseworker" onclick="refreshTimesheet(this)" name="ayiIds" th:value="${item.id}"/>
+							<input type="checkbox" id="cbchooseworker" onclick="refreshTimesheet(this)" th:name="'aid'+${itemStat.index}" th:value="${item.id}"/>
 						</td>
-						<td style="width:35px" th:name="'druation'+${itemStat.index}" th:text="${item.name}"></td>
+						<td style="width:35px" th:text="${item.name}"></td>
 						<td th:text="${item.phone}"></td>
 						<td th:text="${item.areaName}"></td>
 						<td th:text="${item.workTimeName}"></td>
+						<td>
+							<input type="text" th:name="'druation'+${itemStat.index}"  xtype="drua"   size="8"  disabled="true"/>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -113,7 +137,10 @@
 			<iframe width="100%" height="90%"   frameborder="false" marginwidth="0px" scrolling="no" allowtransparency="true" style="border: medium none;overflow:auto;"  id="timesheetPage" name="timesheetPage"></iframe>
 		</div>
 		<div style="width:100%;height:20px;">
-		<labe>当前订单已分派给：</labe><label id="dispatchPerson" th:text="${workerName}"></label>
+		<labe>服务日期：</labe><label id="serviceDate" th:text="${busiDate}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<labe>开始时间：</labe><label id="startTime" th:text="${startTime}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<labe>持续时间：</labe><label id="druationTime" th:text="${druation}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<labe>已分派给：</labe><label id="dispatchPerson" th:text="${workerName}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</div>
 	</form>
 	</div>

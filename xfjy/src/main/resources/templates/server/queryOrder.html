@@ -24,13 +24,20 @@
  		var len=$('input:checked').length;
  		 
  		if(len==1){
- 			var val=$('input:checked').val();
+ 			var oid=$('input:checked').val();
+ 			var chb=$('input:checked');
+ 			var busiDate=$(chb).attr('busiDate');
+ 			var startTime=$(chb).attr('startTime');
+ 			var druation=$(chb).attr('druation');
+ 			if (typeof(druation) == "undefined"){
+ 				druation='';
+ 			}
  			var state=$('input:checked').attr('state');
  			if(state!='P' &&  state!='C'){
  				alert('订单状态不符合分配要求！');
  				return;
  			}
- 			var path = basePath+"/server/dispatchInit.html?orderId="+val;
+ 			var path = basePath+"/server/dispatchInit.html?orderId="+oid+"&busiDate="+busiDate+"&startTime="+startTime+"&druation="+druation;
  	 		window.open(path,'win',"height=700,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
 		}
  	}
@@ -90,6 +97,8 @@
 						<th>交易方式</th>
 						<th>服务类型</th>
 						<th>服务时间</th>
+						<th>开始时间</th>
+						<th>时长</th>
 						<th>周期</th>
 						<th>持续时间</th>
 						<th>面积</th>
@@ -101,7 +110,7 @@
 				<tbody>
 					<tr  th:each="item : ${orderPageView.resultList}">
 						<td style="width:20px">
-							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+''" />
+							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+'',busiDate=''+${item.serviceDate}+'',startTime=''+${item.startTime}+'',druation=''+${item.duration}" />
 						</td>
 						<td style="width:35px" th:text="${item.outTradeNo}"></td>
 						<td th:text="${item.mobileNo}"></td>
@@ -111,6 +120,8 @@
 						<td th:text="${item.payModeText}"></td>
 						<td th:text="${item.serviceTypeText}"></td>
 						<td th:text="${item.serviceDate}"></td>
+						<td th:text="${item.startTime}"></td>
+						<td th:text="${item.duration}"></td>
 						<td th:text="${item.cycleTypeText}"></td>
 						<td th:text="${item.durationMonth}"></td>
 						<td th:text="${item.area}"></td>

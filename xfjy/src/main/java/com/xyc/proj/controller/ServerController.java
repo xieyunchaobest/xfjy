@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.xyc.proj.entity.OrderWorker;
 import com.xyc.proj.entity.Schedule;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
@@ -116,6 +117,9 @@ public class ServerController {
 	 public String dispatchInit(
 	            @RequestParam(value = "areaId", required = false) String areaId,
 	            @RequestParam(value = "storeId", required = false) String storeId,
+	            @RequestParam(value = "busiDate", required = true) String busiDate,
+	            @RequestParam(value = "startTime", required = true) String startTime,
+	            @RequestParam(value = "druation", required = false) String druation,
 	            @RequestParam(value = "name", required = false) String name,
 	            @RequestParam(value = "serviceTypeTwo", required = false) String serviceTypeTwo,
 	            @RequestParam(value = "role", required = false) String role,
@@ -154,6 +158,9 @@ public class ServerController {
 		 model.addAttribute("storeList", storeList);
 		 model.addAttribute("orderId", orderId);
 		 model.addAttribute("workerName", workName);
+		 model.addAttribute("busiDate", busiDate);
+		 model.addAttribute("startTime", startTime);
+		 model.addAttribute("druation", druation);
 		 return "server/orderDispatch";
 		
 	 }
@@ -232,17 +239,18 @@ public class ServerController {
 	 public String dispatch(Model model,
 			 HttpServletRequest request,
 			 @RequestParam(value = "orderId", required = true) Long orderId,
-			 @RequestParam(value = "ayiIds", required = true) String aiyiIds,
 			 @RequestParam(value = "busiDate", required = true) String busiDate,
 			 @RequestParam(value = "startTime", required = true) String startTime
 			) {
 		 String res="S";
 		 try {
 			 List scList=new ArrayList();
+			 List orderWorkerList=new ArrayList();
 			 for(int i=0;i<10;i++) {
 				 String aid=request.getParameter("aid"+i);
 				 if(!StringUtil.isBlank(aid)) {
 					 Schedule  sc=new Schedule();
+					 OrderWorker ow=new OrderWorker();
 					 String druation=request.getParameter("aid"+i);
 					 String endTime=Integer.parseInt(startTime)+Integer.parseInt(druation)+"";
 					 sc.setAyiId(Long.parseLong(aid));
@@ -250,10 +258,14 @@ public class ServerController {
 					 sc.setStartTime(startTime);
 					 sc.setEndTime(endTime);
 					 sc.setOrderId(orderId);
+					 
+					 ow.setOrderId(orderId);
+					 ow.setWorkerId(Long.parseLong(aid));
 					 scList.add(sc);
+					 orderWorkerList.add(ow);
 				 }
 			 }
-			 serverService.dispatchOrder(orderId, scList);
+			 serverService.dispatchOrder(orderId, scList,orderWorkerList);
 		 }catch(Exception e) {
 			 e.printStackTrace();
 			 res="E";

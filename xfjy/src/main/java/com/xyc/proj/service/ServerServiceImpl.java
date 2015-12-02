@@ -150,13 +150,21 @@ public class ServerServiceImpl implements ServerService {
 		return pv;
 	}
 	
-	public void dispatchOrder(Long orderId,List scList){
+	public void dispatchOrder(Long orderId,List scList,List orderWorkerList){
 		//先删除，后添加
 		List oList=orderWorkerRepository.findByOrderId(orderId);
+		List scheduleList=scheduleRepository.findByOrderId(orderId);
 		if(oList!=null && oList.size()>0) {
 			orderWorkerRepository.delete(oList);
 		}
-		orderWorkerRepository.save(scList);
+		if(scheduleList!=null && scheduleList.size()>0) {
+			scheduleRepository.delete(scheduleList);
+		}
+		scheduleRepository.save(scList);
+		orderWorkerRepository.save(orderWorkerList);
+		Order o=orderRepository.findOne(orderId);
+		o.setState(Constants.ORDER_STATE_CONFIRMED);
+		orderRepository.save(o);//修改状态
 	}
 	
 	public List findByCodeAndPassword(String code,String pwd) {
