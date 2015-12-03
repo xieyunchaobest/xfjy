@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface ClientUserMapper {
 	List getClientUserPage(Map m);
-	
+
 	Long getClientUserPageCount(Map m);
 }

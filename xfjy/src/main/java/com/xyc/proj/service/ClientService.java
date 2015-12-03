@@ -62,4 +62,7 @@ public interface ClientService {
 	public Map getWorkerTask(String openId,String serviceDate) ;
 	
 	public String fightOrder(Long oid,String openId);
+	public  List getScheduleList4Month(Order o,List workerList);
+	public  List getScheduleList4OneDay(Order o,List workerList);
+	public ClientUser findClientUserByMobileNo(String mobileNo);
 }

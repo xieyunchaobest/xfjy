@@ -15,45 +15,46 @@ import com.xyc.proj.utility.TestMain;
 public class TestUrlInterceptor implements HandlerInterceptor {
 	@Autowired
 	Properties prop;
-	
-	public TestUrlInterceptor(){
+
+	public TestUrlInterceptor() {
 	}
-	
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-		throws Exception {
-		
-		//System.out.println("key==========="+prop.getWechatkey());
-//		if(request.getRequestURI().equals("/error")){
-//			System.out.println("-------------- input error path ----------------");
-//			//request.getRequestDispatcher("/invalidPage");
-//			response.sendRedirect("/invalidPage");	
-//		}
-//		System.out.println("-------------- TestUrlInterceptor work -----------------" + request.getRequestURI());
-//		
+			throws Exception {
+
+		// System.out.println("key==========="+prop.getWechatkey());
+		// if(request.getRequestURI().equals("/error")){
+		// System.out.println("-------------- input error path
+		// ----------------");
+		// //request.getRequestDispatcher("/invalidPage");
+		// response.sendRedirect("/invalidPage");
+		// }
+		// System.out.println("-------------- TestUrlInterceptor work
+		// -----------------" + request.getRequestURI());
+		//
 		return true;
 	}
-	
+
 	/**
 	 * This implementation is empty.
 	 */
 	@Override
-	public void postHandle(
-			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
-			throws Exception {
-		System.out.println("Constants.wechatkeyConstants.wechatkey="+Constants.wechatkey);
-		boolean isok=TestMain.getLocalFilter(Constants.wechatkey);
-		if(!isok)response.sendRedirect("/error.html");	
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) throws Exception {
+		System.out.println("Constants.wechatkeyConstants.wechatkey=" + Constants.wechatkey);
+		boolean isok = TestMain.getLocalFilter(Constants.wechatkey);
+		if (!isok)
+			response.sendRedirect("/error.html");
 	}
-	
+
 	/**
 	 * This implementation is empty.
 	 */
 	@Override
-	public void afterCompletion(
-			HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		if(ex != null){
+		if (ex != null) {
 			throw ex;
 		}
 	}

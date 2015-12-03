@@ -16,7 +16,6 @@ import javax.persistence.TemporalType;
 
 import com.xyc.proj.utility.DateUtil;
 
-
 @Entity
 @Table(name = "T_CLIENT_USER")
 public class ClientUser {
@@ -24,62 +23,50 @@ public class ClientUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
+
 	@Column(name = "OPEN_ID")
-	private String openId="";
-	 
-	
+	private String openId = "";
+
 	@Column(name = "MOBILE_NO")
 	private String mobileNo;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "CREATE_TIME") 
+	@Column(name = "CREATE_TIME")
 	private Date createdTime;
-	 
+
 	public ClientUser() {
 	}
-
 
 	public long getId() {
 		return id;
 	}
 
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public String getMobileNo() {
 		return mobileNo;
 	}
 
-
 	public void setMobileNo(String mobileNo) {
 		this.mobileNo = mobileNo;
 	}
-
 
 	public String getOpenId() {
 		return openId;
 	}
 
-
 	public void setOpenId(String openId) {
 		this.openId = openId;
 	}
-
 
 	public Date getCreatedTime() {
 		return createdTime;
 	}
 
-
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
 
- 
- 
-	 
 }

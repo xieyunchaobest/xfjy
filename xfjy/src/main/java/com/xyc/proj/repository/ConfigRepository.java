@@ -4,9 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.xyc.proj.entity.Config;
 
-
-
 public interface ConfigRepository extends JpaRepository<Config, Long> {
 
- Config findByConfigCode(String code);
+	Config findByConfigCode(String code);
 }

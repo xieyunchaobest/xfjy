@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.xyc.proj.utility.CustomDateSerializer;
 
 @Entity
-@Table(name = "PN_Coupon")
+@Table(name = "t_coupon")
 public class Coupon {
 
 	@Id
@@ -29,6 +29,10 @@ public class Coupon {
 	
 	@Column(name = "CODE")
 	private String code;
+	
+	@Column(name = "U_ID")
+	private Long uid;
+ 
 	
 	@Column(name = "BATCH_CODE")
 	private String batchCode;
@@ -77,6 +81,30 @@ public class Coupon {
 
 	public long getId() {
 		return id;
+	}
+
+
+
+	public Long getUid() {
+		return uid;
+	}
+
+
+
+	public void setUid(Long uid) {
+		this.uid = uid;
+	}
+
+
+
+	public String getServiceType() {
+		return serviceType;
+	}
+
+
+
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
 	}
 
 

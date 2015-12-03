@@ -15,36 +15,37 @@ import com.xyc.proj.utility.TestMain;
 import com.xyc.proj.utility.WeixinUtil;
 
 public class ApplicationStartup implements ApplicationListener<ContextRefreshedEvent> {
- 
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-    	Properties prop =event.getApplicationContext().getBean(Properties.class);
-    	//ClientController con =event.getApplicationContext().getBean(ClientController.class);
-    	Constants.wechatkey=prop.getWechatkey();
-    	Constants.certLocalPath=prop.getCertLocalPath();
-    	boolean isok=getLocalFilter(prop.getWechatkey()) ;
-    	System.out.println("bbbbbbbbbbbbbbbbbbbbbbb"+isok);
-    	if(!isok) {
-    		Configure.appID="";
-    		Configure.certPassword="";
-    		Configure.key="";
-    	}
-        System.out.println("proppropprop="+prop.getWechatkey());
-        
-        com.alibaba.fastjson.JSONObject tokenJson=WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
-		String accessToken=tokenJson.getString("access_token");
-		Constants.WE_CHAT_ACCESS_TOKEN=accessToken;
-		System.out.println("accessTokenaccessToken="+accessToken);
-    }
-    
-    public static  boolean getLocalFilter(String encrypt) {
-    	byte[] bkey;
+
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		Properties prop = event.getApplicationContext().getBean(Properties.class);
+		// ClientController con
+		// =event.getApplicationContext().getBean(ClientController.class);
+		Constants.wechatkey = prop.getWechatkey();
+		Constants.certLocalPath = prop.getCertLocalPath();
+		boolean isok = getLocalFilter(prop.getWechatkey());
+		System.out.println("bbbbbbbbbbbbbbbbbbbbbbb" + isok);
+		if (!isok) {
+			Configure.appID = "";
+			Configure.certPassword = "";
+			Configure.key = "";
+		}
+		System.out.println("proppropprop=" + prop.getWechatkey());
+
+		com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
+		String accessToken = tokenJson.getString("access_token");
+		Constants.WE_CHAT_ACCESS_TOKEN = accessToken;
+		System.out.println("accessTokenaccessToken=" + accessToken);
+	}
+
+	public static boolean getLocalFilter(String encrypt) {
+		byte[] bkey;
 		try {
 			bkey = TestMain.GetKeyBytes(Constants.shanghu_key);
-			String decrypt = new String(TestMain.decryptMode(bkey,Base64.decode(encrypt)));
-			String  curDateString=DateToStr(new Date());
-			int curDay=Integer.parseInt(curDateString);
-			if(curDay>Integer.parseInt(decrypt)) {
+			String decrypt = new String(TestMain.decryptMode(bkey, Base64.decode(encrypt)));
+			String curDateString = DateToStr(new Date());
+			int curDay = Integer.parseInt(curDateString);
+			if (curDay > Integer.parseInt(decrypt)) {
 				return false;
 			}
 		} catch (Exception e) {
@@ -52,14 +53,12 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 			return false;
 		}
 		return true;
-    }
-    
-    public static String DateToStr(Date date) {
+	}
+
+	public static String DateToStr(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 		String str = format.format(date);
 		return str;
 	}
-    
-    
-    
+
 }

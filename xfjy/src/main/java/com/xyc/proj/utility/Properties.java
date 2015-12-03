@@ -11,76 +11,89 @@ public class Properties {
 	private String smsappid;
 	private String smstemplateId;
 	private String certLocalPath;
-	
-	
-	
-	
+
 	private String fileuploadpath;
 	private String serveraddress;
 	private String wechatkey;
-	
+
 	public String getSmsurl() {
 		return smsurl;
 	}
+
 	public void setSmsurl(String smsurl) {
 		this.smsurl = smsurl;
 	}
+
 	public String getSmsport() {
 		return smsport;
 	}
+
 	public void setSmsport(String smsport) {
 		this.smsport = smsport;
 	}
+
 	public String getSmsaccountId() {
 		return smsaccountId;
 	}
+
 	public void setSmsaccountId(String smsaccountId) {
 		this.smsaccountId = smsaccountId;
 	}
+
 	public String getSmsaccountToken() {
 		return smsaccountToken;
 	}
+
 	public void setSmsaccountToken(String smsaccountToken) {
 		this.smsaccountToken = smsaccountToken;
 	}
+
 	public String getSmsappid() {
 		return smsappid;
 	}
+
 	public void setSmsappid(String smsappid) {
 		this.smsappid = smsappid;
 	}
+
 	public String getSmstemplateId() {
 		return smstemplateId;
 	}
+
 	public void setSmstemplateId(String smstemplateId) {
 		this.smstemplateId = smstemplateId;
 	}
+
 	public String getFileuploadpath() {
 		return fileuploadpath;
 	}
+
 	public void setFileuploadpath(String fileuploadpath) {
 		this.fileuploadpath = fileuploadpath;
 	}
+
 	public String getServeraddress() {
 		return serveraddress;
 	}
+
 	public void setServeraddress(String serveraddress) {
 		this.serveraddress = serveraddress;
 	}
+
 	public String getCertLocalPath() {
 		return certLocalPath;
 	}
+
 	public void setCertLocalPath(String certLocalPath) {
 		this.certLocalPath = certLocalPath;
 	}
+
 	public String getWechatkey() {
 		return wechatkey;
 	}
+
 	public void setWechatkey(String wechatkey) {
 		this.wechatkey = wechatkey;
 	}
-	
-	
-	
 
 }

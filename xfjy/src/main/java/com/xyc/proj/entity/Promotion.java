@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.xyc.proj.utility.CustomDateSerializer;
 
 @Entity
-@Table(name = "PN_Promotion")
+@Table(name = "t_Promotion")
 public class Promotion {
 
 	@Id
@@ -47,12 +47,6 @@ public class Promotion {
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
-	
-	@Column(name = "UPDATE_TIME")
-	@JsonSerialize(using = CustomDateSerializer.class)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updateTime;
-	
 	
 	 
 

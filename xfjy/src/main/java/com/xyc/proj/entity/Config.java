@@ -17,77 +17,60 @@ public class Config {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
+
 	@Column(name = "CONFIG_NAME")
 	private String configName;
-	
-	@Column(name = "CONFIG_VALUE")
-	private String configValue; 
-	
-	
-	@Column(name = "CONFIG_CODE")
-	private String configCode; 
-	
-	@Column(name = "REMARK")
-	private String remark; 
 
+	@Column(name = "CONFIG_VALUE")
+	private String configValue;
+
+	@Column(name = "CONFIG_CODE")
+	private String configCode;
+
+	@Column(name = "REMARK")
+	private String remark;
 
 	public Config() {
 	}
-
 
 	public long getId() {
 		return id;
 	}
 
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public String getConfigName() {
 		return configName;
 	}
 
-
 	public void setConfigName(String configName) {
 		this.configName = configName;
 	}
-
 
 	public String getConfigValue() {
 		return configValue;
 	}
 
-
 	public void setConfigValue(String configValue) {
 		this.configValue = configValue;
 	}
-
 
 	public String getConfigCode() {
 		return configCode;
 	}
 
-
 	public void setConfigCode(String configCode) {
 		this.configCode = configCode;
 	}
-
 
 	public String getRemark() {
 		return remark;
 	}
 
-
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
 
-
- 
-
- 
-	 
 }

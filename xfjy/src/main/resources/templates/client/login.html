@@ -86,11 +86,11 @@
             url: basePath+'/client/login',
             data:$("#loginForm").serialize(),
             success: function(data) {
-            	if(data=="S"){
+            	if(data.code=="S"){
             		var openId=$("#openId").val();
             	 	window.location.href=basePath+'/client/index.html?openId='+openId;
             	}else{
-            		$("#spnwarngin").text('登录失败，请检查输入！');
+            		$("#spnwarngin").text(data.mark);
             	}
             }
         }); 
