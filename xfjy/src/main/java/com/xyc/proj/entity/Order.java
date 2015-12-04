@@ -149,9 +149,9 @@ public class Order {
 	
 	@Transient
 	private Long areaId;
-	
-	@Transient
-	private String useBalance;
+	 
+	@Column(name = "COUPON_ID")
+	private Long couponId;
 
 	public Order() {
 	}
@@ -555,16 +555,14 @@ public class Order {
 	}
 
 
-	public String getUseBalance() {
-		return useBalance;
+	public Long getCouponId() {
+		return couponId;
 	}
 
 
-	public void setUseBalance(String useBalance) {
-		this.useBalance = useBalance;
+	public void setCouponId(Long couponId) {
+		this.couponId = couponId;
 	}
 
 
- 
-	 
 }

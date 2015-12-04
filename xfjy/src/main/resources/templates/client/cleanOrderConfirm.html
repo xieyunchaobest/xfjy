@@ -28,7 +28,7 @@
 	            data:$("#aform").serialize(),
 	            success: function(data) {
 	            	if(data.resultCode=="S"){
-	            		if(data.payMode=='W'){
+	            		if(data.payMode=='OW' || data.payMode=='WY'|| data.payMode=='WC'){//如果支付方式为
 	            			prepay_id=data.prepay_id;
 		            		appId=data.parm.appId;
 		            		timeStamp=data.parm.timeStamp;

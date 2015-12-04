@@ -25,7 +25,7 @@ public class Coupon {
 	private long id;
 	
 	@Column(name = "PROMOTION_ID")
-	private int promotionId;
+	private Long promotionId;
 	
 	@Column(name = "CODE")
 	private String code;
@@ -115,13 +115,13 @@ public class Coupon {
 
 
 
-	public int getPromotionId() {
+	public Long getPromotionId() {
 		return promotionId;
 	}
 
 
 
-	public void setPromotionId(int promotionId) {
+	public void setPromotionId(Long promotionId) {
 		this.promotionId = promotionId;
 	}
 

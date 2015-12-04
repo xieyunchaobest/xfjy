@@ -47,7 +47,7 @@ public interface ClientService {
 	
 	public Order getOrder(Long id) ;
 	
-	public void saveClientUser(ClientUser cu);
+	public ClientUser saveClientUser(ClientUser cu);
 	
 	public ClientUser getClientUser(String openId) ;
 	
@@ -65,4 +65,5 @@ public interface ClientService {
 	public  List getScheduleList4Month(Order o,List workerList);
 	public  List getScheduleList4OneDay(Order o,List workerList);
 	public ClientUser findClientUserByMobileNo(String mobileNo);
+	public void saveCoupon4Register(long uid);
 }

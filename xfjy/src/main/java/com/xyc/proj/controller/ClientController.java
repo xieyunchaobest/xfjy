@@ -127,7 +127,8 @@ public class ClientController {
 						 res = "E";
 					}
 				}else {
-					clientService.saveClientUser(cu);
+					cu=clientService.saveClientUser(cu);
+					clientService.saveCoupon4Register(cu.getId());
 					res = "S";
 				}
 			} else {

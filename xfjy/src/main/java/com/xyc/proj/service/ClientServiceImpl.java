@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.xyc.proj.entity.ClientUser;
+import com.xyc.proj.entity.Coupon;
 import com.xyc.proj.entity.DepositLog;
 import com.xyc.proj.entity.DepositSummary;
 import com.xyc.proj.entity.Order;
@@ -40,6 +41,7 @@ import com.xyc.proj.repository.CleanToolsRepository;
 import com.xyc.proj.repository.ClientUserRepository;
 import com.xyc.proj.repository.CommunityRepository;
 import com.xyc.proj.repository.ConfigRepository;
+import com.xyc.proj.repository.CouponRepository;
 import com.xyc.proj.repository.DepositLogRepository;
 import com.xyc.proj.repository.DepositSummaryRepository;
 import com.xyc.proj.repository.OrderRepository;
@@ -97,6 +99,8 @@ public class ClientServiceImpl implements ClientService {
 	WorkerRepository workerRepository;
 	@Autowired
 	OrderWorkerRepository orderWorkerRepository;
+	@Autowired
+	CouponRepository couponRepository;
 
 	@Override
 	public void saveUserAuthCode(UserAuthCode u) {
@@ -458,10 +462,16 @@ public class ClientServiceImpl implements ClientService {
 		} else {
 			o.setCycleTypeText("零工");
 		}
-		if (Constants.ORDER_PAY_MODE_WECHAT.equals(o.getPayMode())) {
+		if (Constants.ORDER_PAY_MODE_ONLY_WECHAT.equals(o.getPayMode())) {
 			o.setPayModeText("微信");
-		} else {
+		} else if(Constants.ORDER_PAY_MODE_ONLY_YUE.equals(o.getPayMode())){
 			o.setPayModeText("余额");
+		}else if(Constants.ORDER_PAY_MODE_ONLY_COUPON.equals(o.getPayMode())){
+			o.setPayModeText("优惠券");
+		}else if(Constants.ORDER_PAY_MODE_WECHAT_COUPON.equals(o.getPayMode())){
+			o.setPayModeText("微信/优惠券");
+		}else if(Constants.ORDER_PAY_MODE_WECHAT_YUE.equals(o.getPayMode())){
+			o.setPayModeText("微信/余额");
 		}
 
 		if (Constants.ORDER_STATE_UNPAY.equals(o.getState())) {
@@ -588,8 +598,9 @@ public class ClientServiceImpl implements ClientService {
 		}
 	}
 
-	public void saveClientUser(ClientUser cu) {
-		clientUserRepository.save(cu);
+	public ClientUser saveClientUser(ClientUser cu) {
+		 cu=clientUserRepository.save(cu);
+		 return cu;
 	}
 
 	public ClientUser getClientUser(String openId) {
@@ -607,7 +618,6 @@ public class ClientServiceImpl implements ClientService {
 
 			outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
 			order.setOutTradeNo(outTradeNo);
-			order.setPayMode(Constants.ORDER_PAY_MODE_WECHAT);
 			order = saveOrder(order);
 		} else {// 从未完成订单中，不需要重新创建订单
 			outTradeNo = o.getOutTradeNo();
@@ -622,37 +632,54 @@ public class ClientServiceImpl implements ClientService {
 		int totalFee = 1;
 		// int totalFee=order.getTotalFee().intValue()*100;
 		// int totalFee=5;
-		// 判断是否用了余额，如果是，减去余额
-		String useBalance = order.getUseBalance();
+		// 判断是否用了余额或优惠券，如果是，减去余额
+		String payMode = order.getPayMode();
 		boolean goWechat = true;// 是否还需要走微信支付
-		boolean isMix = false;// 是否余额和微信同时用
 		double fee = 0;
-		if (useBalance != null) {// 如果使用，取这个人的余额
+		int finalPay4Wechat=0;//抛去 余额，优惠券 ，最后需要支付的金额
+		String finalPayMode=Constants.ORDER_PAY_MODE_ONLY_WECHAT;
+		if (Constants.ORDER_PAY_MODE_ONLY_YUE.equals(payMode)) {// 如果使用了余额,取这个人的余额
 			DepositSummary ds = getBalance(o.getOpenId());
 			if (ds != null) {
 				fee = ds.getFee();
 				// fee=0.02d;
 				if (fee * 100 < totalFee) { // 余额不足，还是需要走微信接口
 					System.out.println("余额不足，走微信");
-					totalFee = (int) (totalFee - fee * 100);
+					finalPay4Wechat = (int) (totalFee - fee * 100);
 					goWechat = true;
-					isMix = true;
+					finalPayMode=Constants.ORDER_PAY_MODE_WECHAT_YUE;
 				} else {
 					goWechat = false;
+					finalPayMode=Constants.ORDER_PAY_MODE_ONLY_YUE;
 				}
+			}
+		}else if(Constants.ORDER_PAY_MODE_ONLY_COUPON.equals(payMode)) {//如果使用了优惠券
+			//取优惠券的id
+			Long cid=order.getCouponId();
+			Coupon cp=couponRepository.findOne(cid);
+			fee=cp.getCash();
+			if (fee * 100 < totalFee) { // 余额不足，还是需要走微信接口
+				System.out.println("优惠券不足，走微信");
+				finalPay4Wechat = (int) (totalFee - fee * 100);
+				goWechat = true;
+				finalPayMode=Constants.ORDER_PAY_MODE_WECHAT_COUPON;
+			} else {
+				goWechat = false;
+				finalPayMode=Constants.ORDER_PAY_MODE_ONLY_COUPON;
 			}
 		}
 		try {
 			if (goWechat == true) {
-				resMap.put("payMode", "W");
-				if (isMix) {
+				if (finalPayMode.equals(Constants.ORDER_PAY_MODE_WECHAT_YUE)) {//如果威信和余额同时使用
 					DepositLog dl = new DepositLog();
 					dl.setDepositAmount(0 - fee);
 					dl.setOpenId(order.getOpenId());
 					dl.setOrderId(order.getOrderId());
 					dl.setOutTradeNo(order.getOutTradeNo());
-					dl.setState(Constants.STATE_P);
+					dl.setState(Constants.STATE_P);//在付款通知方法中修改成A
 					depositLogRepository.save(dl);
+				}else if(finalPayMode.equals(Constants.ORDER_PAY_MODE_WECHAT_COUPON)) {//如果威信和优惠券同时使用，不做处理，在付款通知方法中做处理
+					
 				}
 
 				String timeStart = DateUtil.Time2Str(new Date(), DateUtil.format1);
@@ -661,7 +688,7 @@ public class ClientServiceImpl implements ClientService {
 				String openId = (String) paraMap.get("openId");
 				String spBillCreateIP = (String) paraMap.get("spBillCreateIP");
 
-				ScanPayReqData scanPayReqData = new ScanPayReqData(outTradeNo, totalFee, spBillCreateIP, timeStart,
+				ScanPayReqData scanPayReqData = new ScanPayReqData(outTradeNo, finalPay4Wechat, spBillCreateIP, timeStart,
 						timeExpire, openId);
 				String res = new ScanPayService().request(scanPayReqData);
 				Map rm = XMLParser.getMapFromXML(res);
@@ -683,27 +710,36 @@ public class ClientServiceImpl implements ClientService {
 					resMap.put("parm", pm);
 
 					System.out.println("parmssssssssss is =" + pm);
-
 				} else {
 					resMap.put("resultCode", "E");
 				}
 				System.out.println("res======" + res);
-			} else {
-				resMap.put("payMode", "B");
-				DepositLog dl = new DepositLog();
-				dl.setDepositAmount(0d - totalFee / 100);
-				dl.setOpenId(order.getOpenId());
-				dl.setOrderId(String.valueOf(order.getId()));
-				dl.setOutTradeNo(order.getOutTradeNo());
-				dl.setState(Constants.STATE_A);
-				depositLogRepository.save(dl);
-				DepositSummary ds = depositSummaryRepository.findByOpenId(order.getOpenId());
-				ds.setFee(ds.getFee() - totalFee / 100);
-				depositSummaryRepository.save(ds);
+			} else {//如果不走威信
+				if(Constants.ORDER_PAY_MODE_ONLY_YUE.equals(finalPayMode)) {//只走余额
+					System.out.println("只走了余额！！！！！");
+					DepositLog dl = new DepositLog();
+					dl.setDepositAmount(0d - totalFee / 100);
+					dl.setOpenId(order.getOpenId());
+					dl.setOrderId(String.valueOf(order.getId()));
+					dl.setOutTradeNo(order.getOutTradeNo());
+					dl.setState(Constants.STATE_A);
+					depositLogRepository.save(dl);
+					DepositSummary ds = depositSummaryRepository.findByOpenId(order.getOpenId());
+					ds.setFee(ds.getFee() - totalFee / 100);
+					depositSummaryRepository.save(ds);
+				}else if(Constants.ORDER_PAY_MODE_ONLY_COUPON.equals(finalPayMode)) {//只走优惠券
+					System.out.println("只走了优惠券！！！！");
+					Long cid=order.getCouponId();
+					Coupon c=couponRepository.findOne(cid);
+					c.setState(Constants.STATE_P);
+					couponRepository.save(c);
+				}
 				order.setState(Constants.ORDER_STATE_PAYED);
+				order.setPayMode(finalPayMode);
 				order.setPayTime(new Date());
 				orderRepository.save(order);
 			}
+			resMap.put("payMode", finalPayMode);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			resMap.put("resultCode", "E");
@@ -719,6 +755,10 @@ public class ClientServiceImpl implements ClientService {
 		}
 		System.out.println("resMap=======" + resMap);
 		return resMap;
+	}
+	
+	private double getMockTotalFee(double totalFee) {
+		
 	}
 
 	public void notifyOrder(String outTradeNo, String orderId) {
@@ -929,6 +969,21 @@ public class ClientServiceImpl implements ClientService {
 		com.alibaba.fastjson.JSONObject res = WeixinUtil.httpRequest(Constants.URL_CREATE_MENU + accessToken, "POST",
 				createWeChatMenu());
 		System.out.println("res===" + res);
+	}
+	
+	// 注册的时候，送三张优惠券，每到一个月，过期一张
+	public void saveCoupon4Register(long uid) {
+		for (int i = 0; i < 3; i++) {
+			Coupon c = new Coupon();
+			c.setCash(20.0d);
+			c.setState(Constants.STATE_A);
+			c.setPromotionId(1l);
+			c.setType(Constants.COUPON_TYPE_CASH);
+			c.setUid(uid);
+			c.setExpireDate(DateUtil.strToDate(DateUtil.getDiffDate(new Date(),
+					(i + 1) * 30)));
+			couponRepository.save(c);
+		}
 	}
 
 }
