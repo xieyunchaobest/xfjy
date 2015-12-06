@@ -87,6 +87,8 @@ public class Constants {
 	
 	
 	public static final String WORK_SERVICE_TYPE_CLEAN="C";//宝洁
+	public static final String WORK_SERVICE_TYPE_JZ="J";//家政
+	
 	public static final String WORK_SERVICE_YS="YS";//YUE SHAO
 	public static final String WORK_SERVICE_YY_YE="YY";//孕婴&育儿嫂
 	public static final String WORK_SERVICE_YL="YL";//养老护工

@@ -108,7 +108,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr  th:each="item : ${orderPageView.resultList}">
+					<tr  th:each="item : ${orderPageViews.resultList}">
 						<td style="width:20px">
 							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+'',busiDate=''+${item.serviceDate}+'',startTime=''+${item.startTime}+'',druation=''+${item.duration}" />
 						</td>
@@ -134,9 +134,9 @@
 			<div>
 				<div style="border:1px solid #fffff">
 					 <nav id="tslCommon-Page"  style="float:right">
-			  			<input type="hidden" name="currentPageNum" th:value="${orderPageView.currentPageNum}"/>
-			  			<input type="hidden" name="totalPageCnt" th:value="${orderPageView.totalPageCnt}"/>
-			  			<input type="hidden" name="totalRecord" th:value="${orderPageView.totalRecord}"/>
+			  			<input type="hidden" name="currentPageNum" th:value="${orderPageViews.currentPageNum}"/>
+			  			<input type="hidden" name="totalPageCnt" th:value="${orderPageViews.totalPageCnt}"/>
+			  			<input type="hidden" name="totalRecord" th:value="${orderPageViews.totalRecord}"/>
 					</nav>
 				</div> 
 				<div style="float: left; margin-right: 15px;">

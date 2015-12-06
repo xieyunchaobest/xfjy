@@ -1,0 +1,179 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	 <script type="text/javascript">
+	 $().ready(function() {
+		 formValidate();
+	 }); 
+	 
+	 function formValidate(){
+		 $("#aform").validate({
+		     	focusInvalid:false	, 
+		     	rules : {
+		     		"name":{
+		     			required:true 
+		     		} , 
+		     		"phone":{
+		     			required:true 
+		     		} , 
+		     		"kmCount":{
+		     			required:true,
+		     			number:true
+		     		},
+		     		"afile":{
+		     			required:$("#carId").val()=='0'
+		     		} 
+		     	},
+		         messages: {
+		             
+		         }
+		     });
+	 }
+	 
+	 
+	 function save(){ 
+		   var path = basePath+"/server/saveWorker";  
+			$('#aform').attr("action", path).submit(); 
+	 }
+	 
+    </script> 
+</head>
+
+<form id="aform" th:action="@{/server/saveWorker}"  method="post" enctype="multipart/form-data"  >
+	<div style="display:none">
+		<input type="text" id="id" name="id" maxlength="100" th:value="${worker.id}" />
+	</div>
+
+	 <div id="userAdd">
+	 	<table class="table table-bordered table-striped" >
+	 		<tr>
+	 			<td align="right" width="100px">姓名：</td>
+	 			<td width="150px"><input type="text" id="name" name="name" maxlength="10" th:value="${worker.name}" /> </td>
+	 			<td align="right" width="100px">身份证号：</td>
+	 			<td width="150px"><input type="text" id="idNo" name="idNo" maxlength="18"  th:value="${worker.idNo}"/> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">出生年月：</td>
+	 			<td width="150px"><input type="text" id="birthday" name="birthday" maxlength="10" readonly="true" th:value="${worker.birthday}" /> </td>
+	 			<td align="right" width="100px">服务区域：</td>
+	 			<td width="150px">
+	 				<select  name="areaId" id="areaId" style="height:30px;width:120px" >
+							<option th:each="area : ${areaList}"
+								th:value="${area.id}" th:text="${area.name}"
+								th:selected="${worker.areaId == area.id}"></option>
+					</select>
+	 			 </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">子区域：</td>
+	 			<td width="150px"><input type="text" id="subArea" name="subArea" maxlength="20"  th:value="${worker.subArea}"/> </td>
+	 			<td align="right" width="100px">籍贯：</td>
+	 			<td width="150px"><input type="text" id="nativePlace" name="nativePlace" maxlength="10"  th:value="${worker.nativePlace}"/> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">教育程度：</td>
+	 			<td width="150px">
+	 					<select  name="education" id="education" style="height:30px;width:120px" >
+							<option value="M"  th:selected="${worker.education == 'M'}">中学及以下</option>
+							<option value="Z" th:selected="${worker.education == 'Z'}">大专</option>
+							<option value="B" th:selected="${worker.education == 'B'}">本科</option>
+							<option value="S" th:selected="${worker.education == 'S'}">硕士</option>
+					</select>
+	 			</td>
+	 			<td align="right" width="100px">联系方式：</td>
+	 			<td width="150px"><input type="text" id="phone" name="phone" maxlength="11"  th:value="${worker.phone}"/> </td>
+	 		</tr>
+	 			<tr>
+	 			<td align="right" width="100px">住址：</td>
+	 			<td width="150px">
+	 				 <input type="text" id="address" name="address" maxlength="30"  th:value="${worker.address}"/> 
+	 			</td>
+	 			<td align="right" width="100px">星座：</td>
+	 			<td width="150px"><input type="text" id="constellation" name="constellation" maxlength="10" th:value="${worker.constellation}" /> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">一级服务类型：</td>
+	 			<td width="150px">
+	 				<select  name="serviceTypeOne" id="serviceTypeOne" style="height:30px;width:120px" >
+							<option value="C"   th:selected="${worker.serviceTypeOne == 'C'}">保洁</option>
+							<option value="J" th:selected="${worker.serviceTypeOne == 'J'}">家政</option> 
+					</select>
+	 			</td>
+	 			<td align="right" width="100px">二级服务类型：</td>
+	 			<td width="150px">
+	 				<select  name="serviceTypeTwo" id="serviceTypeTwo" style="height:30px;width:120px" >
+							<option value="C"  th:selected="${worker.serviceTypeTwo == 'C'}">保洁</option>
+							<option value="YS" th:selected="${worker.serviceTypeTwo == 'YS'}">月嫂</option>
+							<option value="YY" th:selected="${worker.serviceTypeTwo == 'YY'}">孕婴、育儿嫂</option> 
+							<option value="YL" th:selected="${worker.serviceTypeTwo == 'YL'}">养老护工</option>
+							<option value="JZ" th:selected="${worker.serviceTypeTwo == 'JZ'}">家政、小时工</option> 
+					</select> 
+	 			</td>
+	 		</tr> 
+	 		<tr>
+	 			<td align="right" width="100px">角色：</td>
+	 			<td width="150px">
+	 				<select  name="role" id="role" style="height:30px;width:120px" >
+							<option value="T" th:selected="${worker.role == 'T'}">老师</option>
+							<option value="A" th:selected="${worker.role == 'A'}">阿姨</option>  
+					</select> 
+	 			</td>
+	 			<td align="right" width="100px">老师：</td>
+	 			<td width="150px">
+	 				 <select  name="teacherId" id="teacherId" style="height:30px;width:120px" >
+	 				 		  <option value="" >无</option>
+								<option th:each="t: ${teacherList}"
+								th:value="${t.id}" th:text="${t.name}"
+								th:selected="${worker.teacherId == t.teacherId}"
+								></option>  
+					</select> 
+	 			</td>
+	 		</tr> 
+	 		<tr>
+	 			<td align="right" width="100px">工作时间：</td>
+	 			<td width="150px">
+	 				<select  name="workTime" id="workTime" style="height:30px;width:120px" >
+							<option value="D" th:selected="${worker.workTime == 'D'}">白班</option>
+							<option value="H" th:selected="${worker.workTime == 'H'}">24H</option>  
+					</select> 
+	 			</td>
+	 			<td align="right" width="100px">门店：</td>
+	 			<td width="150px">
+	 				<select name="storeId" id="storeId"
+					style="height: 30px; width: 120px">
+						<option th:each="store : ${storeList}" th:value="${store.id}"
+							th:text="${store.name}" th:selected="${storeId == store.id}"></option>
+				</select>
+				</td>
+	 		</tr> 
+	 		 <tr>
+	 			<td align="right" width="100px">照片：</td>
+	 			<td width="150px">
+	 				<input type="file" id="afile" name="afile"/>
+	 			</td>
+	 			<td align="right" width="100px">&nbsp;</td>
+	 			<td width="150px">
+	 				 &nbsp;
+				</td>
+	 		</tr> 
+	 	 
+	 	</table>
+	 </div>
+</form>
+<script th:inline="javascript">
+        /*<![CDATA[*/
+            $('#birthday').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false,
+                minView:2
+            });
+         
+            
+        /*]]>*/
+    </script>
+    
+</html>

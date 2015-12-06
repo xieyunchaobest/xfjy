@@ -8,4 +8,6 @@ import com.xyc.proj.entity.Worker;
 
 public interface AyiRepository extends JpaRepository<Worker, Long> {
 	List serviceTypeOne(String type);
+	
+	List serviceTypeOneAndAreaId(String type,Long areaId);
 }

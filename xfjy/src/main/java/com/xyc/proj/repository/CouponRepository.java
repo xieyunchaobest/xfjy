@@ -1,9 +1,15 @@
 package com.xyc.proj.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.xyc.proj.entity.Coupon;
 
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
+	
+	
+	List findByOpenIdAndStateAndExpireDateGreaterThanEqual(String openId,String state,String date);
 	
 }

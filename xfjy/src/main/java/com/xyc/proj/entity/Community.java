@@ -40,10 +40,10 @@ public class Community {
 	private String areaName;
 
 	@Column(name = "ADDRESS")
-	private Long address;
+	private String address;
 
 	@Column(name = "STATE")
-	private String state;
+	private String state="A";
 
 	public Community() {
 	}
@@ -104,12 +104,12 @@ public class Community {
 		this.state = state;
 	}
 
-	public Long getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(Long address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
-
+ 
 }

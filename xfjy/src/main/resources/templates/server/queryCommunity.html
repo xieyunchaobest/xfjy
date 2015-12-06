@@ -15,10 +15,46 @@
 <script th:inline="javascript" th:src="@{/app/js/commonSort.js}"></script>
 <script th:inline="javascript" th:src="@{/app/js/commonPage.js}"></script>
 <script th:src="@{/app/js/vendor/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/app/validation/jquery.validate.min.js}"></script>
 <script th:src="@{/app/js/public.js}"></script>
 
 <script type="text/javascript">
-  
+//<![CDATA[
+function showAddModal(flag){ 
+	var len=$('input:checked').length;
+	if(flag=='U'){
+		if(len==1){
+ 			var wid=$('input:checked').val();
+ 			$("#dvmodal-body").html("").load(basePath+"/server/communityAddInit.html?wid="+wid+"&rn="+Math.random(), function() {
+ 				$('#inputDialog').modal('show'); 
+ 				});
+		}
+	}else{
+		$("#dvmodal-body").html("").load(basePath+"/server/communityAddInit.html?rn="+Math.random(), function() {
+				$('#inputDialog').modal('show'); 
+				});
+	}
+}
+
+function deleteSelect(){
+	var len=$('input:checked').length;
+	if(len>=1){
+		$.ajax({
+            type: "POST",
+            url: basePath+'/server/deleteCommu',
+            data:$("#orderByForm").serialize(),
+            success: function(data) {
+            	if(data=="S"){
+            		alert('处理成功！');
+            	}else{
+            		 alert('处理失败！');
+            	}
+            }
+        });  
+	}
+	 
+}
+/*]]>*/
 </script>
 </head>
 <body>
@@ -49,6 +85,7 @@
 			<table class="table table-bordered table-striped" style="width:2000px">
 				<thead>
 					<tr>
+						<th  style="width:50px">选择</th>
 						<th>地区</th>
 						<th>小区名称</th>
 						<th>地址</th>
@@ -56,6 +93,9 @@
 				</thead>
 				<tbody>
 					<tr  th:each="item : ${pageView.resultList}">
+						<td>
+							<input type="checkbox" id="cbchooseCommu" name="CommuIds" th:attr="value=''+${item.id}+''" />
+						</td>
 						<td style="width:35px" th:text="${item.areaName}"></td>
 						<td th:text="${item.name}"></td>
 						<td th:text="${item.address}"></td>
@@ -70,9 +110,39 @@
 			  			<input type="hidden" name="totalRecord" th:value="${pageView.totalRecord}"/>
 					</nav>
 				</div> 
+				<div style="float: left; margin-right: 15px;">
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="showAddModal('A')">添加</button>
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="showAddModal('U')">修改</button>
+						<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="deleteSelect()">删除</button>
+				</div> 
 			</div>
 		</div>
 	</form>
+	
+	<div class="modal fade" id="inputDialog" tabindex="-1" role="dialog"  aria-labelledby="inputDialogLabel" aria-hidden="true">
+		   <div class="modal-dialog">
+		      <div class="modal-content" style="width:800px">
+		         <div class="modal-header">
+		            <button type="button" class="close" 
+		               data-dismiss="modal" aria-hidden="true">
+		                  &times;
+		            </button>
+		            <h4 class="modal-title" id="inputDialoglLabel">添加/修改阿姨信息</h4> 
+		         </div>
+		         <div class="modal-body" id='dvmodal-body'></div>
+		         <div style="text-align:center;height:60px">
+		            <button type="button" id="submit"  onclick="save()"  class="btn btn-danger fl btn-lg" style="border-radius:0px;width:128px;height:34px;line-height:10px;"> 确定 </button>
+		             <button type="button" data-dismiss="modal"
+								class="btn btn-lg btn-blue" style="border-radius:0px;width:128px;height:34px;margin-left:25px;line-height:10px;">取消</button>
+		         
+		         </div>
+		      </div>
+			</div>
+		</div>
+		
 	</div>
 <script th:inline="javascript">
         /*<![CDATA[*/

@@ -121,29 +121,47 @@ public class ClientServiceImpl implements ClientService {
 		return userAddressMapper.findAddressByUser(m);
 	}
 
+	private List getScheduleListByAid(List allScheList,Long aid) {
+		List resList=new ArrayList();
+		if(allScheList!=null) {
+			for(int i=0;i<allScheList.size();i++) {
+				Schedule w=(Schedule)allScheList.get(i);
+				if(aid.longValue()==w.getAyiId()) {
+					resList.add(w);
+				}
+			}
+			
+		}
+		return resList;
+	}
+	
 	/**
 	 * 先找出能预约的，然后在排除掉
 	 */
 	public List getNonReservationTimeList(Map m) {
 		String serviceDate = (String) m.get("serviceDate");
 		String serviceType = (String) m.get("serviceType");
-
+		String userAddressId=(String)m.get("userAddressId");
+		UserAddress ua=userAddressRepository.findOne(Long.parseLong(userAddressId));
+		Long areaId=ua.getAreaId();
 		List<TimeSplit> timeSplitList = timeSplitRepository.findAll();
 		List tempList = new ArrayList();
+		List<Worker> aiyiList = ayiRepository.serviceTypeOneAndAreaId(Constants.WORK_SERVICE_TYPE_CLEAN,areaId);
+		
+		List allShecList=scheduleRepository.findByServiceDateAndAreaId(serviceDate,areaId);
+		int ayisize = aiyiList.size();
 		for (int i = 0; i < timeSplitList.size(); i++) {
 			TimeSplit ts = timeSplitList.get(i);
 			String tscode = ts.getCode();
 
 			int startTime = ts.getStartTime();
 			int endTime = ts.getEndTime();
-
-			List<Worker> aiyiList = ayiRepository.serviceTypeOne(Constants.WORK_SERVICE_TYPE_CLEAN);
-			int ayisize = aiyiList.size();
+			
 			int ayin = 0;
 			for (int j = 0; j < ayisize; j++) {
 				Worker ayi = aiyiList.get(j);
 				Long aid = ayi.getId();
-				List<Schedule> scheList = scheduleRepository.findByAyiIdAndBusiDateAndState(aid, serviceDate, "A");
+				List<Schedule> scheList = getScheduleListByAid(allShecList,aid);
 				int n = 0;
 				int scheSize = scheList.size();
 				for (int k = 0; k < scheSize; k++) {
@@ -368,9 +386,9 @@ public class ClientServiceImpl implements ClientService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Order saveOrder(Order order) {
 		Order o = orderRepository.save(order);
-		if (Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
-			saveSchedule(o);
-		}
+//		if (Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
+//			saveSchedule(o);
+//		}
 		return o;
 	}
 
@@ -631,12 +649,12 @@ public class ClientServiceImpl implements ClientService {
 
 		int totalFee = 1;
 		// int totalFee=order.getTotalFee().intValue()*100;
-		// int totalFee=5;
+		 totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
 		// 判断是否用了余额或优惠券，如果是，减去余额
 		String payMode = order.getPayMode();
 		boolean goWechat = true;// 是否还需要走微信支付
 		double fee = 0;
-		int finalPay4Wechat=0;//抛去 余额，优惠券 ，最后需要支付的金额
+		int finalPay4Wechat=totalFee;//抛去 余额，优惠券 ，最后需要支付的金额
 		String finalPayMode=Constants.ORDER_PAY_MODE_ONLY_WECHAT;
 		if (Constants.ORDER_PAY_MODE_ONLY_YUE.equals(payMode)) {// 如果使用了余额,取这个人的余额
 			DepositSummary ds = getBalance(o.getOpenId());
@@ -714,18 +732,20 @@ public class ClientServiceImpl implements ClientService {
 					resMap.put("resultCode", "E");
 				}
 				System.out.println("res======" + res);
+				order.setPayMode(finalPayMode);
+				orderRepository.save(order);
 			} else {//如果不走威信
 				if(Constants.ORDER_PAY_MODE_ONLY_YUE.equals(finalPayMode)) {//只走余额
 					System.out.println("只走了余额！！！！！");
 					DepositLog dl = new DepositLog();
-					dl.setDepositAmount(0d - totalFee / 100);
+					dl.setDepositAmount(0d - ((double)totalFee) / 100);
 					dl.setOpenId(order.getOpenId());
 					dl.setOrderId(String.valueOf(order.getId()));
 					dl.setOutTradeNo(order.getOutTradeNo());
 					dl.setState(Constants.STATE_A);
 					depositLogRepository.save(dl);
 					DepositSummary ds = depositSummaryRepository.findByOpenId(order.getOpenId());
-					ds.setFee(ds.getFee() - totalFee / 100);
+					ds.setFee(ds.getFee() - ((double)totalFee) / 100);
 					depositSummaryRepository.save(ds);
 				}else if(Constants.ORDER_PAY_MODE_ONLY_COUPON.equals(finalPayMode)) {//只走优惠券
 					System.out.println("只走了优惠券！！！！");
@@ -757,8 +777,18 @@ public class ClientServiceImpl implements ClientService {
 		return resMap;
 	}
 	
+	//单位：元
 	private double getMockTotalFee(double totalFee) {
-		
+		if(totalFee<10d) {
+			totalFee=totalFee/100;
+		}else if(totalFee<100d){
+			totalFee=totalFee/1000;
+		}else if(totalFee<1000d){
+			totalFee=totalFee/10000;
+		}else {
+			totalFee=totalFee/100000;
+		}
+		return totalFee;
 	}
 
 	public void notifyOrder(String outTradeNo, String orderId) {
@@ -826,6 +856,14 @@ public class ClientServiceImpl implements ClientService {
 					depositLogRepository.save(dl);
 					depositSummaryRepository.save(ds);
 				}
+				//处理优惠券信息，用于既用了微信，又用了优惠券
+				if(!StringUtil.isBlank(order.getCouponId()+"")) {
+					System.out.println("回调时发现了优惠券！！");
+					Coupon c=couponRepository.findOne(order.getCouponId());
+					c.setState(Constants.STATE_P);
+					couponRepository.save(c);
+				}
+				
 
 			}
 		} else {// 充值
@@ -972,18 +1010,22 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	// 注册的时候，送三张优惠券，每到一个月，过期一张
-	public void saveCoupon4Register(long uid) {
+	public void saveCoupon4Register(String openId) {
 		for (int i = 0; i < 3; i++) {
 			Coupon c = new Coupon();
 			c.setCash(20.0d);
 			c.setState(Constants.STATE_A);
 			c.setPromotionId(1l);
 			c.setType(Constants.COUPON_TYPE_CASH);
-			c.setUid(uid);
-			c.setExpireDate(DateUtil.strToDate(DateUtil.getDiffDate(new Date(),
-					(i + 1) * 30)));
+			c.setOpenId(openId);
+			c.setExpireDate(DateUtil.getDiffDate(new Date(),
+					(i + 1) * 30));
 			couponRepository.save(c);
 		}
+	}
+	
+	public List getCouponListByUid(String openId) {
+		return couponRepository.findByOpenIdAndStateAndExpireDateGreaterThanEqual(openId,Constants.STATE_A,DateUtil.date2Str(new Date()));
 	}
 
 }

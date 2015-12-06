@@ -36,7 +36,8 @@
 	    CONSTELLATION as constellation,
 	    address as address,
 	    descr as descr,
-	    salary as salary 
+	    salary as salary ,
+	     photo as photo 
 	    from t_worker w  where state='A'  
   <include refid="getWorkerCondition"/> 
 	</sql>

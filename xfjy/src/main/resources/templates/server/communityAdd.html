@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	 <script type="text/javascript">
+	 $().ready(function() {
+		formValidate();
+	 }); 
+	 
+	 function formValidate(){
+		 $("#aform").validate({
+		     	focusInvalid:false	, 
+		     	rules : {
+		     		"name":{
+		     			required:true 
+		     		}  
+		     	},
+		         messages: {
+		             
+		         }
+		     });
+	 }
+	 
+	 
+	 function save(){ 
+		   var path = basePath+"/server/saveCommu";  
+			$('#aform').attr("action", path).submit(); 
+	 }
+	 
+	 
+    </script> 
+</head>
+
+<form id="aform" th:action="@{/server/updateCar}"  method="post"   >
+	<div style="display:none">
+		<input type="hidden" id="id" name="id"  th:value="${commu.id}"  />
+	</div>
+
+	 <div id="userAdd">
+	 	<table class="table table-bordered table-striped" >
+	 		<tr>
+	 			<td align="right" width="200px">区域：</td>
+	 			<td>
+	 				<select name="areaId"
+								style="height: 50px; width: 120px">
+								<option th:each="area : ${areaList}" th:value="${area.id}"
+									th:text="${area.name}" th:selected="${commu.areaId == area.id}"></option>
+							</select>
+	 			</td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right">小区名称：</td>
+	 			<td>
+	 				 <input type="text" id="name" name="name" th:value="${commu.name}"/>
+	 			</td>
+	 		</tr>
+	 		<tr id="carPrice">
+	 			<td align="right">详细位置</td>
+	 			<td>
+	 				<input type="text" id="address" size="50" name="address" th:value="${commu.address}"/>
+	 			</td>
+	 		</tr>
+	 	</table>
+	 </div>
+</form>
+</html>

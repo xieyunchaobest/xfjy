@@ -30,8 +30,8 @@ public class Coupon {
 	@Column(name = "CODE")
 	private String code;
 	
-	@Column(name = "U_ID")
-	private Long uid;
+	@Column(name = "OPEN_ID")
+	private String openId;
  
 	
 	@Column(name = "BATCH_CODE")
@@ -53,7 +53,7 @@ public class Coupon {
 	private Double cash;
 	
 	@Column(name = "EXPIRE_DATE")
-	private Date expireDate;
+	private String expireDate;
 	
 	@Column(name = "STATE")
 	private String state; //删除，使用，未用
@@ -61,12 +61,12 @@ public class Coupon {
 	@Column(name = "CREATE_TIME")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createTime;
+	private Date createTime=new Date();
 	
 	@Column(name = "UPDATE_TIME")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date updateTime;
+	private Date updateTime=new Date();
 	
 	@Column(name = "TITLE")
 	private String title;
@@ -84,15 +84,16 @@ public class Coupon {
 	}
 
 
+ 
 
-	public Long getUid() {
-		return uid;
+	public String getOpenId() {
+		return openId;
 	}
 
 
 
-	public void setUid(Long uid) {
-		this.uid = uid;
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 
 
@@ -201,13 +202,13 @@ public class Coupon {
 
 
 
-	public Date getExpireDate() {
+	public String getExpireDate() {
 		return expireDate;
 	}
 
 
 
-	public void setExpireDate(Date expireDate) {
+	public void setExpireDate(String expireDate) {
 		this.expireDate = expireDate;
 	}
 

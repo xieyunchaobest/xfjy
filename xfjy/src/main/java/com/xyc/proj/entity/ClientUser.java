@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.xyc.proj.utility.DateUtil;
 
@@ -29,6 +30,9 @@ public class ClientUser {
 
 	@Column(name = "MOBILE_NO")
 	private String mobileNo;
+	
+	@Transient
+	private double fee;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATE_TIME")
@@ -68,5 +72,15 @@ public class ClientUser {
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
+
+	public double getFee() {
+		return fee;
+	}
+
+	public void setFee(double fee) {
+		this.fee = fee;
+	}
+	
+	
 
 }

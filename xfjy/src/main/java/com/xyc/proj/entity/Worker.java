@@ -108,10 +108,13 @@ public class Worker {
 	private Double salary;
 
 	@Column(name = "STATE")
-	private String state;
+	private String state="A";
 
 	@Column(name = "PASS_WORD")
 	private String password;
+	
+	@Column(name = "photo")
+	private String photo;
 
 	public Worker() {
 	}
@@ -282,6 +285,14 @@ public class Worker {
 
 	public void setEducationText(String educationText) {
 		this.educationText = educationText;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	public String getWorkTime() {

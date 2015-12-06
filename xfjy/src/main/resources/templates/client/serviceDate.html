@@ -677,11 +677,12 @@ $("button[xtype='tmsel']").click(function(){
 	  // alert($(target).val());
 	  var serviceType=$("#serviceType").val();
 	   var serviceDate=$("#serviceDate4sg").val();
+	   var userAddressId=$("#userAddressId").val();
 	  console.log('serviceDate='+serviceDate);
 	  if(serviceType=='CC'){
 		  $.ajax({
 	           type: "POST",
-	           url: basePath+'/client/getDrationListState?serviceDate='+serviceDate+'&serviceType='+serviceType,
+	           url: basePath+'/client/getDrationListState?serviceDate='+serviceDate+'&serviceType='+serviceType+'&userAddressId='+userAddressId,
 	           data:"",
 	           success: function(data) {
 	        	   console.log(data);

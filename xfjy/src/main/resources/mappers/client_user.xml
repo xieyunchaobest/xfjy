@@ -3,7 +3,7 @@
 <mapper namespace="com.xyc.proj.mapper.ClientUserMapper" >
   
  
-  <select id="getClientUserPage" resultType="java.util.HashMap" parameterType="com.xyc.proj.entity.ClientUser">
+  <select id="getClientUserPage" resultType="com.xyc.proj.entity.ClientUser" parameterType="com.xyc.proj.entity.ClientUser">
  	<include refid="queryClientUser"/>
     <include refid="queryClientUserCondition"/>      
  <![CDATA[ limit  #{start} , #{end} ]]>
@@ -12,7 +12,7 @@
  
   
   <sql id="queryClientUser">
-  	  select
+  	  select 
   	  t1.mobile_no as mobileNo,
   	  t2.fee as fee
   	  from T_CLIENT_USER t1 ,T_DEPOSIT_SUMMARY t2 

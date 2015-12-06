@@ -30,6 +30,14 @@ var packages='';
 var signType='';
 var paySign='';
 function createOrder(){
+	var couponCheck=$("#payMode4yhq").prop('checked');
+	if(couponCheck==true){
+		if($("#couponId").val()==''){
+			$("#spnwarngin").text('请选择优惠券！');
+			return;
+		}
+	}
+	
 	$("#btnPay").text('支付中...');
 	$("#btnPay").attr("disabled",true); 
 	 $.ajax({
@@ -38,13 +46,18 @@ function createOrder(){
             data:$("#aform").serialize(),
             success: function(data) {
             	if(data.resultCode=="S"){
-            		prepay_id=data.prepay_id;
-            		appId=data.parm.appId;
-            		timeStamp=data.parm.timeStamp;
-            		nonceStr=data.parm.nonceStr;
-            		packages=data.parm.package;
-            		paySign=data.parm.paySign;
-            		pay();
+            		if(data.payMode=='OW' || data.payMode=='WY'|| data.payMode=='WC'){//如果支付方式为
+            			prepay_id=data.prepay_id;
+                		appId=data.parm.appId;
+                		timeStamp=data.parm.timeStamp;
+                		nonceStr=data.parm.nonceStr;
+                		packages=data.parm.package;
+                		paySign=data.parm.paySign;
+                		pay();
+            		}else{
+           			 alert('订单已成功处理！');
+        			 $("#btnPay").text('支付成功');
+        		}
             	}else{
             		 alert('订单处理失败！');
             	}
@@ -90,22 +103,67 @@ function pay(){
 $(function(){
 	disable();
 });
+function cbcheck(flag){
+	 if(flag=='B'){
+		 if($("#payMode4ye").prop("checked")==true){
+			 $("#payMode4ye").prop("checked",false);
+		 }else{
+			 $("#payMode4ye").prop("checked",true);
+		 }
+		
+	 }else{
+		 if($("#payMode4yhq").prop("checked")==true){
+			 $("#payMode4yhq").prop("checked",false);
+		 }else{
+			 $("#payMode4yhq").prop("checked",true);
+		 }
+		 
+	 }
+	 resetCheckBox(flag);
+}
+
+function resetCheckBox(flag){
+	if(flag=='B'){
+		 if($("#payMode4ye").prop('checked')==true){
+			  $("#payMode4yhq").prop('checked',false);
+			  $("#couponId").val('');
+			  $("input[name='cbcouponId']").prop('checked',false);
+			  $("input[name='cbcouponId']").hide();
+			  $("span[name='txtrdcoupon']").hide();
+			  $("#payMode").val('OY');
+		  }
+	 }else{
+		 if($("#payMode4yhq").prop('checked')==true){
+			 $("#payMode").val('OC');
+			  $("#payMode4ye").prop('checked',false);
+			  cbcheck4coupon();
+		  }
+	 }
+}
+
 
 function disable(){
 	 var balance= $("#spnfee").text();
-	 var iba=parseInt(balance);
+	 var iba=parseFloat(balance);
 	 if(iba==0){
-		 $("#useBalance").attr("disabled",true); 
+		 $("#payMode4ye").attr("disabled",true); 
+	 }
+	 
+	 var couponCount=$("#couponCount").val();
+	 var icouponCount=parseFloat(couponCount);
+	 if(icouponCount==0){
+		 $("#payMode4yhq").hide(); 
+		 $("#spancoupon").hide();
 	 }
 }
 
-function cbcheck(){
-	 if($("#useBalance").prop("checked")==true){
-		 $("#useBalance").prop("checked",false);
-	 }else{
-		 $("#useBalance").prop("checked",true);
+function cbcheck4coupon(){
+	 if($("#payMode4yhq").prop('checked')==true){
+		 $("input[name='cbcouponId']").show();
+		 $("span[name='txtrdcoupon']").show();
 	 }
 }
+
 	 
 </script>
 
@@ -135,6 +193,9 @@ function cbcheck(){
    			<input type="hidden" name="area" id="area" th:value="${order.area}" />
    			<input type="hidden" name="name" id="name" th:value="${order.name}" />
    		
+   			<input type="hidden" id="couponCount"  name="couponCount" th:value="${couponCount}" />
+   			<input type="hidden" id="couponId"  name="couponId"   />
+   			<input type="hidden" id="payMode"  name="payMode"   />
 		</div>
 		<div class="container-fluid">
 		<div style="height:20px"></div>
@@ -174,10 +235,22 @@ function cbcheck(){
 			</ul>
 
 			<div style="mragin-top: 15px; height: 40px;">
-				<input type="checkbox" style="float: left" id="useBalance"
-					name="useBalance" /> <span onclick="cbcheck()">使用余额(</span><span
-					th:text="${ds.fee}" id="spnfee" onclick="cbcheck()"></span><span
-					onclick="cbcheck()">)元</span> <span onclick="cbcheck()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<input type="checkbox" style="float: left" id="payMode4ye"
+					name="payMode4ye" onchange="resetCheckBox('B')" value="OY" /> <span
+					onclick="cbcheck('B')">使用余额(</span><span th:text="${ds.fee}"
+					id="spnfee" onclick="cbcheck('B')"></span><span
+					onclick="cbcheck('B')">)元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <input
+					type="checkbox" id="payMode4yhq" name="payMode4yhq"
+					onchange="resetCheckBox('C')" value="OC" /> <span
+					onclick="cbcheck('C')" id="spancoupon">使用优惠券</span>
+			</div>
+			<div>
+				<span th:each="item:${couponList}"> <input type="radio"
+					name="cbcouponId" style="display: none" th:value="${item.id}"
+					onclick="javascript:$('#couponId').val($(this).val())" /> <span
+					style="display: none" name="txtrdcoupon"
+					th:text="${item.cash}+'元&nbsp;&nbsp;&nbsp;&nbsp;'" />
+				</span>
 			</div>
 
 			<div class="row" id="warnginInfo">

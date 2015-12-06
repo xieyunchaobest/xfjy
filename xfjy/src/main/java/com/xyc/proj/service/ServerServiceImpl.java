@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.xyc.proj.entity.ClientUser;
+import com.xyc.proj.entity.Community;
+import com.xyc.proj.entity.Config;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.OrderWorker;
 import com.xyc.proj.entity.Schedule;
@@ -23,6 +25,8 @@ import com.xyc.proj.mapper.CommunityMapper;
 import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.WorkerMapper;
 import com.xyc.proj.pay.Configure;
+import com.xyc.proj.repository.CommunityRepository;
+import com.xyc.proj.repository.ConfigRepository;
 import com.xyc.proj.repository.OrderRepository;
 import com.xyc.proj.repository.OrderWorkerRepository;
 import com.xyc.proj.repository.ScheduleRepository;
@@ -64,6 +68,10 @@ public class ServerServiceImpl implements ServerService {
 	OrderWorkerRepository orderWorkerRepository;
 	@Autowired
 	ScheduleRepository scheduleRepository;
+	@Autowired
+	CommunityRepository communityRepository;
+	@Autowired
+	ConfigRepository configRepository;
 
 	public PageView getWorkPage(Map m) {
 		PageView pv = new PageView((Integer) m.get("currentPageNum"));
@@ -87,6 +95,12 @@ public class ServerServiceImpl implements ServerService {
 					w.setEducationText("本科");
 				} else if (Constants.EDUCATIONAL_LEVEL_SS.equals(w.getEducation())) {
 					w.setEducationText("硕士");
+				}
+				
+				if(Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeOne())) {
+					w.setServiceTypeTwoName("保洁");
+				}else if(Constants.WORK_SERVICE_TYPE_JZ.equals(w.getServiceTypeOne())) {
+					w.setServiceTypeTwoName("家政");
 				}
 
 				if (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeTwo())) {
@@ -311,5 +325,77 @@ public class ServerServiceImpl implements ServerService {
 			}
 		}
 		return dayList;
+	}
+	
+	
+	public void saveWorker(Worker w) {
+		w=workerRepository.save(w);
+		long id=w.getId();
+		String code = String.format("%06d", id);     
+		 w.setCode("XFJY"+code);
+		 workerRepository.save(w);
+	}
+	
+	public List findTeachers() {
+		return workerRepository.findByRole("T");
+	}
+	
+	
+	public Worker findWorker(Long id) {
+		return workerRepository.findOne(id);
+	}
+	
+	public Community findCommunity(Long id) {
+		return communityRepository.findOne(id);
+	}
+	
+	public void saveCommunity(Community c) {
+		communityRepository.save(c); 
+	}
+	
+	public void deleteCommu(String commuIds) {
+		String workArr[] = commuIds.split(",");
+		for (int i = 0; i < workArr.length; i++) {
+			Long id = Long.parseLong(workArr[i]);
+			Community w = communityRepository.findOne(id);
+			w.setState(Constants.STATE_P);
+			communityRepository.save(w);
+		}
+	}
+	
+	public Map getConfigMap() {
+		List configList= configRepository.findAll();
+		Map configMap=new HashMap();
+		for(int i=0;i<configList.size();i++) {
+			Config c=(Config)configList.get(i);
+			if(c.getConfigCode().equals("PTBJDJ")) {
+				configMap.put("PTBJDJ", c);
+			}else if(c.getConfigCode().equals("DBJDJ")) {
+				configMap.put("DBJDJ", c);
+			}else if(c.getConfigCode().equals("CNCDJ")) {
+				configMap.put("CNCDJ", c);
+			}else if(c.getConfigCode().equals("CYTDJ")) {
+				configMap.put("CYTDJ", c);
+			}else if(c.getConfigCode().equals("KHDJ")) {
+				configMap.put("KHDJ", c);
+			}else if(c.getConfigCode().equals("QJGJFY4PTBJ")) {
+				configMap.put("QJGJFY4PTBJ", c);
+			}else if(c.getConfigCode().equals("QJGJFY4DBJ")) {
+				configMap.put("QJGJFY4DBJ", c);
+			}else if(c.getConfigCode().equals("QJGJFY4CBL")) {
+				configMap.put("QJGJFY4CBL", c);
+			}else if(c.getConfigCode().equals("QJGJFY4KH")) {
+				configMap.put("QJGJFY4KH", c);
+			}
+		}
+		return configMap;
+	}
+
+	public Config getConfigByCode(String code) {
+		return configRepository.findByConfigCode(code);
+	}
+	
+	public void saveConfig(Config config) {
+		configRepository.save(config);
 	}
 }

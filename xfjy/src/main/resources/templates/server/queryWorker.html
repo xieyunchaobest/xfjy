@@ -3,11 +3,12 @@
 	<head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title>订单查询</title>
+<title>阿姨查询</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
 <link rel="stylesheet" th:href="@{/app/css/font-awesome.min.css}" />
+
 <link rel="stylesheet" th:href="@{/app/css/bootstrap-datetimepicker.css}" />
 
 <script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
@@ -15,6 +16,7 @@
 <script th:inline="javascript" th:src="@{/app/js/commonSort.js}"></script>
 <script th:inline="javascript" th:src="@{/app/js/commonPage.js}"></script>
 <script th:src="@{/app/js/vendor/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/app/validation/jquery.validate.min.js}"></script>
 <script th:src="@{/app/js/public.js}"></script>
 
 <script type="text/javascript">
@@ -32,6 +34,45 @@
  		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
 		$('#orderByForm').attr("action", path);
  	}
+ 	
+ 	
+ 	//<![CDATA[
+	function showAddModal(flag){ 
+		var len=$('input:checked').length;
+		if(flag=='U'){
+			if(len==1){
+	 			var wid=$('input:checked').val();
+	 			$("#dvmodal-body").html("").load(basePath+"/server/workerAddInit.html?wid="+wid+"&rn="+Math.random(), function() {
+	 				$('#inputDialog').modal('show'); 
+	 				});
+			}
+		}else{
+			$("#dvmodal-body").html("").load(basePath+"/server/workerAddInit.html?rn="+Math.random(), function() {
+ 				$('#inputDialog').modal('show'); 
+ 				});
+		}
+	}
+	
+	function deleteSelect(){
+		var len=$('input:checked').length;
+		if(len>=1){
+			$.ajax({
+	            type: "POST",
+	            url: basePath+'/server/deleteWorker',
+	            data:$("#orderByForm").serialize(),
+	            success: function(data) {
+	            	if(data=="S"){
+	            		alert('处理成功！');
+	            	}else{
+	            		 alert('处理失败！');
+	            	}
+	            }
+	        });  
+		}
+		 
+	}
+	/*]]>*/
+	
 </script>
 </head>
 <body>
@@ -55,7 +96,7 @@
 								name="storeId" style="height: 50px; width: 120px">
 								<option value="">全部</option>
 								<option th:each="store : ${storeList}" th:value="${store.id}"
-									th:text="${store.name}" th:selected="${storeId == store.id}"></option>
+									th:text="${store.name}" th:selected="${parms.storeId == store.id}"></option>
 							</select>
 						</div>
 
@@ -64,14 +105,14 @@
 								th:value="${parms.name}" />
 						</div>
 						<div class="col-xs-4" style="width: 220px">
-							<label>服务类型:</label> <select name="serviceType"
+							<label>服务类型:</label> <select name="serviceTypeTwo"
 								style="height: 50px; width: 120px">
 								<option value="">全部</option>
-								<option value="CC" th:selected="${serviceType == 'CC'}">保洁</option>
-								<option value="YS" th:selected="${serviceType == 'YS'}">月嫂</option>
-								<option value="YY" th:selected="${serviceType == 'YY'}">孕婴、育儿嫂</option>
-								<option value="YL" th:selected="${serviceType == 'YL'}">养老护工</option>
-								<option value="JZ" th:selected="${serviceType == 'JZ'}">家政、小时工</option>
+								<option value="C" th:selected="${parms.serviceTypeTwo == 'C'}">保洁</option>
+								<option value="YS" th:selected="${parms.serviceTypeTwo == 'YS'}">月嫂</option>
+								<option value="YY" th:selected="${parms.serviceTypeTwo == 'YY'}">孕婴、育儿嫂</option>
+								<option value="YL" th:selected="${parms.serviceTypeTwo == 'YL'}">养老护工</option>
+								<option value="JZ" th:selected="${parms.serviceTypeTwo == 'JZ'}">家政、小时工</option>
 							</select>
 						</div>
 					</div>
@@ -81,8 +122,8 @@
 						<label>角色:</label> <select name="role"
 							style="height: 50px; width: 120px">
 							<option value="">全部</option>
-							<option value="T" th:selected="${parms.role == 'A'}">老师</option>
-							<option value="A" th:selected="${parms.role== 'T'}">阿姨</option>
+							<option value="T" th:selected="${parms.role == 'T'}">老师</option>
+							<option value="A" th:selected="${parms.role== 'A'}">阿姨</option>
 						</select>
 					</div>
 					<div class="col-xs-4" style="width: 220px">
@@ -103,6 +144,7 @@
 			<table class="table table-bordered table-striped" style="width:2000px">
 				<thead>
 					<tr>
+						<th  style="width:50px">选择</th>
 						<th>姓名</th>
 						<th>员工编号</th>
 						<th>身份证号</th>
@@ -122,10 +164,14 @@
 						<th>工作时间</th>
 						<th>薪资</th>
 						<th>简介</th>
+						<th>照片</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr  th:each="item : ${pageView.resultList}">
+						<td>
+							<input type="checkbox" id="cbchooseworker" name="workerIds" th:attr="value=''+${item.id}+''" />
+						</td>
 						<td style="width:35px" th:text="${item.name}"></td>
 						<td th:text="${item.code}"></td>
 						<td th:text="${item.idNo}"></td>
@@ -145,6 +191,9 @@
 						<td th:text="${item.workTimeName}"></td>
 						<td th:text="${item.salary}"></td>
 						<td th:text="${item.descr}"></td>
+						<td>
+							<a th:href="@{'/app/uploadfiles/workerphoto/'+${item.photo}}" target="_blank">查看</a> 
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -156,9 +205,41 @@
 			  			<input type="hidden" name="totalRecord" th:value="${pageView.totalRecord}"/>
 					</nav>
 				</div> 
+				<div style="float: left; margin-right: 15px;">
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="showAddModal('A')">添加</button>
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="showAddModal('U')">修改</button>
+						<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="deleteSelect()">删除</button>
+				</div> 
 			</div>
 		</div>
 	</form>
+	
+	
+		<div class="modal fade" id="inputDialog" tabindex="-1" role="dialog"  aria-labelledby="inputDialogLabel" aria-hidden="true">
+		   <div class="modal-dialog">
+		      <div class="modal-content" style="width:800px">
+		         <div class="modal-header">
+		            <button type="button" class="close" 
+		               data-dismiss="modal" aria-hidden="true">
+		                  &times;
+		            </button>
+		            <h4 class="modal-title" id="inputDialoglLabel">添加/修改阿姨信息</h4> 
+		         </div>
+		         <div class="modal-body" id='dvmodal-body'></div>
+		         <div style="text-align:center;height:60px">
+		            <button type="button" id="submit"  onclick="save()"  class="btn btn-danger fl btn-lg" style="border-radius:0px;width:128px;height:34px;line-height:10px;"> 确定 </button>
+		             <button type="button" data-dismiss="modal"
+								class="btn btn-lg btn-blue" style="border-radius:0px;width:128px;height:34px;margin-left:25px;line-height:10px;">取消</button>
+		         
+		         </div>
+		      </div>
+			</div>
+		</div>
+		
+	
 	</div>
 <script th:inline="javascript">
         /*<![CDATA[*/

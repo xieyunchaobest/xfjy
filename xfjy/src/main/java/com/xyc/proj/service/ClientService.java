@@ -65,5 +65,6 @@ public interface ClientService {
 	public  List getScheduleList4Month(Order o,List workerList);
 	public  List getScheduleList4OneDay(Order o,List workerList);
 	public ClientUser findClientUserByMobileNo(String mobileNo);
-	public void saveCoupon4Register(long uid);
+	public void saveCoupon4Register(String openId);
+	public List getCouponListByUid(String uid) ;
 }

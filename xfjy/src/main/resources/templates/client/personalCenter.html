@@ -27,7 +27,9 @@ function toAddAddress(){
 	window.location.href=basePath+"/client/addressSelect.html?openId="+openId; 
 }
  
- 
+ function showCoupon(){
+	 $("#coupons").show();
+ }
  
 </script>
 
@@ -58,6 +60,25 @@ function toAddAddress(){
 			<div class=" col-xs-4">
 				<button type="button" onclick="dopsit()"   class="btn col-xs-8    btn-info  btn-lg">充值</button>
 			</div>
+		</div>
+		
+		<div class="row" >
+			<div class=" col-xs-8" >
+				<ul class="list-group" style="margin-bottom:0px;padding-bottom:0px">
+	  				<li class="list-group-item" >
+	  					<label>优惠券：</label><font color="red"><span th:text="${couponCount}"  ></span><span>张</span></font>
+	  				</li> 
+				</ul> 
+			</div>
+			<div class=" col-xs-4">
+				<button type="button" onclick="showCoupon()"   class="btn col-xs-8    btn-info  btn-lg">查看</button>
+			</div>
+		</div>
+		<div style="margin-top:-0px;margin-bottom:10px;display:none" id="coupons">
+			<h4>
+				<span class="label label-success" style="paddgin:0 0" th:each="coupon : ${couponList}" th:text="${coupon.cash}">
+				</span><span>&nbsp;</span>
+			</h4>
 		</div>
 		
 		<ul class="list-group" onclick="toAddAddress()">

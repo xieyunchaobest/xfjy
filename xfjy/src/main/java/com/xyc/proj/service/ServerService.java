@@ -3,6 +3,8 @@ package com.xyc.proj.service;
 import java.util.List;
 import java.util.Map;
 
+import com.xyc.proj.entity.Community;
+import com.xyc.proj.entity.Config;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.utility.PageView;
 
@@ -32,5 +34,20 @@ public interface ServerService {
 	public List getDispatchedWorkerByOrderId(Long orderId);
 
 	public List getWorkerTimeSheet(Long workerId);
+	
+	public void saveWorker(Worker w);
+	
+	public List findTeachers() ;
+	public Worker findWorker(Long id) ;
+	public Community findCommunity(Long id) ;
+	
+	public void saveCommunity(Community c);
+	public void deleteCommu(String commuIds);
+	
+	public Map getConfigMap() ;
+	
+	public Config getConfigByCode(String code) ;
+	
+	public void saveConfig(Config config);
 
 }

@@ -13,8 +13,9 @@ public class PageView {
 	private long start = 0;
 	
 	public int getCurrentMaxCnt() {
-		currentMaxCnt = pageShowCnt * currentPageNum;
-		return currentMaxCnt;
+//		currentMaxCnt = pageShowCnt * currentPageNum;
+//		return currentMaxCnt;
+		return 10;
 	}
 
 	

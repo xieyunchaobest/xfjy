@@ -12,6 +12,8 @@ public class Test {
 	public static void main(String a[]) {
 		 String s="20141223131415";
 		 System.out.println(s.substring(8, 10));
+		 String ss=null;
+		 String sss=ss+"";
 		
 	}
 }

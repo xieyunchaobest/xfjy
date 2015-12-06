@@ -29,6 +29,11 @@
 	 }
 	 
 	 function toDateSelect(){
+		 if($("#userAddressId").val()=='' || $("#userAddressId").val()=='0'){
+			 $("#spnwarngin").text('请先选择地址！');
+			 return ;
+		 }
+		 
 		 var path = basePath+"/client/serviceDate";  
 			$('#aform').attr("action", path).submit();
 		 // window.open (basePath+"/client/serviceDate",'newwindow','height=300,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');

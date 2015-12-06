@@ -46,7 +46,7 @@ public class Order {
 	private String mobileNo="";
 	
 	@Column(name = "PAY_MODE")
-	private String payMode="W";
+	private String payMode="";
 	
 	@Transient
 	private String payModeText="";

@@ -72,25 +72,39 @@ public class ClientController {
 	 * @return
 	 */
 	@RequestMapping("/client/login.html")
-	public String toLogin(@RequestParam(value = "code", required = false) String code, Model model) {
+	public String toLogin(@RequestParam(value = "code", required = false) String code,
+			Model model,HttpSession session) {
 		String res = "client/index";
 		try {
-			System.out.println("xxxxxxxxxxxxxxxxxxxxxxx=" + code);
-			String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + "appid=" + Configure.appID + "&secret="
-					+ Configure.WE_CHAT_APPSECRET + "&code=" + code + "&grant_type=authorization_code";
-			com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(url, "GET", null);
-			String jsonstr = tokenJson.toString();
-			System.out.println("token json is =====" + jsonstr);
-			String accessToken = tokenJson.getString("access_token");
-			String expiresIn = tokenJson.getString("expires_in");
-			String refreshToken = tokenJson.getString("refresh_token");
-			String openId = tokenJson.getString("openid");
-			System.out.println("yyyyyyyyyyyyyyyyyyy=" + openId);
+			String openId="";
+			if(session.getAttribute("openId")!=null) {
+				String oid=(String)session.getAttribute("openId");
+				if(!StringUtil.isBlank(oid)) {
+					openId=oid;
+					System.out.println("已经从session中获取openId"+openId);
+				}
+			}else {
+				System.out.println("session中没有openId,重新获取");
+				System.out.println("xxxxxxxxxxxxxxxxxxxxxxx=" + code);
+				String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + "appid=" + Configure.appID + "&secret="
+						+ Configure.WE_CHAT_APPSECRET + "&code=" + code + "&grant_type=authorization_code";
+				com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(url, "GET", null);
+				String jsonstr = tokenJson.toString();
+				System.out.println("token json is =====" + jsonstr);
+				String accessToken = tokenJson.getString("access_token");
+				String expiresIn = tokenJson.getString("expires_in");
+				String refreshToken = tokenJson.getString("refresh_token");
+				openId = tokenJson.getString("openid");
+				session.setAttribute("openId", openId);
+				System.out.println("yyyyyyyyyyyyyyyyyyy=" + openId);
+			}
+			
+			
 			ClientUser cu = clientService.getClientUser(openId);
 			if (cu == null || cu.getId() == 0l) {
 				res = "client/login";
 			}
-
+			System.out.println("初始化登录界面openId="+openId);
 			model.addAttribute("openId", openId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,6 +125,7 @@ public class ClientController {
 			String mobileNo = request.getParameter("mobileNo");
 			String authCode = request.getParameter("authCode");
 			String openId = request.getParameter("openId");
+			System.out.println("登录时获取的openId="+openId);
 			model.addAttribute("openId", openId);
 			ulist = clientService.getUserListByMobileNoAndAuthCode(mobileNo, authCode);
 			if (ulist != null && ulist.size() > 0) {
@@ -128,7 +143,7 @@ public class ClientController {
 					}
 				}else {
 					cu=clientService.saveClientUser(cu);
-					clientService.saveCoupon4Register(cu.getId());
+					clientService.saveCoupon4Register(cu.getOpenId());
 					res = "S";
 				}
 			} else {
@@ -193,9 +208,11 @@ public class ClientController {
 			serviceDate = "2015-11-10";
 		}
 		String serviceType = request.getParameter("serviceType");
+		String userAddressId=request.getParameter("userAddressId");
 		Map m = new HashMap();
 		m.put("serviceDate", serviceDate);
 		m.put("serviceType", serviceType);
+		m.put("userAddressId", userAddressId);
 		List resList = new ArrayList();
 		if (Constants.SERVICE_TYPE_CC.equals(serviceType)) {
 			resList = clientService.getNonReservationTimeList(m);
@@ -458,7 +475,6 @@ public class ClientController {
 		ua.setOpenId(openId);
 		clientService.saveUserAddress(ua);
 		return "forward:/client/addressSelect.html";
-
 	}
 
 	/**
@@ -491,9 +507,11 @@ public class ClientController {
 	public List getNonReservationTimeList(Model model, HttpSession Session, HttpServletRequest request) {
 		String busiDate = request.getParameter("serviceDate");
 		String serviceType = request.getParameter("serviceType");
+		String userAddressId=request.getParameter("userAddressId");
 		Map m = new HashMap();
 		m.put("serviceDate", busiDate);
 		m.put("serviceType", serviceType);
+		m.put("userAddressId", userAddressId);
 		List resList = clientService.getNonReservationTimeList(m);
 		return resList;
 	}
@@ -584,6 +602,10 @@ public class ClientController {
 			ds = new DepositSummary();
 			ds.setFee(0d);
 		}
+		//优惠券
+		List couponList=clientService.getCouponListByUid(openId);
+		model.addAttribute("couponList", couponList);
+		model.addAttribute("couponCount", couponList.size());
 		model.addAttribute("order", order);
 		model.addAttribute("ds", ds);
 		return "client/cleanOrderConfirm";
@@ -667,6 +689,9 @@ public class ClientController {
 			ds = new DepositSummary();
 			ds.setFee(0d);
 		}
+		List couponList=clientService.getCouponListByUid(openId);
+		model.addAttribute("couponList", couponList);
+		model.addAttribute("couponCount", couponList.size());
 		model.addAttribute("ds", ds);
 
 		return "client/khOrderConfirm";
@@ -682,6 +707,10 @@ public class ClientController {
 			ds = new DepositSummary();
 			ds.setFee(0d);
 		}
+		//优惠券
+		List couponList=clientService.getCouponListByUid(openId);
+		model.addAttribute("couponList", couponList);
+		model.addAttribute("couponCount", couponList.size());
 		model.addAttribute("ds", ds);
 		model.addAttribute("order", order);
 		return "client/cblOrderConfirm";
@@ -691,8 +720,11 @@ public class ClientController {
 	public String personalCenter(Model model, HttpSession Session, HttpServletRequest request,
 			@RequestParam(value = "openId", required = true) String openId) {
 		Map resMap = clientService.personalCenter(openId);
+		List couponList=clientService.getCouponListByUid(openId);
 		model.addAttribute("resMap", resMap);
 		model.addAttribute("openId", openId);
+		model.addAttribute("couponList", couponList);
+		model.addAttribute("couponCount", couponList.size());
 		return "client/personalCenter";
 	}
 
@@ -754,11 +786,16 @@ public class ClientController {
 	 * @return
 	 */
 	@RequestMapping("/client/workerTask.html")
-	public String workerTask(Model model, HttpSession Session, HttpServletRequest request,
+	public String workerTask(Model model, HttpSession session, HttpServletRequest request,
 			@RequestParam(value = "code", required = true) String code,
 			@RequestParam(value = "serviceDate", required = false) String serviceDate,
 			@RequestParam(value = "openId", required = false) String openId) {
-
+		
+		if(session.getAttribute("openId")!=null) {
+			String opId=(String)session.getAttribute("openId");
+			openId=opId;
+		}
+		
 		System.out.println("code===============" + code);
 		if (StringUtil.isBlank(openId)) {
 			System.out.println("没有发现openId========");
@@ -767,6 +804,7 @@ public class ClientController {
 			com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(url, "GET", null);
 			System.out.println("tokenJsontokenJsontokenJson=" + tokenJson.toJSONString());
 			openId = tokenJson.getString("openid");
+			session.setAttribute("openId", openId);
 		}
 		System.out.println("openId=======" + openId);
 		Map resMap = clientService.getWorkerTask(openId, serviceDate);
