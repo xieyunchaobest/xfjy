@@ -71,7 +71,7 @@ public class ScheduledTasks {
 		return str;
 	}
 
-	// @Scheduled(fixedRate = 150000)
+	 @Scheduled(fixedRate = 150000)
 	public void dispatchTask() {
 		List orderList = orderRepository.getCleanOrderWithAddressInfo("");
 

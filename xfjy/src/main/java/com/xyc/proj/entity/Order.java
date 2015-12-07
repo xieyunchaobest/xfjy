@@ -95,6 +95,10 @@ public class Order {
 	@Column(name = "TOTAL_FEE")
 	private Double totalFee;
 	
+	
+	@Column(name = "WECHAT_FEE")
+	private Double wechatfee;//使用微信支付的金额
+	
 	@Column(name = "TOOL_FEE_CLEAN")
 	private Double toolFeeClean;//工具费用
 	
@@ -562,6 +566,16 @@ public class Order {
 
 	public void setCouponId(Long couponId) {
 		this.couponId = couponId;
+	}
+
+
+	public Double getWechatfee() {
+		return wechatfee;
+	}
+
+
+	public void setWechatfee(Double wechatfee) {
+		this.wechatfee = wechatfee;
 	}
 
 

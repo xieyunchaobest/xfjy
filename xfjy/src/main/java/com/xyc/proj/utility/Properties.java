@@ -15,6 +15,10 @@ public class Properties {
 	private String fileuploadpath;
 	private String serveraddress;
 	private String wechatkey;
+	
+	private String SpCode;
+	private String LoginName;
+	private String Password;
 
 	public String getSmsurl() {
 		return smsurl;
@@ -94,6 +98,30 @@ public class Properties {
 
 	public void setWechatkey(String wechatkey) {
 		this.wechatkey = wechatkey;
+	}
+
+	public String getSpCode() {
+		return SpCode;
+	}
+
+	public void setSpCode(String spCode) {
+		SpCode = spCode;
+	}
+
+	public String getLoginName() {
+		return LoginName;
+	}
+
+	public void setLoginName(String loginName) {
+		LoginName = loginName;
+	}
+
+	public String getPassword() {
+		return Password;
+	}
+
+	public void setPassword(String password) {
+		Password = password;
 	}
 
 }

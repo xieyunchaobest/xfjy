@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -54,8 +57,8 @@ import com.xyc.proj.repository.VersionRepository;
 import com.xyc.proj.repository.WorkerRepository;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.MsgUtil;
+import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
-import com.xyc.proj.utility.WeixinUtil;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -101,6 +104,8 @@ public class ClientServiceImpl implements ClientService {
 	OrderWorkerRepository orderWorkerRepository;
 	@Autowired
 	CouponRepository couponRepository;
+	@Autowired
+	Properties properties;
 
 	@Override
 	public void saveUserAuthCode(UserAuthCode u) {
@@ -416,31 +421,60 @@ public class ClientServiceImpl implements ClientService {
 		return cleanToolsRepository.findByServieType(serviceType);
 	}
 
-	// public static void main(String arg[]) {
-	// //new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");
-	// String info = null;
-	// try{
+	
+	public void sendShortMsg(String phoneNo,String authCode) {
+		 String info = null;
+		 try{
+	     String content="您正在登录幸福家缘微信平台,校验码为"+authCode+",10分钟内有效,请勿泄露给他人.";
+		// String content="质控消息:患者大是病历书写不合格,请查看!";
+		 HttpClient httpclient = new HttpClient();
+		 PostMethod post = new
+		 PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
+		 post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
+		 post.addParameter("SpCode", properties.getSpCode());
+		 post.addParameter("LoginName", properties.getLoginName());
+		 post.addParameter("Password", properties.getPassword());
+		 post.addParameter("MessageContent", content);
+		 post.addParameter("UserNumber", phoneNo);
+		
+		 post.addParameter("SerialNumber",  RandomStringGenerator.getRandomNumberByLength(20));
+		 post.addParameter("ScheduleTime", "");
+		 post.addParameter("ExtendAccessNum", "");
+		 post.addParameter("f", "1");
+		 httpclient.executeMethod(post);
+		 info = new String(post.getResponseBody(),"gbk");
+		 System.out.println(info);
+		 }catch (Exception e) {
+			 e.printStackTrace();
+		 }
+	}
+	
+	 public static void main(String arg[]) {
+	 //new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");
+	 String info = null;
+	 try{
+     String content="您正在登录幸福家缘微信平台,校验码为1111,10分钟内有效,请勿泄露给他人.";
 	// String content="质控消息:患者大是病历书写不合格,请查看!";
-	// HttpClient httpclient = new HttpClient();
-	// PostMethod post = new
-	// PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
-	// post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
-	// post.addParameter("SpCode", "217289");
-	// post.addParameter("LoginName", "tj_xfjy");
-	// post.addParameter("Password", "helloWORLD123");
-	// post.addParameter("MessageContent", content);
-	// post.addParameter("UserNumber", "18611298927");
-	// post.addParameter("SerialNumber", "12345678901234567890");
-	// post.addParameter("ScheduleTime", "");
-	// post.addParameter("ExtendAccessNum", "");
-	// post.addParameter("f", "1");
-	// httpclient.executeMethod(post);
-	// info = new String(post.getResponseBody(),"gbk");
-	// System.out.println(info);
-	// }catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
+	 HttpClient httpclient = new HttpClient();
+	 PostMethod post = new
+	 PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
+	 post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
+	 post.addParameter("SpCode", "227764");
+	 post.addParameter("LoginName", "xfjy");
+	 post.addParameter("Password", "xfjy123456");
+	 post.addParameter("MessageContent", content);
+	 post.addParameter("UserNumber", "18611298927");
+	 post.addParameter("SerialNumber", "12345678901234567890");
+	 post.addParameter("ScheduleTime", "");
+	 post.addParameter("ExtendAccessNum", "");
+	 post.addParameter("f", "1");
+	 httpclient.executeMethod(post);
+	 info = new String(post.getResponseBody(),"gbk");
+	 System.out.println(info);
+	 }catch (Exception e) {
+	 e.printStackTrace();
+	 }
+	 }
 
 	public Map getOrderMap(String openId) {
 		Map resMap = new HashMap();
@@ -654,7 +688,7 @@ public class ClientServiceImpl implements ClientService {
 		String payMode = order.getPayMode();
 		boolean goWechat = true;// 是否还需要走微信支付
 		double fee = 0;
-		int finalPay4Wechat=totalFee;//抛去 余额，优惠券 ，最后需要支付的金额
+		int finalPay4Wechat=totalFee;//抛去 余额，优惠券 ，最后需要支付的金额,单位：分
 		String finalPayMode=Constants.ORDER_PAY_MODE_ONLY_WECHAT;
 		if (Constants.ORDER_PAY_MODE_ONLY_YUE.equals(payMode)) {// 如果使用了余额,取这个人的余额
 			DepositSummary ds = getBalance(o.getOpenId());
@@ -735,6 +769,7 @@ public class ClientServiceImpl implements ClientService {
 				order.setPayMode(finalPayMode);
 				orderRepository.save(order);
 			} else {//如果不走威信
+				finalPay4Wechat=0;
 				if(Constants.ORDER_PAY_MODE_ONLY_YUE.equals(finalPayMode)) {//只走余额
 					System.out.println("只走了余额！！！！！");
 					DepositLog dl = new DepositLog();
@@ -757,6 +792,7 @@ public class ClientServiceImpl implements ClientService {
 				order.setState(Constants.ORDER_STATE_PAYED);
 				order.setPayMode(finalPayMode);
 				order.setPayTime(new Date());
+				order.setWechatfee(finalPay4Wechat/100d);
 				orderRepository.save(order);
 			}
 			resMap.put("payMode", finalPayMode);
@@ -997,17 +1033,23 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	
+	public void finishOrder(Long oid, String openId) {
+		Order o =orderRepository.findOne(oid);
+		o.setState(Constants.ORDER_STATE_FINISH);
+		orderRepository.save(o);
+	}
+	
 	public ClientUser findClientUserByMobileNo(String mobileNo) {
 		return clientUserRepository.findByMobileNo(mobileNo);
 	}
 
-	public static void main(String args[]) {
-		com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
-		String accessToken = tokenJson.getString("access_token");
-		com.alibaba.fastjson.JSONObject res = WeixinUtil.httpRequest(Constants.URL_CREATE_MENU + accessToken, "POST",
-				createWeChatMenu());
-		System.out.println("res===" + res);
-	}
+//	public static void main(String args[]) {
+//		com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
+//		String accessToken = tokenJson.getString("access_token");
+//		com.alibaba.fastjson.JSONObject res = WeixinUtil.httpRequest(Constants.URL_CREATE_MENU + accessToken, "POST",
+//				createWeChatMenu());
+//		System.out.println("res===" + res);
+//	}
 	
 	// 注册的时候，送三张优惠券，每到一个月，过期一张
 	public void saveCoupon4Register(String openId) {

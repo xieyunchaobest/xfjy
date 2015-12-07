@@ -74,41 +74,41 @@ public class ClientController {
 	@RequestMapping("/client/login.html")
 	public String toLogin(@RequestParam(value = "code", required = false) String code,
 			Model model,HttpSession session) {
-		String res = "client/index";
-		try {
-			String openId="";
-			if(session.getAttribute("openId")!=null) {
-				String oid=(String)session.getAttribute("openId");
-				if(!StringUtil.isBlank(oid)) {
-					openId=oid;
-					System.out.println("已经从session中获取openId"+openId);
-				}
-			}else {
-				System.out.println("session中没有openId,重新获取");
-				System.out.println("xxxxxxxxxxxxxxxxxxxxxxx=" + code);
-				String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + "appid=" + Configure.appID + "&secret="
-						+ Configure.WE_CHAT_APPSECRET + "&code=" + code + "&grant_type=authorization_code";
-				com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(url, "GET", null);
-				String jsonstr = tokenJson.toString();
-				System.out.println("token json is =====" + jsonstr);
-				String accessToken = tokenJson.getString("access_token");
-				String expiresIn = tokenJson.getString("expires_in");
-				String refreshToken = tokenJson.getString("refresh_token");
-				openId = tokenJson.getString("openid");
-				session.setAttribute("openId", openId);
-				System.out.println("yyyyyyyyyyyyyyyyyyy=" + openId);
-			}
-			
-			
-			ClientUser cu = clientService.getClientUser(openId);
-			if (cu == null || cu.getId() == 0l) {
-				res = "client/login";
-			}
-			System.out.println("初始化登录界面openId="+openId);
-			model.addAttribute("openId", openId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String res = "client/login";
+//		try {
+//			String openId="";
+//			if(session.getAttribute("openId")!=null) {
+//				String oid=(String)session.getAttribute("openId");
+//				if(!StringUtil.isBlank(oid)) {
+//					openId=oid;
+//					System.out.println("已经从session中获取openId"+openId);
+//				}
+//			}else {
+//				System.out.println("session中没有openId,重新获取");
+//				System.out.println("xxxxxxxxxxxxxxxxxxxxxxx=" + code);
+//				String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + "appid=" + Configure.appID + "&secret="
+//						+ Configure.WE_CHAT_APPSECRET + "&code=" + code + "&grant_type=authorization_code";
+//				com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(url, "GET", null);
+//				String jsonstr = tokenJson.toString();
+//				System.out.println("token json is =====" + jsonstr);
+//				String accessToken = tokenJson.getString("access_token");
+//				String expiresIn = tokenJson.getString("expires_in");
+//				String refreshToken = tokenJson.getString("refresh_token");
+//				openId = tokenJson.getString("openid");
+//				session.setAttribute("openId", openId);
+//				System.out.println("yyyyyyyyyyyyyyyyyyy=" + openId);
+//			}
+//			
+//			
+//			ClientUser cu = clientService.getClientUser(openId);
+//			if (cu == null || cu.getId() == 0l) {
+//				res = "client/login";
+//			}
+//			System.out.println("初始化登录界面openId="+openId);
+//			model.addAttribute("openId", openId);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 		return res;
 	}
@@ -259,8 +259,8 @@ public class ClientController {
 	@ResponseBody
 	public Map getAuthCode(Model model, HttpSession Session, HttpServletRequest request) {
 		String mobileNo = request.getParameter("mobileNo");
-		// String randomCode=String.valueOf((int)(Math.random()*9000+1000));
-		String randomCode = "1111";
+		String randomCode=String.valueOf((int)(Math.random()*9000+1000));
+		//String randomCode = "1111";
 		// CCPRestSDK restAPI = new CCPRestSDK();
 		// restAPI.init(properties.getSmsurl(), properties.getSmsport());//
 		// 初始化服务器地址和端口，格式如下，服务器地址不需要写https://
@@ -271,6 +271,7 @@ public class ClientController {
 		// Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new
 		// String[]{randomCode});
 		// if("000000".equals(result.get("statusCode"))) {
+		clientService.sendShortMsg(mobileNo, randomCode);
 		UserAuthCode u = new UserAuthCode();
 		u.setAuthCode(randomCode);
 		u.setMobileNo(mobileNo);
@@ -828,6 +829,25 @@ public class ClientController {
 
 		return res;
 	}
+	
+	// 订单完成
+	@ResponseBody
+	@RequestMapping(value = "/client/finishOrder.html", method = {
+			RequestMethod.POST, RequestMethod.GET })
+	public String finishOrder(
+			@RequestParam(value = "oid", required = true) Long oid,
+			@RequestParam(value = "openId", required = true) String openId,
+			Model model) {
+		String res = "S";
+		try {
+			clientService.finishOrder(oid, openId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			res = "E";
+		}
+
+		return res;
+	}
 
 	@RequestMapping("/client/workerAuth.html")
 	public String workerAuth(Model model) {
@@ -837,6 +857,8 @@ public class ClientController {
 		System.out.println("urlurlurl==" + url);
 		return "redirect:" + url;
 	}
+	
+	
 
 	@Bean
 	public FilterRegistrationBean encodingFilter() {

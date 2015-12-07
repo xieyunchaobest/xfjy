@@ -67,4 +67,8 @@ public interface ClientService {
 	public ClientUser findClientUserByMobileNo(String mobileNo);
 	public void saveCoupon4Register(String openId);
 	public List getCouponListByUid(String uid) ;
+	
+	public void sendShortMsg(String phoneNo,String authCode);
+	
+	public void finishOrder(Long oid, String openId);
 }
