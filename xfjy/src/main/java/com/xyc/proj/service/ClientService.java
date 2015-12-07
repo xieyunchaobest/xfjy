@@ -71,4 +71,7 @@ public interface ClientService {
 	public void sendShortMsg(String phoneNo,String authCode);
 	
 	public void finishOrder(Long oid, String openId);
+	
+	//日常保洁的时候推送客服消息
+		public void sendCustomerMsg4rcbj(Order o);
 }

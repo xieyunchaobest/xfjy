@@ -74,41 +74,41 @@ public class ClientController {
 	@RequestMapping("/client/login.html")
 	public String toLogin(@RequestParam(value = "code", required = false) String code,
 			Model model,HttpSession session) {
-		String res = "client/login";
-//		try {
-//			String openId="";
-//			if(session.getAttribute("openId")!=null) {
-//				String oid=(String)session.getAttribute("openId");
-//				if(!StringUtil.isBlank(oid)) {
-//					openId=oid;
-//					System.out.println("已经从session中获取openId"+openId);
-//				}
-//			}else {
-//				System.out.println("session中没有openId,重新获取");
-//				System.out.println("xxxxxxxxxxxxxxxxxxxxxxx=" + code);
-//				String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + "appid=" + Configure.appID + "&secret="
-//						+ Configure.WE_CHAT_APPSECRET + "&code=" + code + "&grant_type=authorization_code";
-//				com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(url, "GET", null);
-//				String jsonstr = tokenJson.toString();
-//				System.out.println("token json is =====" + jsonstr);
-//				String accessToken = tokenJson.getString("access_token");
-//				String expiresIn = tokenJson.getString("expires_in");
-//				String refreshToken = tokenJson.getString("refresh_token");
-//				openId = tokenJson.getString("openid");
-//				session.setAttribute("openId", openId);
-//				System.out.println("yyyyyyyyyyyyyyyyyyy=" + openId);
-//			}
-//			
-//			
-//			ClientUser cu = clientService.getClientUser(openId);
-//			if (cu == null || cu.getId() == 0l) {
-//				res = "client/login";
-//			}
-//			System.out.println("初始化登录界面openId="+openId);
-//			model.addAttribute("openId", openId);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		String res = "client/index";
+		try {
+			String openId="";
+			if(session.getAttribute("openId")!=null) {
+				String oid=(String)session.getAttribute("openId");
+				if(!StringUtil.isBlank(oid)) {
+					openId=oid;
+					System.out.println("已经从session中获取openId"+openId);
+				} 
+			}else {
+				System.out.println("session中没有openId,重新获取");
+				System.out.println("xxxxxxxxxxxxxxxxxxxxxxx=" + code);
+				String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + "appid=" + Configure.appID + "&secret="
+						+ Configure.WE_CHAT_APPSECRET + "&code=" + code + "&grant_type=authorization_code";
+				com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(url, "GET", null);
+				String jsonstr = tokenJson.toString();
+				System.out.println("token json is =====" + jsonstr);
+				String accessToken = tokenJson.getString("access_token");
+				String expiresIn = tokenJson.getString("expires_in");
+				String refreshToken = tokenJson.getString("refresh_token");
+				openId = tokenJson.getString("openid");
+				session.setAttribute("openId", openId);
+				System.out.println("yyyyyyyyyyyyyyyyyyy=" + openId);
+			}
+			   
+			 
+			ClientUser cu = clientService.getClientUser(openId);
+			if (cu == null || cu.getId() == 0l) {
+				res = "client/login";
+			}
+			System.out.println("初始化登录界面openId="+openId);
+			model.addAttribute("openId", openId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return res;
 	}

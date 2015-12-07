@@ -381,7 +381,7 @@ public class ClientServiceImpl implements ClientService {
 			durationText = iStartTime + "";
 			if (!StringUtil.isBlank(o.getEndTime())) {
 				Integer iEndTime = Integer.parseInt(o.getEndTime());
-				durationText = durationText + ":" + iEndTime;
+				durationText = durationText + ":00-" + iEndTime+":00";
 			}
 		}
 		o.setDurationText(durationText);
@@ -681,9 +681,9 @@ public class ClientServiceImpl implements ClientService {
 			}
 		}
 
-		int totalFee = 1;
-		// int totalFee=order.getTotalFee().intValue()*100;
-		 totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
+		//int totalFee = 1;
+		 int totalFee=(int) (order.getTotalFee().doubleValue()*100d);
+		 //totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
 		// 判断是否用了余额或优惠券，如果是，减去余额
 		String payMode = order.getPayMode();
 		boolean goWechat = true;// 是否还需要走微信支付
@@ -767,6 +767,7 @@ public class ClientServiceImpl implements ClientService {
 				}
 				System.out.println("res======" + res);
 				order.setPayMode(finalPayMode);
+				order.setWechatfee(finalPay4Wechat/100d);
 				orderRepository.save(order);
 			} else {//如果不走威信
 				finalPay4Wechat=0;
@@ -794,6 +795,9 @@ public class ClientServiceImpl implements ClientService {
 				order.setPayTime(new Date());
 				order.setWechatfee(finalPay4Wechat/100d);
 				orderRepository.save(order);
+				//日常保洁的时候推送客服消息
+				sendCustomerMsg4rcbj(order);
+
 			}
 			resMap.put("payMode", finalPayMode);
 		} catch (IllegalAccessException e) {
@@ -835,51 +839,10 @@ public class ClientServiceImpl implements ClientService {
 				order.setState(Constants.ORDER_STATE_PAYED);
 				order.setPayTime(new Date());
 				orderRepository.save(order);
+				
+				sendCustomerMsg4rcbj(order);
 
-				if ("CC".equals(order.getServiceType())) {
-					List olist = orderRepository.getCleanOrderWithAddressInfo(outTradeNo);
-					if (olist != null && olist.size() > 0) {
-						Object obj[] = (Object[]) olist.get(0);
-						Order o = (Order) obj[0];
-						String startTime = o.getStartTime();
-						String endTime = o.getEndTime();
-						String serviceDate = o.getServiceDate();
-						UserAddress ua = (UserAddress) obj[1];
-						Long areaId = ua.getAreaId();
-						List ayiList = workerRepository.findWorkerAndOpenIdInArea(areaId);
-						List confictList = new ArrayList();
-						for (int k = 0; k < ayiList.size(); k++) {
-							Object ob[] = (Object[]) ayiList.get(k);
-							Worker w = (Worker) ob[0];
-							List sl = scheduleRepository.findByAyiIdAndBusiDateAndState(w.getId(), serviceDate, "A");
-							if (sl != null) {
-								for (int l = 0; l < sl.size(); l++) {
-									Schedule s = (Schedule) sl.get(l);
-									String sTime = s.getStartTime();
-									String eTime = s.getEndTime();
-									if ((int) Integer.parseInt(startTime) < (int) Integer.parseInt(eTime)
-											&& (int) Integer.parseInt(endTime) > (int) Integer.parseInt(sTime)) {
-										confictList.add(ob);
-										break;
-									}
-								}
-							}
-						}
-
-						ayiList.removeAll(confictList);
-						for (int k = 0; k < ayiList.size(); k++) {
-							Object ob[] = (Object[]) ayiList.get(k);
-							ClientUser w = (ClientUser) ob[1];
-							String loginurl = "http://weixin.tjxfjz.com/xfjy/client/workerTask.html";
-							String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Configure.appID
-									+ "&redirect_uri=" + loginurl
-									+ "&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
-
-							MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(), url, "您有新的任务",
-									order.getFullAddress(), "待办", "点击查看详情");
-						}
-					}
-				}
+				
 				// 处理余额信息，用于一半用了微信，一半用了余额
 				DepositLog dl = depositLogRepository.findByOutTradeNo(outTradeNo);
 				if (dl != null) {
@@ -928,6 +891,58 @@ public class ClientServiceImpl implements ClientService {
 
 		}
 
+	}
+	
+	//日常保洁的时候推送客服消息
+	public void sendCustomerMsg4rcbj(Order order) {
+		if ("CC".equals(order.getServiceType())) {
+			List olist = orderRepository.getCleanOrderWithAddressInfo(order.getOutTradeNo());
+			if (olist != null && olist.size() > 0) {
+				Object obj[] = (Object[]) olist.get(0);
+				Order o = (Order) obj[0];
+				String startTime = o.getStartTime();
+				String endTime = o.getEndTime();
+				String serviceDate = o.getServiceDate();
+				UserAddress ua = (UserAddress) obj[1];
+				Long areaId = ua.getAreaId();
+				o.setAreaId(areaId);
+				List ayiList = workerRepository.findWorkerAndOpenIdInArea(o.getAreaId());
+				List confictList = new ArrayList();
+				for (int k = 0; k < ayiList.size(); k++) {
+					Object ob[] = (Object[]) ayiList.get(k);
+					Worker w = (Worker) ob[0];
+					List sl = scheduleRepository.findByAyiIdAndBusiDateAndState(w.getId(), o.getServiceDate(), "A");
+					if (sl != null) {
+						for (int l = 0; l < sl.size(); l++) {
+							Schedule s = (Schedule) sl.get(l);
+							String sTime = s.getStartTime();
+							String eTime = s.getEndTime();
+							if ((int) Integer.parseInt(o.getStartTime()) < (int) Integer.parseInt(eTime)
+									&& (int) Integer.parseInt(o.getEndTime()) > (int) Integer.parseInt(sTime)) {
+								confictList.add(ob);
+								break;
+							}
+						}
+					}
+				}
+
+				ayiList.removeAll(confictList);
+				for (int k = 0; k < ayiList.size(); k++) {
+					Object ob[] = (Object[]) ayiList.get(k);
+					ClientUser w = (ClientUser) ob[1];
+					String loginurl = "http://weixin.tjxfjz.com/xfjy/client/workerTask.html";
+					String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Configure.appID
+							+ "&redirect_uri=" + loginurl
+							+ "&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+
+					MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(), url, "您有新的任务",
+							o.getFullAddress(), "待办", "点击查看详情");
+				}
+			}
+		}
+		
+		
+		
 	}
 
 	public static String createWeChatMenu() {

@@ -8,6 +8,7 @@ import com.xyc.proj.global.Constants;
 public class MsgUtil {
 	public static void sendTemplateMsg(String templateId, String openId, String url, String title, String taskName,
 			String state, String remark) {
+		
 		Map m = new HashMap();
 		m.put("touser", openId);
 		m.put("template_id", templateId);

@@ -96,7 +96,7 @@ public class Order {
 	private Double totalFee;
 	
 	
-	@Column(name = "WECHAT_FEE")
+	@Column(name = "wechat_fee")
 	private Double wechatfee;//使用微信支付的金额
 	
 	@Column(name = "TOOL_FEE_CLEAN")

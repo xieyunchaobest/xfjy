@@ -15,7 +15,7 @@ margin:auto 0;
 padding:0 0;
 }
 body{
- background-color: f9f7f8;
+ background-color: #eaeaea;
  margin:0 0 0 0 ;padding:0  0 0 0 ;
 }
 #ftt {
@@ -143,27 +143,43 @@ $(function(){
 			         <div class="carousel-caption" style="margin-top:55px"></div>
 			      </div>
 			   </div>
+			   <!-- 轮播（Carousel）导航 -->
+   <a class="carousel-control left" href="#myCarousel" 
+      data-slide="prev">&lsaquo;</a>
+   <a class="carousel-control right" href="#myCarousel" 
+      data-slide="next">&rsaquo;</a>
 			</div> 
 			</div>
-			
-			<div class="row" id="func" style="border:1px solid #e6e6e6;border-bottom:1px;padding:0 0 0 0 ;margin:0 0 0 0">
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:120px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px;background-color:white;text-align:center"  onclick="forward('CC')">
-					<img alt="" th:src="@{/app/img/idx_rcbj.jpg}"  style="height:120px;width:auto" />
-				</div>
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:120px;border:1px solid #e6e6e6;;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px ;background-color:white;text-align:center" onclick="forward('DBJ')">
-					<img alt="" th:src="@{/app/img/idx_dbj.jpg}"  style="height:120px;width:auto"/>
-				</div>
+			<div>
+				 <img class="imgs" th:src="@{/app/img/xfjy_bj_top.jpg}" style="height:auto;width:100%" alt="First slide" />
 			</div>
-			<div class="row" id="func" style="border:1px solid #e6e6e6;border-top:0px;padding:0 0 0 0 ;margin:0 0 0 0">
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:120px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;background-color:white;text-align:center;border-bottom:0px "  onclick="forward('KH')">
-					  <img alt="" th:src="@{/app/img/idx_kh.jpg}"  style="height:119px;width:auto"/>
+			
+			<div class="row" id="func" style="margin:0 0 0 0">
+				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="height:116px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center"  onclick="forward('CC')">
+					<img alt="" th:src="@{/app/img/idx_rcbj.jpg}"  style="height:116px;width:auto" />
 				</div>
-				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:120px;border:1px solid #e6e6e6;padding:0 0 0 0 ;margin:0 0 0 0;background-color:white ;text-align:center;border-bottom:0px"  onclick="forward('CBL')">
-					   <img alt="" th:src="@{/app/img/idx_cbl.jpg}" style="height:119px;width:auto"/>
+				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="text-align:center;height:116px;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px ;background-color:#eaeaea;" onclick="forward('DBJ')">
+					<img alt="" th:src="@{/app/img/idx_dbj.jpg}"  style="height:116px;width:auto"/>
 				</div>
-				 
+				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="height:116px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center"  onclick="forward('CC')">
+					<img alt="" th:src="@{/app/img/idx_kh.jpg}"  style="height:116px;width:auto" />
+				</div>
+				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="height:116px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center" onclick="forward('DBJ')">
+					<img alt="" th:src="@{/app/img/idx_cbl.jpg}"  style="height:116px;width:auto"/>
+				</div>
 			</div>
 			<div>
+				 <img class="imgs" th:src="@{/app/img/xfjy_jz_top.jpg}" style="height:auto;width:100%" alt="First slide" />
+			</div>
+			<div style="text-align:center">
+				<img class="imgs" th:src="@{/app/img/xfjy_jz_wait.jpg}" style="height:90px;width:auto" alt="First slide" />
+			</div>
+			<div>
+				<img class="imgs" th:src="@{/app/img/xfjy_know.jpg}" style="height:auto;width:100%" alt="First slide" />
+			</div>
+			<div>
+				<img class="imgs" th:src="@{/app/img/xfjy_service_introduce.jpg}" style="height:auto;width:120px" alt="First slide" />
+				<img class="imgs" th:src="@{/app/img/xfjy_service_scope.jpg}" style="height:auto;width:120px" alt="First slide" />
 			</div>
 			<div class="row" style="margin:0 0 ;pading:0 0 ">
 				<div id="ftt"></div>
