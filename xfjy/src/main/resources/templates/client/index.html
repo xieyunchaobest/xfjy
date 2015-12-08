@@ -9,6 +9,7 @@
 <script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
 <script th:src="@{/app/js/public.js}"></script>
+<script th:src="@{/app/js/TouchSwipe/jquery.touchSwipe.js}"></script>
 <style type="text/css">
 html{
 margin:auto 0;
@@ -81,6 +82,11 @@ $(function(){
 });
     
     $(".imgs img").addClass("carousel-inner img-responsive img-rounded");
+    
+    $("#myCarousel").swipe({
+    	  swipeLeft: function() { $(this).carousel('next'); },
+    	  swipeRight: function() { $(this).carousel('prev'); },
+    	 });
   });
   
 /*<![CDATA[*/
@@ -143,11 +149,6 @@ $(function(){
 			         <div class="carousel-caption" style="margin-top:55px"></div>
 			      </div>
 			   </div>
-			   <!-- 轮播（Carousel）导航 -->
-   <a class="carousel-control left" href="#myCarousel" 
-      data-slide="prev">&lsaquo;</a>
-   <a class="carousel-control right" href="#myCarousel" 
-      data-slide="next">&rsaquo;</a>
 			</div> 
 			</div>
 			<div>
@@ -161,10 +162,10 @@ $(function(){
 				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="text-align:center;height:116px;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px ;background-color:#eaeaea;" onclick="forward('DBJ')">
 					<img alt="" th:src="@{/app/img/idx_dbj.jpg}"  style="height:116px;width:auto"/>
 				</div>
-				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="height:116px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center"  onclick="forward('CC')">
+				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="height:116px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center"  onclick="forward('KH')">
 					<img alt="" th:src="@{/app/img/idx_kh.jpg}"  style="height:116px;width:auto" />
 				</div>
-				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="height:116px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center" onclick="forward('DBJ')">
+				<div class="col-md-3 col-sm-3 col-lg-3 col-xs-3" style="height:116px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center" onclick="forward('CBL')">
 					<img alt="" th:src="@{/app/img/idx_cbl.jpg}"  style="height:116px;width:auto"/>
 				</div>
 			</div>

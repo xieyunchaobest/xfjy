@@ -238,12 +238,14 @@ public class ClientServiceImpl implements ClientService {
 
 	public List getScheduleList4Month(Order o, List mList) {
 		List resList = new ArrayList();
-
-		Date startD = DateUtil.strToDate(o.getServiceDate());
+		
+		Date startD= DateUtil.getNextMonday(DateUtil.strToDate(o.getServiceDate()));//从下周一开始
+		
+		//Date startD = DateUtil.strToDate(o.getServiceDate());
 		Calendar startC = Calendar.getInstance();
 		startC.setTime(startD);
 
-		int drationDay = Integer.parseInt(o.getDurationMonth()) * 30;
+		int drationDay = Integer.parseInt(o.getDurationMonth()) * 4*7;
 
 		Calendar endC = Calendar.getInstance();
 		endC.setTime(startD);
@@ -275,37 +277,37 @@ public class ClientServiceImpl implements ClientService {
 		return resList;
 	}
 
-	public List getScheduleList4Month(Order o) {
-		List resList = new ArrayList();
-
-		Date startD = DateUtil.strToDate(o.getServiceDate());
-		Calendar startC = Calendar.getInstance();
-		startC.setTime(startD);
-
-		int drationDay = Integer.parseInt(o.getDurationMonth()) * 30;
-
-		Calendar endC = Calendar.getInstance();
-		endC.setTime(startD);
-		endC.add(Calendar.DATE, drationDay);
-
-		while (!(endC.before(startC))) {
-			startC.add(Calendar.DATE, 1);
-			String w = "" + (startC.get(Calendar.DAY_OF_WEEK) - 1);
-			if (o.getRepeatInWeek().contains(w)) {
-				String d = DateUtil.date2Str(startC.getTime());
-				System.out.println(d);
-				Schedule sd = new Schedule();
-				sd.setBusiDate(d);
-				sd.setCreatedTime(new Date());
-				sd.setStartTime(o.getStartTime());
-				sd.setEndTime(o.getEndTime());
-				sd.setOrderId(o.getId());
-				sd.setState(Constants.STATE_P);
-				resList.add(sd);
-			}
-		}
-		return resList;
-	}
+//	public List getScheduleList4Month(Order o) {
+//		List resList = new ArrayList();
+//
+//		Date startD = DateUtil.strToDate(o.getServiceDate());
+//		Calendar startC = Calendar.getInstance();
+//		startC.setTime(startD);
+//
+//		int drationDay = Integer.parseInt(o.getDurationMonth()) * 30;
+//
+//		Calendar endC = Calendar.getInstance();
+//		endC.setTime(startD);
+//		endC.add(Calendar.DATE, drationDay);
+//
+//		while (!(endC.before(startC))) {
+//			startC.add(Calendar.DATE, 1);
+//			String w = "" + (startC.get(Calendar.DAY_OF_WEEK) - 1);
+//			if (o.getRepeatInWeek().contains(w)) {
+//				String d = DateUtil.date2Str(startC.getTime());
+//				System.out.println(d);
+//				Schedule sd = new Schedule();
+//				sd.setBusiDate(d);
+//				sd.setCreatedTime(new Date());
+//				sd.setStartTime(o.getStartTime());
+//				sd.setEndTime(o.getEndTime());
+//				sd.setOrderId(o.getId());
+//				sd.setState(Constants.STATE_P);
+//				resList.add(sd);
+//			}
+//		}
+//		return resList;
+//	}
 
 	public double getTotalPrice(Order o) {
 		if (StringUtil.isBlank(o.getServiceType()))
@@ -324,8 +326,9 @@ public class ClientServiceImpl implements ClientService {
 			if (Constants.CYCLE_TYPE_SG.equals(o.getCycleType())) {
 				res = iduration * dprice + cleanToolsfee;
 			} else {
-				int times = getScheduleList4Month(o).size();
-				res = iduration * dprice * times + cleanToolsfee;
+				//int times = getScheduleList4Month(o).size();
+				int idrationMonth=Integer.parseInt(o.getDurationMonth());
+				res = iduration * dprice *idrationMonth *4 + cleanToolsfee;
 			}
 		} else if (Constants.SERVICE_TYPE_DBJ.equals(o.getServiceType())) {// dabaojie
 			double dprice = Double
@@ -340,8 +343,9 @@ public class ClientServiceImpl implements ClientService {
 			if (Constants.CYCLE_TYPE_SG.equals(o.getCycleType())) {
 				res = area * dprice + cleanToolsfee;
 			} else {
-				int times = getScheduleList4Month(o).size();
-				res = area * dprice * times + cleanToolsfee;
+				//int times = getScheduleList4Month(o).size();
+				int idrationMonth=Integer.parseInt(o.getDurationMonth());
+				res = area * dprice * idrationMonth*4 + cleanToolsfee;
 			}
 		} else if (Constants.SERVICE_TYPE_CBL.equals(o.getServiceType())) {// cbl
 			double cleanToolsfee = 0.0d;
@@ -397,21 +401,21 @@ public class ClientServiceImpl implements ClientService {
 		return o;
 	}
 
-	@Transactional(propagation = Propagation.NESTED)
-	public void saveSchedule(Order o) {
-		if (Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
-			List scheduleList = getScheduleList4Month(o);
-			scheduleRepository.save(scheduleList);
-		} else {
-			Schedule sd = new Schedule();
-			sd.setBusiDate(o.getServiceDate());
-			sd.setCreatedTime(new Date());
-			sd.setStartTime(o.getStartTime());
-			sd.setEndTime(o.getEndTime());
-			sd.setOrderId(o.getId());
-			scheduleRepository.save(sd);
-		}
-	}
+//	@Transactional(propagation = Propagation.NESTED)
+//	public void saveSchedule(Order o) {
+//		if (Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
+//			List scheduleList = getScheduleList4Month(o);
+//			scheduleRepository.save(scheduleList);
+//		} else {
+//			Schedule sd = new Schedule();
+//			sd.setBusiDate(o.getServiceDate());
+//			sd.setCreatedTime(new Date());
+//			sd.setStartTime(o.getStartTime());
+//			sd.setEndTime(o.getEndTime());
+//			sd.setOrderId(o.getId());
+//			scheduleRepository.save(sd);
+//		}
+//	}
 
 	public String getConfigValue(String configCode) {
 		return configRepository.findByConfigCode(configCode).getConfigValue();
@@ -459,9 +463,9 @@ public class ClientServiceImpl implements ClientService {
 	 PostMethod post = new
 	 PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
 	 post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
-	 post.addParameter("SpCode", "227764");
-	 post.addParameter("LoginName", "xfjy");
-	 post.addParameter("Password", "xfjy123456");
+	 post.addParameter("SpCode", "");
+	 post.addParameter("LoginName", "");
+	 post.addParameter("Password", "");
 	 post.addParameter("MessageContent", content);
 	 post.addParameter("UserNumber", "18611298927");
 	 post.addParameter("SerialNumber", "12345678901234567890");
@@ -571,7 +575,7 @@ public class ClientServiceImpl implements ClientService {
 			ds.setState(Constants.STATE_P);
 
 			// int aamount=(int)amount*100;
-			int aamount = 1;
+			int aamount =(int) amount/10000;
 			String outTradeNo = RandomStringGenerator.getRandomStringByLength(18);
 			String spBillCreateIP = "127.0.0.1";
 			String timeStart = DateUtil.Time2Str(new Date(), DateUtil.format1);
@@ -840,7 +844,7 @@ public class ClientServiceImpl implements ClientService {
 				order.setPayTime(new Date());
 				orderRepository.save(order);
 				
-				sendCustomerMsg4rcbj(order);
+				sendCustomerMsg4rcbj(order);//发送客服消息
 
 				
 				// 处理余额信息，用于一半用了微信，一半用了余额
@@ -862,10 +866,9 @@ public class ClientServiceImpl implements ClientService {
 					c.setState(Constants.STATE_P);
 					couponRepository.save(c);
 				}
-				
-
 			}
 		} else {// 充值
+			System.out.println("回调时发现是充值！");
 			DepositLog log = depositLogRepository.findByOutTradeNo(outTradeNo);
 			if (log != null) {
 				log.setOrderId(orderId);
@@ -893,7 +896,7 @@ public class ClientServiceImpl implements ClientService {
 
 	}
 	
-	//日常保洁的时候推送客服消息
+	//推送客服消息
 	public void sendCustomerMsg4rcbj(Order order) {
 		if ("CC".equals(order.getServiceType())) {
 			List olist = orderRepository.getCleanOrderWithAddressInfo(order.getOutTradeNo());
@@ -1036,13 +1039,15 @@ public class ClientServiceImpl implements ClientService {
 		ow.setOrderId(oid);
 		orderWorkerRepository.save(ow);
 		// 修改时间表
-		List scheduleList = scheduleRepository.findByOrderId(oid);
-		for (int i = 0; i < scheduleList.size(); i++) {
-			Schedule s = (Schedule) scheduleList.get(i);
-			s.setAyiId(w.getId());
-			s.setState(Constants.STATE_A);
-			scheduleRepository.save(s);
-		}
+		Schedule sd=new Schedule();
+		sd.setAyiId(w.getId());
+		sd.setBusiDate(o.getServiceDate());
+		sd.setCreatedTime(new Date());
+		sd.setStartTime(o.getStartTime());
+		sd.setEndTime(Integer.parseInt(o.getStartTime())+Integer.parseInt(o.getDuration())+"");
+		sd.setOrderId(o.getId());
+		sd.setState(Constants.STATE_A);
+		scheduleRepository.save(sd);
 
 		return res;
 	}

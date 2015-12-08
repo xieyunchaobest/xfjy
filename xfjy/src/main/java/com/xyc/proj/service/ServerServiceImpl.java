@@ -211,7 +211,6 @@ public class ServerServiceImpl implements ServerService {
 			MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, openId, url, "您有新的任务", o.getFullAddress(), "待办",
 					"点击查看详情");
 		}
-
 	}
 
 	// public void dispatchOrder(Long orderId,List scList,List orderWorkerList){

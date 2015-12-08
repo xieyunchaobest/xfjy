@@ -128,4 +128,21 @@ public class DateUtil {
 	    return date2Str(myDate);
 	}
 	
+	public static Date getNextMonday(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int week = cal.get(Calendar.DAY_OF_WEEK);
+        cal.add(Calendar.DAY_OF_MONTH,-(week-2)+7);
+        
+        return cal.getTime();
+    }
+	
+	public static void  main(String[] argv){
+            String strDate = "2015-12-11";;
+            Date date = strToDate(strDate);
+          //  Date dateSunDay = getSunday(date);
+            Date dateMonday = getNextMonday(date);
+            System.out.println(dateMonday);
+	}
+	
 }
