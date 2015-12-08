@@ -208,7 +208,7 @@ public class ServerServiceImpl implements ServerService {
 			String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Configure.appID
 					+ "&redirect_uri=" + loginurl + "&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
 
-			MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, openId, url, "您有新的任务", o.getFullAddress(), "待办",
+			MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, openId, url, "您有新的任务", o.getFullAddress(), "客服派单",
 					"点击查看详情");
 		}
 	}

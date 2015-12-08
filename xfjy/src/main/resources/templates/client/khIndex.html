@@ -38,7 +38,8 @@ $(function () {
 		showNow: true,
 		nowText: "今天",
         startYear: currYear, //开始年份
-        endYear: currYear + 10 //结束年份
+        endYear: currYear + 10, //结束年份
+        minDate: new Date()
 	};
 	$("#txtServiceDate").mobiscroll($.extend(opt['date'], opt['default']));
 	
@@ -100,6 +101,10 @@ function showTimeModal(){
 			 $("#spnwarngin").text('保洁面积只能为数字！');
 			 return false;
 		 }
+		 if(parseInt(area)<30){
+			 $("#spnwarngin").text('面积不能小于30平米！');
+			 return false;
+		 }
 		 
 		 if(mobileNo==''){
 			 $("#spnwarngin").text('请填写联系方式！');
@@ -120,6 +125,16 @@ function showTimeModal(){
 			 $("#spnwarngin").text('请输入姓名！');
 			 return;
 		 }
+		 
+		 var serviceDate=$("#txtServiceDate").val();
+		   var startTime=$("#hdServiceTime").val();
+		   if(serviceDate==getToday()){
+			   if(parseInt(startTime)<=getCurrentHour()){
+				   $("#spnwarngin").text('服务时间需大于当前时间!');
+				   res=false;
+				   return res;
+			   }
+		   }
 		 
 		 return true;
 	 }
@@ -215,7 +230,7 @@ function showTimeModal(){
 				<input type="text" placeholder="请输入联系方式"    name="txtmobileNo" class="form-control" id="txtmobileNo"/>
 			</li> 
 		</ul>
-		<ul class="list-group" >
+		<ul class="list-group" style="display:none">
 			<li class="list-group-item">
 				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">保洁用品(</font>
 					<span style="color:red" th:text="${cleanToolsFee}"></span><span  style="color:red">元)</span>

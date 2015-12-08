@@ -11,4 +11,5 @@ import com.xyc.proj.utility.DateUtil;
  * 这里放置各种配置数据
  */
 public class Configure {
+
 }

@@ -205,7 +205,7 @@ public class ClientController {
 		forwardPage(model, request);
 		String serviceDate = request.getParameter("serviceDate");
 		if (StringUtil.isBlank(serviceDate)) {
-			serviceDate = "2015-11-10";
+			serviceDate = DateUtil.getTomorrow();
 		}
 		String serviceType = request.getParameter("serviceType");
 		String userAddressId=request.getParameter("userAddressId");

@@ -151,7 +151,7 @@ public class ClientServiceImpl implements ClientService {
 		Long areaId=ua.getAreaId();
 		List<TimeSplit> timeSplitList = timeSplitRepository.findAll();
 		List tempList = new ArrayList();
-		List<Worker> aiyiList = ayiRepository.serviceTypeOneAndAreaId(Constants.WORK_SERVICE_TYPE_CLEAN,areaId);
+		List<Worker> aiyiList = ayiRepository.serviceTypeOneAndAreaIdAndState(Constants.WORK_SERVICE_TYPE_CLEAN,areaId,"A");
 		
 		List allShecList=scheduleRepository.findByServiceDateAndAreaId(serviceDate,areaId);
 		int ayisize = aiyiList.size();
@@ -328,7 +328,8 @@ public class ClientServiceImpl implements ClientService {
 			} else {
 				//int times = getScheduleList4Month(o).size();
 				int idrationMonth=Integer.parseInt(o.getDurationMonth());
-				res = iduration * dprice *idrationMonth *4 + cleanToolsfee;
+				int repeatInWeek=o.getRepeatInWeek().split(",").length;
+				res = iduration * dprice *idrationMonth *4*repeatInWeek + cleanToolsfee;
 			}
 		} else if (Constants.SERVICE_TYPE_DBJ.equals(o.getServiceType())) {// dabaojie
 			double dprice = Double
@@ -356,10 +357,14 @@ public class ClientServiceImpl implements ClientService {
 			}
 			double cytdprice = Double
 					.parseDouble(configRepository.findByConfigCode(Constants.CONFIG_CYTDJ).getConfigValue());
-			int iytCount = Integer.parseInt(o.getBalconyCount());
+			String ytCount=o.getBalconyCount();
+			if(StringUtil.isBlank(ytCount))ytCount="0";
+			int iytCount = Integer.parseInt(ytCount);
 			double cncdprice = Double
 					.parseDouble(configRepository.findByConfigCode(Constants.CONFIG_CNCDJ).getConfigValue());
-			int incCount = Integer.parseInt(o.getWindowCount());
+			String ncCount=o.getWindowCount();
+			if(StringUtil.isBlank(ncCount)) ncCount="0";
+			int incCount = Integer.parseInt(ncCount);
 			res = cytdprice * iytCount + cncdprice * incCount + cleanToolsfee;
 		} else if (Constants.SERVICE_TYPE_KH.equals(o.getServiceType())) {
 			double dprice = Double
@@ -504,7 +509,7 @@ public class ClientServiceImpl implements ClientService {
 
 	public Order fillOrder(Order o) {
 		if (Constants.SERVICE_TYPE_CC.equals(o.getServiceType())) {
-			o.setServiceTypeText("普通保洁");
+			o.setServiceTypeText("日常保洁");
 		} else if (Constants.SERVICE_TYPE_DBJ.equals(o.getServiceType())) {
 			o.setServiceTypeText("大保洁");
 		} else if (Constants.SERVICE_TYPE_CBL.equals(o.getServiceType())) {
@@ -939,7 +944,7 @@ public class ClientServiceImpl implements ClientService {
 							+ "&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
 
 					MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(), url, "您有新的任务",
-							o.getFullAddress(), "待办", "点击查看详情");
+							o.getFullAddress(), "抢单", "点击查看详情");
 				}
 			}
 		}

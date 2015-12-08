@@ -616,6 +616,7 @@ $("button[xtype='tmsel']").click(function(){
 	   }
    }
    
+   /*<![CDATA[*/
    function validate(){
 	   var res=true;
 	   var serviceType=$("#serviceType").val();
@@ -643,13 +644,23 @@ $("button[xtype='tmsel']").click(function(){
 			   res=false;
 			   return res;
 		   }
-		   
 	   }
-	   
+	
+	   var serviceDate=$("#serviceDate4sg").val();
+	   var startTime=$("#startTime").val();
+	   if(serviceDate==getToday()){
+		   if(parseInt(startTime)<=getCurrentHour()){
+			   $("#validateInfo4sg").text('服务时间需大于当前时间!');
+			   res=false;
+			   return res;
+		   }
+	   }
 	  return res;
 	   //if($("#validateInfo4sg"))
 	   
    }
+   /*]]>*/
+   
    
    function validateby(){
 	   if($("#hdrepeatInWeek").val()==''){

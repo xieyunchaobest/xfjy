@@ -137,6 +137,10 @@
 				 $("#spnwarngin").text('保洁面积只能为数字！');
 				 return;
 			 }
+			 if(parseInt($("#txtArea").val())<30){
+				 $("#spnwarngin").text('保洁面积最少为30平米！');
+				 return;
+			 }
 			 $("#area").val($("#txtArea").val());
 		 }
 		 
@@ -210,7 +214,7 @@
 				<input type="text" placeholder="请输入联系方式"   name="txtmobileNo" value=""  class="form-control" id="txtmobileNo"/>
 			</li> 
 		</ul>
-		<ul class="list-group" >
+		<ul class="list-group" style="display:none">
 			<li class="list-group-item">
 				<label style="z-index:1000" onclick="return showCleanTools();">由幸福家缘提供 <font color="red">保洁用品(</font>
 					<span style="color:red" th:text="${cleanToolsFee}"></span><span  style="color:red">元)</span>
