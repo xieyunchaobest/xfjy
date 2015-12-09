@@ -29,15 +29,20 @@
  			var busiDate=$(chb).attr('busiDate');
  			var startTime=$(chb).attr('startTime');
  			var druation=$(chb).attr('druation');
+ 			var areaId=$(chb).attr('areaId');
  			if (typeof(druation) == "undefined"){
  				druation='';
+ 			}
+ 			var durationMonth=$(chb).attr('durationMonth');
+ 			if (typeof(durationMonth) == "undefined"){
+ 				durationMonth='0';
  			}
  			var state=$('input:checked').attr('state');
  			if(state!='P' &&  state!='C'){
  				alert('订单状态不符合分配要求！');
  				return;
  			}
- 			var path = basePath+"/server/dispatchInit.html?orderId="+oid+"&busiDate="+busiDate+"&startTime="+startTime+"&druation="+druation;
+ 			var path = basePath+"/server/dispatchInit.html?orderId="+oid+"&busiDate="+busiDate+"&startTime="+startTime+"&druation="+druation+"&areaId="+areaId+"%role=A"+"&durationMonth="+durationMonth;
  	 		window.open(path,'win',"height=700,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
 		}
  	}
@@ -48,16 +53,18 @@
 	<div class="container-fluid">
 		<form id="orderByForm" th:action="@{/server/queryOrder.html}" method="post">
 			<input type="hidden" id="orderByStr" name="orderByStr"   th:value="${orderBy}"/>
-		 <div class="row" id="qry" style="margin-right:15px;">
-		 	<div  class="col-xs-12" style="padding:10px;border:solid 1px #cccccc;margin:15px 15px;padding:10px 10px">
-		 		<div class="col-xs-4" style="width:380px">
+		 <div class="row" id="qry"  >
+		 	<div  class="col-xs-12" style="padding:10px;border:solid 1px #cccccc;display:table;margin:0 0 ;padding:0 0;height:100px ">
+		 		<div style="height:80px;">
+		 			<div style="height:40px;margin-top:15px">
+		 			 	<div class="col-xs-4" style="width:380px">
 		 			<label>交易时间:</label>
 		 			<input name="startTime" class="input-append date" id="startTime" size="12"  onfocus="this.blur()"  th:value="${startTime}"/> -
 		 			<input name="endTime" id="endTime"   onfocus="this.blur()" th:value="${endTime}" size="12"/>
 		 		</div>
 		 		<div class="col-xs-4" style="width:220px">
 		 			<label>地区:</label>
-		 			<select  name="areaId" style="height:30px;width:120px" >
+		 			<select  name="areaId" style="height:25px;width:120px" >
 		 				<option value="">全部</option>
 							<option th:each="area : ${areaList}"
 								th:value="${area.id}" th:text="${area.name}"
@@ -70,7 +77,7 @@
 		 		</div>	
 		 		<div class="col-xs-4" style="width:220px">
 		 		<label>服务类型:</label>
-		 		 <select  name="serviceType" style="height:30px;width:120px" >
+		 		 <select  name="serviceType" style="height:25px;width:120px" >
 		 				<option value="">全部</option>
 							<option value="CC" th:selected="${serviceType == 'CC'}">日常保洁</option>
 							<option value="DBJ" th:selected="${serviceType == 'DBJ'}">大保洁</option>
@@ -79,8 +86,27 @@
 					</select>
 		 		</div>		
 		 			
-		 		<div class="col-xs-2">
-		 			<button type="submit" class="btn btn-primary"   name="btnQuery" id="btnQuery"  >查询</button> 
+		 			 </div>
+		 			 <div style="height:30px;">
+		 			 	<div class="col-xs-4" style="width:350px">
+		 					<label>联系方式:</label>
+		 					<input name="mobileNo"   id="mobileNo"   th:value="${mobileNo}"/>
+		 				</div>	
+		 				<div class="col-xs-4" style="width:300px">
+		 					<label>状态:</label>
+		 					<select  name="state" style="height:25px;width:120px" >
+			 					<option value="">全部</option>
+								<option value="P" th:selected="${state == 'P'}">已支付</option>
+								<option value="U" th:selected="${state == 'U'}">未支付</option>
+								<option value="C" th:selected="${state == 'C'}">已经确认</option>
+								<option value="F" th:selected="${state == 'F'}">已完成</option>
+							</select>
+		 				</div>
+		 			 </div>		
+		 			
+		 		</div>
+		 		<div style="display:table-cell;border:1px solid red;text-align:center;width:100px;height:0px">
+		 			<button type="submit" class="btn btn-primary"   name="btnQuery" id="btnQuery" style="margin-bottom:60px" >查询</button> 
 		 		</div>
 		 	</div>
 		 </div>
@@ -90,6 +116,7 @@
 					<tr>
 						<th></th>
 						<th>交易号</th>
+						<th>姓名</th>
 						<th>手机号</th>
 						<th>地址</th>
 						<th>支付金额</th>
@@ -110,9 +137,10 @@
 				<tbody>
 					<tr  th:each="item : ${orderPageViews.resultList}">
 						<td style="width:20px">
-							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+'',busiDate=''+${item.serviceDate}+'',startTime=''+${item.startTime}+'',druation=''+${item.duration}" />
+							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+'',busiDate=''+${item.serviceDate}+'',startTime=''+${item.startTime}+'',druation=''+${item.duration}+'',areaId=''+${item.areaId}+'',durationMonth=''+${item.durationMonth}" />
 						</td>
 						<td style="width:35px" th:text="${item.outTradeNo}"></td>
+						<td th:text="${item.name}"></td>
 						<td th:text="${item.mobileNo}"></td>
 						<td th:text="${item.fullAddress}"></td>
 						<td th:text="${item.totalFee}"></td>

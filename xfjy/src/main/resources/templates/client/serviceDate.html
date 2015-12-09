@@ -426,8 +426,9 @@ $("button[xtype='tmsel']").click(function(){
      
        str= day.getFullYear() ;     
        str=str+'-'+((day.getMonth()+1)>10? (day.getMonth()+1).toString():'0' +(day.getMonth()+1));   
-       str=str+"-"+(day.getDate()>9?(day.getDate()+1).toString():'0' + (day.getDate()+1));   
-     
+      // str=str+"-"+(day.getDate()>9?(day.getDate()+1).toString():'0' + (day.getDate()+1));   
+     	var tomorrow=day.getDate()+1;
+     	str=str+"-"+(tomorrow>9?tomorrow.toString():'0' + tomorrow.toString());
        return str;   
    }   
    
@@ -579,6 +580,8 @@ $("button[xtype='tmsel']").click(function(){
 			   $("#duration").val($("#serviceduring4sg").val());
 			   if(serviceType=='CC'){
 				   $("#startTime").val($("#durationTime4sgStart").val());
+			   }else{
+				   $("#duration").val("");
 			   }
 			   $("#endTime").val($("#durationTime4sgEnd").val());
 			   $("#cycleType").val("SG");
@@ -589,6 +592,7 @@ $("button[xtype='tmsel']").click(function(){
 			   $("#repeatInWeekText").val("");
 			   $("#durationMonthText").val("");
 			  
+			  
 			   
 			  var path = basePath+"/client/cleanIndex.html";  
 				$('#submitForm').attr("action", path).submit(); 
@@ -598,6 +602,7 @@ $("button[xtype='tmsel']").click(function(){
    function submitby(){
 	   var res=validateby();
 	   if(res==true){
+		   var serviceType=$("#serviceType").val();
 		   $("#serviceDate").val($("#serviceDate4by").val());
 		   $("#duration").val($("#serviceduring4by").val());
 		   $("#startTime").val($("#durationTime4byStart").val());
@@ -609,7 +614,9 @@ $("button[xtype='tmsel']").click(function(){
 		   $("#repeatInWeekText").val( $("#spanRepeat").text());
 		   $("#durationMonthText").val($("#spanserviceMonthDuring4by").text());
 		   $("#repeatInWeek").val($("#hdrepeatInWeek").val());
-		   
+		   if(serviceType=='DBJ'){
+			   $("#duration").val("");
+		   } 
 		   
 		   var path = basePath+"/client/cleanIndex.html";  
 			$('#submitForm').attr("action", path).submit(); 

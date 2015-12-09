@@ -85,7 +85,7 @@
 					<div>
 						<div class="col-xs-4" style="width: 220px">
 							<label>地区:</label> <select name="areaId"
-								style="height: 50px; width: 120px">
+								style="height: 25px; width: 120px">
 								<option value="">全部</option>
 								<option th:each="area : ${areaList}" th:value="${area.id}"
 									th:text="${area.name}" th:selected="${parms.areaId == area.id}"></option>
@@ -93,7 +93,7 @@
 						</div>
 						<div class="col-xs-4" style="width: 220px">
 							<label style="width: 60px; text-align: right">门店:</label> <select
-								name="storeId" style="height: 50px; width: 120px">
+								name="storeId" style="height: 25px; width: 120px">
 								<option value="">全部</option>
 								<option th:each="store : ${storeList}" th:value="${store.id}"
 									th:text="${store.name}" th:selected="${parms.storeId == store.id}"></option>
@@ -106,7 +106,7 @@
 						</div>
 						<div class="col-xs-4" style="width: 220px">
 							<label>服务类型:</label> <select name="serviceTypeTwo"
-								style="height: 50px; width: 120px">
+								style="height: 25px; width: 120px">
 								<option value="">全部</option>
 								<option value="C" th:selected="${parms.serviceTypeTwo == 'C'}">保洁</option>
 								<option value="YS" th:selected="${parms.serviceTypeTwo == 'YS'}">月嫂</option>
@@ -120,7 +120,7 @@
 				<div>
 					<div class="col-xs-4" style="width: 220px">
 						<label>角色:</label> <select name="role"
-							style="height: 50px; width: 120px">
+							style="height: 25px; width: 120px">
 							<option value="">全部</option>
 							<option value="T" th:selected="${parms.role == 'T'}">老师</option>
 							<option value="A" th:selected="${parms.role== 'A'}">阿姨</option>
@@ -128,7 +128,7 @@
 					</div>
 					<div class="col-xs-4" style="width: 220px">
 						<label>服务时间:</label> <select name="workTime"
-							style="height: 50px; width: 120px">
+							style="height: 25px; width: 120px">
 							<option value="">全部</option>
 							<option value="D" th:selected="${parms.workTime == 'D'}">白班</option>
 							<option value="H" th:selected="${parms.workTime== 'H'}">24H</option>

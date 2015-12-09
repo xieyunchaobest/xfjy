@@ -125,7 +125,7 @@ function onBridgeReady(){
 	}
 
 
-/*]]>*/
+
 function pay(){
 	if (typeof WeixinJSBridge == "undefined"){
 	   if( document.addEventListener ){
@@ -148,12 +148,12 @@ function disable(){
 	 
 	 var couponCount=$("#couponCount").val();
 	 var icouponCount=parseFloat(couponCount);
-	 if(icouponCount==0){
+	 if(icouponCount<=0){
 		 $("#payMode4yhq").hide(); 
 		 $("#spancoupon").hide();
 	 }
 }
-
+/*]]>*/
 function cbcheck4coupon(){
 	 if($("#payMode4yhq").prop('checked')==true){
 		 $("input[name='cbcouponId']").show();

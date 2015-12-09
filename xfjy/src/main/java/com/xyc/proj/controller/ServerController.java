@@ -127,6 +127,7 @@ public class ServerController {
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "serviceTypeTwo", required = false) String serviceTypeTwo,
 			@RequestParam(value = "role", required = false) String role,
+			@RequestParam(value = "durationMonth", required = false) String durationMonth,
 			@RequestParam(value = "workTime", required = false) String workTime,
 			@RequestParam(value = "orderId", required = true) String orderId,
 			@RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum,
@@ -151,6 +152,7 @@ public class ServerController {
 		parmMap.put("serviceTypeTwo", serviceTypeTwo);
 		parmMap.put("role", role);
 		parmMap.put("workTime", workTime);
+		parmMap.put("durationMonth", durationMonth);
 		PageView pageView = serverService.getWorkPage(parmMap);
 		model.addAttribute("pageView", pageView);
 		model.addAttribute("parms", parmMap);
@@ -165,6 +167,7 @@ public class ServerController {
 		model.addAttribute("busiDate", busiDate);
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("druation", druation);
+		model.addAttribute("durationMonth", durationMonth);
 		return "server/orderDispatch";
 
 	}
@@ -202,6 +205,8 @@ public class ServerController {
 			@RequestParam(value = "endTime", required = false) String endTime,
 			@RequestParam(value = "serviceDate", required = false) String serviceDate,
 			@RequestParam(value = "serviceType", required = false) String serviceType,
+			@RequestParam(value = "state", required = false) String state,
+			@RequestParam(value = "mobileNo", required = false) String mobileNo,
 			@RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum,
 			@RequestParam(value = "orderByStr", required = false, defaultValue = "name,desc") String orderBy) {
 		Map<String, Object> parmMap = new HashMap<String, Object>();
@@ -212,6 +217,8 @@ public class ServerController {
 		parmMap.put("endTime", endTime);
 		parmMap.put("serviceDate", serviceDate);
 		parmMap.put("serviceType", serviceType);
+		parmMap.put("state", state);
+		parmMap.put("mobileNo", mobileNo);
 		List areaList = clientService.findAreaList();
 
 		PageView pageView = serverService.getOrderPageView(parmMap);
@@ -223,6 +230,8 @@ public class ServerController {
 		model.addAttribute("endTime", endTime);
 		model.addAttribute("serviceDate", serviceDate);
 		model.addAttribute("serviceType", serviceType);
+		model.addAttribute("state", state);
+		model.addAttribute("mobileNo", mobileNo);
 		return "server/queryOrder";
 
 	}

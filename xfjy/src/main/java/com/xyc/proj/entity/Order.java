@@ -156,7 +156,10 @@ public class Order {
 	 
 	@Column(name = "COUPON_ID")
 	private Long couponId;
-
+	
+	@Column(name = "remarks")
+	private String remarks;
+	
 	public Order() {
 	}
 

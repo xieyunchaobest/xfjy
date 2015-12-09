@@ -2,6 +2,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head lang="en">  
     <meta charset="UTF-8"></meta>  
+    <script src="../../public/app/js/vendor/jquery-1.11.1.js"></script>
     <title></title>  
    <script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
     <style>  
@@ -21,16 +22,17 @@
             border: 1px solid #000000;  
         }  
     </style>  
-    <script>  
-   
-    </script>  
+   <script type="text/javascript">
+   	$(function(){
+   		var day=new Date();
+   		alert(day.getDate());
+   		
+   	});
+   </script>  
 </head>  
 <body>  
     <div class="box">  
-        <div class="box1">  
-            <a href="javascript:;" onclick="jQuery('.box').hide()" class="close">关闭</a>  
-        </div>  
+        
     </div>  
-    <a href="javascript:;" onclick="jQuery('.box').show()" class="show">显示</a>  
 </body>  
 </html>  

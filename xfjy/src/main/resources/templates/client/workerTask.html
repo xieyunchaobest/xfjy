@@ -41,6 +41,26 @@
           }
       }); 	  
   }
+  
+  function finishOrder(target){
+	  $("#myModal").modal('hide');
+	 // $(target).attr("disabled",true);
+	  var oid=$(target).val();
+	  $("button[clicked='y']").attr("disabled",true);  
+	  var openId=$("#openId").val();
+	  $.ajax({
+          type: "POST",
+          url: basePath+'/client/finishOrder.html?oid='+oid+"&openId="+openId,
+          data:$("#aform").serialize(),
+          success: function(data) {
+          	if(data=="S"){
+          		 alert('已完成！');
+          	}else{
+          		 alert('处理失败！');
+          	} 
+          }
+      }); 	  
+  }
   /*]]>*/
  
 </script>
@@ -71,9 +91,9 @@
       <li class="list-group-item"   th:text="__${order.serviceDate}__+' '+${order.durationText} "> </li>
       <li class="list-group-item"  th:text="${order.fullAddress}"></li>
    </ul>
-   <div class="row" style="text-align:center">
-				<button type="button" onclick="getOrder(this)" th:value="${order.id}" style="margin-top:10px;margin-bottom:10px" id="btnPay" class="btn col-sm-8 btn-info">抢单</button>
-		</div>
+    <div class="row" style="text-align:center">
+		<button type="button" onclick="getOrder(this)" th:value="${order.id}" style="margin-top:10px;margin-bottom:10px" id="btnPay" class="btn col-sm-8 btn-info">抢单</button>
+	</div>
 	</div>
 
    </div>
@@ -90,11 +110,42 @@
       <li class="list-group-item"   th:text="__${order.serviceDate}__+' '+${order.durationText} "> </li>
       <li class="list-group-item"  th:text="${order.fullAddress}"></li>
    </ul>
+   <div class="row" style="text-align:center">
+		<button type="button" data-toggle="modal" clicked="n"
+   			data-target="#myModal" th:value="${order.id}" onclick="javascript:$('#btnsure').val($(this).val());$(this).attr('clicked','y')" style="margin-top:10px;margin-bottom:10px" id="btnPay" class="btn col-sm-8 btn-info">完成</button>
+	</div>
 </div>
    </div>
 </div>
 
 
+<div class="modal fade" style="margin-top:150px;margin-left:20px" id="myModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+               确认
+            </h4>
+         </div>
+         <div class="modal-body">
+            确定该订单已经完成？
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" id="btnsure" value="" onclick="finishOrder(this)" >
+               确认
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div>
+</div>
 <body>
 	
 </body>
