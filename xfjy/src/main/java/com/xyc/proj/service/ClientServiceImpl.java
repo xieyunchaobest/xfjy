@@ -346,7 +346,8 @@ public class ClientServiceImpl implements ClientService {
 			} else {
 				//int times = getScheduleList4Month(o).size();
 				int idrationMonth=Integer.parseInt(o.getDurationMonth());
-				res = area * dprice * idrationMonth*4 + cleanToolsfee;
+				int repeatInWeek=o.getRepeatInWeek().split(",").length;
+				res = area * dprice * idrationMonth*4*repeatInWeek + cleanToolsfee;
 			}
 		} else if (Constants.SERVICE_TYPE_CBL.equals(o.getServiceType())) {// cbl
 			double cleanToolsfee = 0.0d;
@@ -580,7 +581,7 @@ public class ClientServiceImpl implements ClientService {
 			ds.setState(Constants.STATE_P);
 
 			// int aamount=(int)amount*100;
-			int aamount =(int) amount/10000;
+			int aamount =(int) amount/100;
 			String outTradeNo = RandomStringGenerator.getRandomStringByLength(18);
 			String spBillCreateIP = "127.0.0.1";
 			String timeStart = DateUtil.Time2Str(new Date(), DateUtil.format1);
@@ -1066,6 +1067,10 @@ public class ClientServiceImpl implements ClientService {
 	
 	public ClientUser findClientUserByMobileNo(String mobileNo) {
 		return clientUserRepository.findByMobileNo(mobileNo);
+	}
+	
+	public ClientUser findClientUserByMobileOpenId(String openId) {
+		return clientUserRepository.findByOpenId(openId);
 	}
 
 //	public static void main(String args[]) {

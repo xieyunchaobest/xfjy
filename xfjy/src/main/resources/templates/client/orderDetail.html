@@ -20,6 +20,10 @@ $(function(){
 });
     showOrHide();
     
+    if($("#fromPage").val()=='ayi'){
+    	$("#dvtomap").show();
+    }
+    
   });
  
  
@@ -93,6 +97,11 @@ $(function(){
  	   ); 
  	}
 
+ function tomap(){
+	 window.location.href="http://map.baidu.com/mobile/webapp/index/index/qt=cur&wd=%E5%A4%A9%E6%B4%A5%E5%B8%82&from=maponline&tn=m01&ie=utf-8=utf-8/tab=line";
+	 
+ }
+ 
 
  /*]]>*/
  function pay(){
@@ -117,6 +126,7 @@ $(function(){
 	   	<input type="hidden" th:value="${order.outTradeNo}" name="outTradeNo" id="outTradeNo"/>
 	   	<input type="hidden" th:value="${order.openId}" name="openId" id="openId"/>
 	   	<input type="hidden" th:value="${order.state}" name="state" id="state"/>
+	   	<input type="hidden" th:value="${fromPage}" name="fromPage" id="fromPage"/>
    	</form>
    </div>
    <div class="panel panel-default" style="margin-left:5px">
@@ -168,6 +178,9 @@ $(function(){
       </li>
    </ul>
 </div>
+	<div style="text-align:center;display:none" id="dvtomap">
+		<a href="#" onclick="tomap()">打开地图</a>
+	</div>
 
 	<div class="row" id="divpay" style="display:none">
 			<div class="col-xs-2"/>

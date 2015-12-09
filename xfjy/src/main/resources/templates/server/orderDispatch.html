@@ -70,6 +70,13 @@
 			<input type="hidden" id="orderId" name="orderId"   th:value="${orderId}"/>
 			<input type="hidden" id="busiDate" name="busiDate"   th:value="${busiDate}"/>
 			<input type="hidden" id="startTime" name="startTime"   th:value="${startTime}"/>
+			<div style="width:100%;height:20px;">
+		<labe>服务日期：</labe><label id="serviceDate" th:text="${busiDate}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<labe>开始时间：</labe><label id="startTime" th:text="${startTime}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<labe>持续时间：</labe><label id="druationTime" th:text="${druation}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<labe>持续月份：</labe><label id="durationMonth" th:text="${durationMonth}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<labe>已分派给：</labe><label id="dispatchPerson" th:text="${workerName}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
 			<div style="border: solid 1px #cccccc; margin: 5px 0px; height: 50px">
 			  <div style="width:100%;float:left">
 				<div id="qry" class="row" style="margin-top: 10px;margin-left:0px">
@@ -136,13 +143,7 @@
 		<div style="width:100%;border:1px solid #ddd;height:200px;">
 			<iframe width="100%" height="90%"   frameborder="false" marginwidth="0px" scrolling="yes" allowtransparency="true" style="border: medium none;overflow:auto;"  id="timesheetPage" name="timesheetPage"></iframe>
 		</div>
-		<div style="width:100%;height:20px;">
-		<labe>服务日期：</labe><label id="serviceDate" th:text="${busiDate}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<labe>开始时间：</labe><label id="startTime" th:text="${startTime}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<labe>持续时间：</labe><label id="druationTime" th:text="${druation}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<labe>持续月份：</labe><label id="durationMonth" th:text="${durationMonth}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<labe>已分派给：</labe><label id="dispatchPerson" th:text="${workerName}"></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		</div>
+		
 	</form>
 	</div>
 

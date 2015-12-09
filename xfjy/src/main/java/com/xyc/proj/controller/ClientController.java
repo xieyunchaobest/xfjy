@@ -404,9 +404,11 @@ public class ClientController {
 		} else {
 			cleanToolsValue = clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4DBJ);
 		}
-
+		
 		List cleanList = clientService.getCleanToolsList(servicetype);
 		model.addAttribute("cleanToolsList", cleanList);
+		ClientUser cu=clientService.findClientUserByMobileOpenId(openId);
+		model.addAttribute("mobileNo", cu.getMobileNo());
 		model.addAttribute("cleanToolsFee", cleanToolsValue);
 		return "client/cleanIndex";
 	}
@@ -433,7 +435,8 @@ public class ClientController {
 		List cleanList = clientService.getCleanToolsList(servicetype);
 		model.addAttribute("cleanToolsList", cleanList);
 		model.addAttribute("cleanToolsFee", cleanToolsValue);
-
+		ClientUser cu=clientService.findClientUserByMobileOpenId(openId);
+		model.addAttribute("mobileNo", cu.getMobileNo());
 		return "client/khIndex";
 	}
 
@@ -459,7 +462,8 @@ public class ClientController {
 		List cleanList = clientService.getCleanToolsList(servicetype);
 		model.addAttribute("cleanToolsList", cleanList);
 		model.addAttribute("cleanToolsFee", cleanToolsFee);
-
+		ClientUser cu=clientService.findClientUserByMobileOpenId(openId);
+		model.addAttribute("mobileNo", cu.getMobileNo());
 		return "client/cblIndex";
 	}
 
@@ -765,9 +769,12 @@ public class ClientController {
 
 	@RequestMapping("/client/orderDetail.html")
 	public String orderDetail(Model model, HttpSession Session, HttpServletRequest request,
-			@RequestParam(value = "oid", required = true) Long oid) {
+			@RequestParam(value = "oid", required = true) Long oid,
+			@RequestParam(value = "fromPage", required = false) String fromPage
+			) {
 		Order o = clientService.getOrder(oid);
 		model.addAttribute("order", o);
+		model.addAttribute("fromPage", fromPage==null?"":fromPage);
 		return "client/orderDetail";
 	}
 

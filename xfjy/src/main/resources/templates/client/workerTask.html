@@ -15,13 +15,13 @@
 
 <script type="text/javascript">
  
-  
+/*<![CDATA[*/
   function toOrderDetail(target){
 	  var oid=$(target).attr('oid');
-	  window.location.href=basePath+"/client/orderDetail.html?oid="+oid;
+	  window.location.href=basePath+"/client/orderDetail.html?oid="+oid+"&fromPage=ayi";
   }
   
-  /*<![CDATA[*/
+
   function getOrder(target){
 	  $(target).attr("disabled",true);
 	  var oid=$(target).val();

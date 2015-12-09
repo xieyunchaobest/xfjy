@@ -73,7 +73,7 @@
 			 <![CDATA[ and    servicetype =#{serviceType}  ]]>
 	  </if>
 	  <if test="state != null and state !=''">
-			 <![CDATA[ and    servicetype =#{state}  ]]>
+			 <![CDATA[ and    state =#{state}  ]]>
 	  </if>
 	  <if test="mobileNo != null and mobileNo !=''">
 			 <![CDATA[ and    mobileNo =#{mobileNo}  ]]>

@@ -74,4 +74,6 @@ public interface ClientService {
 	
 	//日常保洁的时候推送客服消息
 		public void sendCustomerMsg4rcbj(Order o);
+		
+		public ClientUser findClientUserByMobileOpenId(String openId);
 }

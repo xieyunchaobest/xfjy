@@ -14,9 +14,9 @@
   <sql id="queryClientUser">
   	  select 
   	  t1.mobile_no as mobileNo,
-  	  t2.fee as fee
-  	  from T_CLIENT_USER t1 ,T_DEPOSIT_SUMMARY t2 
-  	  where t1.open_id=t2.open_id 
+  	 ifnull(t2.fee,0) as fee
+  	   from T_CLIENT_USER t1  left join T_DEPOSIT_SUMMARY t2 
+  	  on  t1.open_id=t2.open_id 
   </sql>
   
     <select id="getClientUserPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">

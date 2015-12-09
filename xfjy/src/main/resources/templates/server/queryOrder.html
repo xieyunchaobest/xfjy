@@ -54,8 +54,9 @@
 		<form id="orderByForm" th:action="@{/server/queryOrder.html}" method="post">
 			<input type="hidden" id="orderByStr" name="orderByStr"   th:value="${orderBy}"/>
 		 <div class="row" id="qry"  >
-		 	<div  class="col-xs-12" style="padding:10px;border:solid 1px #cccccc;display:table;margin:0 0 ;padding:0 0;height:100px ">
-		 		<div style="height:80px;">
+		 	<div  class="col-xs-12" style="padding:10px;border:solid 1px #cccccc;margin:0 0 ;padding:0 0;height:100px;margin-bottom:15px;margin-top:10px ">
+		 		<div style="height:80px;float:left;width:85%">
+		 			 	<div style="height:80px;">
 		 			<div style="height:40px;margin-top:15px">
 		 			 	<div class="col-xs-4" style="width:380px">
 		 			<label>交易时间:</label>
@@ -88,7 +89,7 @@
 		 			
 		 			 </div>
 		 			 <div style="height:30px;">
-		 			 	<div class="col-xs-4" style="width:350px">
+		 			 	<div class="col-xs-4" style="width:380px">
 		 					<label>联系方式:</label>
 		 					<input name="mobileNo"   id="mobileNo"   th:value="${mobileNo}"/>
 		 				</div>	
@@ -103,10 +104,11 @@
 							</select>
 		 				</div>
 		 			 </div>		
+		 			</div>
 		 			
 		 		</div>
-		 		<div style="display:table-cell;border:1px solid red;text-align:center;width:100px;height:0px">
-		 			<button type="submit" class="btn btn-primary"   name="btnQuery" id="btnQuery" style="margin-bottom:60px" >查询</button> 
+		 		<div style="text-align:center;width:100px;height:80px;float:right;margin-top:30px">
+		 			<button type="submit" class="btn btn-primary"   name="btnQuery" id="btnQuery" style="margin-bottom:60px;float:left" >查询</button> 
 		 		</div>
 		 	</div>
 		 </div>
