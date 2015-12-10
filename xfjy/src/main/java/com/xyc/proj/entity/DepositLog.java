@@ -3,6 +3,7 @@
  */
 package com.xyc.proj.entity;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -67,7 +68,7 @@ public class DepositLog {
 	}
 
 	public Double getDepositAmount() {
-		return depositAmount;
+		return Double.parseDouble( new DecimalFormat("#.00").format(depositAmount));
 	}
 
 	public String getOutTradeNo() {

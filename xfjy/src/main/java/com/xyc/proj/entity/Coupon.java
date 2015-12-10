@@ -4,7 +4,9 @@
  */
 package com.xyc.proj.entity;
 
+import java.text.DecimalFormat;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.xyc.proj.utility.CustomDateSerializer;
 
@@ -191,7 +194,7 @@ public class Coupon {
 
 
 	public Double getCash() {
-		return cash;
+		return Double.parseDouble( new DecimalFormat("#.00").format(cash));
 	}
 
 

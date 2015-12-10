@@ -58,6 +58,9 @@ public class Order {
 	@Column(name = "SERVICE_DATE")
 	private String serviceDate;
 	
+	@Transient
+	private String serviceDateSet;//主要用于包月的，以，隔开的服务日期
+	
 	@Column(name = "WINDOW_COUNT")
 	private String windowCount;
 	
@@ -579,6 +582,26 @@ public class Order {
 
 	public void setWechatfee(Double wechatfee) {
 		this.wechatfee = wechatfee;
+	}
+
+
+	public String getServiceDateSet() {
+		return serviceDateSet;
+	}
+
+
+	public void setServiceDateSet(String serviceDateSet) {
+		this.serviceDateSet = serviceDateSet;
+	}
+
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 
 

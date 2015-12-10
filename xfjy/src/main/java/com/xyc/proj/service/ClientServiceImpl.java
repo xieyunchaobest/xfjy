@@ -1,5 +1,6 @@
 package com.xyc.proj.service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -235,6 +236,29 @@ public class ClientServiceImpl implements ClientService {
 		}
 		return scList;
 	}
+	
+	public List getServiceDateSet(Order o) {
+		List resList=new ArrayList();
+		Date startD= DateUtil.getNextMonday(DateUtil.strToDate(o.getServiceDate()));//从下周一开始
+		Calendar startC = Calendar.getInstance();
+		startC.setTime(startD);
+
+		int drationDay = Integer.parseInt(o.getDurationMonth()) * 4*7;
+		Calendar endC = Calendar.getInstance();
+		endC.setTime(startD);
+		endC.add(Calendar.DATE, drationDay);
+		 
+		while (!(endC.before(startC))) {
+			String w = "" + (startC.get(Calendar.DAY_OF_WEEK) - 1);
+			if (o.getRepeatInWeek().contains(w)) {
+				String d = DateUtil.date2Str(startC.getTime());
+				System.out.println(d);
+				resList.add(d);
+			}
+			startC.add(Calendar.DATE, 1);
+		}
+		return resList;
+	}
 
 	public List getScheduleList4Month(Order o, List mList) {
 		List resList = new ArrayList();
@@ -256,7 +280,6 @@ public class ClientServiceImpl implements ClientService {
 			String duration = (String) (mm.get("druation"));
 			int idruation = Integer.parseInt(duration);
 			while (!(endC.before(startC))) {
-				startC.add(Calendar.DATE, 1);
 				String w = "" + (startC.get(Calendar.DAY_OF_WEEK) - 1);
 				if (o.getRepeatInWeek().contains(w)) {
 					String d = DateUtil.date2Str(startC.getTime());
@@ -271,6 +294,7 @@ public class ClientServiceImpl implements ClientService {
 					sd.setAyiId(wid);
 					resList.add(sd);
 				}
+				startC.add(Calendar.DATE, 1);
 			}
 		}
 
@@ -460,30 +484,8 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	 public static void main(String arg[]) {
-	 //new ClientServiceImpl().getScheduleList4Month("2015-11-11", "3", "3");
-	 String info = null;
-	 try{
-     String content="您正在登录幸福家缘微信平台,校验码为1111,10分钟内有效,请勿泄露给他人.";
-	// String content="质控消息:患者大是病历书写不合格,请查看!";
-	 HttpClient httpclient = new HttpClient();
-	 PostMethod post = new
-	 PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
-	 post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
-	 post.addParameter("SpCode", "");
-	 post.addParameter("LoginName", "");
-	 post.addParameter("Password", "");
-	 post.addParameter("MessageContent", content);
-	 post.addParameter("UserNumber", "18611298927");
-	 post.addParameter("SerialNumber", "12345678901234567890");
-	 post.addParameter("ScheduleTime", "");
-	 post.addParameter("ExtendAccessNum", "");
-	 post.addParameter("f", "1");
-	 httpclient.executeMethod(post);
-	 info = new String(post.getResponseBody(),"gbk");
-	 System.out.println(info);
-	 }catch (Exception e) {
-	 e.printStackTrace();
-	 }
+		 new ClientServiceImpl().getServiceDateSet(null);
+
 	 }
 
 	public Map getOrderMap(String openId) {
@@ -545,7 +547,48 @@ public class ClientServiceImpl implements ClientService {
 		} else if (Constants.ORDER_STATE_FINISH.equals(o.getState())) {
 			o.setStateText("已完成");
 		}
+		String repeatTextInWeak=getRepeatTextInWeak(o.getRepeatInWeek());
+		o.setRepeatInWeekText(repeatTextInWeak);
+		if(Constants.CYCLE_TYPE_SG.equals(o.getCycleType())) {
+			o.setServiceDateSet(o.getServiceDate());
+		}else {
+			List serviceDateSet=getServiceDateSet(o);
+			String res="";
+			for(int i=0;i<serviceDateSet.size();i++) {
+				String serviceDate=(String)serviceDateSet.get(i);
+				res=res+(i==serviceDateSet.size()-1?serviceDate:serviceDate+",");
+			}
+			o.setServiceDateSet(res);
+		}
 		return o;
+	}
+	
+	 
+	
+	private String getRepeatTextInWeak(String repeatInWeak) {
+		String res="";
+		String day="";
+		String arr[]=repeatInWeak.split(",");
+		for(int i=0;i<arr.length;i++) {
+			String n=arr[i];
+			if(n.equals("1")) {
+				day="星期一";
+			}else if(n.equals("2")){
+				day="星期二";
+			}else if(n.equals("3")){
+				day="星期三";
+			}else if(n.equals("4")){
+				day="星期四";
+			}else if(n.equals("5")){
+				day="星期五";
+			}else if(n.equals("6")){
+				day="星期六";
+			}else if(n.equals("7")){
+				day="星期日";
+			}
+			res=res+(i==arr.length-1?day:day+",");
+		}
+		return res;
 	}
 
 	// 避免方法重写，让按照主键查询和openId查询共用一个方法体
@@ -692,7 +735,7 @@ public class ClientServiceImpl implements ClientService {
 		}
 
 		//int totalFee = 1;
-		 int totalFee=(int) (order.getTotalFee().doubleValue()*100d);
+		 int totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(order.getTotalFee().doubleValue()*100d)) ;
 		 //totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
 		// 判断是否用了余额或优惠券，如果是，减去余额
 		String payMode = order.getPayMode();

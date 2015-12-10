@@ -245,7 +245,7 @@ public class ServerController {
 		String res = "S";
 		try {
 			List mList = new ArrayList();
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 16; i++) {
 				String aid = request.getParameter("aid" + i);
 				if (!StringUtil.isBlank(aid)) {
 					String druation = request.getParameter("druation" + i);

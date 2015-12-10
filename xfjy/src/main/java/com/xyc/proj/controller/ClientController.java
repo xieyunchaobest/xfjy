@@ -793,15 +793,17 @@ public class ClientController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/client/workerTask.html")
+	@RequestMapping(value="/client/workerTask.html", method = { RequestMethod.POST, RequestMethod.GET })
 	public String workerTask(Model model, HttpSession session, HttpServletRequest request,
-			@RequestParam(value = "code", required = true) String code,
+			@RequestParam(value = "code", required = false) String code,
 			@RequestParam(value = "serviceDate", required = false) String serviceDate,
+			@RequestParam(value = "flag", required = false) String flag,
 			@RequestParam(value = "openId", required = false) String openId) {
 		
 		if(session.getAttribute("openId")!=null) {
 			String opId=(String)session.getAttribute("openId");
 			openId=opId;
+			session.setAttribute("openId", openId);
 		}
 		
 		System.out.println("code===============" + code);
@@ -815,9 +817,14 @@ public class ClientController {
 			session.setAttribute("openId", openId);
 		}
 		System.out.println("openId=======" + openId);
+		if(StringUtil.isBlank(serviceDate)) {
+			serviceDate=DateUtil.getToday();
+		}
 		Map resMap = clientService.getWorkerTask(openId, serviceDate);
 		model.addAttribute("resMap", resMap);
 		model.addAttribute("openId", openId);
+		model.addAttribute("serviceDate", serviceDate);
+		model.addAttribute("flag", flag);
 		return "client/workerTask";
 	}
 

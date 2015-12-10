@@ -8,6 +8,14 @@
 <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
 <script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_002.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_004.js}" type="text/javascript"></script>
+<link th:href="@{/app/datepicker/css/mobiscroll_002.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/app/datepicker/css/mobiscroll.css}" rel="stylesheet" type="text/css" />
+<script th:src="@{/app/datepicker/js/mobiscroll.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_003.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_005.js}" type="text/javascript"></script>
+<link th:href="@{/app/datepicker/css/mobiscroll_003.css}" rel="stylesheet" type="text/css" />
 <script th:src="@{/app/js/public.js}"></script>
 <style type="text/css">
  
@@ -61,6 +69,36 @@
           }
       }); 	  
   }
+  
+  $(function () {
+      var currYear = (new Date()).getFullYear();	
+  	var opt={};
+  	opt.date = {preset : 'date'};
+  	opt.datetime = {preset : 'datetime'};
+  	opt.time = {preset : 'time'};
+  	opt.default = {
+  		theme: 'android-ics light', //皮肤样式
+          display: 'modal', //显示方式 
+          mode: 'scroller', //日期选择模式
+  		dateFormat: 'yyyy-mm-dd',
+  		lang: 'zh',
+  		showNow: true,
+  		nowText: "今天",
+          startYear: currYear, //开始年份
+          endYear: currYear + 10, //结束年份
+          minDate: new Date()
+  	};
+  	$("#serviceDate").mobiscroll($.extend(opt['date'], opt['default']));
+  	if($("#aflag").val()=='T'){
+  		 $('#myTab li:eq(1) a').tab('show');
+  	}
+  	}
+  	);
+  
+  function refreshPage(flag){
+	  var path = basePath+"/client/workerTask.html?flag="+flag;  
+	  $('#aform').attr("action", path).submit();
+  }
   /*]]>*/
  
 </script>
@@ -77,7 +115,7 @@
 <div id="myTabContent" class="tab-content">
    <div class="tab-pane fade in active" id="home">
 <div style="margin-top:20px;margin-left:10px">
-	<input type="hidden" name="openId" id="openId" th:value="${openId}"/>
+<input type="hidden" name="aflag" id="aflag" th:value="${flag}"/>
 </div>
 <div class="panel panel-default" style="margin-left:5px"  th:each="order : ${resMap.waitOrderList}">
    <div class="panel-heading"  >
@@ -99,6 +137,13 @@
    </div>
    <div class="tab-pane fade" id="ios">
       <div style="margin-top:20px;margin-left:10px"></div>
+      <div>
+      	<form id="aform" method="post">
+      		<input type="hidden" name="openId" id="openId" th:value="${openId}"/>
+      		<label for="serviceDate" style="margin-left:15px;">服务日期：</label>
+      		<input name="serviceDate" onchange="refreshPage('T')" class="input-append date" id="serviceDate" size="12"  th:value="${serviceDate}" onfocus="this.blur()"   />
+      	</form>
+      </div>
 <div class="panel panel-default" style="margin-left:5px"  th:each="order : ${resMap.todoOrderList}">
    <div class="panel-heading"  >
    	<h3 class="panel-title" th:attr="oid=${order.id}"  onclick="toOrderDetail(this)">

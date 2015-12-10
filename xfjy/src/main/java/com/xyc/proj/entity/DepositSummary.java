@@ -3,6 +3,8 @@
  */
 package com.xyc.proj.entity;
 
+import java.text.DecimalFormat;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,7 +52,7 @@ public class DepositSummary {
 
 
 	public Double getFee() {
-		return fee;
+		return Double.parseDouble( new DecimalFormat("#.00").format(fee));
 	}
 
 

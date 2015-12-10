@@ -182,6 +182,7 @@ public class ServerServiceImpl implements ServerService {
 			scheduleRepository.save(sList);
 		} else {
 			List sList = clientService.getScheduleList4OneDay(o, mList);
+			System.out.println("mList========="+mList);
 			scheduleRepository.save(sList);
 		}
 
@@ -195,7 +196,7 @@ public class ServerServiceImpl implements ServerService {
 			orderWorkerList.add(ow);
 		}
 		orderWorkerRepository.save(orderWorkerList);
-		o.setState(Constants.STATE_A);
+		o.setState(Constants.ORDER_STATE_CONFIRMED);
 		orderRepository.save(o);
 
 		// 发送客服消息

@@ -148,9 +148,19 @@ $(function(){
    	  	<label>下单时间：</label>
    	  	<span  th:text="${order.payTime}"></span>
    	   </li>
-      <li class="list-group-item"  id="liserviceTime">
+      <li class="list-group-item"  id="liserviceDate">
+      	<label>服务日期：</label>
+      	<span th:text="${order.repeatInWeekText}"></span>
+   	  	<span  th:text="${order.serviceDateSet}"></span>
+       </li>
+       <li class="list-group-item"  id="listartTime">
+      	<label>开始时间：</label>
+   	  	<span  th:text="${order.startTime} "></span>
+   	  	<span>: 00</span>
+       </li>
+       <li class="list-group-item"  id="liserviceTime">
       	<label>服务时间：</label>
-   	  	<span  th:text="__${order.serviceDate}__+' '+${order.durationText} "></span>
+   	  	<span  th:text="${order.durationText} "></span>
        </li>
         <li class="list-group-item">
       	<label>客户姓名：</label>
