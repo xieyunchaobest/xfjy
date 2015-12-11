@@ -12,7 +12,7 @@ function getToday(){
 	var str = "";   
     str= day.getFullYear() ;     
     str=str+'-'+((day.getMonth()+1)>10? (day.getMonth()+1).toString():'0' +(day.getMonth()+1));   
-    str=str+"-"+(day.getDate()>9?(day.getDate()+1).toString():'0' + (day.getDate()));
+    str=str+"-"+(day.getDate()>9?day.getDate().toString():'0' + (day.getDate()));
     return str;
 }
 

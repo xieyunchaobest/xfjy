@@ -659,7 +659,7 @@ $("button[xtype='tmsel']").click(function(){
 	   var startTime=$("#startTime").val();
 	   if(serviceDate==getToday()){
 		   if(parseInt(startTime)<=getCurrentHour()){
-			   $("#validateInfo4sg").text('服务时间需大于当前时间!');
+			   $("#validateInfo4sg").text('选择的时间段已被约满!');
 			   res=false;
 			   return res;
 		   }

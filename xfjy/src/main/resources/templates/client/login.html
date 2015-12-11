@@ -28,7 +28,7 @@
 		}, 1000);
 	}
 	
-	/*]]>*/
+	
 
 	function getAuthCode(){
 		if(validateMobile()==false)return;
@@ -75,6 +75,10 @@
 			 $("#spnwarngin").text('请输入正确的校验码！');
 			 return false;
 		 }
+		 if($("#cbresb").prop('checked')==false){
+			 $("#spnwarngin").text('您需要同意免责声明！');
+			 return false;
+		 }
 		 return true;
 	}
 	
@@ -96,6 +100,10 @@
         }); 
 	}
 	
+	function toAnouncement(){
+		window.location.href="http://mp.weixin.qq.com/s?__biz=MzI3ODA4MTI2Mw==&mid=402589120&idx=1&sn=26c6d169877872c56d5a21aeaaf191fa#rd"
+	}
+	/*]]>*/
 </script>
 
 
@@ -137,7 +145,14 @@
 				</div>
 				<div class="col-xs-1"/>
 			</div>
-			
+			<div class="row" id="warnginInfo" style="margin-top:10px">
+				<div class="col-xs-1"/>
+				<div>
+					 <input type="checkbox" id="cbresb" name="cbresb" />
+					 同意<a href="#" onclick="toAnouncement();">免责声明</a>
+				</div>
+				<div class="col-xs-1"/>
+			</div>
 			<div class="row">
 				<div class="col-md-4">&nbsp;
 					

@@ -337,7 +337,7 @@ public class ServerServiceImpl implements ServerService {
 	}
 	
 	public List findTeachers() {
-		return workerRepository.findByRole("T");
+		return workerRepository.findByRoleAndState("T","A");
 	}
 	
 	

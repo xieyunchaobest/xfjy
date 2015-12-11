@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.xyc.proj.entity.ClientUser;
+import com.xyc.proj.entity.Config;
 import com.xyc.proj.entity.Coupon;
 import com.xyc.proj.entity.DepositLog;
 import com.xyc.proj.entity.DepositSummary;
@@ -598,7 +599,7 @@ public class ClientServiceImpl implements ClientService {
 
 		List<Order> orderList = new ArrayList();
 		if (!StringUtil.isBlank(openId)) {
-			orderList = orderRepository.findByOpenId(openId);
+			orderList = orderRepository.findByOpenIdAndState(openId);
 		} else {
 			orderList = orderRepository.findById(oid);
 		}
@@ -613,7 +614,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	public Map deposit(String openId, double amount) {
-
+		System.out.println("deposit======="+amount);
 		Map resMap = new HashMap();
 		try {
 
@@ -622,9 +623,29 @@ public class ClientServiceImpl implements ClientService {
 			// ds.setBalance(sum.getFee()+amount);
 			ds.setOpenId(openId);
 			ds.setState(Constants.STATE_P);
-
-			// int aamount=(int)amount*100;
+			
+			//确定范围和折扣 
+			int discount=100;
 			int aamount =(int) amount/100;
+			System.out.println("deposit/100======="+aamount);
+			//int aamount =(int)amount*100;
+			List<Config> cList=configRepository.findByConfigName("DEPOSIT_RANGE");
+			for(int i=0;i<cList.size();i++) {
+				Config config=cList.get(i);
+				String range=config.getConfigCode();
+				String arrRange[]=range.split("-");
+				int start=Integer.parseInt(arrRange[0]);
+				int end=Integer.parseInt(arrRange[1]);
+				int adiscount=Integer.parseInt(config.getConfigValue());
+				if(amount>=start && amount<=end) {
+					discount=adiscount;
+					break;
+				}
+			}
+			aamount=aamount*(discount/100);
+			System.out.println("aamount======="+aamount);
+			// int aamount=(int)amount*100;
+			
 			String outTradeNo = RandomStringGenerator.getRandomStringByLength(18);
 			String spBillCreateIP = "127.0.0.1";
 			String timeStart = DateUtil.Time2Str(new Date(), DateUtil.format1);
@@ -947,7 +968,7 @@ public class ClientServiceImpl implements ClientService {
 	
 	//推送客服消息
 	public void sendCustomerMsg4rcbj(Order order) {
-		if ("CC".equals(order.getServiceType())) {
+		if (Constants.SERVICE_TYPE_CC.equals(order.getServiceType())  && Constants.CYCLE_TYPE_SG.equals(order.getCycleType())) {
 			List olist = orderRepository.getCleanOrderWithAddressInfo(order.getOutTradeNo());
 			if (olist != null && olist.size() > 0) {
 				Object obj[] = (Object[]) olist.get(0);
@@ -958,7 +979,8 @@ public class ClientServiceImpl implements ClientService {
 				UserAddress ua = (UserAddress) obj[1];
 				Long areaId = ua.getAreaId();
 				o.setAreaId(areaId);
-				List ayiList = workerRepository.findWorkerAndOpenIdInArea(o.getAreaId());
+				//List ayiList = workerRepository.findWorkerAndOpenIdInArea(o.getAreaId());
+				List ayiList = workerRepository.findByRoleAndServiceTypeOneAndState();
 				List confictList = new ArrayList();
 				for (int k = 0; k < ayiList.size(); k++) {
 					Object ob[] = (Object[]) ayiList.get(k);
@@ -1034,7 +1056,6 @@ public class ClientServiceImpl implements ClientService {
 
 	public Map getWorkerTask(String openId, String serviceDate) {
 		Map resMap = new HashMap();
-		System.out.println("ppppppppppppppppppp" + openId);
 		ClientUser cu = clientUserRepository.findByOpenId(openId);
 		String phone = cu.getMobileNo();
 		Worker worker = workerRepository.findByPhone(phone);
@@ -1076,6 +1097,23 @@ public class ClientServiceImpl implements ClientService {
 		if (o.getState().equals(Constants.ORDER_STATE_CONFIRMED)) {
 			res = "L";
 			return res;
+		}
+		
+		//抢单的时候判断时间是否冲突
+		System.out.println("000000000000000000000000penid="+openId);
+		Worker worker=workerRepository.findWorkerByOpenId(openId);
+		List scList=scheduleRepository.findByAyiIdAndBusiDateAndState(worker.getId(), o.getServiceDate(), Constants.STATE_A);
+		for(int i=0;i<scList.size();i++) {
+			Schedule sd=(Schedule)scList.get(i);
+			int startTime=Integer.parseInt(sd.getStartTime());
+			int endTime=Integer.parseInt(sd.getEndTime());
+			if(Integer.parseInt(o.getStartTime())<endTime &&
+					Integer.parseInt(o.getEndTime())>startTime	
+					) {
+				res="F";
+				return res;
+			}
+					
 		}
 
 		o.setState(Constants.ORDER_STATE_CONFIRMED);

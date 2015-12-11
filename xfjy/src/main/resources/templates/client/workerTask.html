@@ -36,13 +36,15 @@
 	  var openId=$("#openId").val();
 	  $.ajax({
           type: "POST",
-          url: basePath+'/client/fightOrder.html?oid='+oid+"&openId="+openId,
+          url: basePath+'/client/fightOrder.html?oid='+oid,
           data:$("#aform").serialize(),
           success: function(data) {
           	if(data=="S"){
           		 alert('已成功领取！');
           	}else if(data=='L'){
           		 alert('已被其他人领取！');
+          	}else if(data=='F'){
+          		 alert('该时间段内您已有其他任务！');
           	}else{
           		 alert('处理失败！');
           	}
@@ -85,8 +87,7 @@
   		showNow: true,
   		nowText: "今天",
           startYear: currYear, //开始年份
-          endYear: currYear + 10, //结束年份
-          minDate: new Date()
+          endYear: currYear + 10
   	};
   	$("#serviceDate").mobiscroll($.extend(opt['date'], opt['default']));
   	if($("#aflag").val()=='T'){

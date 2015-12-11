@@ -21,6 +21,7 @@
 	var paySign='';
 	function createOrder(){
 		var couponCheck=$("#payMode4yhq").prop('checked');
+		var openId=$("#openId").val();
 		if(couponCheck==true){
 			if($("#couponId").val()==''){
 				$("#spnwarngin").text('请选择优惠券！');
@@ -47,6 +48,7 @@
 	            		}else{
 	            			 alert('订单已成功处理！');
 	            			 $("#btnPay").text('支付成功');
+	            			 window.location.href=basePath+"/client/index.html?openId="+openId;
 	            		}
 	            		
 	            	}else{

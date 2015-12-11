@@ -57,6 +57,7 @@ function createOrder(){
             		}else{
             			 alert('订单已成功处理！');
             			 $("#btnPay").text('支付成功');
+            			 window.location.href=basePath+"/client/index.html?openId="+openId;
             		}
             	}else{
             		 alert('订单处理失败！');

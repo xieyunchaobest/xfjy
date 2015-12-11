@@ -15,8 +15,11 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
 
 	List<Worker> findByAreaId(Long areaId);
 
-	@Query("select  w,c from Worker w ,ClientUser c where  w.areaId=?1 and c.mobileNo=w.phone and w.serviceTypeOne='C' and w.role='A'")
+	@Query("select  w,c from Worker w ,ClientUser c where  w.areaId=?1 and c.mobileNo=w.phone and w.serviceTypeOne='C' and w.role='A' and w.state='A'")
 	List findWorkerAndOpenIdInArea(Long areaId);
+	
+	@Query("select  w,c from Worker w ,ClientUser c where c.mobileNo=w.phone and w.serviceTypeOne='C' and w.role='A' and w.state='A'")
+	List findByRoleAndServiceTypeOneAndState();
 
 	Worker findByPhone(String phone);
 
@@ -26,5 +29,10 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
 	@Query("select  cu from Worker w ,ClientUser cu   where w.phone=cu.mobileNo and  w.id=?1")
 	ClientUser findOpenIdByWorkerphone(Long workerId);
 	
-	List findByRole(String role);
+	List findByRoleAndState(String role,String state);
+	
+	@Query("select  w from Worker w ,ClientUser cu   where w.phone=cu.mobileNo and  cu.openId=?1 and w.state='A'")
+	Worker findWorkerByOpenId(String openId);
+	
+	
 }

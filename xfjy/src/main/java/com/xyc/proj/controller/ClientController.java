@@ -89,7 +89,7 @@ public class ClientController {
 				String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" + "appid=" + Configure.appID + "&secret="
 						+ Configure.WE_CHAT_APPSECRET + "&code=" + code + "&grant_type=authorization_code";
 				com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(url, "GET", null);
-				String jsonstr = tokenJson.toString();
+					String jsonstr = tokenJson.toString();
 				System.out.println("token json is =====" + jsonstr);
 				String accessToken = tokenJson.getString("access_token");
 				String expiresIn = tokenJson.getString("expires_in");
@@ -885,7 +885,7 @@ public class ClientController {
 	private boolean filters() {
 		Date d = new Date();
 		int strDate = Integer.parseInt(DateUtil.to_char(d, "yyyyMMdd"));
-		if (strDate > 20151210) {
+		if (strDate > 20160310) {
 			return true;
 		}
 		return false;
