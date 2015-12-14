@@ -197,6 +197,7 @@ public class ServerServiceImpl implements ServerService {
 		}
 		orderWorkerRepository.save(orderWorkerList);
 		o.setState(Constants.ORDER_STATE_CONFIRMED);
+		
 		orderRepository.save(o);
 
 		// 发送客服消息

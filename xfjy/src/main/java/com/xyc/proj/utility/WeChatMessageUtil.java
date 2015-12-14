@@ -79,8 +79,7 @@ public class WeChatMessageUtil {
 			
 			
 		}catch(Exception e) {
-			System.err.println("parse xml error");
-			e.printStackTrace();
+			System.err.println("we chat parse xml error");
 		}
 		return msg;
 	}

@@ -128,14 +128,12 @@ function showTimeModal(){
 		 
 		 var serviceDate=$("#txtServiceDate").val();
 		   var startTime=$("#hdServiceTime").val();
-		   if(serviceDate==getToday()){
-			   if(parseInt(startTime)<=getCurrentHour()){
-				   $("#spnwarngin").text('服务时间需大于当前时间!');
-				   res=false;
-				   return res;
-			   }
+		   if(getHourDiff(serviceDate,startTime)<24){
+			   $("#spnwarngin").text('选择的时间段已被约满!');
+			   res=false;
+			   return res;
 		   }
-		 
+		    
 		 return true;
 	 }
 	 /*]]>*/

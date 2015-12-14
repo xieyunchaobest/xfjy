@@ -129,7 +129,8 @@
 						<th>开始时间</th>
 						<th>时长</th>
 						<th>周期</th>
-						<th>持续时间</th>
+						<th>持续时间(月)</th>
+						<th>星期</th>
 						<th>面积</th>
 						<th>内窗数量</th>
 						<th>阳台数量</th>
@@ -154,6 +155,7 @@
 						<td th:text="${item.duration}"></td>
 						<td th:text="${item.cycleTypeText}"></td>
 						<td th:text="${item.durationMonth}"></td>
+						<td th:text="${item.repeatInWeek}"></td>
 						<td th:text="${item.area}"></td>
 						<td th:text="${item.windowCount}"></td>
 						<td th:text="${item.balconyCount}"></td>

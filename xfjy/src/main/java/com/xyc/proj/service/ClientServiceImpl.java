@@ -153,7 +153,7 @@ public class ClientServiceImpl implements ClientService {
 		Long areaId=ua.getAreaId();
 		List<TimeSplit> timeSplitList = timeSplitRepository.findAll();
 		List tempList = new ArrayList();
-		List<Worker> aiyiList = ayiRepository.serviceTypeOneAndAreaIdAndState(Constants.WORK_SERVICE_TYPE_CLEAN,areaId,"A");
+		List<Worker> aiyiList = ayiRepository.serviceTypeOneAndState(Constants.WORK_SERVICE_TYPE_CLEAN,"A");
 		
 		List allShecList=scheduleRepository.findByServiceDateAndAreaId(serviceDate,areaId);
 		int ayisize = aiyiList.size();
@@ -224,6 +224,9 @@ public class ClientServiceImpl implements ClientService {
 			Map mm = (Map) mList.get(i);
 			Long wid = Long.parseLong((String) mm.get("aid"));
 			String duration = (String) (mm.get("druation"));
+			if(StringUtil.isBlank(o.getEndTime())) {
+				o.setEndTime(o.getStartTime()+Integer.parseInt(duration));
+			}
 			int idruation = Integer.parseInt(duration);
 			Schedule sd = new Schedule();
 			sd.setBusiDate(o.getServiceDate());
@@ -279,6 +282,9 @@ public class ClientServiceImpl implements ClientService {
 			Map mm = (Map) mList.get(i);
 			Long wid = Long.parseLong((String) mm.get("aid"));
 			String duration = (String) (mm.get("druation"));
+			if(StringUtil.isBlank(o.getEndTime())) {
+				o.setEndTime(Integer.parseInt(o.getStartTime())+Integer.parseInt(duration)+"");
+			}
 			int idruation = Integer.parseInt(duration);
 			while (!(endC.before(startC))) {
 				String w = "" + (startC.get(Calendar.DAY_OF_WEEK) - 1);
@@ -561,6 +567,17 @@ public class ClientServiceImpl implements ClientService {
 			}
 			o.setServiceDateSet(res);
 		}
+		
+		String durationText = "";
+		if (!StringUtil.isBlank(o.getStartTime())) {
+			Integer iStartTime = Integer.parseInt(o.getStartTime());
+			durationText = iStartTime + "";
+			if (!StringUtil.isBlank(o.getEndTime())) {
+				Integer iEndTime = Integer.parseInt(o.getEndTime());
+				durationText = durationText + ":00-" + iEndTime+":00";
+			}
+		}
+		o.setDurationText(durationText);
 		return o;
 	}
 	
@@ -1059,9 +1076,9 @@ public class ClientServiceImpl implements ClientService {
 		ClientUser cu = clientUserRepository.findByOpenId(openId);
 		String phone = cu.getMobileNo();
 		Worker worker = workerRepository.findByPhone(phone);
-		Long areaId = worker.getAreaId();
+		//Long areaId = worker.getAreaId();
 		List waitedOrderList = new ArrayList();
-		List objList = orderRepository.findByAreaIdAndStateAndServiceType("P", "CC", areaId);
+		List objList = orderRepository.findByStateAndServiceType("P", "CC");
 		if (waitedOrderList != null) {
 			for (int i = 0; i < objList.size(); i++) {
 				Object obj[] = (Object[]) objList.get(i);

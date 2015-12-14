@@ -656,14 +656,20 @@ $("button[xtype='tmsel']").click(function(){
 	   }
 	
 	   var serviceDate=$("#serviceDate4sg").val();
-	   var startTime=$("#startTime").val();
-	   if(serviceDate==getToday()){
+	   var startTime=$("#durationTime4sgStart").val();
+	   
+	   if(getHourDiff(serviceDate,startTime)<24){
+		   $("#validateInfo4sg").text('选择的时间段已被约满!');
+		   res=false;
+		   return res;
+	   }
+	   /**if(serviceDate==getToday()){
 		   if(parseInt(startTime)<=getCurrentHour()){
 			   $("#validateInfo4sg").text('选择的时间段已被约满!');
 			   res=false;
 			   return res;
 		   }
-	   }
+	   }**/
 	  return res;
 	   //if($("#validateInfo4sg"))
 	   
@@ -736,6 +742,7 @@ $("button[xtype='tmsel']").click(function(){
    
    function fillServiceTime(target){
 	   $("#startTime").val($(target).attr('value'));
+	   $("#durationTime4byStart").val($(target).attr('value'));
 	   $("#serviceTimeSelectModal").modal('hide');
 	   if(flagStartTime=='sg'){
 		   $("#spanserviceTimesg").text($(target).attr('txt'));

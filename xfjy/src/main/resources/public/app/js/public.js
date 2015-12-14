@@ -18,7 +18,21 @@ function getToday(){
 
 function getCurrentHour(){
 	var myDate = new Date();
-	var hour= myDate.getHours()+1;;       //获取当前小时数(0-23)
+	var hour= myDate.getHours();       //获取当前小时数(0-23)
 	return hour;
+}
+
+//和当前时间相差的小时数
+function getHourDiff(d2,h2){
+	var today=new  Date();
+	if(parseInt(h2)<10)h2="0"+h2;
+	var day=d2+" "+h2+":00:00";
+	var dt = new Date(day.replace(/-/,"/")) 
+	alert(dt);
+	var diffmills=dt.getTime()-today.getTime()  //时间差的毫秒数
+	console.info('diffmillsdiffmills='+diffmills);
+	var hours=Math.floor(diffmills/(3600*1000))
+	console.info('hourshours='+hours);
+	return hours;
 }
 /*]]>*/
