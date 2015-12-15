@@ -1081,7 +1081,9 @@ public class ClientServiceImpl implements ClientService {
 
 				Order o = (Order) obj[0];
 				o = fillOrder(o);
-				waitedOrderList.add(o);
+				if(Constants.CYCLE_TYPE_SG.equals(o.getCycleType())) {//只抢闪弓的
+					waitedOrderList.add(o);
+				}
 			}
 		}
 

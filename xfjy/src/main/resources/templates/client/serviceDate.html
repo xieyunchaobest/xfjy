@@ -656,7 +656,15 @@ $("button[xtype='tmsel']").click(function(){
 	   }
 	
 	   var serviceDate=$("#serviceDate4sg").val();
-	   var startTime=$("#durationTime4sgStart").val();
+	   var startTime='';
+	   if(serviceType=='CC'){
+		   startTime=$("#durationTime4sgStart").val();
+	   }else{
+		   startTime=$("#startTime").val();
+	   }
+	   
+	   console.info('serviceDateserviceDate='+serviceDate);
+	   console.info('startTimestartTime='+startTime);
 	   
 	   if(getHourDiff(serviceDate,startTime)<24){
 		   $("#validateInfo4sg").text('选择的时间段已被约满!');

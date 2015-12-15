@@ -42,9 +42,22 @@ $(function () {
         minDate: new Date()
 	};
 	$("#txtServiceDate").mobiscroll($.extend(opt['date'], opt['default']));
-	
+	$("#txtServiceDate").val(getTomorrow(new Date()));
+	$("#serviceDate").val(getTomorrow(new Date()));
 	
 });
+
+getTomorrow = function(day)   
+{   
+    var str = "";   
+  
+    str= day.getFullYear() ;     
+    str=str+'-'+((day.getMonth()+1)>10? (day.getMonth()+1).toString():'0' +(day.getMonth()+1));   
+   // str=str+"-"+(day.getDate()>9?(day.getDate()+1).toString():'0' + (day.getDate()+1));   
+  	var tomorrow=day.getDate()+1;
+  	str=str+"-"+(tomorrow>9?tomorrow.toString():'0' + tomorrow.toString());
+    return str;   
+} 
 
 function showTimeModal(){
 	   $("#serviceTimeSelectModal").modal({
