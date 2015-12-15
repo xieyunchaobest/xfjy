@@ -154,7 +154,11 @@ function showTimeModal(){
 			   res=false;
 			   return res;
 		   }
-		   
+		   if(getHourDiff(serviceDate,startTime)>168){
+			   $("#spnwarngin").text('选择的时间段已被约满!');
+			   res=false;
+			   return res;
+		   }
 		   
 		 return true;
 	 }

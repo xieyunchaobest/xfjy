@@ -76,12 +76,12 @@ function toAddAddress(){
 		</div>
 		<div style="margin-top:-0px;margin-bottom:10px;display:none" id="coupons">
 			<h4>
-				<span class="label label-success" style="paddgin:0 0" th:each="coupon : ${couponList}" th:text="${coupon.cash}">
+				<span class="label label-success" style="paddgin:0 0" th:each="coupon : ${couponList}" th:text="__${coupon.cash}__+' '+${coupon.expireDate}+'到期'">
 				</span><span>&nbsp;</span>
 			</h4>
 		</div>
 		
-		<ul class="list-group" onclick="toAddAddress()">
+		<ul class="list-group" style="margin-top:20px" onclick="toAddAddress()">
   				<li class="list-group-item" >
   					<label>个人地址管理：</label>
   					<span class="badge">></span>

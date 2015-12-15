@@ -199,12 +199,22 @@ public class ServerServiceImpl implements ServerService {
 		o.setState(Constants.ORDER_STATE_CONFIRMED);
 		
 		orderRepository.save(o);
+		//发送手机短信
+		o=clientService.fillOrder(o);
+		String serviceTypeText=o.getServiceTypeText();
+		String serviceCycleText=o.getCycleTypeText();
+		String serviceDate=o.getServiceDate();
+		if(Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
+			serviceDate=(String)clientService.getServiceDateSet(o).get(0);
+		}
+		String content="您收到客服分配的"+serviceTypeText+serviceCycleText+"订单首次服务时间"+serviceDate+"请尽快到待办中查看"+"!";
 
 		// 发送客服消息
 		for (int i = 0; i < mList.size(); i++) {
 			Map w = (Map) mList.get(i);
 			Long wid = Long.parseLong((String) w.get("aid"));
 			ClientUser clientUser = workerRepository.findOpenIdByWorkerphone(wid);
+			String phoneNo=workerRepository.findOne(wid).getPhone();
 			String openId = clientUser.getOpenId();
 			String loginurl = "http://weixin.tjxfjz.com/xfjy/client/workerTask.html";
 			String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Configure.appID
@@ -212,9 +222,22 @@ public class ServerServiceImpl implements ServerService {
 
 			MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, openId, url, "您有新的任务", o.getFullAddress(), "客服派单",
 					"点击查看详情");
+			
+			clientService.sendShortMsg(phoneNo, content);
 		}
+		
 	}
 
+	
+	public static void main(String args[]) {
+		String serviceTypeText="大宝洁";
+		String serviceCycleText="包月";
+		String serviceDate="2015-12-12";
+		String content="您收到客服分配的"+serviceTypeText+serviceCycleText+"订单首次服务时间"+serviceDate+"请尽快到待办中查看"+"!";
+		new ClientServiceImpl().sendShortMsg("13820103966", content);
+	}
+	
+	
 	// public void dispatchOrder(Long orderId,List scList,List orderWorkerList){
 	// //先删除，后添加
 	// List oList=orderWorkerRepository.findByOrderId(orderId);
@@ -234,7 +257,7 @@ public class ServerServiceImpl implements ServerService {
 	// }
 
 	public List findByCodeAndPassword(String code, String pwd) {
-		return workerRepository.findByCodeAndPassword(code, pwd);
+		return workerRepository.findByCodeAndPasswordAndRole(code, pwd,"T");
 	}
 
 	public List findStore() {
@@ -330,6 +353,7 @@ public class ServerServiceImpl implements ServerService {
 	
 	
 	public void saveWorker(Worker w) {
+		w.setPassword("abc123");
 		w=workerRepository.save(w);
 		long id=w.getId();
 		String code = String.format("%06d", id);     

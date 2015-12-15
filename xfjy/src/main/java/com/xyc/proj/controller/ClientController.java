@@ -271,7 +271,8 @@ public class ClientController {
 		// Map result = restAPI.sendTemplateSMS(mobileNo, templeId,new
 		// String[]{randomCode});
 		// if("000000".equals(result.get("statusCode"))) {
-		clientService.sendShortMsg(mobileNo, randomCode);
+		String content="您正在登录幸福家缘微信平台,校验码为"+randomCode+",10分钟内有效,请勿泄露给他人.";
+		clientService.sendShortMsg(mobileNo, content);
 		UserAuthCode u = new UserAuthCode();
 		u.setAuthCode(randomCode);
 		u.setMobileNo(mobileNo);

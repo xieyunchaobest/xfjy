@@ -76,4 +76,6 @@ public interface ClientService {
 		public void sendCustomerMsg4rcbj(Order o);
 		
 		public ClientUser findClientUserByMobileOpenId(String openId);
+		
+	public List	getServiceDateSet(Order o);
 }

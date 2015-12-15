@@ -463,10 +463,9 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	
-	public void sendShortMsg(String phoneNo,String authCode) {
+	public void sendShortMsg(String phoneNo,String content) {
 		 String info = null;
 		 try{
-	     String content="您正在登录幸福家缘微信平台,校验码为"+authCode+",10分钟内有效,请勿泄露给他人.";
 		// String content="质控消息:患者大是病历书写不合格,请查看!";
 		 HttpClient httpclient = new HttpClient();
 		 PostMethod post = new
@@ -630,38 +629,35 @@ public class ClientServiceImpl implements ClientService {
 		return orderList;
 	}
 
+	private double recalcDepositAmount(double amount) {
+		double finalAmount=amount;
+		if(finalAmount>=3000d && finalAmount<=5999 ) {
+			finalAmount=finalAmount+300d;
+		}else if(finalAmount>=6000d && finalAmount<=7999 ) {
+			finalAmount=finalAmount+600d;
+		}else if(finalAmount>=8000d && finalAmount<=9999 ) {
+			finalAmount=finalAmount+800d;
+		}else if(finalAmount>=10000d) {
+			finalAmount=finalAmount+1000d;
+		}
+		return finalAmount;
+	}
 	public Map deposit(String openId, double amount) {
 		System.out.println("deposit======="+amount);
 		Map resMap = new HashMap();
 		try {
 
 			DepositLog ds = new DepositLog();
-			ds.setDepositAmount(amount);
+			double finalAmount=recalcDepositAmount(amount);
+			ds.setDepositAmount(finalAmount);
 			// ds.setBalance(sum.getFee()+amount);
 			ds.setOpenId(openId);
 			ds.setState(Constants.STATE_P);
 			
 			//确定范围和折扣 
-			int discount=100;
 			int aamount =(int) amount/100;
 			System.out.println("deposit/100======="+aamount);
-			//int aamount =(int)amount*100;
-			List<Config> cList=configRepository.findByConfigName("DEPOSIT_RANGE");
-			for(int i=0;i<cList.size();i++) {
-				Config config=cList.get(i);
-				String range=config.getConfigCode();
-				String arrRange[]=range.split("-");
-				int start=Integer.parseInt(arrRange[0]);
-				int end=Integer.parseInt(arrRange[1]);
-				int adiscount=Integer.parseInt(config.getConfigValue());
-				if(amount>=start && amount<=end) {
-					discount=adiscount;
-					break;
-				}
-			}
-			aamount=aamount*(discount/100);
-			System.out.println("aamount======="+aamount);
-			// int aamount=(int)amount*100;
+			//int aamount =(int)amount*100; 
 			
 			String outTradeNo = RandomStringGenerator.getRandomStringByLength(18);
 			String spBillCreateIP = "127.0.0.1";

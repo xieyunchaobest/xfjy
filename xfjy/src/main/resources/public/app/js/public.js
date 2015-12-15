@@ -25,10 +25,15 @@ function getCurrentHour(){
 //和当前时间相差的小时数
 function getHourDiff(d2,h2){
 	var today=new  Date();
-	if(parseInt(h2)<10)h2="0"+h2;
-	var day=d2+" "+h2+":00:00";
-	var dt = new Date(day.replace(/-/,"/")) 
-	alert(dt);
+	
+	var y=parseInt(d2.substring(0,4));
+	var m=parseInt(d2.substring(5,7))-1;
+	var d=parseInt(d2.substring(8,10));
+	var ah=parseInt(h2);
+	
+	var dt=new Date(y,m,d,ah,0,0);
+	 
+	
 	var diffmills=dt.getTime()-today.getTime()  //时间差的毫秒数
 	console.info('diffmillsdiffmills='+diffmills);
 	var hours=Math.floor(diffmills/(3600*1000))

@@ -10,11 +10,11 @@ import com.xyc.proj.entity.Order;
 
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-	@Query("select o from Order o where o.openId=? and (o.state='P' or o.state='C' or o.state='F') ") 
+	@Query("select o from Order o where o.openId=? and (o.state='P' or o.state='C' or o.state='F') order by o.serviceDate desc") 
 	List findByOpenIdAndState(String openId);
 	
 	List findById(Long id);
-	
+	 
 	Order findByOutTradeNo(String outTradeNo);
 	
 	@Query("select  o,u from Order o,UserAddress u,Area a  where u.areaId=a.id and o.userAddressId=u.id   and o.outTradeNo=?1") 
@@ -24,7 +24,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	List findByStateAndServiceType(String state,String serviceType);
 	
 	
-	@Query("select o from OrderWorker ow,Order o where o.id=ow.orderId and ow.workerId=?1 and o.state='C'") 
+	@Query("select o from OrderWorker ow,Order o where o.id=ow.orderId and ow.workerId=?1 and o.state='C' order by o.serviceDate desc") 
 	List findByWorkerIdAndState(Long workerId);
 	
 	@Query("select o from OrderWorker ow,Order o,Schedule s  where o.id=ow.orderId and ow.workerId=?1 and s.orderId=o.id and o.state='C' and s.busiDate=?2") 
