@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.xyc.proj.entity.ClientUser;
-import com.xyc.proj.entity.Config;
 import com.xyc.proj.entity.Coupon;
 import com.xyc.proj.entity.DepositLog;
 import com.xyc.proj.entity.DepositSummary;
@@ -61,6 +60,7 @@ import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.MsgUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
+import com.xyc.proj.utility.WeixinUtil;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -232,7 +232,7 @@ public class ClientServiceImpl implements ClientService {
 			sd.setBusiDate(o.getServiceDate());
 			sd.setCreatedTime(new Date());
 			sd.setStartTime(o.getStartTime());
-			sd.setEndTime(Integer.parseInt(o.getStartTime()) + idruation + "");
+			sd.setEndTime((Integer.parseInt(o.getStartTime()) + + idruation) + "");
 			sd.setOrderId(o.getId());
 			sd.setState(Constants.STATE_A);
 			sd.setAyiId(wid);
@@ -490,7 +490,13 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	 public static void main(String arg[]) {
-		 new ClientServiceImpl().getServiceDateSet(null);
+		 ClientServiceImpl cs=new ClientServiceImpl();
+		// cs.deleteMenu();
+		 com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
+			String accessToken = tokenJson.getString("access_token");
+			com.alibaba.fastjson.JSONObject res = WeixinUtil.httpRequest(Constants.URL_CREATE_MENU + accessToken, "POST",
+					createWeChatMenu());
+			System.out.println("res===" + res);
 
 	 }
 
@@ -655,9 +661,9 @@ public class ClientServiceImpl implements ClientService {
 			ds.setState(Constants.STATE_P);
 			
 			//确定范围和折扣 
-			int aamount =(int) amount/100;
-			System.out.println("deposit/100======="+aamount);
-			//int aamount =(int)amount*100; 
+//			int aamount =(int) amount/100;
+//			System.out.println("deposit/100======="+aamount);
+			int aamount =(int)amount*100; 
 			
 			String outTradeNo = RandomStringGenerator.getRandomStringByLength(18);
 			String spBillCreateIP = "127.0.0.1";
@@ -1032,6 +1038,15 @@ public class ClientServiceImpl implements ClientService {
 		
 	}
 
+	public static void deleteMenu() {
+		com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
+		String accessToken = tokenJson.getString("access_token");
+		System.out.println("accessTokenaccessToken="+accessToken);
+		String url="https://api.weixin.qq.com/cgi-bin/menu/delete?access_token="+accessToken;
+		com.alibaba.fastjson.JSONObject res = WeixinUtil.httpRequest(url, "GET",
+				"");
+		System.out.println("res===="+res);
+	}
 	public static String createWeChatMenu() {
 		Map mainMap = new HashMap();
 		List menuList = new ArrayList();
@@ -1042,13 +1057,38 @@ public class ClientServiceImpl implements ClientService {
 		item1.put("url",
 				"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce20c658c1eb222f&redirect_uri=http://weixin.tjxfjz.com/xfjy/client/login.html&response_type=code&scope=snsapi_userinfo&state=1&connect_redirect=1#wechat_redirect");
 
-		Map item2 = new HashMap();
-		item2.put("type", "view");
-		item2.put("name", "帮助");
-		item2.put("url", "http://www.baidu.com");
+		Map  item2=new HashMap();
+		item2.put("name", "服务说明");
+		List item2List=new ArrayList();
+		Map item2sub1=new HashMap();
+		item2sub1.put("type", "view");
+		item2sub1.put("name", "服务介绍");
+		item2sub1.put("url", "http://mp.weixin.qq.com/s?__biz=MzI3ODA4MTI2Mw==&mid=402589120&idx=1&sn=26c6d169877872c56d5a21aeaaf191fa#rd");
+
+		Map item2sub2=new HashMap();
+		item2sub2.put("type", "view");
+		item2sub2.put("name", "免责声明 ");
+		item2sub2.put("url", "http://mp.weixin.qq.com/s?__biz=MzI3ODA4MTI2Mw==&mid=402589120&idx=2&sn=adacf2d2a6a63f7a91646f8e4b4dff04#rd ");
+
+		Map item2sub3=new HashMap();
+		item2sub3.put("type", "click");
+		item2sub3.put("name", "服务电话 ");
+		item2sub3.put("key", "servicePhone");
+		item2List.add(item2sub1);
+		item2List.add(item2sub2);
+		item2List.add(item2sub3);
+		
+		item2.put("sub_button", item2List);
+		
+		
+		Map item3 = new HashMap();
+		item3.put("type", "view");
+		item3.put("name", "帮助");
+		item3.put("url", "http://mp.weixin.qq.com/s?__biz=MzI3ODA4MTI2Mw==&mid=402589120&idx=3&sn=b7076ca4a5beeb845c093497b1488ebb#rd");
 
 		menuList.add(item1);
 		menuList.add(item2);
+		menuList.add(item3);
 
 		mainMap.put("button", menuList);
 

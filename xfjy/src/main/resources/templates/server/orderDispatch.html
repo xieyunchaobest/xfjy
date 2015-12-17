@@ -19,12 +19,18 @@
 <script type="text/javascript">
 	function dispatchOrder(){
 		 var len=$('input:checked').length;
+		 var startTime=$("#startTime").val();
 		if(len>=1){
 			var res=true;
 			$("input[xtype=drua]").each(function(){
 				if($(this).prop('disabled')==false){
 					if($(this).val()==''){
 						alert('请填写时长！');
+						res=false;
+						return false;
+					}
+					if(parseInt($(this).val())+paseInt(startTime)>20 ){
+						alert('结束时间已超过20点！');
 						res=false;
 						return false;
 					}

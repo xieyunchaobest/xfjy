@@ -46,8 +46,9 @@ public class WeChatMessageUtil {
 //					 "<Content><![CDATA[this is a test]]></Content>"+
 //					 "<MsgId>1234567890123456</MsgId>"+
 //					 "</xml>";
+		System.out.println("xmlllllll="+xml);
 		 Msg msg=new Msg();
-		try {
+		try { 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			StringReader sr = new StringReader(xml);
@@ -61,14 +62,35 @@ public class WeChatMessageUtil {
 			NodeList MsgTypeNl = root.getElementsByTagName("MsgType");
 			NodeList ContentNl = root.getElementsByTagName("Content");
 			NodeList MsgIdNl = root.getElementsByTagName("MsgId");
+			NodeList EventNl = root.getElementsByTagName("Event");
+			NodeList EventKeyNl = root.getElementsByTagName("EventKey");
 			
 			
 			String toUserName = ToUserNameNl.item(0).getTextContent();
 			String fromUserName=  FromUserNameNl.item(0).getTextContent();
 			String createTime=  CreateTimeNl.item(0).getTextContent();
 			String msgType=  MsgTypeNl.item(0).getTextContent();
-			String content=  ContentNl.item(0).getTextContent();
-			String msgId=  MsgIdNl.item(0).getTextContent();
+			String content="";
+			if(ContentNl!=null) {
+				if(ContentNl.getLength()>0) {
+					content=  ContentNl.item(0).getTextContent();
+				}
+			}
+			if(EventNl!=null && EventKeyNl!=null) {
+				if(EventKeyNl.getLength()>=0) {
+					if(EventKeyNl.item(0).getTextContent().equals("servicePhone")) {
+						content="022-60956627";
+					}
+				}
+				
+			}
+			
+			String msgId="";
+			if(MsgIdNl!=null) {
+				if(MsgIdNl.getLength()!=0) {
+					msgId=MsgIdNl.item(0).getTextContent();
+				}
+			}
 			
 			msg.setToUserName(toUserName);
 			msg.setFromUserName(fromUserName);
@@ -79,6 +101,7 @@ public class WeChatMessageUtil {
 			
 			
 		}catch(Exception e) {
+			e.printStackTrace();
 			System.err.println("we chat parse xml error");
 		}
 		return msg;

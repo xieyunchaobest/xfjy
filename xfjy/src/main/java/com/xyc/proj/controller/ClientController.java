@@ -748,7 +748,7 @@ public class ClientController {
 			Msg msg = WeChatMessageUtil.recevieMsg(data);
 			Msg m = new Msg();
 			m.setToUserName(msg.getFromUserName());
-			m.setContent("Msg Test!");
+			m.setContent(msg.getContent());
 			String sendxml = WeChatMessageUtil.getResponeTxt(m);
 			System.out.println("send xml is======" + sendxml);
 			write(response, sendxml);

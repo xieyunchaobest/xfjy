@@ -18,7 +18,9 @@
 <link th:href="@{/app/datepicker/css/mobiscroll_003.css}" rel="stylesheet" type="text/css" />
 <script th:src="@{/app/js/public.js}"></script>
 <style type="text/css">
- 
+ body{
+ 	font-size:18px;
+ }
 </style>
 
 <script type="text/javascript">
@@ -152,13 +154,18 @@
       </h3>
    </div>    
    <ul class="list-group" th:attr="oid=${order.id}"  onclick="toOrderDetail(this)">
-   	  <li class="list-group-item"   th:text="__${order.totalFee}__+'元'"> </li>
+   	  <li class="list-group-item"   > 
+   	  	<span th:text="__${order.totalFee}__+'元'"></span>
+   	  	<span>(订单金额)</span>
+   	  </li>
       <li class="list-group-item"   th:text="__${order.serviceDate}__+' '+${order.durationText} "> </li>
       <li class="list-group-item"  th:text="${order.fullAddress}"></li>
    </ul>
    <div class="row" style="text-align:center">
-		<button type="button" data-toggle="modal" clicked="n"
+		<button type="button" data-toggle="modal" clicked="n" th:if="${order.state=='C'}"
    			data-target="#myModal" th:value="${order.id}" onclick="javascript:$('#btnsure').val($(this).val());$(this).attr('clicked','y')" style="margin-top:10px;margin-bottom:10px" id="btnPay" class="btn col-sm-8 btn-info">完成</button>
+		<button type="button" data-toggle="modal"  th:if="${order.state=='F'}"
+   			  style="margin-top:10px;margin-bottom:10px;" disabled="disabled"  class="btn col-sm-8 btn-info">已经完成</button>
 	</div>
 </div>
    </div>

@@ -27,7 +27,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	@Query("select o from OrderWorker ow,Order o where o.id=ow.orderId and ow.workerId=?1 and o.state='C' order by o.serviceDate desc") 
 	List findByWorkerIdAndState(Long workerId);
 	
-	@Query("select o from OrderWorker ow,Order o,Schedule s  where o.id=ow.orderId and ow.workerId=?1 and s.orderId=o.id and o.state='C' and s.busiDate=?2") 
+	@Query("select distinct o from OrderWorker ow,Order o,Schedule s  where o.id=ow.orderId and ow.workerId=?1 and s.orderId=o.id and (o.state='C' or o.state='F') and s.busiDate=?2") 
 	List findByWorkerIdAndState(Long workerId,String serviceDate);
 	
 }
