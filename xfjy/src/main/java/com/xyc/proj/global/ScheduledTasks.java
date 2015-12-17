@@ -71,36 +71,6 @@ public class ScheduledTasks {
 		return str;
 	}
 
-	// @Scheduled(fixedRate = 150000)
-	public void dispatchTask() {
-		List orderList = orderRepository.getCleanOrderWithAddressInfo("");
-
-		List<Area> areaList = areaRepository.findAll();
-		for (int i = 0; i < areaList.size(); i++) {
-			Area area = areaList.get(i);
-			long aid = area.getId();
-			List ayiList = workerRepository.findWorkerAndOpenIdInArea(aid);
-
-			for (int j = 0; j < orderList.size(); j++) {
-				Object obj[] = (Object[]) orderList.get(j);
-				Order o = (Order) obj[0];
-				UserAddress ua = (UserAddress) obj[1];
-				long areaId = ua.getAreaId();
-				if (aid == areaId) {
-					for (int k = 0; k < ayiList.size(); k++) {
-						Object ob[] = (Object[]) ayiList.get(k);
-						ClientUser w = (ClientUser) ob[1];
-						MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, w.getOpenId(),
-								Constants.URL_SEND_TEMPLEATE_MSG, "您有新的任务", o.getFullAddress(), "代办", "点击查看详情");
-
-					}
-
-				}
-
-			}
-		}
-
-	}
 
 	@Scheduled(fixedRate = 3600000)
 	public void refreshWeChatAccessToken() {

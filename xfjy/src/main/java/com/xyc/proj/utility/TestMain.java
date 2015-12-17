@@ -29,6 +29,7 @@ public class TestMain {
 				return false;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Unknown Error!!!");
 			return false;
 		}
