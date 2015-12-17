@@ -225,14 +225,14 @@ public class ClientServiceImpl implements ClientService {
 			Long wid = Long.parseLong((String) mm.get("aid"));
 			String duration = (String) (mm.get("druation"));
 			if(StringUtil.isBlank(o.getEndTime())) {
-				o.setEndTime(o.getStartTime()+Integer.parseInt(duration));
+				o.setEndTime(Integer.parseInt(o.getStartTime())+Integer.parseInt(duration)+"");
 			}
 			int idruation = Integer.parseInt(duration);
 			Schedule sd = new Schedule();
 			sd.setBusiDate(o.getServiceDate());
 			sd.setCreatedTime(new Date());
 			sd.setStartTime(o.getStartTime());
-			sd.setEndTime((Integer.parseInt(o.getStartTime()) + + idruation) + "");
+			sd.setEndTime((Integer.parseInt(o.getStartTime()) ) + idruation+ "");
 			sd.setOrderId(o.getId());
 			sd.setState(Constants.STATE_A);
 			sd.setAyiId(wid);
