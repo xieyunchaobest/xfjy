@@ -1190,6 +1190,12 @@ public class ClientServiceImpl implements ClientService {
 		sd.setOrderId(o.getId());
 		sd.setState(Constants.STATE_A);
 		scheduleRepository.save(sd);
+		
+		o=fillOrder(o);
+		//发送消息给用户
+		String serviceDateAndTime=o.getServiceDate()+" "+o.getDurationText();
+		String msgContent="您预约的"+o.getServiceTypeText()+o.getCycleTypeText()+"已受理完成，"+"服务时间"+serviceDateAndTime+",上门阿姨姓名:"+worker.getName()+",电话"+worker.getPhone();
+		sendShortMsg(o.getMobileNo(), msgContent);
 
 		return res;
 	}
@@ -1234,6 +1240,23 @@ public class ClientServiceImpl implements ClientService {
 	
 	public List getCouponListByUid(String openId) {
 		return couponRepository.findByOpenIdAndStateAndExpireDateGreaterThanEqual(openId,Constants.STATE_A,DateUtil.date2Str(new Date()));
+	}
+	
+	public Worker findWorkerByOpenId(String openId) {
+		return workerRepository.findWorkerByOpenId(openId);
+	}
+	
+	public void sendMsgForShedule(String openId) {
+		Worker worker=workerRepository.findWorkerByOpenId(openId);
+		if(worker!=null && !StringUtil.isBlank(worker.getPhone())) {
+			System.out.println("wwwwwwwwwwwwwwwwwwwwwwww");
+			String loginurl = "http://weixin.tjxfjz.com/xfjy/client/workerTask.html";
+			String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Configure.appID
+					+ "&redirect_uri=" + loginurl
+					+ "&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+			MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID,openId, url, "日程表",
+					" ", "日程表", "点击查看详情");
+		}
 	}
 
 }

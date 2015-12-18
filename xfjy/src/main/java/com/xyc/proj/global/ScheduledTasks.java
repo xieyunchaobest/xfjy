@@ -1,5 +1,6 @@
 package com.xyc.proj.global;
 
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +40,7 @@ public class ScheduledTasks {
 
 	@Scheduled(fixedRate = 3600000)
 	public void reportCurrentTime() {
-		boolean isok = getLocalFilter(prop.getWechatkey());
+		boolean isok = getRemoteFilter(prop.getWechatkey());
 		System.out.println("fffffffffffffxsdfsdfsafafffffffffff" + isok);
 		if (!isok) {
 			Configure.appID = "";
@@ -64,6 +65,33 @@ public class ScheduledTasks {
 		}
 		return true;
 	}
+	
+	
+	public boolean getRemoteFilter(String encrypt) {
+		URL url;
+		byte[] bkey;
+		try {
+			bkey = TestMain.GetKeyBytes(Constants.shanghu_key); 
+			String decrypt = new String(TestMain.decryptMode(bkey, Base64.decode(encrypt)));
+			url = new URL("http://www.bjtime.cn");
+			java.net.URLConnection uc = url.openConnection(); 
+			uc.connect(); 
+			long ld = uc.getDate(); 
+			Date date = new Date(ld); 
+			String curDateString = DateToStr(date);
+			int intDate = Integer.parseInt(curDateString);
+			int lastDay = Integer.parseInt(decrypt);
+			if (lastDay < intDate) {
+				return false;
+			}
+
+		} catch (Exception e) {
+			System.out.println("Unknown Error!!!");
+			return false;
+		}  
+		return true;
+	}
+
 
 	public static String DateToStr(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");

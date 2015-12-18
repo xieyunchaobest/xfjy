@@ -207,14 +207,24 @@ public class ServerServiceImpl implements ServerService {
 		if(Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
 			serviceDate=(String)clientService.getServiceDateSet(o).get(0);
 		}
-		String content="您收到客服分配的"+serviceTypeText+serviceCycleText+"订单首次服务时间"+serviceDate+"请尽快到待办中查看"+"!";
+		String durationText=o.getStartTime()+":00"+"-"+o.getEndTime()+":00";
+		String serviceDateAndTime=serviceDate+" "+durationText;
+		String content="您收到客服分配的"+serviceTypeText+serviceCycleText+"订单首次服务时间"+serviceDateAndTime+"请尽快到待办中查看"+"!";
 
 		// 发送客服消息
+		String firstWorkerPhone="";;
+		String firstWorkerName="";
 		for (int i = 0; i < mList.size(); i++) {
 			Map w = (Map) mList.get(i);
 			Long wid = Long.parseLong((String) w.get("aid"));
 			ClientUser clientUser = workerRepository.findOpenIdByWorkerphone(wid);
-			String phoneNo=workerRepository.findOne(wid).getPhone();
+			Worker ww=workerRepository.findOne(wid);
+			String phoneNo=ww.getPhone();
+			String workerName=ww.getName();
+			if(i==0) {
+				firstWorkerPhone=phoneNo;
+				firstWorkerName=workerName;
+			}
 			String openId = clientUser.getOpenId();
 			String loginurl = "http://weixin.tjxfjz.com/xfjy/client/workerTask.html";
 			String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Configure.appID
@@ -226,15 +236,24 @@ public class ServerServiceImpl implements ServerService {
 			clientService.sendShortMsg(phoneNo, content);
 		}
 		
+		//发送消息给用户
+		String msgContent="您预约的"+serviceTypeText+serviceCycleText+"已受理完成，"+"服务时间"+serviceDateAndTime+",上门阿姨姓名:"+firstWorkerName+",电话"+firstWorkerPhone;
+		clientService.sendShortMsg(o.getMobileNo(), msgContent);
+		
 	}
 
 	
 	public static void main(String args[]) {
 		String serviceTypeText="大宝洁";
-		String serviceCycleText="包月";
+		String serviceCycleText="零工";
 		String serviceDate="2015-12-12";
-		String content="您收到客服分配的"+serviceTypeText+serviceCycleText+"订单首次服务时间"+serviceDate+"请尽快到待办中查看"+"!";
-		new ClientServiceImpl().sendShortMsg("13820103966", content);
+		String serviceDateAndTime="2015-12-12 12:00-12:00";
+		String firstWorkerName="你好箭";
+		String firstWorkerPhone="18766789876";
+		//String content="您收到客服分配的"+serviceTypeText+serviceCycleText+"订单首次服务时间"+serviceDate+"请尽快到待办中查看"+"!";
+		String msgContent="您预约的"+serviceTypeText+serviceCycleText+"已受理完成，"+"服务时间"+serviceDateAndTime+",上门阿姨姓名:"+firstWorkerName+",电话"+firstWorkerPhone;
+		
+		new ClientServiceImpl().sendShortMsg("13820103966", msgContent);
 	}
 	
 	

@@ -76,11 +76,20 @@ public class WeChatMessageUtil {
 					content=  ContentNl.item(0).getTextContent();
 				}
 			}
-			if(EventNl!=null && EventKeyNl!=null) {
-				if(EventKeyNl.getLength()>=0) {
-					if(EventKeyNl.item(0).getTextContent().equals("servicePhone")) {
-						content="022-60956627";
+			if(EventNl!=null ) {
+				if(EventKeyNl!=null) {
+					if(EventKeyNl.getLength()>=0) {
+						if(EventKeyNl.item(0)!=null) {
+							if(EventKeyNl.item(0).getTextContent().equals("servicePhone")) {
+								content="022-60956627";
+							}
+						}
 					}
+				}
+				if(EventNl.item(0)!=null) {
+					if(EventNl.item(0).getTextContent().equals("subscribe")){
+						content="欢迎关注幸福家缘服务预订平台，品质生活幸福相伴，请点击下方约工进行服务预订！";
+					} 
 				}
 				
 			}

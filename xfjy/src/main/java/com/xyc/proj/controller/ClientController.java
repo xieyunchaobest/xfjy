@@ -39,6 +39,7 @@ import com.xyc.proj.entity.Msg;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
+import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.CharacterEncodingFilter;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.pay.Configure;
@@ -749,16 +750,23 @@ public class ClientController {
 			Msg m = new Msg();
 			m.setToUserName(msg.getFromUserName());
 			m.setContent(msg.getContent());
-			String sendxml = WeChatMessageUtil.getResponeTxt(m);
-			System.out.println("send xml is======" + sendxml);
-			write(response, sendxml);
+			if("日程表".equals(msg.getContent())) {
+				String openId=msg.getFromUserName();
+				System.out.println("openId====="+openId);
+				clientService.sendMsgForShedule(openId);
+			}else {
+				String sendxml = WeChatMessageUtil.getResponeTxt(m);
+				System.out.println("send xml is======" + sendxml);
+				write(response, sendxml);
+			}
+			
 		}
 	}
 
 	public static void write(HttpServletResponse response, String str) {
 		try {
-			response.setCharacterEncoding("GBK");
-			response.setContentLength(str.length());
+			response.setCharacterEncoding("UTF-8");
+			//response.setContentLength(str.length()); 
 			response.getOutputStream().write(str.getBytes());
 			response.getOutputStream().flush();
 			response.getOutputStream().close();

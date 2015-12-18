@@ -29,12 +29,15 @@ $(function(){
  
  function showOrHide(){
 	 var serviceType=$("#serviceType").val();
-	 if(serviceType=='CC' || serviceType=='DBJ'){
+	 if(serviceType=='CC' ){
 		 $('#liArea').hide();
 		 $('#liBalconyCount').hide();
 		 $('#liWindowCount').hide();
+	 }else if(serviceType=='DBJ'){
+		 $('#liBalconyCount').hide();
+		 $('#liWindowCount').hide();
 	 }else if(serviceType=='CBL'){
-		
+		$("#liArea").hide();
 	 }else if(serviceType=='KH'){
 		 $('#liBalconyCount').hide();
 		 $('#liWindowCount').hide();

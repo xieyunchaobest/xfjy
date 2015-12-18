@@ -8,6 +8,7 @@ import com.xyc.proj.entity.DepositSummary;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
+import com.xyc.proj.entity.Worker;
 
 public interface ClientService {
 
@@ -78,4 +79,7 @@ public interface ClientService {
 		public ClientUser findClientUserByMobileOpenId(String openId);
 		
 	public List	getServiceDateSet(Order o);
+	
+	public Worker findWorkerByOpenId(String openId);
+	public void sendMsgForShedule(String openId);
 }

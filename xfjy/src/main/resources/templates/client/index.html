@@ -101,7 +101,7 @@ $(function(){
 		 }
 		 
 	 }
-	 /*]]>*/
+	 
 	 
 	 function menuForward(flag){
 		 var openId=$("#openId").val();
@@ -114,6 +114,12 @@ $(function(){
 		 }
 		 
 	 }
+	 
+	 function toForward(){
+		 window.location.href="http://mp.weixin.qq.com/s?__biz=MzI3ODA4MTI2Mw==&mid=402589120&idx=1&sn=26c6d169877872c56d5a21aeaaf191fa#rd";
+	 }
+	 
+	 /*]]>*/
 </script>
 
 
@@ -179,8 +185,8 @@ $(function(){
 				<img class="imgs" th:src="@{/app/img/xfjy_know.jpg}" style="height:auto;width:100%" alt="First slide" />
 			</div>
 			<div>
-				<img class="imgs" th:src="@{/app/img/xfjy_service_introduce.jpg}" style="height:auto;width:120px" alt="First slide" />
-				<img class="imgs" th:src="@{/app/img/xfjy_service_scope.jpg}" style="height:auto;width:120px" alt="First slide" />
+				<img class="imgs" th:src="@{/app/img/xfjy_service_introduce.jpg}" onclick="toForward()" style="height:auto;width:120px" alt="First slide" />
+				<img class="imgs" th:src="@{/app/img/xfjy_service_scope.jpg}" onclick="toForward()" style="height:auto;width:120px" alt="First slide" />
 			</div>
 			<div class="row" style="margin:0 0 ;pading:0 0 ">
 				<div id="ftt"></div>

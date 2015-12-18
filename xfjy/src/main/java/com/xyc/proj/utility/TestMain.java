@@ -77,7 +77,7 @@ public class TestMain {
 			String decrypt = "";
 
 			byte[] bkey = TestMain.GetKeyBytes(Constants.shanghu_key);
-			encrypt = TestMain.byte2Base64(TestMain.encryptMode(bkey, password.getBytes()));
+			//encrypt = TestMain.byte2Base64(TestMain.encryptMode(bkey, password.getBytes()));
 			System.out.println("jiami result is " + encrypt);
 			decrypt = new String(TestMain.decryptMode(bkey, Base64.decode(encrypt)));
 			System.out.println("jiemi result is " + decrypt);
@@ -97,10 +97,7 @@ public class TestMain {
 	/// <param name="value">������ַ�</param>
 	/// <param name="strKey">ԭʼ��Կ�ַ�</param>
 	/// <returns></returns>
-	public static String Encrypt3DES(String value, String key) throws Exception {
-		String str = byte2Base64(encryptMode(GetKeyBytes(key), value.getBytes()));
-		return str;
-	}
+ 
 
 	// ����24λ��������byteֵ,���ȶ�ԭʼ��Կ��MD5��hashֵ������ǰ8λ��ݶ�Ӧ��ȫ��8λ
 	public static byte[] GetKeyBytes(String strKey) throws Exception {
@@ -124,29 +121,10 @@ public class TestMain {
 	private static final String Algorithm = "DESede"; // ���� �����㷨,����
 														// DES,DESede,Blowfish
 
-	// keybyteΪ������Կ������Ϊ24�ֽ�
+	 
+	 
 
-	// srcΪ�����ܵ���ݻ�����Դ��
-
-	public static byte[] encryptMode(byte[] keybyte, byte[] src) {
-		try {
-			// �����Կ
-			SecretKey deskey = new SecretKeySpec(keybyte, Algorithm); // ����
-			Cipher c1 = Cipher.getInstance(Algorithm);
-			c1.init(Cipher.ENCRYPT_MODE, deskey);
-			return c1.doFinal(src);
-		} catch (java.security.NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
-		} catch (javax.crypto.NoSuchPaddingException e2) {
-			e2.printStackTrace();
-		} catch (java.lang.Exception e3) {
-			e3.printStackTrace();
-		}
-		return null;
-	}
-
-	// keybyteΪ������Կ������Ϊ24�ֽ�
-	// srcΪ���ܺ�Ļ�����
+	//解密
 	public static byte[] decryptMode(byte[] keybyte, byte[] src) {
 		try { // �����Կ
 			SecretKey deskey = new SecretKeySpec(keybyte, Algorithm);
