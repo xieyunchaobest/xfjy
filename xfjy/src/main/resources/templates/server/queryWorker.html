@@ -141,11 +141,11 @@
 				</div>
 			</div>
 			<div id="tbdata" style="width:100%;overflow: scroll">
-			<table class="table table-bordered table-striped" style="width:2000px">
+			<table class="table table-bordered table-striped" style="width:2600px">
 				<thead>
 					<tr>
 						<th  style="width:50px">选择</th>
-						<th>姓名</th>
+						<th style="width:90px">姓名</th>
 						<th>员工编号</th>
 						<th>身份证号</th>
 						<th>出生年月</th>
@@ -172,7 +172,7 @@
 						<td>
 							<input type="checkbox" id="cbchooseworker" name="workerIds" th:attr="value=''+${item.id}+''" />
 						</td>
-						<td style="width:35px" th:text="${item.name}"></td>
+						<td style="width:90px" th:text="${item.name}"></td>
 						<td th:text="${item.code}"></td>
 						<td th:text="${item.idNo}"></td>
 						<td th:text="${item.birthday}"></td>
