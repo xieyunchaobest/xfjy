@@ -28,6 +28,9 @@ public class DepositLog {
 
 	@Column(name = "DEPOSIT_AMOUNT")
 	private Double depositAmount;
+	
+	@Column(name = "MORE_AMOUNT")
+	private Double moreAmount;//赠送的金额，在统计中需要用到
 
 	@Column(name = "BALANCE")
 	private Double balance;
@@ -122,5 +125,15 @@ public class DepositLog {
 	public void setState(String state) {
 		this.state = state;
 	}
+
+	public Double getMoreAmount() {
+		return moreAmount;
+	}
+
+	public void setMoreAmount(Double moreAmount) {
+		this.moreAmount = moreAmount;
+	}
+	
+	
 
 }

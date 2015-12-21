@@ -1,13 +1,8 @@
-select worker0_.id as id1_20_, worker0_.address as address2_20_,
-worker0_.area_id as area_id3_20_, worker0_.birthday as birthday4_20_,
-worker0_.code as code5_20_, worker0_.constellation as constell6_20_,
-worker0_.descr as descr7_20_, worker0_.education as educatio8_20_,
-worker0_.id_no as id_no9_20_, worker0_.name as name10_20_,
-worker0_.native_place as native_11_20_, worker0_.pass_word as
-pass_wo12_20_, worker0_.phone as phone13_20_, worker0_.photo as
-photo14_20_, worker0_.role as role15_20_, worker0_.salary as
-salary16_20_, worker0_.service_type_one as service17_20_,
-worker0_.service_type_two as service18_20_, worker0_.state as
-state19_20_, worker0_.store_id as store_i20_20_, worker0_.sub_area as
-sub_are21_20_, worker0_.teacher_id as teacher22_20_, worker0_.work_time
-as work_ti23_20_ from t_worker worker0_ where worker0_.phone=?
+select 
+  	  t1.mobile_no as mobileNo,
+  	 (t2.DEPOSIT_AMOUNT-ifnull(MORE_AMOUNT,0)) as actllyAmount,
+  	 ifnull(t2.MORE_AMOUNT,0) as moreAmount
+  	   from T_CLIENT_USER t1 , T_DEPOSIT_LOG t2 
+  	  where  t1.open_id=t2.open_id 
+  	  and t2.state='A' AND DEPOSIT_AMOUNT>0
+  	   

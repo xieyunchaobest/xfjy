@@ -635,18 +635,26 @@ public class ClientServiceImpl implements ClientService {
 		return orderList;
 	}
 
-	private double recalcDepositAmount(double amount) {
+	private double[] recalcDepositAmount(double amount) {
+		double finalAmountArr[]=new double[2];
 		double finalAmount=amount;
+		double moreAmount=0d;
 		if(finalAmount>=3000d && finalAmount<=5999 ) {
-			finalAmount=finalAmount+300d;
+			moreAmount=300d;
+			finalAmount=finalAmount+moreAmount;
 		}else if(finalAmount>=6000d && finalAmount<=7999 ) {
-			finalAmount=finalAmount+600d;
+			moreAmount=600d;
+			finalAmount=finalAmount+moreAmount;
 		}else if(finalAmount>=8000d && finalAmount<=9999 ) {
-			finalAmount=finalAmount+800d;
+			moreAmount=800d;
+			finalAmount=finalAmount+moreAmount;
 		}else if(finalAmount>=10000d) {
-			finalAmount=finalAmount+1000d;
+			moreAmount=1000d;
+			finalAmount=finalAmount+moreAmount;
 		}
-		return finalAmount;
+		finalAmountArr[0]=finalAmount;
+		finalAmountArr[1]=moreAmount;
+		return finalAmountArr;
 	}
 	public Map deposit(String openId, double amount) {
 		System.out.println("deposit======="+amount);
@@ -654,8 +662,9 @@ public class ClientServiceImpl implements ClientService {
 		try {
 
 			DepositLog ds = new DepositLog();
-			double finalAmount=recalcDepositAmount(amount);
-			ds.setDepositAmount(finalAmount);
+			double[] finalAmount=recalcDepositAmount(amount);
+			ds.setDepositAmount(finalAmount[0]);
+			ds.setMoreAmount(finalAmount[1]);
 			// ds.setBalance(sum.getFee()+amount);
 			ds.setOpenId(openId);
 			ds.setState(Constants.STATE_P);
@@ -783,6 +792,7 @@ public class ClientServiceImpl implements ClientService {
 		double fee = 0;
 		int finalPay4Wechat=totalFee;//抛去 余额，优惠券 ，最后需要支付的金额,单位：分
 		String finalPayMode=Constants.ORDER_PAY_MODE_ONLY_WECHAT;
+		double balanceCouponFee=0d;
 		if (Constants.ORDER_PAY_MODE_ONLY_YUE.equals(payMode)) {// 如果使用了余额,取这个人的余额
 			DepositSummary ds = getBalance(o.getOpenId());
 			if (ds != null) {
@@ -793,10 +803,13 @@ public class ClientServiceImpl implements ClientService {
 					finalPay4Wechat = (int) (totalFee - fee * 100);
 					goWechat = true;
 					finalPayMode=Constants.ORDER_PAY_MODE_WECHAT_YUE;
+					balanceCouponFee=fee;
 				} else {
 					goWechat = false;
 					finalPayMode=Constants.ORDER_PAY_MODE_ONLY_YUE;
+					balanceCouponFee=order.getTotalFee();
 				}
+				order.setBalanceCouponFee(balanceCouponFee);
 			}
 		}else if(Constants.ORDER_PAY_MODE_ONLY_COUPON.equals(payMode)) {//如果使用了优惠券
 			//取优惠券的id
@@ -808,9 +821,11 @@ public class ClientServiceImpl implements ClientService {
 				finalPay4Wechat = (int) (totalFee - fee * 100);
 				goWechat = true;
 				finalPayMode=Constants.ORDER_PAY_MODE_WECHAT_COUPON;
+				balanceCouponFee=fee;
 			} else {
 				goWechat = false;
 				finalPayMode=Constants.ORDER_PAY_MODE_ONLY_COUPON;
+				balanceCouponFee=order.getTotalFee();
 			}
 		}
 		try {

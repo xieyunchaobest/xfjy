@@ -102,6 +102,9 @@ public class Order {
 	@Column(name = "wechat_fee")
 	private Double wechatfee;//使用微信支付的金额
 	
+	@Column(name = "balance_coupon_fee")
+	private Double balanceCouponFee;
+	
 	@Column(name = "TOOL_FEE_CLEAN")
 	private Double toolFeeClean;//工具费用
 	
@@ -604,5 +607,16 @@ public class Order {
 		this.remarks = remarks;
 	}
 
+
+	public Double getBalanceCouponFee() {
+		return balanceCouponFee;
+	}
+
+
+	public void setBalanceCouponFee(Double balanceCouponFee) {
+		this.balanceCouponFee = balanceCouponFee;
+	}
+
+	
 
 }

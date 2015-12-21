@@ -82,7 +82,7 @@
   , process: function (items,target1,target2) {
 	 if(items==''){
 		$(target1).attr("real-value","");
-		$(target2).text('没有检索到该小区，请联系客服60956027');
+		$(target2).text('没有检索到该小区，请联系客服60956627');
 	 }else{
 		 $(target2).text('');
 	 }

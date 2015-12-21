@@ -98,8 +98,7 @@
 		 					<select  name="state" style="height:25px;width:120px" >
 			 					<option value="">全部</option>
 								<option value="P" th:selected="${state == 'P'}">已支付</option>
-								<option value="U" th:selected="${state == 'U'}">未支付</option>
-								<option value="C" th:selected="${state == 'C'}">已经确认</option>
+								<option value="C" th:selected="${state == 'C'}">已确认</option>
 								<option value="F" th:selected="${state == 'F'}">已完成</option>
 							</select>
 		 				</div>
@@ -124,6 +123,7 @@
 						<th>支付金额</th>
 						<th>交易时间</th>
 						<th>交易方式</th>
+						<th>优惠券/余额</th>
 						<th>服务类型</th>
 						<th>服务时间</th>
 						<th>开始时间</th>
@@ -149,6 +149,7 @@
 						<td th:text="${item.totalFee}"></td>
 						<td th:text="${item.payTime}"></td>
 						<td th:text="${item.payModeText}"></td>
+						<td th:text="${item.balanceCouponFee}"></td>
 						<td th:text="${item.serviceTypeText}"></td>
 						<td th:text="${item.serviceDate}"></td>
 						<td th:text="${item.startTime}"></td>

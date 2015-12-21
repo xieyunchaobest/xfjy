@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xyc.proj.mapper.DepositStatMapper" >
+  
+ 
+  <select id="getDepositStatPage" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+ 	<include refid="queryDepositStat"/>
+    <include refid="queryDepositStatCondition"/>      
+ <![CDATA[ limit  #{start} , #{end} ]]>
+
+  </select>
+ 
+  
+  <sql id="queryDepositStat">
+  	 select 
+  	  t1.mobile_no as mobileNo,
+  	 (t2.DEPOSIT_AMOUNT-ifnull(MORE_AMOUNT,0)) as actllyAmount,
+  	 ifnull(t2.MORE_AMOUNT,0) as moreAmount
+  	   from T_CLIENT_USER t1 , T_DEPOSIT_LOG t2 
+  	  where  t1.open_id=t2.open_id 
+  	  and t2.state='A' AND DEPOSIT_AMOUNT>0
+  	   
+ <include refid="queryDepositStatCondition"/> 
+ group by o.SERVICE_TYPE
+  </sql>
+  
+    <select id="getDepositStatPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+	select count(1) from (
+		<include refid="queryDepositStat"/>
+		<include refid="queryDepositStatCondition"/>
+	) as c
+  </select> 
+  
+  <sql id="queryDepositStatCondition">
+  	  <if test="startTime != null and startTime !=''">
+			 <![CDATA[ and   payTime >=#{startTime}  ]]>
+	  </if>
+	  <if test="endTime != null and endTime !=''">
+			 <![CDATA[ and    payTime <=#{endTime}  ]]>
+	  </if>
+  </sql>
+  
+</mapper>

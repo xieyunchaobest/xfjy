@@ -125,7 +125,7 @@
 	 				 		  <option value="" >无</option>
 								<option th:each="t: ${teacherList}"
 								th:value="${t.id}" th:text="${t.name}"
-								th:selected="${worker.teacherId == t.teacherId}"
+								th:selected="${worker.teacherId == t.id}"
 								></option>  
 					</select> 
 	 			</td>
