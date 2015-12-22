@@ -3,8 +3,13 @@
 <mapper namespace="com.xyc.proj.mapper.UserAddressMapper" >
  <select id="findAddressByUser" resultType="java.util.HashMap"
 		parameterType="java.util.HashMap">
-	select tt.*,CONCAT(areaName,communityname) as areaNameAndCommunityName, 
-	CONCAT(areaname,communityname,detailAddress) as fullAddress  from (SELECT t.id, t.area_id as areaId,t.community_id as communityId,t.open_id as openId,
+	select tt.*,
+	areaName as areaNameAndCommunityName,
+	<!-- CONCAT(areaName,communityname) as areaNameAndCommunityName, --> 
+	<!-- CONCAT(areaname,communityname,detailAddress) as fullAddress  -->
+	CONCAT(areaname,detailAddress) as fullAddress 
+	 from 
+	(SELECT t.id, t.area_id as areaId,t.community_id as communityId,t.open_id as openId,
 	(select a.name from t_area a where a.id=t.area_id) as areaName,
 	(select a.name from t_community a where a.id=t.community_id) as communityname,
 	t.detail_address as detailAddress,

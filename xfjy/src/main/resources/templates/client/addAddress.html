@@ -64,11 +64,11 @@ function validate(){
 		return false;
 	}
 	
-	if(relVal=='' || $("#autocompleteInput").val()==''){
+	/**if(relVal=='' || $("#autocompleteInput").val()==''){
 		$("#spnwarngin").text("请选择小区！");
 		res=false;
 		return res;
-	}
+	}**/
 	if(addressDetail==''){
 		$("#spnwarngin").text("请输入详细地址！");
 		res=false;
@@ -124,7 +124,7 @@ function fillContent(target){
 				</li> 
 			</ul>
 			<ul class="list-group">
-				<li class="list-group-item">
+				<li class="list-group-item" style="display:none">
 					<input type="hidden" name="communityId" id="communityId"/>
 					<input type="text" placeholder="请输入小区名称" real-value="" name="communityName" class="form-control" id="autocompleteInput"/>
 				</li> 
