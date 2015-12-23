@@ -7,5 +7,5 @@ import com.xyc.proj.utility.PageView;
 public interface StatService {
 	public PageView geOrderStatPage(Map m);
 	
-	public PageView geDepositStatPage(Map m);
+	public PageView getDepositStatPage(Map m);
 }

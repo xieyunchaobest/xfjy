@@ -1,0 +1,117 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8" />
+<head>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/font-awesome.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/components.css}" />
+<link rel="shortcut icon" th:href="@{/app/img/favicon.png}" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+
+<script type="text/javascript">
+	$().ready(function() {
+		$("#contentPage").attr("src", basePath + '/server/queryUser.html');
+
+	});
+
+	function switchPage(url) {
+		var userName = $("#userName").val();
+		url = url + "?userName=" + userName;
+		$("#contentPage").attr("src", basePath + url);
+	}
+</script>
+<style type="text/css">
+html{
+margin:auto 0;
+padding:0 0;
+overflow-y:hidden;
+overflow-x:hidden;
+}
+body{
+ background-color: #eaeaea;
+ margin:0 0 0 0 ;padding:0  0 0 0 ;
+ overflow-y:hidden;
+overflow-x:hidden;
+}
+</style>
+
+</head>
+<body>
+	<div class="row">
+		<div class="dropdown col-xs-4" style="margin-right:0px;padding:0 0">
+			<button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenu1"
+				data-toggle="dropdown" style="width:100%;">
+				区域 <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				<li role="presentation" th:each="area : ${areaList}">
+					<a role="menuitem" tabindex="-1" href="#" th:text="${area.name}"></a>
+					<li role="presentation" class="divider"></li>
+				</li> 
+					
+			</ul>
+		</div>
+		<div class="dropdown col-xs-4" style="margin-right:0px;padding:0 0">
+			<button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenu1"
+				data-toggle="dropdown" style="width:100%">
+				工种 <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#">月嫂</a></li>
+					<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#">孕婴、育儿嫂</a></li>
+					<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#">养老护工</a></li>
+				<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#">家政、小时工</a></li>
+			</ul>
+		</div>
+		<div class="dropdown col-xs-4" style="margin-right:0px;padding:0 0">
+			<button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenu1"
+				data-toggle="dropdown" style="width:100%">
+				工时 <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#">白班</a></li>
+					<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#">24小时</a></li> 
+			</ul>
+		</div>
+	</div>
+	<!-- begin worker list -->
+		<div style="border:1px solid red">
+			<div class="row" style="padding-bottom:10px;padding-top:10px;">
+				<div style="float:left;margin-left:20px">
+					<img th:src="@{/app/img/xfjy_banner2.jpg}" style="width:100px;height:auto"/>
+				</div>
+				<div style="float:left">
+					<div style="border:1px solid blue;float:left;margin-left:10px">
+						<span style="font-weight:bold">王志明</span> 
+						<span>42岁|山东人</span> 
+					</div>
+					<div style="border:1px solid blue;float:right;margin-right:20px">
+						<span>参考工资：</span><span>4500</span>
+					</div>
+					<div style="clear:both" ></div> 
+					<div style="margin-left:10px;border:1px solid orange;width:250px;">
+						简介简介简介简介简介简介简简介简介  
+						简介简介简介简介简介简介简简介简介
+					</div>
+				</div>
+				
+				
+			</div>
+		
+		</div>
+		
+</body>
+</html>

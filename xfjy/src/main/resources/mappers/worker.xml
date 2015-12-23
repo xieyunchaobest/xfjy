@@ -64,6 +64,9 @@
 		<if test="serviceTypeTwo != null and serviceTypeTwo !=''">
 		 	<![CDATA[ and   service_type_two= #{serviceTypeTwo}  ]]>
 		</if> 
+		<if test="serviceTypeOne != null and serviceTypeOne !=''">
+		 	<![CDATA[ and   SERVICE_TYPE_ONE= #{serviceTypeOne}  ]]>
+		</if> 
 		<if test="role != null and role !=''">
 		 	<![CDATA[ and   role= #{role}  ]]>
 		</if> 

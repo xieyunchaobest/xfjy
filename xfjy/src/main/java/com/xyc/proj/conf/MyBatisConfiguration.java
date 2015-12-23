@@ -13,7 +13,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.mapper.ClientUserMapper;
 import com.xyc.proj.mapper.CommunityMapper;
+import com.xyc.proj.mapper.DepositStatMapper;
 import com.xyc.proj.mapper.OrderMapper;
+import com.xyc.proj.mapper.OrderStatMapper;
 import com.xyc.proj.mapper.UserAddressMapper;
 import com.xyc.proj.mapper.WorkerMapper;
 
@@ -47,7 +49,10 @@ public class MyBatisConfiguration {
 	
 	@Autowired
 	ClientUserMapper clientUserMapper;
-	
+	@Autowired
+	OrderStatMapper OrderStatMapper;
+	@Autowired
+	DepositStatMapper depositStatMapper;
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate() {
 		return new SqlSessionTemplate(sqlSessionFactory);
@@ -79,6 +84,16 @@ public class MyBatisConfiguration {
 	@Bean
 	public ClientUserMapper clientUserMapper() {
 		return sessionTemplate.getMapper(ClientUserMapper.class);
+	}
+	
+	@Bean
+	public OrderStatMapper orderStatMapper() {
+		return sessionTemplate.getMapper(OrderStatMapper.class);
+	}
+	
+	@Bean
+	public DepositStatMapper depositStatMapper() {
+		return sessionTemplate.getMapper(DepositStatMapper.class);
 	}
 	
     

@@ -1,0 +1,185 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+	<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>订单统计</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/font-awesome.min.css}" />
+
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-datetimepicker.css}" />
+
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:inline="javascript" th:src="@{/app/js/commonSort.js}"></script>
+<script th:inline="javascript" th:src="@{/app/js/commonPage.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/app/validation/jquery.validate.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+
+<script type="text/javascript">
+ 	function exportExcel(){
+		var path = basePath+"/stat/exportAlbumAndMusicWithCouponStat";  
+		$('#orderByForm').attr("action", path).submit();
+ 	}
+ 	
+ 	function query(){
+ 		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
+		$('#orderByForm').attr("action", path).submit();
+ 	}
+ 	
+ 	function resetAction(){
+ 		var path = basePath+"/stat/albumAndMusicWithCouponStat";  
+		$('#orderByForm').attr("action", path);
+ 	}
+ 	
+ 	
+ 	//<![CDATA[
+	function showAddModal(flag){ 
+		var len=$('input:checked').length;
+		if(flag=='U'){
+			if(len==1){
+	 			var wid=$('input:checked').val();
+	 			$("#dvmodal-body").html("").load(basePath+"/server/workerAddInit.html?wid="+wid+"&rn="+Math.random(), function() {
+	 				$('#inputDialog').modal('show'); 
+	 				});
+			}
+		}else{
+			$("#dvmodal-body").html("").load(basePath+"/server/workerAddInit.html?rn="+Math.random(), function() {
+ 				$('#inputDialog').modal('show'); 
+ 				});
+		}
+	}
+	
+	function deleteSelect(){
+		var len=$('input:checked').length;
+		if(len>=1){
+			$.ajax({
+	            type: "POST",
+	            url: basePath+'/server/deleteWorker',
+	            data:$("#orderByForm").serialize(),
+	            success: function(data) {
+	            	if(data=="S"){
+	            		alert('处理成功！');
+	            	}else{
+	            		 alert('处理失败！');
+	            	}
+	            }
+	        });  
+		}
+		 
+	}
+	/*]]>*/
+	
+</script>
+</head>
+<body>
+	<div class="container-fluid">
+		<form id="orderByForm" th:action="@{/server/orderStat.html}" method="post">
+			<input type="hidden" id="orderByStr" name="orderByStr"   th:value="${orderBy}"/>
+			<div style="border: solid 1px #cccccc; margin: 15px 15px; height: 50px">
+				<div id="qry" class="row" style="margin-top: 10px;margin-left:0px">
+						<div class="col-xs-8" style="width: 480px">
+							<label>开始时间:</label> 
+							<input type="text" size="10" id="startTime" name="startTime" th:value="${paraMap.startTime}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<label>结束时间:</label> 
+							<input type="text" size="10" id="endTime" name="endTime" th:value="${paraMap.endTime}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+						</div> 
+						<button type="submit" class="btn btn-primary"   name="btnQuery" id="btnQuery"  >查询</button> 
+				</div> 
+			</div>
+			<div id="tbdata" style="width:100%;overflow: scroll">
+			<table class="table table-bordered table-striped" style="width:100%">
+				<thead>
+					<tr>
+						<th>订单类型</th>
+						<th>订单总金额</th>
+						<th>微信总金额</th>
+						<th>余额支付金额</th>
+						<th>优惠券支付金额</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr  th:each="item : ${pv.resultList}">
+						<td style="width:90px" th:text="${item.serviceTypeTxt}"></td>
+						<td th:text="${item.atotalFee}"></td>
+						<td th:text="${item.wechatFee}"></td>
+						<td th:text="${item.balanceFee}"></td>
+						<td th:text="${item.couponFee}"></td> 
+					</tr>
+				</tbody>
+			</table>
+			<div>
+				<div style="border:1px solid #fffff">
+					 <nav id="tslCommon-Page"  style="float:right">
+			  			<input type="hidden" name="currentPageNum" th:value="${pv.currentPageNum}"/>
+			  			<input type="hidden" name="totalPageCnt" th:value="${pv.totalPageCnt}"/>
+			  			<input type="hidden" name="totalRecord" th:value="${pv.totalRecord}"/>
+					</nav>
+				</div>  
+			</div>
+		</div>
+	</form>
+	
+	
+		<div class="modal fade" id="inputDialog" tabindex="-1" role="dialog"  aria-labelledby="inputDialogLabel" aria-hidden="true">
+		   <div class="modal-dialog">
+		      <div class="modal-content" style="width:800px">
+		         <div class="modal-header">
+		            <button type="button" class="close" 
+		               data-dismiss="modal" aria-hidden="true">
+		                  &times;
+		            </button>
+		            <h4 class="modal-title" id="inputDialoglLabel">添加/修改阿姨信息</h4> 
+		         </div>
+		         <div class="modal-body" id='dvmodal-body'></div>
+		         <div style="text-align:center;height:60px">
+		            <button type="button" id="submit"  onclick="save()"  class="btn btn-danger fl btn-lg" style="border-radius:0px;width:128px;height:34px;line-height:10px;"> 确定 </button>
+		             <button type="button" data-dismiss="modal"
+								class="btn btn-lg btn-blue" style="border-radius:0px;width:128px;height:34px;margin-left:25px;line-height:10px;">取消</button>
+		         
+		         </div>
+		      </div>
+			</div>
+		</div>
+		
+	
+	</div>
+<script th:inline="javascript">
+        /*<![CDATA[*/
+            $('#startTime').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false,
+                minView:2
+            });
+        
+            $('#endTime').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false ,
+                minView:2
+            });
+            
+            $('#serviceDate').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false ,
+                minView:2
+            });
+            
+            
+        /*]]>*/
+    </script>
+
+</body>
+</html>

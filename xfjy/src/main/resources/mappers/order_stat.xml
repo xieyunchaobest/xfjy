@@ -5,27 +5,20 @@
  
   <select id="getOrderPage" resultType="java.util.HashMap" parameterType="com.xyc.proj.entity.Order">
  	<include refid="queryOrder"/>
-    <include refid="queryOrderCondition"/>      
  <![CDATA[ limit  #{start} , #{end} ]]>
 
   </select>
  
   
   <sql id="queryOrder">
-  	  select o.SERVICE_TYPE as serviceType,sum(o.TOTAL_FEE) as totalFee,ifnull(sum(o.wechat_fee),0) as wechatFee,
-ifnull((
-	case 
-		when pay_Mode='OY' or pay_Mode='WY' then 
-		   sum(balance_coupon_fee) 
-	end
-),0) as balanceFee,
-ifnull((
-	case 
-		when pay_Mode='OC' or pay_Mode='WC' then 
-		   sum(balance_coupon_fee) 
-	end
-),0) as couponFee 
- from t_order o 
+  	  select o.SERVICE_TYPE as serviceType,sum(o.TOTAL_FEE) as atotalFee,ifnull(sum(o.wechat_fee),0) as wechatFee,
+ifnull(sum(
+     (case when pay_Mode='OY' or pay_Mode='WY' then o.balance_coupon_fee   end ) 
+    ),0) AS balanceFee,
+ifnull(sum(
+    (case when pay_Mode='OC' or pay_Mode='WC' then  o.balance_coupon_fee   end ) 
+    ),0) AS couponFee 
+ from t_order o  where 1=1 
  <include refid="queryOrderCondition"/> 
  group by o.SERVICE_TYPE
   </sql>
@@ -33,16 +26,15 @@ ifnull((
     <select id="getOrderPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
 	select count(1) from (
 		<include refid="queryOrder"/>
-		<include refid="queryOrderCondition"/>
 	) as c
   </select> 
   
   <sql id="queryOrderCondition">
   	  <if test="startTime != null and startTime !=''">
-			 <![CDATA[ and   payTime >=#{startTime}  ]]>
+			 <![CDATA[ and   PAY_TIME >=#{startTime}  ]]>
 	  </if>
 	  <if test="endTime != null and endTime !=''">
-			 <![CDATA[ and    payTime <=#{endTime}  ]]>
+			 <![CDATA[ and    PAY_TIME <=#{endTime}  ]]>
 	  </if>
   </sql>
   

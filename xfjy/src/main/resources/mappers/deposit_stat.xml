@@ -5,7 +5,6 @@
  
   <select id="getDepositStatPage" resultType="java.util.HashMap" parameterType="java.util.HashMap">
  	<include refid="queryDepositStat"/>
-    <include refid="queryDepositStatCondition"/>      
  <![CDATA[ limit  #{start} , #{end} ]]>
 
   </select>
@@ -21,22 +20,20 @@
   	  and t2.state='A' AND DEPOSIT_AMOUNT>0
   	   
  <include refid="queryDepositStatCondition"/> 
- group by o.SERVICE_TYPE
   </sql>
   
     <select id="getDepositStatPageCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
 	select count(1) from (
 		<include refid="queryDepositStat"/>
-		<include refid="queryDepositStatCondition"/>
 	) as c
   </select> 
   
   <sql id="queryDepositStatCondition">
   	  <if test="startTime != null and startTime !=''">
-			 <![CDATA[ and   payTime >=#{startTime}  ]]>
+			 <![CDATA[ and   pay_Time >=#{startTime}  ]]>
 	  </if>
 	  <if test="endTime != null and endTime !=''">
-			 <![CDATA[ and    payTime <=#{endTime}  ]]>
+			 <![CDATA[ and    pay_Time <=#{endTime}  ]]>
 	  </if>
   </sql>
   

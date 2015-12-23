@@ -5,13 +5,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.mapper.DepositStatMapper;
 import com.xyc.proj.mapper.OrderStatMapper;
 import com.xyc.proj.utility.PageView;
 
-
+@Service
 public class StatServiceImpl implements StatService{
 	
 	@Lazy
@@ -30,7 +31,7 @@ public class StatServiceImpl implements StatService{
 		return pv;
 	}
 	
-	public PageView geDepositStatPage(Map m) {
+	public PageView getDepositStatPage(Map m) {
 		PageView pv = new PageView((Integer) m.get("currentPageNum"));
 		m.put("start", pv.getStart());
 		m.put("end", pv.getCurrentMaxCnt());
@@ -46,13 +47,13 @@ public class StatServiceImpl implements StatService{
 				Map mm=(Map)oList.get(i);
 				String serviceType=(String)mm.get("serviceType");
 				if (Constants.SERVICE_TYPE_CC.equals(serviceType)) {
-					mm.put("serviceTypeText","日常保洁");
+					mm.put("serviceTypeTxt","日常保洁");
 				} else if (Constants.SERVICE_TYPE_DBJ.equals(serviceType)) {
-					mm.put("serviceTypeText","大保洁");
+					mm.put("serviceTypeTxt","大保洁");
 				} else if (Constants.SERVICE_TYPE_CBL.equals(serviceType)) {
-					mm.put("serviceTypeText","擦玻璃");
+					mm.put("serviceTypeTxt","擦玻璃");
 				} else if (Constants.SERVICE_TYPE_KH.equals(serviceType)) {
-					mm.put("serviceTypeText","开荒");
+					mm.put("serviceTypeTxt","开荒");
 				}
 			}
 		}
