@@ -126,6 +126,10 @@ public class ServerServiceImpl implements ServerService {
 				} else if (Constants.WORK_TIME_24H.equals(w.getWorkTime())) {
 					w.setWorkTimeName("24小时");
 				}
+				
+				int yeearsold=Integer.parseInt(DateUtil.getToday().substring(0,4))-Integer.parseInt(w.getBirthday().substring(0,4));
+				w.setYearsOld(yeearsold+"");
+				
 			}
 		}
 

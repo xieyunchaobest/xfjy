@@ -9,18 +9,76 @@
 <link rel="shortcut icon" th:href="@{/app/img/favicon.png}" />
 <script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/vendor/jquery.shCircleLoader.js}" type="text/javascript"></script>
 <script th:src="@{/app/js/public.js}"></script>
 
 <script type="text/javascript">
+/*<![CDATA[*/
 	$().ready(function() {
-		$("#contentPage").attr("src", basePath + '/server/queryUser.html');
-
+		$('#shclDefault').css({ 
+			position:'absolute', 
+			left: ($(window).width() - $('#shclDefault').outerWidth())/2, 
+			top: ($(window).height() - $('#shclDefault').outerHeight())/2 + $(document).scrollTop() 
+			}); 
+		
+		var totalPageCnt=$("#totalPageCnt").val()
+		if(totalPageCnt<='1'){
+			$("#dvloadmore").text('没有更多数据了...');
+		}
+		
 	});
 
 	function switchPage(url) {
 		var userName = $("#userName").val();
 		url = url + "?userName=" + userName;
 		$("#contentPage").attr("src", basePath + url);
+	}
+	
+	function queryWorker(flag,target){
+		if(flag=='A'){
+			//alert($(target).attr('value'));
+			$("#areaId").val($(target).attr('value'));
+			$("#areaName").val($(target).text());
+			$("#spnAreaName").text($(target).text());
+		}else if(flag=='W'){
+			$("#serviceTypeTwo").val($(target).attr('value'));
+			$("#spnserviceTypeTwo").text($(target).text());
+			$("#serviceTypeTwoText").val($(target).text());
+		}else if(flag=='T'){
+			$("#workTime").val($(target).attr('value'));
+			$("#spnWorktime").text($(target).text());
+			$("#workTimeText").val($(target).text());
+		}
+		 var path = basePath+"/client/houseKeepingIndex.html";  
+		 $('#aform').attr("action", path).submit(); 
+	}
+	
+	function appendData(){
+		var areaId=$("#areaId").val();
+		var serviceTypeTwo=$("#serviceTypeTwo").val();
+		var workTime=$("#workTime").val();
+		var currentPageNum=$("#currentPageNum").val();
+		var len= $ ("div[xtype='dt']").length;
+		 $("div[xtype='dt']").each(function(index,element){
+			 if (index === len - 1){
+				 $('#shclDefault').show();
+				 $('#shclDefault').shCircleLoader();
+				 var currentPageNum=$("#currentPageNum").val();
+				 currentPageNum=parseInt(currentPageNum)+1
+				$("#currentPageNum").val(currentPageNum);
+				 if(currentPageNum>=parseInt($("#totalPageCnt").val())){
+					 $("#dvloadmore").text('没有更多数据了...');
+				 }
+				
+				 $(this).append("").load(basePath+"/client/appendWorkerItems.html?rn="+Math.random()+"&areaId="+areaId+"&serviceTypeTwo="+serviceTypeTwo+"&workTime="+workTime+"&currentPageNum="+currentPageNum, function() {
+						$("#dvdata").append('<div id="dataappend"  xtype="dt"></div>');
+						$('#shclDefault').hide();
+				}); 
+			 }
+        });
+		 
+		 /*]]>*/		  
+		 
 	}
 </script>
 <style type="text/css">
@@ -40,78 +98,99 @@ overflow-x:hidden;
 
 </head>
 <body>
+	<form id="aform" method="post">
 	<div class="row">
+		<input type="hidden" name="areaId" id="areaId" th:value="${parms.areaId}"/>
+		<input type="hidden" name="areaName" id="areaName" th:value="${parms.areaName}"/>
+		<input type="hidden" name="serviceTypeTwo" id="serviceTypeTwo" th:value="${parms.serviceTypeTwo}"/>
+		<input type="hidden" name="serviceTypeTwoText" id="serviceTypeTwoText" th:value="${parms.serviceTypeTwoText}"/>
+		<input type="hidden" name="workTime" id="workTime" th:value="${parms.workTime}"/>
+		<input type="hidden" name="workTimeText" id="workTimeText" th:value="${parms.workTimeText}"/>
+		<input type="hidden" name="currentPageNum" id="currentPageNum" value="1"/>
+		<input type="hidden" name="totalPageCnt" id="totalPageCnt" th:value="${pageView.totalPageCnt}"/>
 		<div class="dropdown col-xs-4" style="margin-right:0px;padding:0 0">
 			<button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenu1"
 				data-toggle="dropdown" style="width:100%;">
-				区域 <span class="caret"></span>
+				<span id="spnAreaName" th:text="${parms.areaName}==null or ${parms.areaName}==''?'所有区域':${parms.areaName}">区域</span> <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 				<li role="presentation" th:each="area : ${areaList}">
-					<a role="menuitem" tabindex="-1" href="#" th:text="${area.name}"></a>
+					<a role="menuitem" tabindex="-1" href="#" th:value="${area.id}" onclick="queryWorker('A',this)" th:text="${area.name}"></a>
 					<li role="presentation" class="divider"></li>
 				</li> 
-					
+				 
 			</ul>
 		</div>
 		<div class="dropdown col-xs-4" style="margin-right:0px;padding:0 0">
 			<button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenu1"
 				data-toggle="dropdown" style="width:100%">
-				工种 <span class="caret"></span>
+				<span id="spnserviceTypeTwo"  th:text="${parms.serviceTypeTwoText}==null or ${parms.serviceTypeTwoText}==''?'工种':${parms.serviceTypeTwoText}"></span> <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">月嫂</a></li>
+					href="#" value="YS" onclick="queryWorker('W',this)">月嫂</a></li>
 					<li role="presentation" class="divider"></li>
 				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">孕婴、育儿嫂</a></li>
+					href="#"  value="YY" onclick="queryWorker('W',this)">孕婴、育儿嫂</a></li>
 					<li role="presentation" class="divider"></li>
 				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">养老护工</a></li>
+					href="#" value="YL" onclick="queryWorker('W',this)">养老护工</a></li>
 				<li role="presentation" class="divider"></li>
 				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">家政、小时工</a></li>
+					href="#" value="JZ" onclick="queryWorker('W',this)">家政、小时工</a></li>
+				<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#" value="" onclick="queryWorker('W',this)">所有工种</a></li>
 			</ul>
 		</div>
 		<div class="dropdown col-xs-4" style="margin-right:0px;padding:0 0">
 			<button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenu1"
 				data-toggle="dropdown" style="width:100%">
-				工时 <span class="caret"></span>
+				<span id="spnWorktime" th:text="${parms.workTimeText}==null or ${parms.workTimeText}==''?'工种':${parms.workTimeText}">工时</span> <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				<li role="presentation"><a role="menuitem" tabindex="-1"
+				<li role="presentation"><a role="menuitem" tabindex="-1" value="D" onclick="queryWorker('T',this)"
 					href="#">白班</a></li>
 					<li role="presentation" class="divider"></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1"
+				<li role="presentation"><a role="menuitem" tabindex="-1" value="H" onclick="queryWorker('T',this)"
 					href="#">24小时</a></li> 
+				<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1" value="" onclick="queryWorker('T',this)"
+					href="#">所有工时</a></li> 
 			</ul>
 		</div>
 	</div>
 	<!-- begin worker list -->
-		<div style="border:1px solid red">
-			<div class="row" style="padding-bottom:10px;padding-top:10px;">
+	<div style="overflow-y:scroll;overflow-x:hidden;height:100%">
+		<div style="border:1px solid red" id="dvdata">
+			<div class="row" style="padding-bottom:10px;padding-top:10px;border:1px solid green;margin-top:3px" th:value="${item.id}" th:each="item : ${pageView.resultList}" onclick="javascript:alert($(this).attr('value'))">
 				<div style="float:left;margin-left:20px">
 					<img th:src="@{/app/img/xfjy_banner2.jpg}" style="width:100px;height:auto"/>
 				</div>
 				<div style="float:left">
 					<div style="border:1px solid blue;float:left;margin-left:10px">
-						<span style="font-weight:bold">王志明</span> 
-						<span>42岁|山东人</span> 
+						<span style="font-weight:bold" th:text="${item.name}"></span> <br/>
+						<span th:text="__${item.yearsOld}__+'岁|'+__${item.nativePlace}__+'人'"></span> 
 					</div>
 					<div style="border:1px solid blue;float:right;margin-right:20px">
-						<span>参考工资：</span><span>4500</span>
+						<span>参考工资：</span><span th:text="${item.salary}">4500</span>
 					</div>
 					<div style="clear:both" ></div> 
-					<div style="margin-left:10px;border:1px solid orange;width:250px;">
-						简介简介简介简介简介简介简简介简介  
-						简介简介简介简介简介简介简简介简介
+					<div style="margin-left:10px;border:1px solid orange;width:200px;" th:text="${item.serviceTypeTwoName}">
 					</div>
 				</div>
-				
-				
 			</div>
-		
+			<div id="dataappend" xtype="dt"></div> 
 		</div>
 		
+		<div style="height:30px;border:1px solid blue;text-align:center" id="dvloadmore" onclick="appendData()">
+			加载。。。。
+		</div>
+		<div style="height:150px"></div>
+		<div id="shclDefault" style="width:50px;height:50px;"></div>
+		</div>
+		
+		
+		</form>
 </body>
 </html>

@@ -86,6 +86,9 @@ public class Worker {
 	private String storeName;
 	@Transient
 	private String teacherName;
+	
+	@Transient
+	private String yearsOld;
 
 	public String getTeacherName() {
 		return teacherName;
@@ -366,5 +369,15 @@ public class Worker {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getYearsOld() {
+		return yearsOld;
+	}
+
+	public void setYearsOld(String yearsOld) {
+		this.yearsOld = yearsOld;
+	}
+	
+	
 
 }
