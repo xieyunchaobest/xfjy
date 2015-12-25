@@ -35,6 +35,7 @@ import com.xyc.proj.repository.WorkerRepository;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.MsgUtil;
 import com.xyc.proj.utility.PageView;
+import com.xyc.proj.utility.StringUtil;
 
 @Service
 public class ServerServiceImpl implements ServerService {
@@ -82,54 +83,78 @@ public class ServerServiceImpl implements ServerService {
 		return pv;
 	}
 
+	public Worker findWorkerDetail(Worker w) {
+		if (Constants.EDUCATIONAL_LEVEL_MIDDLE.equals(w.getEducation())) {
+			w.setEducationText("中学及以下");
+		} else if (Constants.EDUCATIONAL_LEVEL_ZK.equals(w.getEducation())) {
+			w.setEducationText("专科");
+		} else if (Constants.EDUCATIONAL_LEVEL_BK.equals(w.getEducation())) {
+			w.setEducationText("本科");
+		} else if (Constants.EDUCATIONAL_LEVEL_SS.equals(w.getEducation())) {
+			w.setEducationText("硕士");
+		}
+		
+		if(Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeOne())) {
+			w.setServiceTypeTwoName("保洁");
+		}else if(Constants.WORK_SERVICE_TYPE_JZ.equals(w.getServiceTypeOne())) {
+			w.setServiceTypeTwoName("家政");
+		}
+
+		if (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("保洁");
+		} else if (Constants.WORK_SERVICE_YS.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("月嫂");
+		} else if (Constants.WORK_SERVICE_YY_YE.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("孕婴、育儿嫂");
+		} else if (Constants.WORK_SERVICE_YL.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("养老护工");
+		} else if (Constants.WORK_SERVICE_JZ.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("家政、小时工");
+		}
+
+		if (Constants.WORK_ROLE_ROLE_AY.equals(w.getRole())) {
+			w.setRoleName("阿姨");
+		} else if (Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
+			w.setRoleName("老师");
+		}
+
+		if (Constants.WORK_TIME_DAY.equals(w.getWorkTime())) {
+			w.setWorkTimeName("白班");
+		} else if (Constants.WORK_TIME_24H.equals(w.getWorkTime())) {
+			w.setWorkTimeName("24小时");
+		}
+		
+		int yeearsold=Integer.parseInt(DateUtil.getToday().substring(0,4))-Integer.parseInt(w.getBirthday().substring(0,4));
+		w.setYearsOld(yeearsold+"");
+		
+		String timeofStartWork=w.getTimeOfStartWork();
+		if(!StringUtil.isBlank(timeofStartWork)) {
+			int iworkExperience=Integer.parseInt(DateUtil.getToday().substring(0,4))-Integer.parseInt(w.getTimeOfStartWork().substring(0, 4));
+			String workExperience=iworkExperience+"";
+			w.setWorkExperience(workExperience);
+		}else {
+			w.setWorkExperience("未知");
+		}
+		
+		if(StringUtil.isBlank(w.getPoliticStatus())) {
+			w.setPoliticStatus("群众");
+		}
+		if(StringUtil.isBlank(w.getReligion())) {
+			w.setReligion("无宗教信仰");
+		}
+		if(StringUtil.isBlank(w.getLanguageLevel())) {
+			w.setLanguageLevel("一般");
+		}
+		
+		return w;
+	}
+	
 	public List findWorkList(Map pm) {
 		List<Worker> workerList = workerMapper.getWorkPageList(pm);
 		if (workerList != null) {
 			for (int i = 0; i < workerList.size(); i++) {
 				Worker w = workerList.get(i);
-				if (Constants.EDUCATIONAL_LEVEL_MIDDLE.equals(w.getEducation())) {
-					w.setEducationText("中学及以下");
-				} else if (Constants.EDUCATIONAL_LEVEL_ZK.equals(w.getEducation())) {
-					w.setEducationText("专科");
-				} else if (Constants.EDUCATIONAL_LEVEL_BK.equals(w.getEducation())) {
-					w.setEducationText("本科");
-				} else if (Constants.EDUCATIONAL_LEVEL_SS.equals(w.getEducation())) {
-					w.setEducationText("硕士");
-				}
-				
-				if(Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeOne())) {
-					w.setServiceTypeTwoName("保洁");
-				}else if(Constants.WORK_SERVICE_TYPE_JZ.equals(w.getServiceTypeOne())) {
-					w.setServiceTypeTwoName("家政");
-				}
-
-				if (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeTwo())) {
-					w.setServiceTypeTwoName("保洁");
-				} else if (Constants.WORK_SERVICE_YS.equals(w.getServiceTypeTwo())) {
-					w.setServiceTypeTwoName("月嫂");
-				} else if (Constants.WORK_SERVICE_YY_YE.equals(w.getServiceTypeTwo())) {
-					w.setServiceTypeTwoName("孕婴、育儿嫂");
-				} else if (Constants.WORK_SERVICE_YL.equals(w.getServiceTypeTwo())) {
-					w.setServiceTypeTwoName("养老护工");
-				} else if (Constants.WORK_SERVICE_JZ.equals(w.getServiceTypeTwo())) {
-					w.setServiceTypeTwoName("家政、小时工");
-				}
-
-				if (Constants.WORK_ROLE_ROLE_AY.equals(w.getRole())) {
-					w.setRoleName("阿姨");
-				} else if (Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
-					w.setRoleName("老师");
-				}
-
-				if (Constants.WORK_TIME_DAY.equals(w.getWorkTime())) {
-					w.setWorkTimeName("白班");
-				} else if (Constants.WORK_TIME_24H.equals(w.getWorkTime())) {
-					w.setWorkTimeName("24小时");
-				}
-				
-				int yeearsold=Integer.parseInt(DateUtil.getToday().substring(0,4))-Integer.parseInt(w.getBirthday().substring(0,4));
-				w.setYearsOld(yeearsold+"");
-				
+				w=findWorkerDetail(w);
 			}
 		}
 

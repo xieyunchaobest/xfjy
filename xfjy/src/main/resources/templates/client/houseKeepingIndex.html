@@ -76,10 +76,13 @@
 				}); 
 			 }
         });
-		 
-		 /*]]>*/		  
-		 
 	}
+	 /*]]>*/
+	
+	 function toWorkerDetail(target){
+		 var workerId=$(target).attr('value');
+		 window.location.href=basePath+"/client/workerDetail.html?workerId="+workerId;;
+	 }
 </script>
 <style type="text/css">
 html{
@@ -163,7 +166,7 @@ overflow-x:hidden;
 	<!-- begin worker list -->
 	<div style="overflow-y:scroll;overflow-x:hidden;height:100%">
 		<div style="border:1px solid red" id="dvdata">
-			<div class="row" style="padding-bottom:10px;padding-top:10px;border:1px solid green;margin-top:3px" th:value="${item.id}" th:each="item : ${pageView.resultList}" onclick="javascript:alert($(this).attr('value'))">
+			<div class="row" style="padding-bottom:10px;padding-top:10px;border:1px solid green;margin-top:3px" th:value="${item.id}" th:each="item : ${pageView.resultList}" onclick="toWorkerDetail(this)">
 				<div style="float:left;margin-left:20px">
 					<img th:src="@{/app/img/xfjy_banner2.jpg}" style="width:100px;height:auto"/>
 				</div>

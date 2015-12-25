@@ -49,5 +49,7 @@ public interface ServerService {
 	public Config getConfigByCode(String code) ;
 	
 	public void saveConfig(Config config);
+	
+	public Worker findWorkerDetail(Worker w) ;
 
 }

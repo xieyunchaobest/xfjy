@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.xyc.proj.entity.Area;
+import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.service.ServerService;
@@ -99,6 +100,15 @@ public class HouseKeepingController {
 		model.addAttribute("pageView", pageView);
 		model.addAttribute("parms", parmMap);
 		return "client/workerItems";
+	}
+	
+	@RequestMapping("/client/workerDetail.html")
+	public String workerDetail(@RequestParam(value = "workerId", required = true) Long workerId,
+			Model model) {
+		Worker worker=serverService.findWorker(workerId);
+		worker=serverService.findWorkerDetail(worker);
+		model.addAttribute("worker", worker);
+		return "client/workerDetail";
 	}
 	 
 

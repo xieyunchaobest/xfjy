@@ -103,7 +103,10 @@ public class Constants {
 	public static final String COUPON_TYPE_CASH="C";//
 	public static final String COUPON_TYPE_DISCOUNT="D";
 	
-	
+	public static final String BLOOD_TYPE_A="A";
+	public static final String BLOOD_TYPE_B="B";
+	public static final String BLOOD_TYPE_AB="AB";
+	public static final String BLOOD_TYPE_O="O";
 	
 	
 	public static String key = "";

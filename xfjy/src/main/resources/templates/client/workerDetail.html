@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>订单</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/public.css}" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+<style type="text/css">
+  
+</style>
+
+<script type="text/javascript">
+ 
+</script>
+</head>
+<body>
+	<div style="margin-top: 0px">
+		<div id="dvtopinfo" class="top">
+			<div style="margin-left:25px;margin-top:25px;float:left;width:80px;height:80px;border:1px solid red">
+				<img alt="" src="" style="width:100%;height:100%"/>
+			</div>
+			<div style="border:1px solid red;height:80px;width:220px;float:left;margin-top:25px;margin-left:15px">
+				<span style="font-weight:bold" th:text="${worker.name}"></span><br/>
+				<span>参考工资：</span><span th:text="${worker.salary}"></span><span>元/月</span><br/>
+				<span th:text="${worker.yearsOld}"></span><span>岁&nbsp;|&nbsp;</span><span th:text="${worker.nativePlace}"></span><span>人</span><br/>
+				<span th:text="${worker.serviceTypeTwoName}"></span>
+			</div>
+		</div>
+		<div style="margin-top:10px;height:120px;border:1px solid red">
+			<div id="dvtitle" style="height:32px;border:1px solid blue" >
+				<div style="height:20px;border-bottom:1px solid orange; "></div>
+				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">基本信息</h5>
+			</div>
+			<div id="dvbase" style="height:70px;border:1px solid yellow;padding-left:15px;padding-top:10px;">
+				<span th:text="${worker.yearsOld}"></span><span>岁&nbsp;|&nbsp;</span><span th:text="${worker.nativePlace}"></span><span>人&nbsp;|&nbsp;</span><span th:text="${worker.nation}"></span><br/>
+				<div style="height:5px;"></div>
+				<span th:text="${worker.politicStatus}"></span><span>&nbsp;|&nbsp;</span><span th:text="${worker.educationText}"></span><span>&nbsp;|&nbsp;</span><span th:text="${worker.religion}"></span>
+			</div>
+			<div id="split" style="background-color: gray;height:1px;margin-top:10px;margin-left:15px"></div>
+			<div style="height:80px;padding-left:15px;margin-top:10px">
+				<span>普通话</span><span th:text="${worker.languageLevel}"></span><br/>
+				<div style="height:5px;"></div>
+				<span>行业经验</span><span th:text="${worker.workExperience}"></span><span>年左右</span><br/>
+				<div  style="height:5px;"></div>
+				<span th:text="${worker.employmentDate}"></span><span>加入幸福家缘</span>
+			</div>
+			<div id="split" style="background-color: gray;height:1px;margin-top:10px;margin-left:15px"></div>
+			
+			
+		</div>
+	</div>
+
+
+</body>
+</html>

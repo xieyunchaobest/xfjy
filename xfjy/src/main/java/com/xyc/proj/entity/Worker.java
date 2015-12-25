@@ -89,6 +89,39 @@ public class Worker {
 	
 	@Transient
 	private String yearsOld;
+	
+	@Column(name = "TIME_OF_STARTWORK")
+	private String timeOfStartWork;//从业开始时间
+	@Transient
+	private String workExperience;//工作经验
+	
+	@Column(name = "NATION")
+	private String nation;//民族
+	@Column(name = "POLITIC_STATUS")
+	private String politicStatus;//政治面貌
+	@Column(name = "RELIGION")
+	private String religion;//宗教信仰 
+	@Column(name = "LANGUAGE_LEVEL")
+	private String languageLevel;
+	@Column(name = "EMPLOYMENT_DATE")
+	private String employmentDate;//入职日期
+	@Column(name = "STATURE")
+	private String stature;//身高
+	@Column(name = "WEIGHT")
+	private String weight;
+	@Column(name = "BLOOD_TYPE")
+	private String bloodType;
+	@Column(name = "CERTIFICATE_OF_HONOR")
+	private String certificateOfHonor;//荣誉证书
+
+
+	public String getTimeOfStartWork() {
+		return timeOfStartWork;
+	}
+
+	public void setTimeOfStartWork(String timeOfStartWork) {
+		this.timeOfStartWork = timeOfStartWork;
+	}
 
 	public String getTeacherName() {
 		return teacherName;
@@ -377,6 +410,87 @@ public class Worker {
 	public void setYearsOld(String yearsOld) {
 		this.yearsOld = yearsOld;
 	}
+
+	public String getWorkExperience() {
+		return workExperience;
+	}
+
+	public void setWorkExperience(String workExperience) {
+		this.workExperience = workExperience;
+	}
+
+	public String getNation() {
+		return nation;
+	}
+
+	public void setNation(String nation) {
+		this.nation = nation;
+	}
+
+	public String getPoliticStatus() {
+		return politicStatus;
+	}
+
+	public void setPoliticStatus(String politicStatus) {
+		this.politicStatus = politicStatus;
+	}
+
+	public String getReligion() {
+		return religion;
+	}
+
+	public void setReligion(String religion) {
+		this.religion = religion;
+	}
+
+	public String getLanguageLevel() {
+		return languageLevel;
+	}
+
+	public void setLanguageLevel(String languageLevel) {
+		this.languageLevel = languageLevel;
+	}
+
+	public String getEmploymentDate() {
+		return employmentDate;
+	}
+
+	public void setEmploymentDate(String employmentDate) {
+		this.employmentDate = employmentDate;
+	}
+
+	public String getStature() {
+		return stature;
+	}
+
+	public void setStature(String stature) {
+		this.stature = stature;
+	}
+
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	public String getBloodType() {
+		return bloodType;
+	}
+
+	public void setBloodType(String bloodType) {
+		this.bloodType = bloodType;
+	}
+
+	public String getCertificateOfHonor() {
+		return certificateOfHonor;
+	}
+
+	public void setCertificateOfHonor(String certificateOfHonor) {
+		this.certificateOfHonor = certificateOfHonor;
+	}
+	
 	
 	
 
