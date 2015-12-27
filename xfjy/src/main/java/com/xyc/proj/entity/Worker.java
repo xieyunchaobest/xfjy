@@ -151,7 +151,11 @@ public class Worker {
 	
 	@Column(name = "photo")
 	private String photo;
+	
+	@Transient
+	private Worker teacher;
 
+	
 	public Worker() {
 	}
 
@@ -489,6 +493,14 @@ public class Worker {
 
 	public void setCertificateOfHonor(String certificateOfHonor) {
 		this.certificateOfHonor = certificateOfHonor;
+	}
+
+	public Worker getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Worker teacher) {
+		this.teacher = teacher;
 	}
 	
 	

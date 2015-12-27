@@ -1,5 +1,16 @@
 .top{
-	background: url("../img/xfjy_banner.jpg") no-repeat  ;
+	background: url("../img/bg_header.png") no-repeat  ;
 	background-size:100% auto;
-	height:130px
+	height:183px
+}
+
+.photobg{
+	background: url("../img/photo_bg.png") no-repeat  ;
+	background-size:100% auto;
+	margin-left: 25px;
+	margin-top: 50px;
+	float: left;
+	width: 80px;
+	height: 80px;
+	border: 1px solid red
 }

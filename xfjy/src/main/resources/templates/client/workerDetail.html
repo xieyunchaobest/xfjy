@@ -11,7 +11,16 @@
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
 <script th:src="@{/app/js/public.js}"></script>
 <style type="text/css">
-  
+body, html {
+	height: 100%;
+	overflow: hidden;
+}
+
+.pto {
+	height: 78px;
+	background-size: cover;
+	-webkit-border-radius: 50%
+}
 </style>
 
 <script type="text/javascript">
@@ -21,17 +30,18 @@
 <body>
 	<div style="margin-top: 0px">
 		<div id="dvtopinfo" class="top">
-			<div style="margin-left:25px;margin-top:25px;float:left;width:80px;height:80px;border:1px solid red">
-				<img alt="" src="" style="width:100%;height:100%"/>
+			<div class="photobg">
+				<!-- <img alt="" src="" style="width:100%;height:100%"/> -->
+				<div class="pto" th:style="'background-image:url(http://weixin.tjxfjz.com/xfjy/app/uploadfiles/workerphoto/'+${worker.photo}+');'"></div>
 			</div>
-			<div style="border:1px solid red;height:80px;width:220px;float:left;margin-top:25px;margin-left:15px">
+			<div style="border:1px solid red;height:80px;width:220px;float:left;margin-top:50px;margin-left:15px">
 				<span style="font-weight:bold" th:text="${worker.name}"></span><br/>
 				<span>参考工资：</span><span th:text="${worker.salary}"></span><span>元/月</span><br/>
 				<span th:text="${worker.yearsOld}"></span><span>岁&nbsp;|&nbsp;</span><span th:text="${worker.nativePlace}"></span><span>人</span><br/>
 				<span th:text="${worker.serviceTypeTwoName}"></span>
 			</div>
 		</div>
-		<div style="margin-top:10px;height:120px;border:1px solid red">
+		<div style="margin-top:10px;height:120px;border:1px solid red;height:360px;">
 			<div id="dvtitle" style="height:32px;border:1px solid blue" >
 				<div style="height:20px;border-bottom:1px solid orange; "></div>
 				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">基本信息</h5>
@@ -50,8 +60,46 @@
 				<span th:text="${worker.employmentDate}"></span><span>加入幸福家缘</span>
 			</div>
 			<div id="split" style="background-color: gray;height:1px;margin-top:10px;margin-left:15px"></div>
-			
-			
+			<div style="margin-left:15px;margin-top:10px;">
+				<span th:text="${worker.stature}"></span><span>cm&nbsp;|&nbsp;</span><span th:text="${worker.weight}"></span><span>kg&nbsp;</span><br/>
+				<div style="margin-top:5px"></div>
+				<span th:text="${worker.constellation}"></span>
+			</div>
+			<div id="split" style="background-color: gray;height:1px;margin-top:10px;margin-left:15px"></div>
+			<div style="margin-left:15px;margin-top:10px;">
+				<div style="height:50px;float:left;border:1px solid red">个人描述</div>
+				<div style="float:left;margin-left:15px;border:1px solid blue;width:230px;" th:text="${worker.descr}"></div>
+			</div>
+		</div>
+		<div id="dvteacher" style="height:100px;border:1px solid red">
+			<div id="dvtitle" style="height:32px;border:1px solid blue" >
+				<div style="height:20px;border-bottom:1px solid orange; "></div>
+				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">所属老师</h5>
+			</div>
+			<div style="height:70px;border:1px solid blue">
+				<div style="float:left;height:70px;width:70px;display:block;border:1px solid red;margin-left:15px;">
+					<img th:src="@{/app/img/ayi.jpg}" style="width:48px;height:auto"/>
+					<!-- <img th:src="@{'/app/uploadfiles/workerphoto/'+${worker.teacher.photo}}" style="width:48px;height:auto"/> -->
+				</div>
+				<div style="float:left;width:200px;height:70px;border:1px solid red">
+					<span style="font-weight:bold" th:text="${worker.teacher.name}"></span><br/>
+					<div style="margin-top:5px"></div>
+					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span>
+				</div>
+				<div style="float:right;width:60px;height:70px;border:1px solid orange;margin-right:20px;line-height:70px; position:relative;   ">
+					<!-- <a th:href="'tel:'+${worker.teacher.phone}">
+						<img th:src="@{/app/img/btn_call.png}" style="position:absolute;   height:55px;width:55px; top:8%; "/>
+					</a> -->
+				</div>
+			</div>
+			<div style="height:50px;border:1px solid red" class="row">
+				<div style="margin-top:10px"></div>
+				<div class="col-xs-2"></div>
+				<div>
+					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 btn-default btn-lg">预 约</button>
+				</div>
+				<div class="col-xs-2"></div>
+			</div>
 		</div>
 	</div>
 

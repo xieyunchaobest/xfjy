@@ -51,5 +51,7 @@ public interface ServerService {
 	public void saveConfig(Config config);
 	
 	public Worker findWorkerDetail(Worker w) ;
+	
+	public Worker findWorkerPlus(Worker w) ;
 
 }

@@ -106,7 +106,7 @@ public class HouseKeepingController {
 	public String workerDetail(@RequestParam(value = "workerId", required = true) Long workerId,
 			Model model) {
 		Worker worker=serverService.findWorker(workerId);
-		worker=serverService.findWorkerDetail(worker);
+		worker=serverService.findWorkerPlus(worker);
 		model.addAttribute("worker", worker);
 		return "client/workerDetail";
 	}

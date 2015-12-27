@@ -149,6 +149,14 @@ public class ServerServiceImpl implements ServerService {
 		return w;
 	}
 	
+	public Worker findWorkerPlus(Worker w) {
+		w=findWorkerDetail(w);
+		Long tearcherId=w.getTeacherId();
+		Worker teacher=workerRepository.findOne(tearcherId);
+		w.setTeacher(teacher);
+		return w;
+	}
+	
 	public List findWorkList(Map pm) {
 		List<Worker> workerList = workerMapper.getWorkPageList(pm);
 		if (workerList != null) {
