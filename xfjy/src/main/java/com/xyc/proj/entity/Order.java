@@ -166,6 +166,15 @@ public class Order {
 	@Column(name = "remarks")
 	private String remarks;
 	
+	@Column(name = "WORKER_ID")
+	private Long workerId;
+	
+	
+	@Column(name = "TEACHER_ID")
+	private Long teacherId;
+	
+	
+	
 	public Order() {
 	}
 
@@ -615,6 +624,26 @@ public class Order {
 
 	public void setBalanceCouponFee(Double balanceCouponFee) {
 		this.balanceCouponFee = balanceCouponFee;
+	}
+
+
+	public Long getTeacherId() {
+		return teacherId;
+	}
+
+
+	public void setTeacherId(Long teacherId) {
+		this.teacherId = teacherId;
+	}
+
+
+	public Long getWorkerId() {
+		return workerId;
+	}
+
+
+	public void setWorkerId(Long workerId) {
+		this.workerId = workerId;
 	}
 
 	

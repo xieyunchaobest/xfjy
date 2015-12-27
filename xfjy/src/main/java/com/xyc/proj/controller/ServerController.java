@@ -208,7 +208,8 @@ public class ServerController {
 			@RequestParam(value = "state", required = false) String state,
 			@RequestParam(value = "mobileNo", required = false) String mobileNo,
 			@RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum,
-			@RequestParam(value = "orderByStr", required = false, defaultValue = "name,desc") String orderBy) {
+			@RequestParam(value = "orderByStr", required = false, defaultValue = "name,desc") String orderBy,
+			HttpSession session) {
 		Map<String, Object> parmMap = new HashMap<String, Object>();
 		parmMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
 		parmMap.put(Constants.ORDERBY, StringUtil.formatSortBy(orderBy));
@@ -219,6 +220,10 @@ public class ServerController {
 		parmMap.put("serviceType", serviceType);
 		parmMap.put("state", state);
 		parmMap.put("mobileNo", mobileNo);
+		Worker w=(Worker)session.getAttribute("user");
+		if(w!=null && Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
+			parmMap.put("teacherId", w.getId());
+		}
 		List areaList = clientService.findAreaList();
 
 		PageView pageView = serverService.getOrderPageView(parmMap);

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.xyc.proj.entity.Area;
+import com.xyc.proj.entity.ClientUser;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.service.ServerService;
 import com.xyc.proj.utility.PageView;
 import com.xyc.proj.utility.StringUtil;
+import com.xyc.proj.utility.Tools;
 
 /**
  * 幸福加缘客户端控制类
@@ -39,6 +42,7 @@ public class HouseKeepingController {
 	 
 	@RequestMapping("/client/houseKeepingIndex.html")
 	public String houseKeepingIndex( 
+			@RequestParam(value = "openId", required = true) String openId,
 			@RequestParam(value = "areaId", required = false) String areaId,
 			@RequestParam(value = "areaName", required = false) String areaName,
 			@RequestParam(value = "serviceTypeTwo", required = false) String serviceTypeTwo,
@@ -72,6 +76,7 @@ public class HouseKeepingController {
 		model.addAttribute("pageView", pageView);
 		model.addAttribute("parms", parmMap);
 		model.addAttribute("areaList", areaList);
+		model.addAttribute("openId", openId);
 		return "client/houseKeepingIndex";
 	}
 	
@@ -99,17 +104,36 @@ public class HouseKeepingController {
 		PageView pageView = serverService.getWorkPage(parmMap);
 		model.addAttribute("pageView", pageView);
 		model.addAttribute("parms", parmMap);
+		
 		return "client/workerItems";
 	}
 	
 	@RequestMapping("/client/workerDetail.html")
 	public String workerDetail(@RequestParam(value = "workerId", required = true) Long workerId,
+			@RequestParam(value = "openId", required = true) String openId,
 			Model model) {
 		Worker worker=serverService.findWorker(workerId);
 		worker=serverService.findWorkerPlus(worker);
 		model.addAttribute("worker", worker);
+		model.addAttribute("openId", openId);
 		return "client/workerDetail";
+		
 	}
+	
+	@RequestMapping("/client/housekeepingConfirm.html")
+	public String housekeepingConfirm(@RequestParam(value = "workerId", required = true) Long workerId,
+			@RequestParam(value = "openId", required = true) String openId,
+			HttpServletRequest request,
+			Model model) {
+		Tools.forwardPage(model, request);
+		Worker worker=serverService.findWorker(workerId);
+		worker=serverService.findWorkerPlus(worker);
+		model.addAttribute("worker", worker);
+		model.addAttribute("openId", openId);
+		ClientUser cu=clientService.findClientUserByMobileOpenId(openId);
+		model.addAttribute("mobileNo", cu.getMobileNo());
+		return "client/housekeepingConfirm";
+	} 
 	 
 
 }

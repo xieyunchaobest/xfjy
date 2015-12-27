@@ -39,7 +39,6 @@ import com.xyc.proj.entity.Msg;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.UserAddress;
 import com.xyc.proj.entity.UserAuthCode;
-import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.CharacterEncodingFilter;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.pay.Configure;
@@ -48,6 +47,7 @@ import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
+import com.xyc.proj.utility.Tools;
 import com.xyc.proj.utility.WeChatMessageUtil;
 import com.xyc.proj.utility.WeixinUtil;
 
@@ -186,7 +186,7 @@ public class ClientController {
 	@RequestMapping(value = "/client/addAddressInit", method = { RequestMethod.POST, RequestMethod.GET })
 	public String addAddressInit(@RequestParam(value = "areaId", required = false) String areaId,
 			@RequestParam(value = "openId", required = true) String openId, HttpServletRequest request, Model model) {
-		forwardPage(model, request);
+		Tools.forwardPage(model, request);
 		List areaList = clientService.findAreaList();
 		model.addAttribute("areaList", areaList);
 		return "client/addAddress";
@@ -203,7 +203,7 @@ public class ClientController {
 	@RequestMapping("/client/serviceDate")
 	public String serviceDate(@RequestParam(value = "areaId", required = false) String areaId, Model model,
 			HttpServletRequest request) {
-		forwardPage(model, request);
+		Tools.forwardPage(model, request);
 		String serviceDate = request.getParameter("serviceDate");
 		if (StringUtil.isBlank(serviceDate)) {
 			serviceDate = DateUtil.getTomorrow();
@@ -296,93 +296,7 @@ public class ClientController {
 		return "client/index";
 	}
 
-	private void forwardPage(Model model, HttpServletRequest request) {
-		boolean exp = filters();
-		if (exp == true)
-			return;
-		String openId = request.getParameter("openId");
-		openId = StringUtil.isBlank(openId) ? "" : openId;
-
-		String userAddressId = request.getParameter("userAddressId");
-		userAddressId = StringUtil.isBlank(userAddressId) ? "0" : userAddressId;
-
-		String fullAddress = request.getParameter("fullAddress");
-		fullAddress = StringUtil.isBlank(fullAddress) ? "" : fullAddress;
-
-		String mobileNo = request.getParameter("mobileNo");
-		mobileNo = StringUtil.isBlank(mobileNo) ? "" : mobileNo;
-
-		String serviceDate = request.getParameter("serviceDate");
-		serviceDate = StringUtil.isBlank(serviceDate) ? "" : serviceDate;
-
-		String duration = request.getParameter("duration");
-		duration = StringUtil.isBlank(duration) ? "" : duration;
-
-		String startTime = request.getParameter("startTime");
-		startTime = StringUtil.isBlank(startTime) ? "" : startTime;
-
-		String endTime = request.getParameter("endTime");
-		endTime = StringUtil.isBlank(endTime) ? "" : endTime;
-
-		String servicetype = request.getParameter("serviceType");
-		servicetype = StringUtil.isBlank(servicetype) ? "" : servicetype;
-
-		String cycleType = request.getParameter("cycleType");
-		cycleType = StringUtil.isBlank(cycleType) ? "" : cycleType;
-
-		String durationMonth = request.getParameter("durationMonth");
-		durationMonth = StringUtil.isBlank(cycleType) ? "" : durationMonth;
-
-		String repeatInWeek = request.getParameter("repeatInWeek");
-		repeatInWeek = StringUtil.isBlank(repeatInWeek) ? "" : repeatInWeek;
-
-		String repeatInWeekText = request.getParameter("repeatInWeekText");
-		repeatInWeekText = StringUtil.isBlank(repeatInWeekText) ? "" : repeatInWeekText;
-
-		String durationMonthText = request.getParameter("durationMonthText");
-		durationMonthText = StringUtil.isBlank(durationMonthText) ? "" : durationMonthText;
-
-		String durationText = request.getParameter("durationText");
-		durationText = StringUtil.isBlank(durationText) ? "" : durationText;
-
-		String isProviceCleanTools = request.getParameter("isProviceCleanTools");
-		isProviceCleanTools = StringUtil.isBlank(isProviceCleanTools) ? "" : isProviceCleanTools;
-
-		String area = request.getParameter("area");
-		area = StringUtil.isBlank(area) ? "" : area;
-
-		String balconyCount = request.getParameter("balconyCount");
-		balconyCount = StringUtil.isBlank(balconyCount) ? "" : balconyCount;
-
-		String windowCount = request.getParameter("windowCount");
-		windowCount = StringUtil.isBlank(windowCount) ? "" : windowCount;
-
-		String name = request.getParameter("name");
-		name = StringUtil.isBlank(name) ? "" : name;
-
-		Order o = new Order();
-		o.setOpenId(openId);
-		o.setUserAddressId(Long.parseLong(userAddressId));
-		o.setFullAddress(fullAddress);
-		o.setMobileNo(mobileNo);
-		o.setServiceDate(serviceDate);
-		o.setDuration(duration);
-		o.setStartTime(startTime);
-		o.setEndTime(endTime);
-		o.setServiceType(servicetype);
-		o.setCycleType(cycleType);
-		o.setRepeatInWeek(repeatInWeek);
-		o.setDurationMonth(durationMonth);
-		o.setRepeatInWeekText(repeatInWeekText);
-		o.setDurationMonthText(durationMonthText);
-		o.setDurationText(durationText);
-		o.setArea(area);
-		o.setWindowCount(windowCount);
-		o.setBalconyCount(balconyCount);
-		o.setName(name);
-		model.addAttribute("order", o);
-	}
-
+	
 	/**
 	 * 宝洁功能首页
 	 * 
@@ -393,11 +307,7 @@ public class ClientController {
 	public String cleanIndex(Model model, HttpServletRequest request,
 			@RequestParam(value = "serviceType", required = true) String serviceType,
 			@RequestParam(value = "openId", required = true) String openId) {
-		boolean exp = filters();
-		if (exp == true)
-			return "";
-
-		forwardPage(model, request);
+		Tools.forwardPage(model, request);
 		String servicetype = request.getParameter("serviceType");
 		servicetype = StringUtil.isBlank(servicetype) ? "" : servicetype;
 		String cleanToolsValue = "";
@@ -425,11 +335,11 @@ public class ClientController {
 	public String khIndex(Model model, HttpServletRequest request,
 			@RequestParam(value = "serviceType", required = true, defaultValue = "KH") String serviceType,
 			@RequestParam(value = "openId", required = true) String openId) {
-		boolean exp = filters();
+		boolean exp = Tools.filters();
 		if (exp == true)
 			return "";
 
-		forwardPage(model, request);
+		Tools.forwardPage(model, request);
 		String servicetype = request.getParameter("serviceType");
 		servicetype = StringUtil.isBlank(servicetype) ? "" : servicetype;
 		String cleanToolsValue = clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4KH);
@@ -452,11 +362,11 @@ public class ClientController {
 	public String cblIndex(Model model, HttpServletRequest request,
 			@RequestParam(value = "serviceType", required = true, defaultValue = "CBL") String serviceType,
 			@RequestParam(value = "openId", required = true) String openId) {
-		boolean exp = filters();
+		boolean exp = Tools.filters();
 		if (exp == true)
 			return "";
 
-		forwardPage(model, request);
+		Tools.forwardPage(model, request);
 		String servicetype = request.getParameter("serviceType");
 		servicetype = StringUtil.isBlank(servicetype) ? "" : servicetype;
 		String cleanToolsFee = clientService.getConfigValue(Constants.CONFIG_CLEAN_TOOLS_FEE4CBL);
@@ -493,12 +403,14 @@ public class ClientController {
 	@RequestMapping(value = "/client/addressSelect.html", method = { RequestMethod.POST, RequestMethod.GET })
 	public String addressSelect(Model model, HttpServletRequest request,
 			@RequestParam(value = "openId", required = false) String openId) {
-		boolean exp = filters();
+		boolean exp = Tools.filters();
 		if (exp == true)
 			return "";
-		forwardPage(model, request);
+		Tools.forwardPage(model, request);
 		Map map = new HashMap();
 		map.put("openId", openId);
+		String workerId=StringUtil.isBlank(request.getParameter("workerId"))?"":request.getParameter("workerId");
+		model.addAttribute("workerId", workerId);
 		List addressList = clientService.findAddressByUser(map);
 		model.addAttribute("addressList", addressList);
 		return "client/addressSelect";
@@ -891,14 +803,6 @@ public class ClientController {
 		return registration;
 	}
 
-	private boolean filters() {
-		Date d = new Date();
-		int strDate = Integer.parseInt(DateUtil.to_char(d, "yyyyMMdd"));
-		if (strDate > 20160310) {
-			return true;
-		}
-		return false;
-	}
 
 	private String getData(HttpServletRequest request) throws IOException {
 		BufferedReader br = new BufferedReader(

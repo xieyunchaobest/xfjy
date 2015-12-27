@@ -1,0 +1,185 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>订单确认</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/public.css}" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_002.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_004.js}" type="text/javascript"></script>
+<link th:href="@{/app/datepicker/css/mobiscroll_002.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/app/datepicker/css/mobiscroll.css}" rel="stylesheet" type="text/css" />
+<script th:src="@{/app/datepicker/js/mobiscroll.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_003.js}" type="text/javascript"></script>
+<script th:src="@{/app/datepicker/js/mobiscroll_005.js}" type="text/javascript"></script>
+<link th:href="@{/app/datepicker/css/mobiscroll_003.css}" rel="stylesheet" type="text/css" />
+<style type="text/css">
+body, html {
+	height: 100%;
+	overflow: hidden;
+}
+
+.pto {
+	height: 78px;
+	background-size: cover;
+	-webkit-border-radius: 50%
+}
+</style>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+
+function toAddressSelect(){
+	var workerId=$("#workerId").val();
+	var openId=$("#openId").val();
+		var path = basePath+"/client/addressSelect.html?workerId="+workerId;  
+		$('#aform').attr("action", path).submit();
+}
+
+$(function () {
+    var currYear = (new Date()).getFullYear();	
+	var opt={};
+	opt.date = {preset : 'date'};
+	opt.datetime = {preset : 'datetime'};
+	opt.time = {preset : 'time'};
+	opt.default = {
+		theme: 'android-ics light', //皮肤样式
+        display: 'modal', //显示方式 
+        mode: 'scroller', //日期选择模式
+		dateFormat: 'yyyy-mm-dd',
+		lang: 'zh',
+		showNow: true,
+		nowText: "今天",
+        startYear: currYear, //开始年份
+        endYear: currYear + 10, //结束年份
+        minDate: new Date()
+	};
+	$("#txtServiceDate").mobiscroll($.extend(opt['date'], opt['default']));
+	$("#txtServiceDate").val(getTomorrow(new Date()));
+	$("#serviceDate").val(getTomorrow(new Date()));
+});
+
+
+getTomorrow = function(day)   
+{   
+    var str = "";   
+  
+    str= day.getFullYear() ;     
+    str=str+'-'+((day.getMonth()+1)>10? (day.getMonth()+1).toString():'0' +(day.getMonth()+1));   
+   // str=str+"-"+(day.getDate()>9?(day.getDate()+1).toString():'0' + (day.getDate()+1));   
+  	var tomorrow=day.getDate()+1;
+  	str=str+"-"+(tomorrow>9?tomorrow.toString():'0' + tomorrow.toString());
+    return str;   
+} 
+
+/*]]>*/
+
+</script>
+</head>
+<body>
+	<div style="margin-top: 0px"> 
+	<form id="aform" name="aform" method="post">
+		<input type="hidden" name="workerId" id="workerId" th:value="${worker.id}" />
+		<input type="hidden" name="teacherId" id="teacherId" th:value="${worker.teacher.id}" />
+		<input type="hidden" name="openId" id="openId"   th:value="${order.openId}"/>
+		<input type="hidden" name="mobileNo" id="mobileNo"   th:value="${order.mobileNo}"/>
+		<input type="hidden" name="userAddressId"  id="userAddressId" th:value="${order.userAddressId}"/>
+		<input type="hidden" name="fullAddress" id="fullAddress" th:value="${order.fullAddress}"/>
+		<input type="hidden" name="serviceDate" id="serviceDate" th:value="${order.serviceDate}"/>
+		<input type="hidden" name="duration"  id="duration"  th:value="${order.duration}"/>
+		<input type="hidden" name="startTime"  id="startTime"  th:value="${order.startTime}"/>
+		<input type="hidden" name="endTime"  id="endTime"  th:value="${order.endTime}"/>
+		<input type="hidden" name="serviceType" id="serviceType" th:value="${order.serviceType}"/>
+		<input type="hidden" name="cycleType" id="cycleType" th:value="${order.cycleType}"/>
+		<input type="hidden" name="durationMonth" id="durationMonth"   th:value="${order.durationMonth}"/>
+  		<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}"/>
+		<input type="hidden" name="repeatInWeekText" id="repeatInWeekText" th:value="${order.repeatInWeekText}" />
+  		<input type="hidden" name="durationMonthText" id="durationMonthText" th:value="${order.durationMonthText}" />
+  		<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
+  		<input type="hidden" name="isProviceCleanTools" id="isProviceCleanTools" th:value="${order.isProviceCleanTools}" />
+  		<input type="hidden" name="area" id="area" th:value="${order.area}" />
+  		<input type="hidden" name="windowCount" id="windowCount" th:value="${order.windowCount}" />
+  		<input type="hidden" name="balconyCount" id="balconyCount" th:value="${order.balconyCount}" />
+  		<input type="hidden" name="name" id="name" th:value="${order.name}" />
+  			
+  		<input type="hidden" id="couponCount"  name="couponCount" th:value="${couponCount}" />
+  		<input type="hidden" id="couponId"  name="couponId"   />
+  		<input type="hidden" id="payMode"  name="payMode"   />
+		<div style="margin-top:10px;height:120px;border:1px solid red;height:120px;">
+			<div id="dvtitle" style="height:32px;border:1px solid blue" >
+				<div style="height:20px;border-bottom:1px solid orange; "></div>
+				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">阿姨信息</h5>
+			</div>
+			<div style="float:left;height:70px;width:70px;display:block;border:1px solid red;margin-left:15px;margin-top:5px;">
+				<img th:src="@{'http://weixin.tjxfjz.com/xfjy/app/uploadfiles/workerphoto/'+${worker.photo}}" style="height:80px;width:auto"/>
+			</div>
+			<div style="float:left;width:200px;height:90px;border:1px solid red">
+				<span style="font-weight:bold" th:text="${worker.name}"></span><br/>
+				<span>参考工资：</span><span th:text="${worker.salary}"></span><span>元/月</span><br/>
+				<span th:text="${worker.yearsOld}"></span><span>岁&nbsp;|&nbsp;</span><span th:text="${worker.nativePlace}"></span><span>人</span><br/>
+				<span th:text="${worker.serviceTypeTwoName}"></span>
+			</div> 
+		</div>
+		<div id="dvteacher" style="height:100px;border:1px solid red">
+			<div id="dvtitle" style="height:32px;border:1px solid blue" >
+				<div style="height:20px;border-bottom:1px solid orange; "></div>
+				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">所属老师</h5>
+			</div>
+			<div style="height:70px;border:1px solid blue">
+				<div style="float:left;height:70px;width:70px;display:block;border:1px solid red;margin-left:15px;">
+					<img th:src="@{/app/img/ayi.jpg}" style="width:48px;height:auto"/>
+					<!-- <img th:src="@{'/app/uploadfiles/workerphoto/'+${worker.teacher.photo}}" style="width:48px;height:auto"/> -->
+				</div>
+				<div style="float:left;width:200px;height:70px;border:1px solid red">
+					<span style="font-weight:bold" th:text="${worker.teacher.name}"></span><br/>
+					<div style="margin-top:5px"></div>
+					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span>
+				</div>
+				<div style="float:right;width:60px;height:70px;border:1px solid orange;margin-right:20px;line-height:70px; position:relative;   ">
+					<!-- <a th:href="'tel:'+${worker.teacher.phone}">
+						<img th:src="@{/app/img/btn_call.png}" style="position:absolute;   height:55px;width:55px; top:8%; "/>
+					</a> -->
+				</div>
+			</div>
+			<div style="margin-top:15px">
+				<ul class="list-group">
+	  				<li class="list-group-item" onclick="toAddressSelect()">
+	  					<label>地址：</label><span th:text="${order.fullAddress}"></span>
+	  					<span class="badge">></span>
+	  				</li>
+					<li class="list-group-item">
+						<label>服务日期：</label>
+						<input type="text" id="txtServiceDate" style="border:0px;width:70%;"/>
+		  					<span class="badge">></span>
+					</li>
+				</ul>
+				<ul class="list-group">
+					<li class="list-group-item"><input type="text"
+						placeholder="请输入姓名" name="txtName" value="" class="form-control"
+						id="txtName" /></li>
+					<li class="list-group-item"><input type="text"
+						placeholder="请输入联系方式" name="txtmobileNo" th:value="${mobileNo}"
+						class="form-control" id="txtmobileNo" /></li>
+				</ul>
+			</div>
+			
+			<div style="height:50px;border:1px solid red;margin-top:15px" class="row">
+				<div style="margin-top:10px"></div>
+				<div class="col-xs-2"></div>
+				<div>
+					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 btn-default btn-lg">预  约</button>
+				</div>
+				<div class="col-xs-2"></div>
+			</div>
+		</div>
+		</form>
+	</div>
+
+
+</body>
+</html>

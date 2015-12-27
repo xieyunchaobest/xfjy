@@ -15,14 +15,14 @@ public class PageView {
 	public int getCurrentMaxCnt() {
 //		currentMaxCnt = pageShowCnt * currentPageNum;
 //		return currentMaxCnt;
-		return 15;
+		return 10;
 	}
 
 	
 	
 	
 	public PageView(int currentPageNum){
-		this(currentPageNum, 15);
+		this(currentPageNum, 10);
 	}
 	
 	public int getPageShowCnt() {

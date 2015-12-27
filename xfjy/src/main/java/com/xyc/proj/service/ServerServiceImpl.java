@@ -123,12 +123,15 @@ public class ServerServiceImpl implements ServerService {
 		} else if (Constants.WORK_TIME_24H.equals(w.getWorkTime())) {
 			w.setWorkTimeName("24小时");
 		}
+		int yeearsold=0;
+		if(!StringUtil.isBlank(w.getBirthday()) && w.getBirthday().length()>=4) {
+			 yeearsold=Integer.parseInt(DateUtil.getToday().substring(0,4))-Integer.parseInt(w.getBirthday().substring(0,4));
+		}
 		
-		int yeearsold=Integer.parseInt(DateUtil.getToday().substring(0,4))-Integer.parseInt(w.getBirthday().substring(0,4));
 		w.setYearsOld(yeearsold+"");
 		
 		String timeofStartWork=w.getTimeOfStartWork();
-		if(!StringUtil.isBlank(timeofStartWork)) {
+		if(!StringUtil.isBlank(timeofStartWork) && timeofStartWork.length()>=4) {
 			int iworkExperience=Integer.parseInt(DateUtil.getToday().substring(0,4))-Integer.parseInt(w.getTimeOfStartWork().substring(0, 4));
 			String workExperience=iworkExperience+"";
 			w.setWorkExperience(workExperience);

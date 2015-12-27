@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>订单</title>
+<title>阿姨详情</title>
 <link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
 <link rel="stylesheet" th:href="@{/app/css/public.css}" />
@@ -24,11 +24,19 @@ body, html {
 </style>
 
 <script type="text/javascript">
- 
+/*<![CDATA[*/
+ function toOrderConfirm(){
+	 var workerId=$("#workerId").val();
+	 var openId=$("#openId").val();
+	 window.location.href=basePath+"/client/housekeepingConfirm.html?workerId="+workerId+"&openId="+openId;
+ }
+ /*]]>*/
 </script>
 </head>
 <body>
 	<div style="margin-top: 0px">
+		<input type="hidden" name="workerId" id="workerId" th:value="${worker.id}"/>
+		<input type="hidden" name="openId" id="openId" th:value="${openId}"/>
 		<div id="dvtopinfo" class="top">
 			<div class="photobg">
 				<!-- <img alt="" src="" style="width:100%;height:100%"/> -->
@@ -96,7 +104,7 @@ body, html {
 				<div style="margin-top:10px"></div>
 				<div class="col-xs-2"></div>
 				<div>
-					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 btn-default btn-lg">预 约</button>
+					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 btn-default btn-lg">确 定</button>
 				</div>
 				<div class="col-xs-2"></div>
 			</div>

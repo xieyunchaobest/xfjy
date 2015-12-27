@@ -33,6 +33,9 @@
 			path=basePath+"/client/khIndex.html"; 
 		}else if(serviceType=='CBL'){
 			path=basePath+"/client/cblIndex.html"; 
+		}else{//家政
+			var workerId=$("#workerId").val();
+			path=basePath+"/client/housekeepingConfirm.html"; 
 		}
 		 
 		 $("#userAddressId").val(userAddressId);
@@ -95,6 +98,9 @@
 			<input type="hidden" name="repeatInWeekText" id="repeatInWeekText" th:value="${order.repeatInWeekText}" />
    			<input type="hidden" name="durationMonthText" id="durationMonthText" th:value="${order.durationMonthText}" />
    			<input type="hidden" name="durationText" id="durationText" th:value="${order.durationText}" />
+   			
+   			<input type="hidden" name="workerId" id="workerId" th:value="${workerId}" />
+   			
 		</div>
 		
 		<ul class="list-group" xtype='addrsel' onclick="selected(this)"   th:attr="value=''+${address.id}+'',fullAddress=''+${address.fullAddress}+''"  th:each="address : ${addressList}">

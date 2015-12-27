@@ -56,6 +56,43 @@
 	 		<tr>
 	 			<td align="right" width="100px">出生年月：</td>
 	 			<td width="150px"><input type="text" id="birthday" name="birthday" maxlength="10" readonly="true" th:value="${worker.birthday}" /> </td>
+	 			<td align="right" width="100px">籍贯：</td>
+	 			<td width="150px"><input type="text" id="nativePlace" name="nativePlace" maxlength="10"  th:value="${worker.nativePlace}"/> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">民族：</td>
+	 			<td width="150px"><input type="text" id="nation" name="nation" maxlength="10"   th:value="${worker.nation}" /> </td>
+	 			<td align="right" width="100px">政治面貌：</td>
+	 			<td width="150px"><input type="text" id="politicStatus" name="politicStatus" maxlength="10"  th:value="${worker.politicStatus}"/> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">宗教信仰：</td>
+	 			<td width="150px"><input type="text" id="religion" name="religion" maxlength="10"   th:value="${worker.religion}" /> </td>
+	 			<td align="right" width="100px">普通话水平：</td>
+	 			<td width="150px"><input type="text" id="languageLevel" name="languageLevel" maxlength="10"  th:value="${worker.languageLevel}"/> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">身高：</td>
+	 			<td width="150px"><input type="text" id="stature" name="stature" maxlength="10"   th:value="${worker.stature}" /> </td>
+	 			<td align="right" width="100px">体重：</td>
+	 			<td width="150px"><input type="text" id="weight" name="weight" maxlength="10"  th:value="${worker.weight}"/> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">血型：</td>
+	 			<td width="150px">
+	 				<select  name="bloodType" id="bloodType" style="height:30px;width:120px" >
+							<option value="A"  th:selected="${worker.bloodType == 'A'}">A型</option>
+							<option value="B" th:selected="${worker.bloodType == 'B'}">B型</option>
+							<option value="AB" th:selected="${worker.bloodType == 'AB'}">AB型</option>
+							<option value="O" th:selected="${worker.bloodType == 'O'}">O型</option>
+					</select>
+	 			</td>
+	 			<td align="right" width="100px">荣誉证书：</td>
+	 			<td width="150px"><input type="text" id="certificateOfHonor" name="certificateOfHonor" maxlength="10"  th:value="${worker.certificateOfHonor}"/> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">子区域：</td>
+	 			<td width="150px"><input type="text" id="subArea" name="subArea" maxlength="20"  th:value="${worker.subArea}"/> </td>
 	 			<td align="right" width="100px">服务区域：</td>
 	 			<td width="150px">
 	 				<select  name="areaId" id="areaId" style="height:30px;width:120px" >
@@ -64,12 +101,6 @@
 								th:selected="${worker.areaId == area.id}"></option>
 					</select>
 	 			 </td>
-	 		</tr>
-	 		<tr>
-	 			<td align="right" width="100px">子区域：</td>
-	 			<td width="150px"><input type="text" id="subArea" name="subArea" maxlength="20"  th:value="${worker.subArea}"/> </td>
-	 			<td align="right" width="100px">籍贯：</td>
-	 			<td width="150px"><input type="text" id="nativePlace" name="nativePlace" maxlength="10"  th:value="${worker.nativePlace}"/> </td>
 	 		</tr>
 	 		<tr>
 	 			<td align="right" width="100px">教育程度：</td>
@@ -147,6 +178,18 @@
 				</select>
 				</td>
 	 		</tr> 
+	 		<tr>
+	 			<td align="right" width="100px">从业开始时间：</td>
+	 			<td width="150px">
+	 				<input type="text" id="timeOfStartWork" name="timeOfStartWork" maxlength="10" th:value="${worker.timeOfStartWork}" readonly="true"/> 
+	 			</td>
+	 			<td align="right" width="100px">入职日期：</td>
+	 			<td width="150px">
+	 				<input type="text" id="employmentDate" name="employmentDate" maxlength="10" th:value="${worker.employmentDate}"  readonly="true"/> 
+				</td>
+	 		</tr>
+	 		 
+	 		
 	 		 <tr>
 	 			<td align="right" width="100px">照片：</td>
 	 			<td width="150px">
@@ -171,7 +214,22 @@
                 pickTime: false,
                 minView:2
             });
-         
+            $('#timeOfStartWork').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false,
+                minView:2
+            });
+            $('#employmentDate').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false,
+                minView:2
+            });
             
         /*]]>*/
     </script>

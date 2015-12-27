@@ -100,8 +100,10 @@ $(function(){
 			 window.location.href=basePath+"/client/cleanIndex.html?openId="+openId+"&serviceType="+serviceType;
 		 }else if(serviceType=='KH' ){
 			 window.location.href=basePath+"/client/khIndex.html?openId="+openId+"&serviceType="+serviceType;
-		 }else{
+		 }else if(serviceType=='CBL'){
 			 window.location.href=basePath+"/client/cblIndex.html?openId="+openId+"&serviceType="+serviceType;
+		 }else{
+			 window.location.href=basePath+"/client/houseKeepingIndex.html?openId="+openId;
 		 }
 		 
 	 }
@@ -182,7 +184,7 @@ $(function(){
 			<div>
 				 <img class="imgs" th:src="@{/app/img/xfjy_jz_top.jpg}" style="height:auto;width:100%" alt="First slide" />
 			</div>
-			<div style="text-align:center">
+			<div style="text-align:center" onclick="forward('JZ')">
 				<img class="imgs" th:src="@{/app/img/xfjy_jz_wait.jpg}" style="height:90px;width:auto" alt="First slide" />
 			</div>
 			<div>
