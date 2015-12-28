@@ -38,12 +38,20 @@
  				durationMonth='0';
  			}
  			var state=$('input:checked').attr('state');
- 			if(state!='P' &&  state!='C'){
- 				alert('订单状态不符合分配要求！');
- 				return;
+ 			
+ 			var serviceType=$(chb).attr('serviceType');
+ 			if(serviceType=='J'){
+ 				var path = basePath+"/server/orderDispatchInit4jzInit.html?orderId="+oid;
+ 	 	 		window.open(path,'win',"height=300,width=400,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
+ 			}else{
+ 				if(state!='P' &&  state!='C'){
+ 	 				alert('订单状态不符合分配要求！');
+ 	 				return;
+ 	 			}
+ 				var path = basePath+"/server/dispatchInit.html?orderId="+oid+"&busiDate="+busiDate+"&startTime="+startTime+"&druation="+druation+"&role=A"+"&durationMonth="+durationMonth;
+ 	 	 		window.open(path,'win',"height=700,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
  			}
- 			var path = basePath+"/server/dispatchInit.html?orderId="+oid+"&busiDate="+busiDate+"&startTime="+startTime+"&druation="+druation+"&role=A"+"&durationMonth="+durationMonth;
- 	 		window.open(path,'win',"height=700,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
+ 			
 		}
  	}
  	 /*]]>*/
@@ -140,7 +148,7 @@
 				<tbody>
 					<tr  th:each="item : ${orderPageViews.resultList}">
 						<td style="width:20px">
-							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+'',busiDate=''+${item.serviceDate}+'',startTime=''+${item.startTime}+'',druation=''+${item.duration}+'',areaId=''+${item.areaId}+'',durationMonth=''+${item.durationMonth}" />
+							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+'',busiDate=''+${item.serviceDate}+'',startTime=''+${item.startTime}+'',druation=''+${item.duration}+'',areaId=''+${item.areaId}+'',durationMonth=''+${item.durationMonth}+'',serviceType=''+${item.serviceType}" />
 						</td>
 						<td style="width:35px" th:text="${item.outTradeNo}"></td>
 						<td th:text="${item.name}"></td>

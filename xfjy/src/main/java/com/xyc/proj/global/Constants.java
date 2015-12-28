@@ -52,9 +52,11 @@ public class Constants {
 	public static final String SERVICE_TYPE_DBJ="DBJ";//大宝洁
 	public static final String SERVICE_TYPE_KH="KH";//开荒
 	public static final String SERVICE_TYPE_CBL="CBL";//插玻璃
+	public static final String SERVICE_TYPE_JZ="JZ";//家政
 	
 	public static final String CYCLE_TYPE_SG="SG";//散工
 	public static final String CYCLE_TYPE_BY="BY";//包月
+	public static final String CYCLE_TYPE_SY="SY";//试用，用于家政
 	
 	public static final String CONFIG_PTBJDJ="PTBJDJ";//普通宝洁单价
 	public static final String CONFIG_DBJDJ="DBJDJ";//大宝洁单价

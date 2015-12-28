@@ -531,12 +531,16 @@ public class ClientServiceImpl implements ClientService {
 			o.setServiceTypeText("擦玻璃");
 		} else if (Constants.SERVICE_TYPE_KH.equals(o.getServiceType())) {
 			o.setServiceTypeText("开荒");
+		} else if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {
+			o.setServiceTypeText("家政");
 		}
 
 		if (Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
 			o.setCycleTypeText("包月");
-		} else {
+		} else if(Constants.CYCLE_TYPE_SG.equals(o.getCycleType())){
 			o.setCycleTypeText("零工");
+		}else/**(Constants.CYCLE_TYPE_SY.equals(o.getCycleType())) **/{
+			o.setCycleTypeText("试用");
 		}
 		if (Constants.ORDER_PAY_MODE_ONLY_WECHAT.equals(o.getPayMode())) {
 			o.setPayModeText("微信");
@@ -563,7 +567,7 @@ public class ClientServiceImpl implements ClientService {
 		o.setRepeatInWeekText(repeatTextInWeak);
 		if(Constants.CYCLE_TYPE_SG.equals(o.getCycleType())) {
 			o.setServiceDateSet(o.getServiceDate());
-		}else {
+		}else if(Constants.CYCLE_TYPE_BY.equals(o.getCycleType())){
 			List serviceDateSet=getServiceDateSet(o);
 			String res="";
 			for(int i=0;i<serviceDateSet.size();i++) {
@@ -750,6 +754,10 @@ public class ClientServiceImpl implements ClientService {
 		} else {
 			return (Order) orderList.get(0);
 		}
+	}
+	
+	public Order findOrder(Long id) {
+		return orderRepository.findOne(id);
 	}
 
 	public ClientUser saveClientUser(ClientUser cu) {

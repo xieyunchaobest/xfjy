@@ -1,0 +1,88 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+	<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>订单分配</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/font-awesome.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-datetimepicker.css}" />
+
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:inline="javascript" th:src="@{/app/js/commonPage.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap-datetimepicker.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+
+<script type="text/javascript">
+	function dispatchOrder(){
+		 $.ajax({
+	            type: "POST",
+	            url: basePath+'/server/orderDispatch4jz.html',
+	            data:$("#orderByForm").serialize(),
+	            success: function(data) {
+	            	if(data=="S"){
+	            		alert('成功分配!');
+	            		window.opener=null;
+	            		window.open('','_self');
+	            		window.close();
+	            	}else{
+	            		 alert('分配失败 ！');
+	            	}
+	            }
+	        }); 
+	}
+	 
+</script>
+</head>
+<body>
+	<div class="container-fluid">
+		<form id="orderByForm" th:action="@{/server/queryWorker.html}" method="post">
+			<input type="hidden" id="orderId" name="orderId"   th:value="${order.id}"/>
+			<div id="tbdata" style="width:100%;overflow: hidden;margin-top:10px">
+			<table class="table table-bordered table-striped" >
+					<tr>
+						<td style="width:100px">阿姨</td>
+						<td>
+							<select id="ayiId" name="ayiId">
+								<option th:each="ayi : ${ayiList}"
+									th:value="${ayi.id}" th:text="${ayi.name}"
+									th:selected="${order.workerId == ayi.id}"></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:100px">服务日期</td>
+						<td>
+							<input type="text" size="10" id="serviceDate" name="serviceDate" th:value="${order.serviceDate}" readonly="true" />
+						</td> 
+					</tr>
+			</table>
+			<div style="height:50px;"></div>
+			<div>  
+				<div style="text-align:center">
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="dispatchOrder()">分配</button>
+				</div> 
+			</div>
+		</div> 
+		
+	</form>
+	</div>
+<script th:inline="javascript">
+        /*<![CDATA[*/
+            $('#serviceDate').datetimepicker({
+                autoclose:true,
+                todayHighlight:true,
+                format: 'yyyy-mm-dd',
+                pickDate: true,  
+                pickTime: false,
+                minView:2
+            }); 
+            
+        /*]]>*/
+    </script>
+</body>
+</html>

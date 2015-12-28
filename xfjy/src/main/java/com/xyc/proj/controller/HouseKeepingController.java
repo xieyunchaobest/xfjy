@@ -3,6 +3,7 @@
  */
 package com.xyc.proj.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +14,19 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xyc.proj.entity.Area;
 import com.xyc.proj.entity.ClientUser;
+import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.service.ClientService;
+import com.xyc.proj.service.HouseKeepingService;
 import com.xyc.proj.service.ServerService;
 import com.xyc.proj.utility.PageView;
 import com.xyc.proj.utility.StringUtil;
@@ -38,6 +44,8 @@ public class HouseKeepingController {
 	ClientService clientService;
 	@Autowired
 	ServerService serverService;
+	@Autowired
+	HouseKeepingService houseKeepingService;
 
 	 
 	@RequestMapping("/client/houseKeepingIndex.html")
@@ -134,6 +142,57 @@ public class HouseKeepingController {
 		model.addAttribute("mobileNo", cu.getMobileNo());
 		return "client/housekeepingConfirm";
 	} 
+	
+	@RequestMapping(value = "/server/orderDispatchInit4jzInit.html", method = { RequestMethod.POST, RequestMethod.GET })
+	public String orderDispatchInit4jzInit(
+			@RequestParam(value = "orderId", required = true) String orderId,
+			Model model,HttpSession session) {
+		Order o=clientService.getOrder(Long.parseLong(orderId));
+		Worker w=(Worker)session.getAttribute("user");
+		List ayiList=new ArrayList();
+		if(w!=null && Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
+			ayiList=serverService.findWorkerByTeacherId(w.getId());
+		}
+		model.addAttribute("order", o);
+		model.addAttribute("ayiList", ayiList);
+		return "server/orderDispatch4jz";
+	}
 	 
+	@ResponseBody
+	@RequestMapping(value = "/server/orderDispatch4jz", method = { RequestMethod.POST, RequestMethod.GET })
+	public String orderDispatch4jz(
+			@RequestParam(value = "orderId", required = true) String orderId,
+			@RequestParam(value = "serviceDate", required = true) String serviceDate,
+			@RequestParam(value = "ayiId", required = true) String ayiId,
+			Model model,HttpSession session) {
+		String res="S";
+		try {
+			 Order o=new Order();
+			 o.setId(Long.parseLong(orderId));
+			 o.setServiceDate(serviceDate);
+			 o.setWorkerId(Long.parseLong(ayiId));
+			 houseKeepingService.dispatchOrder(o);
+		}catch(Exception e) {
+			e.printStackTrace();
+			res="E";
+		}
+		return res;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/client/createOrder4jz")
+	public Map createOrder4jz(Model model, HttpSession Session, HttpServletRequest request,
+			@ModelAttribute("order") Order order) {
+		Map resMap = new HashMap();
+		resMap.put("resultCode", "S");
+		try {
+			 houseKeepingService.createOrder(order);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resMap.put("resultCode", "E");
+		}
+
+		return resMap;
+	}
 
 }

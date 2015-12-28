@@ -34,5 +34,7 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
 	@Query("select  w from Worker w ,ClientUser cu   where w.phone=cu.mobileNo and  cu.openId=?1 and w.state='A'")
 	Worker findWorkerByOpenId(String openId);
 	
+	List findByTeacherId(Long teacherId);
+	
 	
 }

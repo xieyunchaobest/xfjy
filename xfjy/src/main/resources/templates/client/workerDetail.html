@@ -13,7 +13,7 @@
 <style type="text/css">
 body, html {
 	height: 100%;
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 .pto {
@@ -34,7 +34,7 @@ body, html {
 </script>
 </head>
 <body>
-	<div style="margin-top: 0px">
+	<div style="margin-top: 0px;">
 		<input type="hidden" name="workerId" id="workerId" th:value="${worker.id}"/>
 		<input type="hidden" name="openId" id="openId" th:value="${openId}"/>
 		<div id="dvtopinfo" class="top">
@@ -94,19 +94,19 @@ body, html {
 					<div style="margin-top:5px"></div>
 					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span>
 				</div>
-				<div style="float:right;width:60px;height:70px;border:1px solid orange;margin-right:20px;line-height:70px; position:relative;   ">
-					<!-- <a th:href="'tel:'+${worker.teacher.phone}">
+				<!--<div style="float:right;width:60px;height:70px;border:1px solid orange;margin-right:20px;line-height:70px; position:relative;   ">
+					 <a th:href="'tel:'+${worker.teacher.phone}">
 						<img th:src="@{/app/img/btn_call.png}" style="position:absolute;   height:55px;width:55px; top:8%; "/>
-					</a> -->
-				</div>
+					</a> 
+				</div>-->
 			</div>
 			<div style="height:50px;border:1px solid red" class="row">
 				<div style="margin-top:10px"></div>
-				<div class="col-xs-2"></div>
+				<div class="col-xs-2 col-sm-2">&nbsp;</div>
 				<div>
-					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 btn-default btn-lg">确 定</button>
+					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 col-sm-8 btn-default btn-lg">确 定</button>
 				</div>
-				<div class="col-xs-2"></div>
+				<div class="col-xs-2 col-sm-2"></div>
 			</div>
 		</div>
 	</div>

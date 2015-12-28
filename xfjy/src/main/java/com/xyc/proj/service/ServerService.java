@@ -53,5 +53,7 @@ public interface ServerService {
 	public Worker findWorkerDetail(Worker w) ;
 	
 	public Worker findWorkerPlus(Worker w) ;
+	
+	public List findWorkerByTeacherId(Long teacherId) ;
 
 }

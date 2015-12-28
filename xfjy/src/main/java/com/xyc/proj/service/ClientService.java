@@ -82,4 +82,6 @@ public interface ClientService {
 	
 	public Worker findWorkerByOpenId(String openId);
 	public void sendMsgForShedule(String openId);
+	
+	public Order findOrder(Long id) ;
 }

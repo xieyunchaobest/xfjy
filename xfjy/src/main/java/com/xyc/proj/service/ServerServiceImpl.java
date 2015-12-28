@@ -475,6 +475,9 @@ public class ServerServiceImpl implements ServerService {
 		return configMap;
 	}
 
+	public List findWorkerByTeacherId(Long teacherId) {
+		return workerRepository.findByTeacherId(teacherId);
+	}
 	public Config getConfigByCode(String code) {
 		return configRepository.findByConfigCode(code);
 	}

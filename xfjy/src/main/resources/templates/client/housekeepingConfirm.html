@@ -77,6 +77,62 @@ getTomorrow = function(day)
     return str;   
 } 
 
+function createOrder(){
+	var res=validate();
+	if(res==false)return;
+	prepairValue();
+	var openId=$("#openId").val();
+	$.ajax({
+        type: "POST",
+        url: basePath+'/client/createOrder4jz',
+        data:$("#aform").serialize(),
+        success: function(data) {
+       	 console.info(data);
+        	if(data.resultCode=="S"){
+        		 alert('已经成功预约，稍后客服会主动联系您！');
+        		 window.location.href=basePath+"/client/index.html?openId="+openId;
+        	}else{
+        		 alert('订单处理失败！');
+        	}
+        }
+    }); 
+}
+
+function validate(){
+	var res=true;
+	 var address=$("#userAddressId").val();
+	 var serviceDate=$("#txtServiceDate").val();
+	 var name=$("#txtName").val();
+	 var mobileNo=$("#txtmobileNo").val();
+	 if(address=='' || address=='0'){
+		 $("#spnwarngin").text('请选择地址！');
+		 return false;
+	 }
+	 if(serviceDate==''){
+		 $("#spnwarngin").text('请选择服务日期！');
+		 return false;
+	 } 
+	 if(name==''){
+		 $("#spnwarngin").text('请填写姓名！');
+		 return false;
+	 }
+	 if(isNaN(mobileNo)){
+		 $("#spnwarngin").text('请输入正确的联系方式！');
+		 return false;
+	 }
+}
+
+function prepairValue(){
+	 var serviceDate=$("#txtServiceDate").val();
+	 var serviceTime=$("#hdServiceTime").val();
+	 var mobileNo=$("#txtmobileNo").val();
+	 
+	 $("#name").val($("#txtName").val());
+	 $("#serviceDate").val(serviceDate);
+	 $("#startTime").val(serviceTime);
+	 $("#mobileNo").val(mobileNo);
+}
+
 /*]]>*/
 
 </script>
@@ -94,7 +150,7 @@ getTomorrow = function(day)
 		<input type="hidden" name="duration"  id="duration"  th:value="${order.duration}"/>
 		<input type="hidden" name="startTime"  id="startTime"  th:value="${order.startTime}"/>
 		<input type="hidden" name="endTime"  id="endTime"  th:value="${order.endTime}"/>
-		<input type="hidden" name="serviceType" id="serviceType" th:value="${order.serviceType}"/>
+		<input type="hidden" name="serviceType" id="serviceType" value="JZ"/>
 		<input type="hidden" name="cycleType" id="cycleType" th:value="${order.cycleType}"/>
 		<input type="hidden" name="durationMonth" id="durationMonth"   th:value="${order.durationMonth}"/>
   		<input type="hidden" name="repeatInWeek" id="repeatInWeek" th:value="${order.repeatInWeek}"/>
@@ -167,12 +223,18 @@ getTomorrow = function(day)
 						class="form-control" id="txtmobileNo" /></li>
 				</ul>
 			</div>
-			
+			<div class="row" id="warnginInfo">
+				<div class="col-xs-1"/>
+				<div>
+					 <span id="spnwarngin" style="font-weight:bold;color:red"></span>
+				</div>
+				<div class="col-xs-1"/>
+			</div>
 			<div style="height:50px;border:1px solid red;margin-top:15px" class="row">
 				<div style="margin-top:10px"></div>
 				<div class="col-xs-2"></div>
 				<div>
-					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 btn-default btn-lg">预  约</button>
+					<button type="button" onclick="createOrder()" class="btn col-xs-8 btn-default btn-lg">预  约</button>
 				</div>
 				<div class="col-xs-2"></div>
 			</div>
