@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xyc.proj.entity.Area;
 import com.xyc.proj.entity.ClientUser;
+import com.xyc.proj.entity.DepositSummary;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
@@ -195,4 +196,24 @@ public class HouseKeepingController {
 		return resMap;
 	}
 
+	@RequestMapping(value = "/client/houseKeepingPay.html", method = { RequestMethod.POST, RequestMethod.GET })
+	public String houseKeepingPay(
+			@RequestParam(value = "orderId", required = true) String orderId,
+			Model model,HttpSession session) {
+		Order o=houseKeepingService.getOrder(Long.parseLong(orderId));
+		Worker worker=serverService.findWorker(o.getWorkerId());
+		worker=serverService.findWorkerPlus(worker);
+		DepositSummary ds = clientService.getBalance(o.getOpenId());
+		if (ds == null) {
+			ds = new DepositSummary();
+			ds.setFee(0d);
+		}
+		List couponList=clientService.getCouponListByUid(o.getOpenId());
+		model.addAttribute("couponList", couponList);
+		model.addAttribute("couponCount", couponList.size());
+		model.addAttribute("ds", ds);
+		model.addAttribute("order", o);
+		model.addAttribute("worker", worker);
+		return "client/houseKeepingPay";
+	}
 }

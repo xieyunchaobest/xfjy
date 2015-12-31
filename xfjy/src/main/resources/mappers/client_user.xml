@@ -28,7 +28,7 @@
   
   <sql id="queryClientUserCondition">
    	  <if test="mobileNo != null and mobileNo !=''">
-			 <![CDATA[ and   t1.mobile_No =#{mobileNo}  ]]>
+			 <![CDATA[ where   t1.mobile_No =#{mobileNo}  ]]>
 	  </if>
   </sql>
   

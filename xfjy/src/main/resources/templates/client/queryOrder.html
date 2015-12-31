@@ -22,7 +22,13 @@ $(function(){
   
   function toOrderDetail(target){
 	  var oid=$(target).attr('oid');
-	  window.location.href=basePath+"/client/orderDetail.html?oid="+oid;
+	  var serviceType=$(target).attr('servicetype');
+	  if(serviceType=='JZ'){
+		  window.location.href=basePath+"/client/houseKeepingPay.html?orderId="+oid; 
+	  }else{
+		  window.location.href=basePath+"/client/orderDetail.html?oid="+oid; 
+	  }
+	  
   }
  
 </script>
@@ -41,12 +47,13 @@ $(function(){
 <div style="margin-top:20px;margin-left:10px"></div>
 <div class="panel panel-default" style="margin-left:5px"  th:each="order : ${resMap.unFinishedOrders}">
    <div class="panel-heading"  >
-   	<h3 class="panel-title" th:attr="oid=${order.id}" onclick="toOrderDetail(this)">
-   		<span  th:text="__${order.serviceTypeText}__+'('+${order.cycleTypeText}+')'"></span>
+   	<h3 class="panel-title" th:attr="oid=${order.id}+'',serviceType=''+${order.serviceType}" onclick="toOrderDetail(this)">
+   		<span  th:text="${order.serviceTypeText}"></span>
+   		<span th:if="${order.cycleTypeText}!=''"><span>(</span><span th:text="${order.cycleTypeText}"></span><span>)</span></span>
    		<span  style="float:right" th:text="${order.stateText}"></span>
       </h3>
    </div>    
-   <ul class="list-group" th:attr="oid=${order.id}" onclick="toOrderDetail(this)">
+   <ul class="list-group" th:attr="oid=${order.id}+'',serviceType=''+${order.serviceType}" onclick="toOrderDetail(this)">
    	  <li class="list-group-item"   th:text="__${order.totalFee}__+'元'"> </li>
       <li class="list-group-item"   th:text="__${order.serviceDate}__+' '+${order.durationText} "> </li>
       <li class="list-group-item"  th:text="${order.fullAddress}"></li>
@@ -58,11 +65,13 @@ $(function(){
       <div style="margin-top:20px;margin-left:10px"></div>
 <div class="panel panel-default" style="margin-left:5px"  th:each="order : ${resMap.finishedOrders}">
    <div class="panel-heading"  >
-   	<h3 class="panel-title" >
-   		<span  th:text="__${order.serviceTypeText}__+'('+${order.cycleTypeText}+')'"></span>
+   	<h3 class="panel-title" th:attr="oid=${order.id}+'',serviceType=''+${order.serviceType}" onclick="toOrderDetail(this)">
+   		<span  th:text="${order.serviceTypeText}"></span>
+   		<span th:if="${order.cycleTypeText}!=''"><span>(</span><span th:text="${order.cycleTypeText}"></span><span>)</span></span>
+   		<span  style="float:right" th:text="${order.stateText}"></span>
       </h3>
    </div>    
-   <ul class="list-group">
+   <ul class="list-group" th:attr="oid=${order.id}+'',serviceType=''+${order.serviceType}" onclick="toOrderDetail(this)">
    	  <li class="list-group-item"   th:text="__${order.totalFee}__+'元'"> </li>
       <li class="list-group-item"   th:text="__${order.serviceDate}__+' '+${order.durationText} "> </li>
       <li class="list-group-item"  th:text="${order.fullAddress}"></li>

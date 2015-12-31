@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.xyc.proj.entity.Worker;
 import com.xyc.proj.utility.Properties;
-import com.xyc.proj.utility.TestMain;
 
 @Component
 public class TestUrlInterceptor implements HandlerInterceptor {
@@ -22,17 +22,19 @@ public class TestUrlInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
-		// System.out.println("key==========="+prop.getWechatkey());
-		// if(request.getRequestURI().equals("/error")){
-		// System.out.println("-------------- input error path
-		// ----------------");
-		// //request.getRequestDispatcher("/invalidPage");
-		// response.sendRedirect("/invalidPage");
-		// }
-		// System.out.println("-------------- TestUrlInterceptor work
-		// -----------------" + request.getRequestURI());
-		//
+		String uri=request.getRequestURI();
+		if(uri.contains("/server/") && !(uri.endsWith("login.html"))
+				&&!(uri.endsWith("doLogin")) ) {
+			Object obj=request.getSession().getAttribute("user");
+			if(obj==null) {
+				response.sendRedirect("/server/login.html");
+			}else {
+				Worker w=(Worker)obj;
+				if(w.getId()<=0) {
+					response.sendRedirect("/server/login.html");
+				}
+			}
+		}
 		return true;
 	}
 

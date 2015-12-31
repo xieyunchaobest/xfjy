@@ -10,7 +10,7 @@ import com.xyc.proj.entity.Order;
 
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-	@Query("select o from Order o where o.openId=? and (o.state='P' or o.state='C' or o.state='F') order by o.serviceDate desc") 
+	@Query("select o from Order o where o.openId=? and ( (o.state='P' or o.state='C' or o.state='F') or o.serviceType='JZ' )order by o.serviceDate desc") 
 	List findByOpenIdAndState(String openId);
 	
 	List findById(Long id);

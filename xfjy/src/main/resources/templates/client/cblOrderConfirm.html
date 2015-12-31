@@ -143,7 +143,7 @@ function pay(){
 function disable(){
 	 var balance= $("#spnfee").text();
 	 var iba=parseFloat(balance);
-	 if(iba==0){
+	 if(iba<=0){
 		 $("#payMode4ye").attr("disabled",true); 
 	 }
 	 

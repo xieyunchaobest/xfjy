@@ -169,22 +169,22 @@ overflow-x:hidden;
 	</div>
 	<!-- begin worker list -->
 	<div style="overflow-y:scroll;overflow-x:hidden;height:100%">
-		<div style="border:1px solid red" id="dvdata">
+		<div id="dvdata">
 			<div class="row" style="padding-bottom:10px;padding-top:10px;border:1px solid green;margin-top:3px" th:value="${item.id}" th:each="item : ${pageView.resultList}" onclick="toWorkerDetail(this)">
 				<div style="float:left;margin-left:20px">
 					<img th:src="@{/app/img/ayi.jpg}" style="width:48px;height:auto"/>
 					<!-- <img th:src="@{'/app/uploadfiles/workerphoto/'+${item.photo}}" style="width:48px;height:auto"/> -->
 				</div>
 				<div style="float:left">
-					<div style="border:1px solid blue;float:left;margin-left:10px">
+					<div style="float:left;margin-left:10px">
 						<span style="font-weight:bold" th:text="${item.name}"></span> <br/>
 						<span th:text="__${item.yearsOld}__+'岁|'+__${item.nativePlace}__+'人'"></span> 
 					</div>
-					<div style="border:1px solid blue;float:right;margin-right:20px">
+					<div style="float:right;margin-right:20px">
 						<span>参考工资：</span><span th:text="${item.salary}">4500</span>
 					</div>
 					<div style="clear:both" ></div> 
-					<div style="margin-left:10px;border:1px solid orange;width:200px;" th:text="${item.serviceTypeTwoName}">
+					<div style="margin-left:10px;width:200px;" th:text="${item.serviceTypeTwoName}">
 					</div>
 				</div>
 			</div>

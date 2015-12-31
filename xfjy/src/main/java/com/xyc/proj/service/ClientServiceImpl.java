@@ -472,7 +472,7 @@ public class ClientServiceImpl implements ClientService {
 		 PostMethod("http://sms.api.ums86.com:8899/sms/Api/Send.do");//
 		 post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"gbk");
 		 post.addParameter("SpCode", properties.getSpCode());
-		 post.addParameter("LoginName", properties.getLoginName());
+		 post.addParameter("LoginName",  properties.getLoginName());
 		 post.addParameter("Password", properties.getPassword());
 		 post.addParameter("MessageContent", content);
 		 post.addParameter("UserNumber", phoneNo);
@@ -539,8 +539,6 @@ public class ClientServiceImpl implements ClientService {
 			o.setCycleTypeText("包月");
 		} else if(Constants.CYCLE_TYPE_SG.equals(o.getCycleType())){
 			o.setCycleTypeText("零工");
-		}else/**(Constants.CYCLE_TYPE_SY.equals(o.getCycleType())) **/{
-			o.setCycleTypeText("试用");
 		}
 		if (Constants.ORDER_PAY_MODE_ONLY_WECHAT.equals(o.getPayMode())) {
 			o.setPayModeText("微信");
@@ -562,6 +560,8 @@ public class ClientServiceImpl implements ClientService {
 			o.setStateText("已确认");
 		} else if (Constants.ORDER_STATE_FINISH.equals(o.getState())) {
 			o.setStateText("已完成");
+		}else if(Constants.ORDER_STATE_PROBATION.equals(o.getState())) {
+			o.setStateText("试用中");
 		}
 		String repeatTextInWeak=getRepeatTextInWeak(o.getRepeatInWeek());
 		o.setRepeatInWeekText(repeatTextInWeak);
@@ -774,25 +774,34 @@ public class ClientServiceImpl implements ClientService {
 		resMap.put("resultCode", "S");
 		Order order = new Order();
 		String outTradeNo = "";
-		if (StringUtil.isBlank(o.getOutTradeNo())) { // 第一次支付，需要保存
+		if (StringUtil.isBlank(o.getOutTradeNo()) && (o.getId()<=0d)) { // 第一次支付，需要保存
 			order = getConfirmOrder(o);
 			order.setState(Constants.ORDER_STATE_UNPAY);
 
 			outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
 			order.setOutTradeNo(outTradeNo);
 			order = saveOrder(order);
-		} else {// 从未完成订单中，不需要重新创建订单
-			outTradeNo = o.getOutTradeNo();
-			order = orderRepository.findByOutTradeNo(outTradeNo);
-			// 删除余额日志，避免重复创建
-			DepositLog dl = depositLogRepository.findByOutTradeNo(outTradeNo);
-			if (dl != null) {
-				depositLogRepository.delete(dl);
-			}
+		} else {// 从未完成订单中，不需要重新创建订单,用于家政
+			outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
+			o.setOutTradeNo(outTradeNo);
+			//删除未用的余额记录，避免扣款通知
+			List dpList=depositLogRepository.findByOutTradeNoAndState(outTradeNo, "P");
+			depositLogRepository.delete(dpList);
+			order= saveOrder(o);
 		}
 
 		//int totalFee = 1;
-		 int totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(order.getTotalFee().doubleValue()*100d)) ;
+		int totalFee=0;
+		if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {
+			if(Constants.ORDER_STATE_PROBATION.equals(order.getState())) {//如果是试用,总费用等于第二次费用
+				totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(o.getSecondPayAmount().doubleValue()*100d)) ;
+			}else if(Constants.ORDER_STATE_CONFIRMED.equals(order.getState())) {
+				totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(o.getFirstPayAmount().doubleValue()*100d)) ;
+			}
+		}else {
+			totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(order.getTotalFee().doubleValue()*100d)) ;
+		}
+		 
 		 //totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
 		// 判断是否用了余额或优惠券，如果是，减去余额
 		String payMode = order.getPayMode();
@@ -906,14 +915,38 @@ public class ClientServiceImpl implements ClientService {
 					c.setState(Constants.STATE_P);
 					couponRepository.save(c);
 				}
-				order.setState(Constants.ORDER_STATE_PAYED);
+				if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {//如果是家政。家政的状态分为试用/完成
+					if(Constants.ORDER_STATE_CONFIRMED.equals(o.getState())) {
+						order.setState(Constants.ORDER_STATE_PROBATION);
+						order.setPayFirstTime(new Date());
+					}else if(Constants.ORDER_STATE_PROBATION.equals(o.getState())) {
+						order.setState(Constants.ORDER_STATE_FINISH);
+						order.setTotalFee(order.getFirstPayAmount()+order.getSecondPayAmount());//订单总金额
+						order.setPaySecondTime(new Date());
+					}
+				}else {
+					order.setState(Constants.ORDER_STATE_PAYED);
+				}
+				
 				order.setPayMode(finalPayMode);
 				order.setPayTime(new Date());
 				order.setWechatfee(finalPay4Wechat/100d);
 				orderRepository.save(order);
-				//日常保洁的时候推送客服消息
-				sendCustomerMsg4rcbj(order);
-
+				//推送客服消息
+				if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {
+					Worker ayi=workerRepository.findOne(order.getWorkerId());
+					Worker teacher=workerRepository.findOne(order.getTeacherId());
+					String phone=teacher.getPhone();
+					if(Constants.ORDER_STATE_PROBATION.equals(order.getState())) {
+						String content="客户"+order.getName()+",电话"+order.getMobileNo()+",预订阿姨"+ayi.getName()+",日期"+order.getServiceDate()+"的家政试用订单已支付完成,请尽快安排阿姨上门服务.";
+						sendShortMsg(phone, content);
+					}else if(Constants.ORDER_STATE_FINISH.equals(order.getState())) {
+						String content="客户"+order.getName()+",电话"+order.getMobileNo()+",预订阿姨"+ayi.getName()+",日期"+order.getServiceDate()+"的家政长期订单已支付完成,请尽快安排阿姨上门服务.";
+						sendShortMsg(phone, content);
+					}
+				}else {
+					sendCustomerMsg4rcbj(order);
+				}
 			}
 			resMap.put("payMode", finalPayMode);
 		} catch (IllegalAccessException e) {
@@ -952,16 +985,42 @@ public class ClientServiceImpl implements ClientService {
 			Order order = orderRepository.findByOutTradeNo(outTradeNo);
 			if (order != null) {
 				order.setOrderId(orderId);
-				order.setState(Constants.ORDER_STATE_PAYED);
+				if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {//如果是家政。家政的状态分为试用/完成
+					if(Constants.ORDER_STATE_CONFIRMED.equals(order.getState())) {
+						order.setState(Constants.ORDER_STATE_PROBATION);
+						order.setPayFirstTime(new Date());
+					}else if(Constants.ORDER_STATE_PROBATION.equals(order.getState())) {
+						order.setState(Constants.ORDER_STATE_FINISH);
+						//order.setTotalFee(order.getFirstPayAmount()+order.getSecondPayAmount());//订单总金额
+						order.setPaySecondTime(new Date());
+					}
+				}else {
+					order.setState(Constants.ORDER_STATE_PAYED);
+				}
+				
 				order.setPayTime(new Date());
 				orderRepository.save(order);
 				
-				sendCustomerMsg4rcbj(order);//发送客服消息
+				if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {
+					Worker ayi=workerRepository.findOne(order.getWorkerId());
+					Worker teacher=workerRepository.findOne(order.getTeacherId());
+					String phone=teacher.getPhone();
+					if(Constants.ORDER_STATE_PROBATION.equals(order.getState())) {
+						String content="客户"+order.getName()+",电话"+order.getMobileNo()+",预订阿姨"+ayi.getName()+",日期"+order.getServiceDate()+"的家政试用订单已支付完成,请尽快安排阿姨上门服务.";
+						sendShortMsg(phone, content);
+					}else if(Constants.ORDER_STATE_FINISH.equals(order.getState())) {
+						String content="客户"+order.getName()+",电话"+order.getMobileNo()+",预订阿姨"+ayi.getName()+",日期"+order.getServiceDate()+"的家政长期订单已支付完成,请尽快安排阿姨上门服务.";
+						sendShortMsg(phone, content);
+					}
+				}else {
+					sendCustomerMsg4rcbj(order);
+				}
 
 				
 				// 处理余额信息，用于一半用了微信，一半用了余额
-				DepositLog dl = depositLogRepository.findByOutTradeNo(outTradeNo);
-				if (dl != null) {
+				List dlList = depositLogRepository.findByOutTradeNoOrderByCreatedTimeDesc(outTradeNo);
+				if(dlList!=null && dlList.size()>0) {
+					DepositLog	dl=(DepositLog)dlList.get(0);
 					System.out.println("发现使用了余额");
 					dl.setState(Constants.STATE_A);
 					String openId = dl.getOpenId();
@@ -971,6 +1030,7 @@ public class ClientServiceImpl implements ClientService {
 					depositLogRepository.save(dl);
 					depositSummaryRepository.save(ds);
 				}
+				
 				//处理优惠券信息，用于既用了微信，又用了优惠券
 				if(!StringUtil.isBlank(order.getCouponId()+"")) {
 					System.out.println("回调时发现了优惠券！！");

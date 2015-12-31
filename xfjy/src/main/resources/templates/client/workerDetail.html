@@ -42,19 +42,19 @@ body, html {
 				<!-- <img alt="" src="" style="width:100%;height:100%"/> -->
 				<div class="pto" th:style="'background-image:url(http://weixin.tjxfjz.com/xfjy/app/uploadfiles/workerphoto/'+${worker.photo}+');'"></div>
 			</div>
-			<div style="border:1px solid red;height:80px;width:220px;float:left;margin-top:50px;margin-left:15px">
+			<div style="height:80px;width:220px;float:left;margin-top:50px;margin-left:15px">
 				<span style="font-weight:bold" th:text="${worker.name}"></span><br/>
 				<span>参考工资：</span><span th:text="${worker.salary}"></span><span>元/月</span><br/>
 				<span th:text="${worker.yearsOld}"></span><span>岁&nbsp;|&nbsp;</span><span th:text="${worker.nativePlace}"></span><span>人</span><br/>
 				<span th:text="${worker.serviceTypeTwoName}"></span>
 			</div>
 		</div>
-		<div style="margin-top:10px;height:120px;border:1px solid red;height:360px;">
-			<div id="dvtitle" style="height:32px;border:1px solid blue" >
+		<div style="margin-top:10px;height:120px;height:360px;">
+			<div id="dvtitle" style="height:32px;" >
 				<div style="height:20px;border-bottom:1px solid orange; "></div>
 				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">基本信息</h5>
 			</div>
-			<div id="dvbase" style="height:70px;border:1px solid yellow;padding-left:15px;padding-top:10px;">
+			<div id="dvbase" style="height:70px;padding-left:15px;padding-top:10px;">
 				<span th:text="${worker.yearsOld}"></span><span>岁&nbsp;|&nbsp;</span><span th:text="${worker.nativePlace}"></span><span>人&nbsp;|&nbsp;</span><span th:text="${worker.nation}"></span><br/>
 				<div style="height:5px;"></div>
 				<span th:text="${worker.politicStatus}"></span><span>&nbsp;|&nbsp;</span><span th:text="${worker.educationText}"></span><span>&nbsp;|&nbsp;</span><span th:text="${worker.religion}"></span>
@@ -75,21 +75,21 @@ body, html {
 			</div>
 			<div id="split" style="background-color: gray;height:1px;margin-top:10px;margin-left:15px"></div>
 			<div style="margin-left:15px;margin-top:10px;">
-				<div style="height:50px;float:left;border:1px solid red">个人描述</div>
-				<div style="float:left;margin-left:15px;border:1px solid blue;width:230px;" th:text="${worker.descr}"></div>
+				<div style="height:50px;float:left;">个人描述</div>
+				<div style="float:left;margin-left:15px;width:230px;" th:text="${worker.descr}"></div>
 			</div>
 		</div>
-		<div id="dvteacher" style="height:100px;border:1px solid red">
-			<div id="dvtitle" style="height:32px;border:1px solid blue" >
+		<div id="dvteacher" style="height:100px;">
+			<div id="dvtitle" style="height:32px;" >
 				<div style="height:20px;border-bottom:1px solid orange; "></div>
 				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">所属老师</h5>
 			</div>
-			<div style="height:70px;border:1px solid blue">
-				<div style="float:left;height:70px;width:70px;display:block;border:1px solid red;margin-left:15px;">
+			<div style="height:70px;">
+				<div style="float:left;height:70px;width:70px;display:block;margin-left:15px;">
 					<img th:src="@{/app/img/ayi.jpg}" style="width:48px;height:auto"/>
 					<!-- <img th:src="@{'/app/uploadfiles/workerphoto/'+${worker.teacher.photo}}" style="width:48px;height:auto"/> -->
 				</div>
-				<div style="float:left;width:200px;height:70px;border:1px solid red">
+				<div style="float:left;width:200px;height:70px;">
 					<span style="font-weight:bold" th:text="${worker.teacher.name}"></span><br/>
 					<div style="margin-top:5px"></div>
 					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span>
@@ -100,7 +100,8 @@ body, html {
 					</a> 
 				</div>-->
 			</div>
-			<div style="height:50px;border:1px solid red" class="row">
+			<div style="height:30px;border-top:1px solid orange"></div>
+			<div style="height:70px;" class="row">
 				<div style="margin-top:10px"></div>
 				<div class="col-xs-2 col-sm-2">&nbsp;</div>
 				<div>
@@ -108,6 +109,7 @@ body, html {
 				</div>
 				<div class="col-xs-2 col-sm-2"></div>
 			</div>
+			<div style="height:100px"></div>
 		</div>
 	</div>
 

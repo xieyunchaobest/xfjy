@@ -56,7 +56,6 @@ public class Constants {
 	
 	public static final String CYCLE_TYPE_SG="SG";//散工
 	public static final String CYCLE_TYPE_BY="BY";//包月
-	public static final String CYCLE_TYPE_SY="SY";//试用，用于家政
 	
 	public static final String CONFIG_PTBJDJ="PTBJDJ";//普通宝洁单价
 	public static final String CONFIG_DBJDJ="DBJDJ";//大宝洁单价
@@ -74,6 +73,7 @@ public class Constants {
 	public static final String ORDER_STATE_PAYED="P";//已支付
 	public static final String ORDER_STATE_CONFIRMED="C";//已经确认
 	public static final String ORDER_STATE_FINISH="F";//完成
+	public static final String ORDER_STATE_PROBATION="S";//试用
 	
 	public static final String ORDER_PAY_MODE_ONLY_WECHAT="OW";//支付方式，只有微信
 	public static final String ORDER_PAY_MODE_ONLY_YUE="OY";//只有余额

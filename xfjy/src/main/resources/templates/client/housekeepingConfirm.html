@@ -166,42 +166,43 @@ function prepairValue(){
   		<input type="hidden" id="couponCount"  name="couponCount" th:value="${couponCount}" />
   		<input type="hidden" id="couponId"  name="couponId"   />
   		<input type="hidden" id="payMode"  name="payMode"   />
-		<div style="margin-top:10px;height:120px;border:1px solid red;height:120px;">
-			<div id="dvtitle" style="height:32px;border:1px solid blue" >
+		<div style="margin-top:10px;height:120px;height:120px;">
+			<div id="dvtitle" style="height:32px;" >
 				<div style="height:20px;border-bottom:1px solid orange; "></div>
 				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">阿姨信息</h5>
 			</div>
-			<div style="float:left;height:70px;width:70px;display:block;border:1px solid red;margin-left:15px;margin-top:5px;">
+			<div style="float:left;height:70px;width:70px;display:block;margin-left:15px;margin-top:5px;">
 				<img th:src="@{'http://weixin.tjxfjz.com/xfjy/app/uploadfiles/workerphoto/'+${worker.photo}}" style="height:80px;width:auto"/>
 			</div>
-			<div style="float:left;width:200px;height:90px;border:1px solid red">
+			<div style="float:left;width:200px;height:90px;margin-left:30px">
 				<span style="font-weight:bold" th:text="${worker.name}"></span><br/>
 				<span>参考工资：</span><span th:text="${worker.salary}"></span><span>元/月</span><br/>
 				<span th:text="${worker.yearsOld}"></span><span>岁&nbsp;|&nbsp;</span><span th:text="${worker.nativePlace}"></span><span>人</span><br/>
 				<span th:text="${worker.serviceTypeTwoName}"></span>
 			</div> 
 		</div>
-		<div id="dvteacher" style="height:100px;border:1px solid red">
-			<div id="dvtitle" style="height:32px;border:1px solid blue" >
+		<div id="dvteacher" style="height:100px;">
+			<div id="dvtitle" style="height:32px;" >
 				<div style="height:20px;border-bottom:1px solid orange; "></div>
 				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">所属老师</h5>
 			</div>
-			<div style="height:70px;border:1px solid blue">
-				<div style="float:left;height:70px;width:70px;display:block;border:1px solid red;margin-left:15px;">
+			<div style="height:70px;">
+				<div style="float:left;height:70px;width:70px;display:block;margin-left:15px;">
 					<img th:src="@{/app/img/ayi.jpg}" style="width:48px;height:auto"/>
 					<!-- <img th:src="@{'/app/uploadfiles/workerphoto/'+${worker.teacher.photo}}" style="width:48px;height:auto"/> -->
 				</div>
-				<div style="float:left;width:200px;height:70px;border:1px solid red">
+				<div style="float:left;width:200px;height:70px">
 					<span style="font-weight:bold" th:text="${worker.teacher.name}"></span><br/>
 					<div style="margin-top:5px"></div>
 					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span>
 				</div>
-				<div style="float:right;width:60px;height:70px;border:1px solid orange;margin-right:20px;line-height:70px; position:relative;   ">
-					<!-- <a th:href="'tel:'+${worker.teacher.phone}">
+				<!--<div style="float:right;width:60px;height:70px;border:1px solid orange;margin-right:20px;line-height:70px; position:relative;   ">
+					 <a th:href="'tel:'+${worker.teacher.phone}">
 						<img th:src="@{/app/img/btn_call.png}" style="position:absolute;   height:55px;width:55px; top:8%; "/>
-					</a> -->
-				</div>
+					</a> 
+				</div>-->
 			</div>
+			<div style="height:1px;background-color: orange;"></div>
 			<div style="margin-top:15px">
 				<ul class="list-group">
 	  				<li class="list-group-item" onclick="toAddressSelect()">

@@ -3,6 +3,7 @@
  */
 package com.xyc.proj.entity;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -118,7 +119,7 @@ public class Order {
 	private String cycleType;//零工，包月
 	
 	@Transient
-	private String cycleTypeText;//零工，包月
+	private String cycleTypeText="";//零工，包月
 	 
 	@Column(name = "DRATION_MONTH")
 	private String durationMonth;
@@ -173,6 +174,17 @@ public class Order {
 	@Column(name = "TEACHER_ID")
 	private Long teacherId;
 	
+	@Column(name = "PAY_FIRST_TIME")
+	private Date payFirstTime;
+	
+	@Column(name = "PAY_SECOND_TIME")
+	private Date paySecondTime;
+	
+	@Column(name = "FIRST_PAY_AMOUNT")
+	private Double firstPayAmount;
+	
+	@Column(name = "SECOND_PAY_AMOUNT")
+	private Double secondPayAmount;
 	
 	
 	public Order() {
@@ -644,6 +656,46 @@ public class Order {
 
 	public void setWorkerId(Long workerId) {
 		this.workerId = workerId;
+	}
+
+
+	public Date getPayFirstTime() {
+		return payFirstTime;
+	}
+
+
+	public void setPayFirstTime(Date payFirstTime) {
+		this.payFirstTime = payFirstTime;
+	}
+
+
+	public Date getPaySecondTime() {
+		return paySecondTime;
+	}
+
+
+	public void setPaySecondTime(Date paySecondTime) {
+		this.paySecondTime = paySecondTime;
+	}
+
+
+	public Double getFirstPayAmount() {
+		return firstPayAmount;
+	}
+
+
+	public void setFirstPayAmount(Double firstPayAmount) {
+		this.firstPayAmount = firstPayAmount;
+	}
+
+
+	public Double getSecondPayAmount() {
+		return secondPayAmount;
+	}
+
+
+	public void setSecondPayAmount(Double secondPayAmount) {
+		this.secondPayAmount = secondPayAmount;
 	}
 
 	
