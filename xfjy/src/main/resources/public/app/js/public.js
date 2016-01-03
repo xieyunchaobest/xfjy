@@ -3,6 +3,8 @@ var baseUrl=window.location.href;
 var basePath='';
 if(baseUrl.indexOf("\/xfjy\/") > 0){
 	basePath='/xfjy';
+}else if(baseUrl.indexOf("\/xfjytest\/") > 0){
+	basePath='/xfjytest';
 }else{
 	basePath="";
 }

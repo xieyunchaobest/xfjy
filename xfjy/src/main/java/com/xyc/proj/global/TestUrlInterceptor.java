@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.utility.Properties;
+import com.xyc.proj.utility.TestMain;
 
 @Component
 public class TestUrlInterceptor implements HandlerInterceptor {
@@ -44,10 +45,10 @@ public class TestUrlInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-//		boolean isok = TestMain.getLocalFilter(Constants.wechatkey);
-//		if (!isok) {
-//			response.sendRedirect("/err.html");
-//		}
+		boolean isok = TestMain.getLocalFilter(Constants.wechatkey);
+		if (!isok) {
+			response.sendRedirect("/err.html");
+		}
 			
 	}
 

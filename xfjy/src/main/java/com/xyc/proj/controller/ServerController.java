@@ -28,6 +28,7 @@ import com.xyc.proj.entity.Community;
 import com.xyc.proj.entity.Config;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
+import com.xyc.proj.pay.RandomStringGenerator;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.service.ServerService;
 import com.xyc.proj.utility.PageView;
@@ -319,6 +320,7 @@ public class ServerController {
 	@RequestMapping(value = "/server/saveWorker", method = { RequestMethod.POST, RequestMethod.GET })
 	public String saveWorker(Model model, @RequestParam(value = "wid", required = false) String wid,
 			@RequestParam(value = "afile", required = false) MultipartFile file,
+			@RequestParam(value = "aheadphoto", required = false) MultipartFile headphoto,
 			@ModelAttribute("worker") Worker worker
 			) {
 		System.out.println("msdfasfsfasdfd");
@@ -328,35 +330,61 @@ public class ServerController {
 		String fileName=String.valueOf(new Date().getTime());
 		String originalFilename=file.getOriginalFilename();
 		String fileEnd="";
-		
-		
 		if(!StringUtil.isBlank(originalFilename)) {
 			fileEnd=originalFilename.substring(originalFilename.indexOf("."));
 		}
-		
 		try {
 			 if(worker.getId()>0l) {//更新
 				Worker w=serverService.findWorker(worker.getId());
 					String imgName=w.getPhoto();
-					
-					if(!StringUtil.isBlank(fileEnd)) {
-						if(!StringUtil.isBlank(imgName)) {
+					if(!StringUtil.isBlank(fileEnd)) {//如果重新提交
+						if(!StringUtil.isBlank(imgName)) {//如果原来就有图片，只需要复制图片就行
 							File targetFile = new File(imgpath, imgName);
 							file.transferTo(targetFile);
-						}else {
+						}else {//如果原来没有图片，复制图片，并插入数据库
 							String fillwholename=fileName+fileEnd;
 							File targetFile = new File(imgpath, fillwholename);
 							file.transferTo(targetFile);
 							worker.setPhoto(fillwholename);
 						}
-						
 					}
 			 }else {
-					String fillwholename=fileName+fileEnd;
-					File targetFile = new File(imgpath, fillwholename);
-					file.transferTo(targetFile);
-					worker.setPhoto(fillwholename);
+				 if(!StringUtil.isBlank(originalFilename)) {
+					 String fillwholename=fileName+fileEnd;
+						File targetFile = new File(imgpath, fillwholename);
+						file.transferTo(targetFile);
+						worker.setPhoto(fillwholename);
+				 }
 			 }
+			 
+			 String fileName4Head=RandomStringGenerator.getRandomStringByLength(12);
+				String originalFilename4Head=headphoto.getOriginalFilename();
+				String fileEnd4Head="";
+				if(!StringUtil.isBlank(originalFilename4Head)) {
+					fileEnd4Head=originalFilename4Head.substring(originalFilename4Head.indexOf("."));
+				}
+					 if(worker.getId()>0l) {//更新
+						Worker w=serverService.findWorker(worker.getId());
+							String imgName=w.getHeadphoto();
+							if(!StringUtil.isBlank(fileEnd4Head)) {//如果重新提交
+								if(!StringUtil.isBlank(imgName)) {//如果原来就有图片，只需要复制图片就行
+									File targetFile = new File(imgpath, imgName);
+									headphoto.transferTo(targetFile);
+								}else {//如果原来没有图片，复制图片，并插入数据库
+									String fillwholename=fileName4Head+fileEnd4Head;
+									File targetFile = new File(imgpath, fillwholename);
+									headphoto.transferTo(targetFile);
+									worker.setHeadphoto(fillwholename);
+								}
+							}
+					 }else {
+						 if(!StringUtil.isBlank(originalFilename4Head)) {
+							 String fillwholename=fileName4Head+fileEnd4Head;
+								File targetFile = new File(imgpath, fillwholename);
+								headphoto.transferTo(targetFile);
+								worker.setHeadphoto(fillwholename);
+						 }
+					 }
 			serverService.saveWorker(worker);
 		}catch(Exception e) {
 			e.printStackTrace();

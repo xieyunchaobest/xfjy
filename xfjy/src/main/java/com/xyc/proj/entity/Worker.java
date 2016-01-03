@@ -113,6 +113,9 @@ public class Worker {
 	private String bloodType;
 	@Column(name = "CERTIFICATE_OF_HONOR")
 	private String certificateOfHonor;//荣誉证书
+	
+	@Column(name = "HEADPHOTO")
+	private String headphoto;//头像
 
 
 	public String getTimeOfStartWork() {
@@ -501,6 +504,14 @@ public class Worker {
 
 	public void setTeacher(Worker teacher) {
 		this.teacher = teacher;
+	}
+
+	public String getHeadphoto() {
+		return headphoto;
+	}
+
+	public void setHeadphoto(String headphoto) {
+		this.headphoto = headphoto;
 	}
 	
 	

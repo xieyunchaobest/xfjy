@@ -14,6 +14,22 @@
 		     		"name":{
 		     			required:true 
 		     		} , 
+		     		"birthday":{
+		     			required:true 
+		     		} ,
+		     		"nativePlace":{
+		     			required:true 
+		     		} ,
+		     		"nation":{
+		     			required:true 
+		     		} ,
+		     		"stature":{
+		     			required:true 
+		     		} ,
+		     		"weight":{
+		     			required:true 
+		     		} ,
+
 		     		"phone":{
 		     			required:true 
 		     		} , 
@@ -21,9 +37,23 @@
 		     			required:true,
 		     			number:true
 		     		},
+		     		"timeOfStartWork":{
+		     			required:true,
+		     		},
+		     		"employmentDate":{
+		     			required:true,
+		     		},
+		     		"descr":{
+		     			required:true,
+		     		},
+		     		
 		     		"afile":{
-		     			required:$("#carId").val()=='0'
-		     		} 
+		     			required:true,
+		     		} ,
+		     		"aheadphoto":{
+		     			required:true,
+		     		}  
+		     		
 		     	},
 		         messages: {
 		             
@@ -31,8 +61,31 @@
 		     });
 	 }
 	 
+	 function valdateData(){
+		 var role=$("#role").val();
+		 var teacherId=$("#teacherId").val();
+		 var salary=$("#salary").val();
+		 var serviceTypeOne=$("#serviceTypeOne").val();
+		 if(role=='A'){
+			 if(teacherId==''){
+				 alert('当角色为阿姨时，必须要选择老师！');
+				 return false;
+			 }
+			 if(serviceTypeOne=='J'){
+				 if(salary=='' ){
+					 alert('当角色为阿姨并服务类型为家政时，工资必填！');
+					 return false;
+				 }
+			 }
+			 
+		 }
+		 return true;
+	 }
+	 
+	 
 	 
 	 function save(){ 
+		 if(valdateData()==false)return;
 		   var path = basePath+"/server/saveWorker";  
 			$('#aform').attr("action", path).submit(); 
 	 }
@@ -188,19 +241,32 @@
 	 				<input type="text" id="employmentDate" name="employmentDate" maxlength="10" th:value="${worker.employmentDate}"  readonly="true"/> 
 				</td>
 	 		</tr>
-	 		 
-	 		
 	 		 <tr>
 	 			<td align="right" width="100px">照片：</td>
 	 			<td width="150px">
-	 				<input type="file" id="afile" name="afile"/>
+	 				<input type="file" id="afile" name="afile" style="width:120px"/>
+	 			</td>
+	 			<td align="right" width="100px">头像：</td>
+	 			<td width="150px">
+	 				<input type="file"  id="aheadphoto" name="aheadphoto" style="width:120px"/>
+				</td>
+	 		</tr> 
+	 		 <tr>
+	 			<td align="right" width="100px">工资：</td>
+	 			<td width="150px">
+	 				 <input type="text" id="salary" name="salary" maxlength="10" th:value="${worker.salary}"  /> 
 	 			</td>
 	 			<td align="right" width="100px">&nbsp;</td>
 	 			<td width="150px">
 	 				 &nbsp;
 				</td>
 	 		</tr> 
-	 	 
+	 	 <tr>
+	 			<td align="right" width="100px">个人描述：</td>
+	 			<td colspan="3">
+	 				<input type="text" size="60" id="descr" name="descr"  th:value="${worker.descr}" />
+	 			</td>
+	 		</tr> 
 	 	</table>
 	 </div>
 </form>

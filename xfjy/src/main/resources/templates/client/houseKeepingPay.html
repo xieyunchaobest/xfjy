@@ -48,6 +48,14 @@ function createOrder(){
 			return;
 		}
 	}
+	var state=$("#state").val();
+	if(state=='S'){
+		var secondPayAmount=$('#secondPayAmount').val();
+		if(secondPayAmount<=0){
+			$("#spnwarngin").text('请选择会员费！');
+			return;
+		}
+	}
 	
 	$("#btnPay").text('支付中...');
 	$("#btnPay").attr("disabled",true); 
@@ -106,12 +114,16 @@ function resetCheckBox(flag){
 			  $("input[name='cbcouponId']").hide();
 			  $("span[name='txtrdcoupon']").hide();
 			  $("#payMode").val('OY');
+		  }else{
+			  $("#payMode").val('');
 		  }
 	 }else{
 		 if($("#payMode4yhq").prop('checked')==true){
 			 $("#payMode").val('OC');
 			  $("#payMode4ye").prop('checked',false);
 			  cbcheck4coupon();
+		  }else{
+			  $("#payMode").val('');
 		  }
 	 }
 }

@@ -47,8 +47,8 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
 		orderWorkerRepository.save(ow);
 		
 		//发送短信给客户
-//		String content="您的订单已确认,请尽快进入微平台在我的订单中完成支付。";
-//		clientService.sendShortMsg(order.getMobileNo(), content);
+		String content="您的订单已确认,请尽快进入微平台在我的订单中完成支付。";
+		clientService.sendShortMsg(order.getMobileNo(), content);
 		
 	}
 
@@ -71,11 +71,10 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
 		//ClientUser cu=clientUserRepository.findByMobileNo(teacher.getPhone());
 //		MsgUtil.sendTemplateMsg(Constants.MSG_KF_TEMPLATE_ID, cu.getOpenId(), url, "您有新的任务",
 //				o.getFullAddress(), "订单确认", "点击查看详情");
-//		Worker ayi=workerRepository.findOne(o.getWorkerId());
 //		//发送短信给老师
-//		//客户{xxxxxxxxxxxxxxxx}电话{xxxxxxxxxxxxxxxx}预订阿姨{xxxxxxxxxxxxxxxx}日期{xxxxxxxxxxxxxxxx}的家政试用订单已支付完成{x}请尽快安排阿姨上门服务{x}
-//		String content="您收到客户"+o.getName()+",电话"+o.getMobileNo()+",预订阿姨"+ayi.getName()+",日期"+o.getServiceDate()+",的家政试用订单,请尽快进入待办中查看";
-//		clientService.sendShortMsg(teacher.getPhone(), content);
+		Worker ayi=workerRepository.findOne(o.getWorkerId());
+		String content="您收到客户"+o.getName()+",电话"+o.getMobileNo()+",预订阿姨"+ayi.getName()+",日期"+o.getServiceDate()+",的家政试用订单,请尽快进入待办中查看";
+		clientService.sendShortMsg(teacher.getPhone(), content);
 	}
 	
 	public Order getOrder(Long oid) {
