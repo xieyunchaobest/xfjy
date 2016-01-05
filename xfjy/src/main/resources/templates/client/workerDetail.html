@@ -92,7 +92,8 @@ body, html {
 				<div style="float:left;width:200px;height:70px;">
 					<span style="font-weight:bold" th:text="${worker.teacher.name}"></span><br/>
 					<div style="margin-top:5px"></div>
-					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span>
+					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span><br/>
+					<a th:href="'tel:'+${worker.teacher.phone}" style="color:black" th:text="${worker.teacher.phone}"></a>
 				</div>
 				<!--<div style="float:right;width:60px;height:70px;border:1px solid orange;margin-right:20px;line-height:70px; position:relative;   ">
 					 <a th:href="'tel:'+${worker.teacher.phone}">
@@ -105,7 +106,7 @@ body, html {
 				<div style="margin-top:10px"></div>
 				<div class="col-xs-2 col-sm-2">&nbsp;</div>
 				<div>
-					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 col-sm-8 btn-default btn-lg">确 定</button>
+					<button type="button" onclick="toOrderConfirm()" class="btn col-xs-8 col-sm-8 btn-default btn-lg">选 择</button>
 				</div>
 				<div class="col-xs-2 col-sm-2"></div>
 			</div>

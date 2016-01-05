@@ -11,7 +11,7 @@ import com.xyc.proj.entity.Worker;
 public interface WorkerRepository extends JpaRepository<Worker, Long> {
 	List<Worker> findByStoreId(Long storeId);
 
-	List<Worker> findByCodeAndPasswordAndRole(String code, String password,String role);
+	List<Worker> findByCodeAndPasswordAndRoleNot(String code, String password,String role);
 
 	List<Worker> findByAreaId(Long areaId);
 

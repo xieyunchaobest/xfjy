@@ -200,7 +200,24 @@ public class ServerServiceImpl implements ServerService {
 		PageView pv = new PageView((Integer) m.get("currentPageNum"));
 		m.put("start", pv.getStart());
 		m.put("end", pv.getCurrentMaxCnt());
-		pv.setResultList(findOrderList(m));
+		List orderList=findOrderList(m);
+		if(orderList!=null) {
+			for(int i=0;i<orderList.size();i++) {
+				Order o =(Order)orderList.get(i);
+				List<OrderWorker> orderWorkerList=orderWorkerRepository.findByOrderId(o.getId());
+				String workers="";
+				if(orderWorkerList!=null) {
+					for(int j=0;j<orderWorkerList.size();j++) {
+						OrderWorker ow=(OrderWorker)orderWorkerList.get(j);
+						Long wid=ow.getWorkerId();
+						Worker w=workerRepository.findOne(wid);
+						workers=workers+((j==orderWorkerList.size()-1)?w.getName():(w.getName()+","));
+					}
+				}
+				o.setWorkers(workers);
+			}
+		}
+		pv.setResultList(orderList);
 		pv.setTotalRecord(orderMapper.getOrderPageCount(m));
 		return pv;
 	}
@@ -316,7 +333,7 @@ public class ServerServiceImpl implements ServerService {
 	// }
 
 	public List findByCodeAndPassword(String code, String pwd) {
-		return workerRepository.findByCodeAndPasswordAndRole(code, pwd,"T");
+		return workerRepository.findByCodeAndPasswordAndRoleNot(code, pwd,"A");
 	}
 
 	public List findStore() {

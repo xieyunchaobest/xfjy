@@ -165,12 +165,14 @@ public class HouseKeepingController {
 			@RequestParam(value = "orderId", required = true) String orderId,
 			@RequestParam(value = "serviceDate", required = true) String serviceDate,
 			@RequestParam(value = "ayiId", required = true) String ayiId,
+			@RequestParam(value = "totalFee", required = true) double totalFee,
 			Model model,HttpSession session) {
 		String res="S";
 		try {
 			 Order o=new Order();
 			 o.setId(Long.parseLong(orderId));
 			 o.setServiceDate(serviceDate);
+			 o.setTotalFee(totalFee);
 			 o.setWorkerId(Long.parseLong(ayiId));
 			 houseKeepingService.dispatchOrder(o);
 		}catch(Exception e) {

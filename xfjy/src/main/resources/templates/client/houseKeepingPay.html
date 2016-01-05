@@ -206,10 +206,7 @@ function calfee(target){
 	var feesalary=$("#spfeesalary").text();
 	var secondPayAmount=fee+ parseInt(feesalary)
 	$("#sptotalFee").text(secondPayAmount);
-	$("#secondPayAmount").val(secondPayAmount);
-	var firstPayAmount=$("#firstPayAmount").val();
-	var secondPayAmount=$("#secondPayAmount").val();
-	$("#totalFee").val(parseFloat(secondPayAmount)+parseFloat(firstPayAmount));
+	$("#totalFee").val(secondPayAmount);
 }
 /*]]>*/
 
@@ -247,18 +244,16 @@ function calfee(target){
   		<input type="hidden" id="couponId"  name="couponId"   />
   		<input type="hidden" id="payMode"  name="payMode"   />
   		<input type="hidden" id="totalFee"  name="totalFee" th:value="${order.totalFee}"  />
-  		<input type="hidden" id="firstPayAmount"  name="firstPayAmount" th:value="${order.firstPayAmount}"  />
-  		<input type="hidden" id="secondPayAmount"  name="secondPayAmount" th:value="${order.secondPayAmount}"  />
   		<ul class="list-group" style="margin-top:15px;" th:if="${order.state=='C'}">
 			<li class="list-group-item" >
-				<label>试用3天金额：</label><span style="color:red" th:text="${order.firstPayAmount}"></span><span style="color:red">元</span>
+				<label>试用3天金额：</label><span style="color:red" th:text="${order.totalFee}"></span><span style="color:red">元</span>
 			</li> 
-		</ul>
+		</ul> 
 		<ul class="list-group" style="margin-top:15px;" th:if="${order.state=='F'}">
 			<li class="list-group-item" >
 				<label>金额：</label><span style="color:red" th:text="${order.totalFee}"></span><span style="color:red">元</span>
 			</li> 
-		</ul>
+		</ul> 
 		<ul class="list-group" style="margin-top:15px;" th:if="${order.state=='S'}">
 			<li class="list-group-item" >
 				<label>会员费：</label><br/>
@@ -320,7 +315,8 @@ function calfee(target){
 				<div style="float:left;width:200px;height:70px;">
 					<span style="font-weight:bold" th:text="${worker.teacher.name}"></span><br/>
 					<div style="margin-top:5px"></div>
-					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span>
+					<span th:text="${worker.teacher.nativePlace}"></span><span>人</span><br/>
+					<a th:href="'tel:'+${worker.teacher.phone}" style="color:black" th:text="${worker.teacher.phone}"></a>
 				</div> 
 			</div>
 			<div style="height:1px;background-color:orange"></div>

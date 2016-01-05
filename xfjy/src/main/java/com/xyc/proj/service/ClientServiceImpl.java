@@ -510,10 +510,19 @@ public class ClientServiceImpl implements ClientService {
 		if (orderList != null) {
 			for (int i = 0; i < orderList.size(); i++) {
 				Order o = orderList.get(i);
-				if (Constants.ORDER_STATE_FINISH.equals(o.getState())) {
-					finishedList.add(o);
-				} else {
-					unFinishedList.add(o);
+				if(o.getFollowOrderId()==null ||o.getFollowOrderId()<=0 ) {
+					
+					if (Constants.ORDER_STATE_FINISH.equals(o.getState())) {
+						//如果是家政的单子，需要重新算一下价格。如果单子状态为已完成，就把两个单子的价格加在一起
+						if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {
+							Order oo=orderRepository.findByFollowOrderId(o.getId());
+							double totalFee=oo.getTotalFee()+o.getTotalFee();
+							o.setTotalFee(totalFee);
+						}
+						finishedList.add(o);
+					} else {
+						unFinishedList.add(o);
+					}
 				}
 			}
 		}
@@ -782,25 +791,31 @@ public class ClientServiceImpl implements ClientService {
 			order.setOutTradeNo(outTradeNo);
 			order = saveOrder(order);
 		} else {// 从未完成订单中，不需要重新创建订单,用于家政
-			outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
-			o.setOutTradeNo(outTradeNo);
-			//删除未用的余额记录，避免扣款通知
-			List dpList=depositLogRepository.findByOutTradeNoAndState(outTradeNo, "P");
-			depositLogRepository.delete(dpList);
-			order= saveOrder(o);
+			if(Constants.ORDER_STATE_CONFIRMED.equals(o.getState())) {//如果是已确认，也就是第一次支付，则操作第一个订单即可
+				outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
+				o.setOutTradeNo(outTradeNo);
+				//删除未用的余额记录，避免扣款通知
+				List dpList=depositLogRepository.findByOutTradeNoAndState(outTradeNo, "P");
+				depositLogRepository.delete(dpList);
+				order= saveOrder(o);
+			}else if(Constants.ORDER_STATE_PROBATION.equals(o.getState())){//如果是第二次支付，则重新创建一个订单，如果二次订单已经创建，则不需要再次创建
+				Long aoid=o.getId();
+				Order oo=orderRepository.findByFollowOrderId(aoid);
+				if(oo==null || oo.getId()<=0) {//如果还没有二次单子，则创建
+					outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
+					Long oid=o.getId();
+					o.setOutTradeNo(outTradeNo);
+					o.setId(0l);
+					o.setFollowOrderId(oid);
+					order= saveOrder(o);
+				}else {//有的话则取出来
+					order=oo;
+				}
+			}
 		}
 
 		//int totalFee = 1;
-		int totalFee=0;
-		if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {
-			if(Constants.ORDER_STATE_PROBATION.equals(order.getState())) {//如果是试用,总费用等于第二次费用
-				totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(o.getSecondPayAmount().doubleValue()*100d)) ;
-			}else if(Constants.ORDER_STATE_CONFIRMED.equals(order.getState())) {
-				totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(o.getFirstPayAmount().doubleValue()*100d)) ;
-			}
-		}else {
-			totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(order.getTotalFee().doubleValue()*100d)) ;
-		}
+		int  totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(order.getTotalFee().doubleValue()*100d)) ;
 		 
 		 //totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
 		// 判断是否用了余额或优惠券，如果是，减去余额
@@ -918,11 +933,20 @@ public class ClientServiceImpl implements ClientService {
 				if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {//如果是家政。家政的状态分为试用/完成
 					if(Constants.ORDER_STATE_CONFIRMED.equals(o.getState())) {
 						order.setState(Constants.ORDER_STATE_PROBATION);
-						order.setPayFirstTime(new Date());
 					}else if(Constants.ORDER_STATE_PROBATION.equals(o.getState())) {
 						order.setState(Constants.ORDER_STATE_FINISH);
-						order.setTotalFee(order.getFirstPayAmount()+order.getSecondPayAmount());//订单总金额
-						order.setPaySecondTime(new Date());
+						//更新关联的订单状态,新增订单-阿姨关联关系
+						Long aoid=order.getFollowOrderId();
+						Order followOrder=orderRepository.findOne(aoid);
+						followOrder.setState(Constants.ORDER_STATE_FINISH);
+						List<OrderWorker> orderWorkerList=orderWorkerRepository.findByOrderId(aoid);//先找出原来订单的阿姨，
+						if(orderWorkerList!=null && orderWorkerList.size()>0) {
+							OrderWorker ow=(OrderWorker)orderWorkerList.get(0);
+							OrderWorker newow=new OrderWorker();
+							newow.setOrderId(order.getId());
+							newow.setWorkerId(ow.getWorkerId());
+							orderWorkerRepository.save(newow);
+						}
 					}
 				}else {
 					order.setState(Constants.ORDER_STATE_PAYED);
@@ -988,11 +1012,20 @@ public class ClientServiceImpl implements ClientService {
 				if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {//如果是家政。家政的状态分为试用/完成
 					if(Constants.ORDER_STATE_CONFIRMED.equals(order.getState())) {
 						order.setState(Constants.ORDER_STATE_PROBATION);
-						order.setPayFirstTime(new Date());
 					}else if(Constants.ORDER_STATE_PROBATION.equals(order.getState())) {
 						order.setState(Constants.ORDER_STATE_FINISH);
-						//order.setTotalFee(order.getFirstPayAmount()+order.getSecondPayAmount());//订单总金额
-						order.setPaySecondTime(new Date());
+						//更新关联的订单状态,新增订单-阿姨关联关系
+						Long aoid=order.getFollowOrderId();
+						Order followOrder=orderRepository.findOne(aoid);
+						followOrder.setState(Constants.ORDER_STATE_FINISH);
+						List<OrderWorker> orderWorkerList=orderWorkerRepository.findByOrderId(aoid);//先找出原来订单的阿姨，
+						if(orderWorkerList!=null && orderWorkerList.size()>0) {
+							OrderWorker ow=(OrderWorker)orderWorkerList.get(0);
+							OrderWorker newow=new OrderWorker();
+							newow.setOrderId(order.getId());
+							newow.setWorkerId(ow.getWorkerId());
+							orderWorkerRepository.save(newow);
+						}
 					}
 				}else {
 					order.setState(Constants.ORDER_STATE_PAYED);

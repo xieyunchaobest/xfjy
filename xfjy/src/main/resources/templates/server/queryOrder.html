@@ -41,6 +41,10 @@
  			
  			var serviceType=$(chb).attr('serviceType');
  			if(serviceType=='JZ'){
+ 				if(state=='F'){
+ 	 				alert('订单状态不符合分配要求！');
+ 	 				return;
+ 	 			}
  				var path = basePath+"/server/orderDispatchInit4jzInit.html?orderId="+oid;
  	 	 		window.open(path,'win',"height=300,width=400,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no,status=no");
  			}else{
@@ -131,6 +135,7 @@
 						<th>支付金额</th>
 						<th>交易时间</th>
 						<th>交易方式</th>
+						<th>阿姨</th>
 						<th>优惠券/余额</th>
 						<th>服务类型</th>
 						<th>服务时间</th>
@@ -157,6 +162,7 @@
 						<td th:text="${item.totalFee}"></td>
 						<td th:text="${item.payTime}"></td>
 						<td th:text="${item.payModeText}"></td>
+						<td th:text="${item.workers}"></td>
 						<td th:text="${item.balanceCouponFee}"></td>
 						<td th:text="${item.serviceTypeText}"></td>
 						<td th:text="${item.serviceDate}"></td>

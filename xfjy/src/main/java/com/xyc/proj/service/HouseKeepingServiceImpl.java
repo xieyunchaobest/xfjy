@@ -36,6 +36,7 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
 		Order order=orderRepository.findOne(o.getId());
 		order.setServiceDate(o.getServiceDate());
 		order.setWorkerId(o.getWorkerId());
+		order.setTotalFee(o.getTotalFee());
 		order.setState(Constants.ORDER_STATE_CONFIRMED);
 		orderRepository.save(order);
 		//插入订单、员工关系表，先删除，后插入
@@ -59,7 +60,6 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
 		double salary=worker.getSalary();
 		double totalFee=Double.parseDouble( new DecimalFormat("#.00").format(salary/22.0d*3d*1.2d)) ;
 		o.setTotalFee(totalFee);
-		o.setFirstPayAmount(totalFee);
 		orderRepository.save(o);
 		//发送客服消息给老师
 		String loginurl = "http://weixin.tjxfjz.com/xfjy/client/orderDetail4jz.html";
@@ -80,9 +80,17 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
 	public Order getOrder(Long oid) {
 		Order o=orderRepository.findOne(oid);
 		Worker worker=serverService.findWorker(o.getWorkerId());
-		double salary=worker.getSalary();
-		double totalFee=Double.parseDouble( new DecimalFormat("#.00").format(salary/22.0d*3d*1.2d)) ;
-		o.setTotalFee(totalFee);
+//		double salary=worker.getSalary();
+//		double totalFee=Double.parseDouble( new DecimalFormat("#.00").format(salary/22.0d*3d*1.2d)) ;
+//		o.setTotalFee(totalFee);
+		//如果是家政的单子，需要重新算一下价格。如果单子状态为已完成，就把两个单子的价格加在一起
+		if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {
+			Order oo=orderRepository.findByFollowOrderId(o.getId());
+			if(oo!=null) {
+				double totalFee=oo.getTotalFee()+o.getTotalFee();
+				o.setTotalFee(totalFee);
+			}
+		}
 		return o;
 	}
 	

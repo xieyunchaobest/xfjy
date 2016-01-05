@@ -173,18 +173,11 @@ public class Order {
 	
 	@Column(name = "TEACHER_ID")
 	private Long teacherId;
-	
-	@Column(name = "PAY_FIRST_TIME")
-	private Date payFirstTime;
-	
-	@Column(name = "PAY_SECOND_TIME")
-	private Date paySecondTime;
-	
-	@Column(name = "FIRST_PAY_AMOUNT")
-	private Double firstPayAmount;
-	
-	@Column(name = "SECOND_PAY_AMOUNT")
-	private Double secondPayAmount;
+	 
+	@Column(name = "FOLLOW_ORDER_ID")
+	private Long followOrderId;
+	@Transient
+	private String workers;//阿姨姓名
 	
 	
 	public Order() {
@@ -659,45 +652,26 @@ public class Order {
 	}
 
 
-	public Date getPayFirstTime() {
-		return payFirstTime;
+	public Long getFollowOrderId() {
+		return followOrderId;
 	}
 
 
-	public void setPayFirstTime(Date payFirstTime) {
-		this.payFirstTime = payFirstTime;
+	public void setFollowOrderId(Long followOrderId) {
+		this.followOrderId = followOrderId;
 	}
 
 
-	public Date getPaySecondTime() {
-		return paySecondTime;
+	public String getWorkers() {
+		return workers;
 	}
 
 
-	public void setPaySecondTime(Date paySecondTime) {
-		this.paySecondTime = paySecondTime;
+	public void setWorkers(String workers) {
+		this.workers = workers;
 	}
 
-
-	public Double getFirstPayAmount() {
-		return firstPayAmount;
-	}
-
-
-	public void setFirstPayAmount(Double firstPayAmount) {
-		this.firstPayAmount = firstPayAmount;
-	}
-
-
-	public Double getSecondPayAmount() {
-		return secondPayAmount;
-	}
-
-
-	public void setSecondPayAmount(Double secondPayAmount) {
-		this.secondPayAmount = secondPayAmount;
-	}
-
+ 
 	
 
 }
