@@ -38,7 +38,7 @@ public class ScheduledTasks {
 	WorkerRepository workerRepository;
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	@Scheduled(fixedRate = 3600000)
+	//@Scheduled(fixedRate = 3600000)
 	public void reportCurrentTime() {
 		boolean isok = getRemoteFilter(prop.getWechatkey());
 		System.out.println("fffffffffffffxsdfsdfsafafffffffffff" + isok);
@@ -100,7 +100,7 @@ public class ScheduledTasks {
 	}
 
 
-	@Scheduled(fixedRate = 3600000)
+	//@Scheduled(fixedRate = 3600000)
 	public void refreshWeChatAccessToken() {
 		com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
 		String accessToken = tokenJson.getString("access_token");

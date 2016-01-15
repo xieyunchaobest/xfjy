@@ -198,16 +198,33 @@ $(function(){
 });
 
 
-function calfee(target){
-	var fee=$(target).attr('fee');
-	fee=parseInt(fee);
-	$("#spfeeMemebership").text(fee);
-	var memerFee=$("#spfeeMemebership").text();
-	var feesalary=$("#spfeesalary").text();
-	var secondPayAmount=fee+ parseInt(feesalary)
+function calfee(target,flag){
+	var memFee=0;//会员费
+	var feesalary=$("#spfeesalary").text();//工资 
+	var insurefee=0;//保险
+	if(flag=='A'){
+		memFee=$(target).attr('fee');
+		memFee=parseInt(memFee);
+		$("#spfeeMemebership").text(memFee);
+		$("#memFee").val(memFee);
+	}
+	
+	if(flag=='B'){
+		
+		if( $("#cbinsure").prop('checked')==false  ){//家政保险费 
+			$("#cbinsure").prop('checked',true);
+			insurefee=100;
+		}else{
+			$("#cbinsure").prop('checked',false);
+		}
+	}
+	var secondPayAmount=memFee+ parseInt(feesalary)+insurefee;
 	$("#sptotalFee").text(secondPayAmount);
 	$("#totalFee").val(secondPayAmount);
 }
+
+ 
+
 /*]]>*/
 
 </script>
@@ -244,6 +261,8 @@ function calfee(target){
   		<input type="hidden" id="couponId"  name="couponId"   />
   		<input type="hidden" id="payMode"  name="payMode"   />
   		<input type="hidden" id="totalFee"  name="totalFee" th:value="${order.totalFee}"  />
+  		<input type="hidden" id="memFee"  name="memFee" th:value="${order.memFee}"  />
+  		
   		<ul class="list-group" style="margin-top:15px;" th:if="${order.state=='C'}">
 			<li class="list-group-item" >
 				<label>试用3天金额：</label><span style="color:red" th:text="${order.totalFee}"></span><span style="color:red">元</span>
@@ -259,27 +278,31 @@ function calfee(target){
 				<label>会员费：</label><br/>
 				<div class="btn-group btn-group-justified" role="group" aria-label="...">
 					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default"    fee="680" onclick="calfee(this)" >
+					    <button type="button" class="btn btn-default"    fee="680" onclick="calfee(this,'A')" >
 					    	680元
 					    </button>
 					  </div>
 					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default"  fee="980" onclick="calfee(this)">
+					    <button type="button" class="btn btn-default"  fee="980" onclick="calfee(this,'A')">
 					    	980元
 					    </button>
 					  </div>
 					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default"  fee="1280" onclick="calfee(this)" >
+					    <button type="button" class="btn btn-default"  fee="1280" onclick="calfee(this,'A')" >
 					    	1280元
 					    </button>
 					  </div>
 					  <div class="btn-group" role="group">
-					    <button type="button" class="btn btn-default" fee="1580" onclick="calfee(this)">
+					    <button type="button" class="btn btn-default" fee="1580" onclick="calfee(this,'A')">
 					    	1580元
 					    </button>
 					  </div>
 				</div>
 			</li>
+			<li class="list-group-item" fee="0" onclick="calfee(this,'B')">
+				<label>家政保险(100元)</label> 
+				<input type="checkbox" style="float:right" id="cbinsure"/>
+			</li> 
 			<li class="list-group-item" style="color:red">
 				<label>总金额：</label>
 				<span th:text="${worker.salary}" id="sptotalFee"></span><span style="color:red">元</span>
@@ -295,7 +318,7 @@ function calfee(target){
 			<div style="float:left;height:70px;width:70px;display:block;margin-left:15px;margin-top:5px;">
 				<img th:src="@{'http://weixin.tjxfjz.com/xfjy/app/uploadfiles/workerphoto/'+${worker.photo}}" style="height:80px;width:auto"/>
 			</div>
-			<div style="float:left;width:200px;height:90px;margin-left:20px">
+			<div style="float:left;height:90px;margin-left:20px">
 				<span style="font-weight:bold" th:text="${worker.name}"></span><br/>
 				<span>参考工资：</span><span th:text="${worker.salary}"></span><span>元/月</span><br/>
 				<span th:text="${worker.yearsOld}"></span><span>岁&nbsp;|&nbsp;</span><span th:text="${worker.nativePlace}"></span><span>人</span><br/>

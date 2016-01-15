@@ -49,7 +49,7 @@ body, html {
 				<span th:text="${worker.serviceTypeTwoName}"></span>
 			</div>
 		</div>
-		<div style="margin-top:10px;height:120px;height:360px;">
+		<div style="margin-top:10px;height:120px;height:380px;">
 			<div id="dvtitle" style="height:32px;" >
 				<div style="height:20px;border-bottom:1px solid orange; "></div>
 				<h5 style="width:90px;padding:0px 10px;padding-left:15px;margin-left:40px;margin-top:-10px;background-color: white">基本信息</h5>
@@ -60,12 +60,14 @@ body, html {
 				<span th:text="${worker.politicStatus}"></span><span>&nbsp;|&nbsp;</span><span th:text="${worker.educationText}"></span><span>&nbsp;|&nbsp;</span><span th:text="${worker.religion}"></span>
 			</div>
 			<div id="split" style="background-color: gray;height:1px;margin-top:10px;margin-left:15px"></div>
-			<div style="height:80px;padding-left:15px;margin-top:10px">
+			<div style="height:100px;padding-left:15px;margin-top:10px">
 				<span>普通话</span><span th:text="${worker.languageLevel}"></span><br/>
 				<div style="height:5px;"></div>
 				<span>行业经验</span><span th:text="${worker.workExperience}"></span><span>年左右</span><br/>
 				<div  style="height:5px;"></div>
-				<span th:text="${worker.employmentDate}"></span><span>加入幸福家缘</span>
+				<span th:text="${worker.employmentDate}"></span><span>加入幸福家缘</span><br/>
+				<div style="height:5px;"></div>
+				<span>服务范围</span><span th:text="${worker.adderssDetail}"></span>
 			</div>
 			<div id="split" style="background-color: gray;height:1px;margin-top:10px;margin-left:15px"></div>
 			<div style="margin-left:15px;margin-top:10px;">

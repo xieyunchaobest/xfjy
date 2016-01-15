@@ -155,7 +155,7 @@ overflow-x:hidden;
 		<div class="dropdown col-xs-4" style="margin-right:0px;padding:0 0">
 			<button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenu1"
 				data-toggle="dropdown" style="width:100%">
-				<span id="spnWorktime" th:text="${parms.workTimeText}==null or ${parms.workTimeText}==''?'工种':${parms.workTimeText}">工时</span> <span class="caret"></span>
+				<span id="spnWorktime" th:text="${parms.workTimeText}==null or ${parms.workTimeText}==''?'工时':${parms.workTimeText}">工时</span> <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 				<li role="presentation"><a role="menuitem" tabindex="-1" value="D" onclick="queryWorker('T',this)"

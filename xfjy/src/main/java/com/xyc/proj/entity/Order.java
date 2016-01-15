@@ -179,7 +179,20 @@ public class Order {
 	@Transient
 	private String workers;//阿姨姓名
 	
+	@Column(name = "memFee")
+	private Integer memFee;
 	
+	
+	public Integer getMemFee() {
+		return memFee;
+	}
+
+
+	public void setMemFee(Integer memFee) {
+		this.memFee = memFee;
+	}
+
+
 	public Order() {
 	}
 

@@ -158,6 +158,11 @@ public class Worker {
 	@Transient
 	private Worker teacher;
 
+	@Transient
+	private String adderssDetail;//一级区域和二级区域
+	
+	@Column(name = "WORK_STATE")
+	private String workState;
 	
 	public Worker() {
 	}
@@ -512,6 +517,22 @@ public class Worker {
 
 	public void setHeadphoto(String headphoto) {
 		this.headphoto = headphoto;
+	}
+
+	public String getAdderssDetail() {
+		return adderssDetail;
+	}
+
+	public void setAdderssDetail(String adderssDetail) {
+		this.adderssDetail = adderssDetail;
+	}
+
+	public String getWorkState() {
+		return workState;
+	}
+
+	public void setWorkState(String workState) {
+		this.workState = workState;
 	}
 	
 	

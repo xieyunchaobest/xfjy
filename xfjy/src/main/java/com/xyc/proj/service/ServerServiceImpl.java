@@ -25,6 +25,7 @@ import com.xyc.proj.mapper.CommunityMapper;
 import com.xyc.proj.mapper.OrderMapper;
 import com.xyc.proj.mapper.WorkerMapper;
 import com.xyc.proj.pay.Configure;
+import com.xyc.proj.repository.AreaRepository;
 import com.xyc.proj.repository.CommunityRepository;
 import com.xyc.proj.repository.ConfigRepository;
 import com.xyc.proj.repository.OrderRepository;
@@ -73,6 +74,8 @@ public class ServerServiceImpl implements ServerService {
 	CommunityRepository communityRepository;
 	@Autowired
 	ConfigRepository configRepository;
+	@Autowired
+	AreaRepository areaRepository;
 
 	public PageView getWorkPage(Map m) {
 		PageView pv = new PageView((Integer) m.get("currentPageNum"));
@@ -157,6 +160,8 @@ public class ServerServiceImpl implements ServerService {
 		Long tearcherId=w.getTeacherId();
 		Worker teacher=workerRepository.findOne(tearcherId);
 		w.setTeacher(teacher);
+		String areaName=areaRepository.findOne(w.getAreaId()).getName();
+		w.setAdderssDetail(areaName+w.getSubArea());
 		return w;
 	}
 	

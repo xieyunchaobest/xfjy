@@ -810,6 +810,8 @@ public class ClientServiceImpl implements ClientService {
 					order= saveOrder(o);
 				}else {//有的话则取出来
 					order=oo;
+					outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
+					order.setOutTradeNo(outTradeNo);
 				}
 			}
 		}
@@ -817,7 +819,7 @@ public class ClientServiceImpl implements ClientService {
 		//int totalFee = 1;
 		int  totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(order.getTotalFee().doubleValue()*100d)) ;
 		 
-		 //totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
+		 totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
 		// 判断是否用了余额或优惠券，如果是，减去余额
 		String payMode = order.getPayMode();
 		boolean goWechat = true;// 是否还需要走微信支付

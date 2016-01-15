@@ -256,9 +256,13 @@
 	 			<td width="150px">
 	 				 <input type="text" id="salary" name="salary" maxlength="10" th:value="${worker.salary}"  /> 
 	 			</td>
-	 			<td align="right" width="100px">&nbsp;</td>
+	 			<td align="right" width="100px">状态:</td>
 	 			<td width="150px">
-	 				 &nbsp;
+	 				<select  name="workState" id="workState" style="height:30px;width:120px" >
+	 						<option value="F" th:selected="${worker.workState == 'F'}">空闲</option> 
+							<option value="S" th:selected="${worker.workState == 'S'}">服务中</option>
+							<option value="O" th:selected="${worker.workState == 'O'}">已成单</option>  
+					</select> 
 				</td>
 	 		</tr> 
 	 	 <tr>

@@ -347,6 +347,8 @@ public class ServerController {
 							file.transferTo(targetFile);
 							worker.setPhoto(fillwholename);
 						}
+					}else {
+						worker.setPhoto(w.getPhoto());
 					}
 			 }else {
 				 if(!StringUtil.isBlank(originalFilename)) {
@@ -376,6 +378,8 @@ public class ServerController {
 									headphoto.transferTo(targetFile);
 									worker.setHeadphoto(fillwholename);
 								}
+							}else {
+								worker.setHeadphoto(w.getHeadphoto());
 							}
 					 }else {
 						 if(!StringUtil.isBlank(originalFilename4Head)) {
