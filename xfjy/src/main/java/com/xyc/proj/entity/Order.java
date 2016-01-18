@@ -180,7 +180,10 @@ public class Order {
 	private String workers;//阿姨姓名
 	
 	@Column(name = "memFee")
-	private Integer memFee;
+	private Integer memFee;//会员费
+	
+	@Column(name = "INSURE_FEE")
+	private Integer insureFee;//保险费
 	
 	
 	public Integer getMemFee() {
@@ -682,6 +685,16 @@ public class Order {
 
 	public void setWorkers(String workers) {
 		this.workers = workers;
+	}
+
+
+	public Integer getInsureFee() {
+		return insureFee;
+	}
+
+
+	public void setInsureFee(Integer insureFee) {
+		this.insureFee = insureFee;
 	}
 
  

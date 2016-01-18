@@ -50,8 +50,8 @@ function createOrder(){
 	}
 	var state=$("#state").val();
 	if(state=='S'){
-		var secondPayAmount=$('#secondPayAmount').val();
-		if(secondPayAmount<=0){
+		var memFee=$('#memFee').val();
+		if(memFee<=0){
 			$("#spnwarngin").text('请选择会员费！');
 			return;
 		}
@@ -205,22 +205,30 @@ function calfee(target,flag){
 	if(flag=='A'){
 		memFee=$(target).attr('fee');
 		memFee=parseInt(memFee);
+		insurefee=$("#insureFee").val();
+		if(insurefee=='')insurefee=0;
+		insurefee=parseInt(insurefee);
 		$("#spfeeMemebership").text(memFee);
 		$("#memFee").val(memFee);
+		
 	}
 	
 	if(flag=='B'){
-		
+		memFee=$("#memFee").val();
+		if(memFee=='')memFee=0;
+		memFee=parseInt(memFee);
 		if( $("#cbinsure").prop('checked')==false  ){//家政保险费 
 			$("#cbinsure").prop('checked',true);
 			insurefee=100;
 		}else{
 			$("#cbinsure").prop('checked',false);
 		}
+		$("#insureFee").val(insurefee);
 	}
 	var secondPayAmount=memFee+ parseInt(feesalary)+insurefee;
 	$("#sptotalFee").text(secondPayAmount);
 	$("#totalFee").val(secondPayAmount);
+	$("#spInsureFee").text(insurefee);
 }
 
  
@@ -262,6 +270,7 @@ function calfee(target,flag){
   		<input type="hidden" id="payMode"  name="payMode"   />
   		<input type="hidden" id="totalFee"  name="totalFee" th:value="${order.totalFee}"  />
   		<input type="hidden" id="memFee"  name="memFee" th:value="${order.memFee}"  />
+  		<input type="hidden" id="insureFee"  name="insureFee" th:value="${order.insureFee}"  />
   		
   		<ul class="list-group" style="margin-top:15px;" th:if="${order.state=='C'}">
 			<li class="list-group-item" >
@@ -307,7 +316,8 @@ function calfee(target,flag){
 				<label>总金额：</label>
 				<span th:text="${worker.salary}" id="sptotalFee"></span><span style="color:red">元</span>
 				<span>(会员费</span><span id="spfeeMemebership"></span>
-				<span>元+月工资</span><span id="spfeesalary" th:text="${worker.salary}"></span><span>元)</span>
+				<span>元+月工资</span><span id="spfeesalary" th:text="${worker.salary}"></span><span>元+</span>
+				<span>保险费</span><span id="spInsureFee"></span><span>元)</span>
 			</li> 
 		</ul>
 		<div style="margin-top:10px;height:120px;height:120px;">

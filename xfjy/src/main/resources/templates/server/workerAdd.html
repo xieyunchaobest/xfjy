@@ -260,6 +260,7 @@
 	 			<td width="150px">
 	 				<select  name="workState" id="workState" style="height:30px;width:120px" >
 	 						<option value="F" th:selected="${worker.workState == 'F'}">空闲</option> 
+	 						<option value="R" th:selected="${worker.workState == 'R'}">预定中</option>  
 							<option value="S" th:selected="${worker.workState == 'S'}">服务中</option>
 							<option value="O" th:selected="${worker.workState == 'O'}">已成单</option>  
 					</select> 

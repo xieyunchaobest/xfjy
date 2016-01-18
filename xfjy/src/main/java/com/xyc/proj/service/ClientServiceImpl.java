@@ -810,6 +810,10 @@ public class ClientServiceImpl implements ClientService {
 					order= saveOrder(o);
 				}else {//有的话则取出来
 					order=oo;
+					order.setPayMode(o.getPayMode());
+					order.setMemFee(o.getMemFee());
+					order.setInsureFee(o.getInsureFee());
+					order.setTotalFee(o.getTotalFee());
 					outTradeNo = RandomStringGenerator.getRandomStringByLength(32);
 					order.setOutTradeNo(outTradeNo);
 				}
