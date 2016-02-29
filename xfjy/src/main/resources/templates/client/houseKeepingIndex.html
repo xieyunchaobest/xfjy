@@ -182,13 +182,17 @@ overflow-x:hidden;
 						<span style="font-weight:bold" th:text="${item.name}"></span> <br/>
 						<span th:text="__${item.yearsOld}__+'岁|'+__${item.nativePlace}__+'人'"></span> 
 					</div>
-					<div style="float:right;margin-right:20px">
-						<span>参考工资：</span><span th:text="${item.salary}">4500</span>
+					<div style="float:right;">
+						<span>参考工资：</span><span th:text="${item.salary}"></span>
+						
 					</div>
 					<div style="clear:both" ></div> 
-					<div style="margin-left:10px;width:200px;" th:text="${item.serviceTypeTwoName}">
-					</div>
+					<div style="margin-left:10px;width:200px;" th:text="${item.serviceTypeTwoName}"></div>
 				</div>
+				<img alt="" th:src="@{/app/img/worker_state_deal.jpg}"  style="width:50px;float:right;margin-right:15px" th:if="${item.workState=='O'}"/>
+				<img alt="" th:src="@{/app/img/worker_state_reserve.jpg}"  style="width:50px;float:right;margin-right:15px" th:if="${item.workState=='R'}"/>
+				<img alt="" th:src="@{/app/img/worker_state_inservice.jpg}"  style="width:50px;float:right;margin-right:15px" th:if="${item.workState=='S'}"/>
+				<img alt="" th:src="@{/app/img/worker_state_free.jpg}"  style="width:50px;float:right;margin-right:15px" th:if="${item.workState=='F'}"/>
 			</div>
 			<div id="dataappend" xtype="dt"></div> 
 		</div>

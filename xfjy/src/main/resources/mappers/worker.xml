@@ -36,7 +36,8 @@
 	    address as address,
 	    descr as descr,
 	    salary as salary ,
-	     photo as photo 
+	     photo as photo,
+	     work_state as workState
 	    from t_worker w  where state='A'  
   <include refid="getWorkerCondition"/> 
 	</sql>
