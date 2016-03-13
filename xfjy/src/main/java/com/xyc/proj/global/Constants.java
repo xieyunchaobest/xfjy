@@ -91,10 +91,12 @@ public class Constants {
 	public static final String WORK_SERVICE_TYPE_CLEAN="C";//宝洁
 	public static final String WORK_SERVICE_TYPE_JZ="J";//家政
 	
-	public static final String WORK_SERVICE_YS="YS";//YUE SHAO
-	public static final String WORK_SERVICE_YY_YE="YY";//孕婴&育儿嫂
-	public static final String WORK_SERVICE_YL="YL";//养老护工
-	public static final String WORK_SERVICE_JZ="JZ";//家政&小时工
+	public static final String WORK_SERVICE_JZY="JZY";//家政员
+	public static final String WORK_SERVICE_YY_YYS="YYS";//育婴师
+	public static final String WORK_SERVICE_YY_YS="YS";//月嫂
+	public static final String WORK_SERVICE_YL="YL";//养老
+	public static final String WORK_SERVICE_XSG="XSG";//小时工
+	public static final String WORK_SERVICE_YYHG="YYHG";//医院护工
 	
 	public static final String WORK_ROLE_ROLE_AY="A";//阿姨
 	public static final String WORK_ROLE_ROLE_TEACHER="T";//老师

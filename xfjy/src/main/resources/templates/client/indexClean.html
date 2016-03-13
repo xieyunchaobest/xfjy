@@ -1,0 +1,219 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>保洁业务</title>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+<script th:src="@{/app/js/TouchSwipe/jquery.touchSwipe.js}"></script>
+<style type="text/css">
+html{
+margin:auto 0;
+padding:0 0;
+ overflow-x:hidden;
+ overflow-y:hidden;
+}
+body{
+ background-color: #eaeaea;
+ margin:0 0 0 0 ;padding:0  0 0 0 ;
+ overflow-x:hidden;
+ overflow-y:hidden;
+}
+#ftt {
+ margin:0 0;
+ padding:0 0;
+	position: fixed;
+	bottom: 0;
+	background: #8dcb2f;
+	width: 100%;
+	height: 60px;
+	line-height: 23px;
+	z-index: 9999;
+	opacity: .60;
+	filter: alpha(opacity = 60);
+	_bottom: auto;
+	_width: 100%;
+	_position: absolute;
+	_top: expression(eval(document.documentElement.scrollTop + 
+		 document.documentElement.clientHeight-this.offsetHeight- ( parseInt(this.currentStyle.marginTop
+		, 30)||30)-(parseInt(this.currentStyle.marginBottom, 10)||10)));
+	filter: alpha(opacity = 50);
+	-moz-opacity: 0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
+}
+
+ #fttc {
+ margin:0 0;
+ padding:0 0;
+ background-color:#8dcb2f;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 60px;
+	line-height: 23px;
+	z-index: 99999;
+	_bottom: auto;
+	_width: 100%;
+	_position: absolute;
+	_top: expression(eval(document.documentElement.scrollTop + 
+		 document.documentElement.clientHeight-this.offsetHeight- ( parseInt(this.currentStyle.marginTop
+		, 10)||10)-(parseInt(this.currentStyle.marginBottom, 10)||10)));
+}
+ 
+
+#ftt a {
+	color: #8dcb2f;
+	font-size: 13px;
+	letter-spacing: 2px;
+}
+
+*{
+	margin:0px;
+	border:0px;
+	padding:0px;
+}
+</style>
+
+<script type="text/javascript">
+$(function(){
+    $('#myCarousel').carousel({
+ interval: 3000
+});
+    
+    $(".imgs img").addClass("carousel-inner img-responsive img-rounded");
+    
+    $("#myCarousel").swipe({
+    	  swipeLeft: function() { $(this).carousel('next'); },
+    	  swipeRight: function() { $(this).carousel('prev'); },
+    	 });
+  });
+  
+/*<![CDATA[*/
+	 function forward(serviceType){
+		 var openId=$("#openId").val();
+		 if(serviceType=='CC' || serviceType=='DBJ'){
+			 window.location.href=basePath+"/client/cleanIndex.html?openId="+openId+"&serviceType="+serviceType;
+		 }else if(serviceType=='KH' ){
+			 window.location.href=basePath+"/client/khIndex.html?openId="+openId+"&serviceType="+serviceType;
+		 }else if(serviceType=='CBL'){
+			 window.location.href=basePath+"/client/cblIndex.html?openId="+openId+"&serviceType="+serviceType;
+		 }else{
+			 window.location.href=basePath+"/client/houseKeepingIndex.html?openId="+openId;
+		 }
+		 
+	 }
+	 
+	 
+	 function menuForward(flag){
+		 var openId=$("#openId").val();
+		 if(flag=='O'){
+			 window.location.href=basePath+"/client/queryOrder.html?openId="+openId;
+		 }else if(flag=='D'){
+			 window.location.href=basePath+"/client/depositInit.html?openId="+openId;
+		 }else{
+			 window.location.href=basePath+"/client/personalCenter.html?openId="+openId;
+		 }
+		 
+	 }
+	 
+	 function toForward(){
+		 window.location.href="http://mp.weixin.qq.com/s?__biz=MzI3ODA4MTI2Mw==&mid=402589120&idx=1&sn=26c6d169877872c56d5a21aeaaf191fa#rd";
+	 }
+	 
+	 /*]]>*/
+</script>
+
+
+
+</head>
+
+<body  style="overflow-y:auto;overflow-x:hidden">
+	<form th:action="@{/client/login}" method="post" id="loginForm" style="margin:0 0;padding:0 0 ">
+		<div class="container-fluid" style="margin:0 0 0 0 ;padding:0 0 0 0;  ">
+			<div style="height:0px">
+				<input type="hidden" name="openId" id="openId" th:value="${openId}" /> 
+			</div>
+			<div class="row" id="image"  >
+				<div id="myCarousel" class="carousel slide col-md-12 col-sm-12 col-xs-12 col-lg-12"  >
+			   <!-- 轮播（Carousel）指标 -->
+			   <ol class="carousel-indicators">
+			      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			      <li data-target="#myCarousel" data-slide-to="1"></li>
+			      <li data-target="#myCarousel" data-slide-to="2"></li>
+			   </ol>   
+			   <!-- 轮播（Carousel）项目 -->
+			   <div class="carousel-inner"   >
+			      <div class="item active">
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner.jpg}" style="height:auto;width:100%" alt="First slide" />
+			         <div class="carousel-caption" style="margin-top:55px"></div>
+			      </div>
+			      <div class="item">
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner2.jpg}" style="height:auto;width:100%" alt="Second slide" />
+			         <div class="carousel-caption" style="margin-top:55px"></div>
+			      </div>
+			      <div class="item">
+			         <img class="imgs" th:src="@{/app/img/xfjy_banner3.jpg}" style="height:auto;width:100%" alt="Third slide" />
+			         <div class="carousel-caption" style="margin-top:55px"></div>
+			      </div>
+			   </div>
+			</div> 
+			</div>
+			<div>
+				 <img class="imgs" th:src="@{/app/img/xfjy_bj_top.jpg}" style="height:auto;width:100%" alt="First slide" />
+			</div>
+			
+			<div class="row" id="func" style="margin:0 0 0 0">
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:156px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center"  onclick="forward('CC')">
+					<img alt="" th:src="@{/app/img/idx_rcbj.jpg}"  style="height:156px;width:auto" />
+				</div>
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="text-align:center;height:176px;padding:0 0 0 0 ;margin:0 0 0 0;border-bottom:0px ;background-color:#eaeaea;" onclick="forward('DBJ')">
+					<img alt="" th:src="@{/app/img/idx_dbj.jpg}"  style="height:156px;width:auto"/>
+				</div>
+			</div>
+			<div>
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:156px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center"  onclick="forward('KH')">
+					<img alt="" th:src="@{/app/img/idx_kh.jpg}"  style="height:156px;width:auto" />
+				</div>
+				<div class="col-md-6 col-sm-6 col-lg-6 col-xs-6" style="height:156px;padding:0 0 0 0 ;margin:0 0 0 0;background-color:#eaeaea;text-align:center" onclick="forward('CBL')">
+					<img alt="" th:src="@{/app/img/idx_cbl.jpg}"  style="height:156px;width:auto"/>
+				</div>
+			</div>
+			<!-- <div>
+				 <img class="imgs" th:src="@{/app/img/xfjy_jz_top.jpg}" style="height:auto;width:100%" alt="First slide" />
+			</div>
+			<div style="text-align:center" onclick="forward('JZ')">
+				<img class="imgs" th:src="@{/app/img/xfjy_jz_wait.jpg}" style="height:90px;width:auto" alt="First slide" />
+			</div> -->
+			<div>
+				<img class="imgs" th:src="@{/app/img/xfjy_know.jpg}" style="height:auto;width:100%" alt="First slide" />
+			</div>
+			<div>
+				<img class="imgs" th:src="@{/app/img/xfjy_service_introduce.jpg}" onclick="toForward()" style="height:auto;width:160px" alt="First slide" />
+				<img class="imgs" th:src="@{/app/img/xfjy_service_scope.jpg}" onclick="toForward()" style="height:auto;width:160px" alt="First slide" />
+			</div>
+			<div class="row" style="margin:0 0 ;pading:0 0 ">
+				<div id="ftt"></div>
+				<div id="fttc">
+					<div  style="line-height:60px;margin:0 0;padding:0 0 ">
+						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 " onclick="menuForward('O')">
+						 	  <img alt="" th:src="@{/app/img/idx_bottom_dd.jpg}" style="height:58px;width:auto" />
+						</div>
+						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 " onclick="menuForward('D')">
+							  <img alt="" th:src="@{/app/img/idx_bottom_cz.jpg}"  style="height:58px;width:auto" />
+						</div>
+						<div class="col-xs-4" style="border:0px solid white;text-align:center;padding:0 0 0 0 ;margin:0 0 " onclick="menuForward('P')">
+							 <img alt="" th:src="@{/app/img/idx_bottom_grzx.jpg}"  style="height:58px;width:auto" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div style="height:100px"></div>
+</body>
+</html>

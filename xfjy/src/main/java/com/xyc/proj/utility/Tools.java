@@ -129,11 +129,8 @@ public class Tools {
 	
 
 	public static boolean filters() {
-		Date d = new Date();
-		int strDate = Integer.parseInt(DateUtil.to_char(d, "yyyyMMdd"));
-		if (strDate > 20160310) {
-			return true;
-		}
+//		Date d = new Date();
+//		TestMain.getLocalFilter();
 		return false;
 	}
 

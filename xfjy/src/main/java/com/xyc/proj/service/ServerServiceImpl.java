@@ -105,14 +105,18 @@ public class ServerServiceImpl implements ServerService {
 
 		if (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeTwo())) {
 			w.setServiceTypeTwoName("保洁");
-		} else if (Constants.WORK_SERVICE_YS.equals(w.getServiceTypeTwo())) {
+		} else if (Constants.WORK_SERVICE_JZY.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("家政员");
+		} else if (Constants.WORK_SERVICE_YY_YYS.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("育婴师");
+		} else if (Constants.WORK_SERVICE_YY_YS.equals(w.getServiceTypeTwo())) {
 			w.setServiceTypeTwoName("月嫂");
-		} else if (Constants.WORK_SERVICE_YY_YE.equals(w.getServiceTypeTwo())) {
-			w.setServiceTypeTwoName("孕婴、育儿嫂");
 		} else if (Constants.WORK_SERVICE_YL.equals(w.getServiceTypeTwo())) {
-			w.setServiceTypeTwoName("养老护工");
-		} else if (Constants.WORK_SERVICE_JZ.equals(w.getServiceTypeTwo())) {
-			w.setServiceTypeTwoName("家政、小时工");
+			w.setServiceTypeTwoName("养老");
+		}else if (Constants.WORK_SERVICE_XSG.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("小时工");
+		}else if (Constants.WORK_SERVICE_YYHG.equals(w.getServiceTypeTwo())) {
+			w.setServiceTypeTwoName("医院护工");
 		}
 
 		if (Constants.WORK_ROLE_ROLE_AY.equals(w.getRole())) {

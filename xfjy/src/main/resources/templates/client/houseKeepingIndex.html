@@ -28,12 +28,32 @@
 			$("#dvloadmore").text('没有更多数据了...');
 		}
 		
+		//处理从家政首页带过来的工种参数
+		initParameter();
 	});
 
 	function switchPage(url) {
 		var userName = $("#userName").val();
 		url = url + "?userName=" + userName;
 		$("#contentPage").attr("src", basePath + url);
+	}
+	
+	function initParameter(){
+		var serviceTypeTwo=$("#serviceTypeTwo").val();
+		if(serviceTypeTwo=='JZY'){
+			$("#spnserviceTypeTwo").text('家政员');
+		}else if(serviceTypeTwo=='YYS'){
+			$("#spnserviceTypeTwo").text('育婴师');
+		}else if(serviceTypeTwo=='YS'){
+			$("#spnserviceTypeTwo").text('月嫂');
+		}else if(serviceTypeTwo=='YL'){
+			$("#spnserviceTypeTwo").text('养老');
+		}else if(serviceTypeTwo=='XSG'){
+			$("#spnserviceTypeTwo").text('小时工');
+		}else if(serviceTypeTwo=='YYHG'){
+			$("#spnserviceTypeTwo").text('医院护工');
+		}
+		
 	}
 	
 	function queryWorker(flag,target){
@@ -137,16 +157,22 @@ overflow-x:hidden;
 			</button>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#" value="JZY" onclick="queryWorker('W',this)">家政员</a></li>
+					<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#"  value="YYS" onclick="queryWorker('W',this)">育婴师</a></li>
+					<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
 					href="#" value="YS" onclick="queryWorker('W',this)">月嫂</a></li>
-					<li role="presentation" class="divider"></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#"  value="YY" onclick="queryWorker('W',this)">孕婴、育儿嫂</a></li>
-					<li role="presentation" class="divider"></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#" value="YL" onclick="queryWorker('W',this)">养老护工</a></li>
 				<li role="presentation" class="divider"></li>
 				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#" value="JZ" onclick="queryWorker('W',this)">家政、小时工</a></li>
+					href="#" value="YL" onclick="queryWorker('W',this)">养老</a></li>
+				<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#" value="XSG" onclick="queryWorker('W',this)">小时工</a></li>
+				<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1"
+					href="#" value="YYHG" onclick="queryWorker('W',this)">医院护工</a></li>
 				<li role="presentation" class="divider"></li>
 				<li role="presentation"><a role="menuitem" tabindex="-1"
 					href="#" value="" onclick="queryWorker('W',this)">所有工种</a></li>

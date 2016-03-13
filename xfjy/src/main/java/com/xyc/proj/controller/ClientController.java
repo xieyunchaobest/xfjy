@@ -64,6 +64,23 @@ public class ClientController {
 	Properties properties;
 	@Autowired
 	ClientService clientService;
+	
+	//菜单,宝洁
+	@RequestMapping("/client/login4bj.html")
+	public String login4bj(@RequestParam(value = "code", required = false) String code,
+			@RequestParam(value = "flagFrom", required = false,defaultValue="BJ") String flagFrom,
+			Model model,HttpSession session) {
+		return toLogin(code, flagFrom, model, session);
+	}
+	
+	//菜单，家政
+	@RequestMapping("/client/login4jz.html")
+	public String login4jz(@RequestParam(value = "code", required = false) String code,
+			@RequestParam(value = "flagFrom", required = false,defaultValue="JZ") String flagFrom,
+			Model model,HttpSession session) {
+		return toLogin(code, flagFrom, model, session);
+	}
+	
 
 	/**
 	 * 登录
@@ -74,8 +91,15 @@ public class ClientController {
 	 */
 	@RequestMapping("/client/login.html")
 	public String toLogin(@RequestParam(value = "code", required = false) String code,
+			@RequestParam(value = "flagFrom", required = false) String flagFrom,
 			Model model,HttpSession session) {
 		String res = "client/index";
+		if("BJ".equals(flagFrom)) {
+			res="client/indexClean";
+		}else if("JZ".equals(flagFrom)) {
+			res="client/indexHouseKeeping";
+		} 
+		
 		try {
 			String openId="";
 			if(session.getAttribute("openId")!=null) {
@@ -294,6 +318,32 @@ public class ClientController {
 	public String index(@RequestParam(value = "openId", required = true) String openId, Model model) {
 		model.addAttribute("openId", openId);
 		return "client/index";
+	}
+	
+	/**
+	 * 宝洁首页
+	 * 
+	 * @param areaId
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/client/indexClean.html")
+	public String indexClean(@RequestParam(value = "openId", required = true) String openId, Model model) {
+		model.addAttribute("openId", openId);
+		return "client/indexClean";
+	}
+	
+	/**
+	 * 家政首页
+	 * 
+	 * @param areaId
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/client/indexHouseKeeping.html")
+	public String indexHouseKeeping(@RequestParam(value = "openId", required = true) String openId, Model model) {
+		model.addAttribute("openId", openId);
+		return "client/indexHouseKeeping";
 	}
 
 	

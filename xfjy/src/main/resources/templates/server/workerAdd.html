@@ -188,10 +188,12 @@
 	 			<td width="150px">
 	 				<select  name="serviceTypeTwo" id="serviceTypeTwo" style="height:30px;width:120px" >
 							<option value="C"  th:selected="${worker.serviceTypeTwo == 'C'}">保洁</option>
+							<option value="JZY" th:selected="${worker.serviceTypeTwo == 'JZY'}">家政员</option>
+							<option value="YYS" th:selected="${worker.serviceTypeTwo == 'YYS'}">育婴师</option> 
 							<option value="YS" th:selected="${worker.serviceTypeTwo == 'YS'}">月嫂</option>
-							<option value="YY" th:selected="${worker.serviceTypeTwo == 'YY'}">孕婴、育儿嫂</option> 
-							<option value="YL" th:selected="${worker.serviceTypeTwo == 'YL'}">养老护工</option>
-							<option value="JZ" th:selected="${worker.serviceTypeTwo == 'JZ'}">家政、小时工</option> 
+							<option value="YL" th:selected="${worker.serviceTypeTwo == 'YL'}">养老</option> 
+							<option value="XSG" th:selected="${worker.serviceTypeTwo == 'XSG'}">小时工</option> 
+							<option value="YYHG" th:selected="${worker.serviceTypeTwo == 'YYHG'}">医院护工</option> 
 					</select> 
 	 			</td>
 	 		</tr> 

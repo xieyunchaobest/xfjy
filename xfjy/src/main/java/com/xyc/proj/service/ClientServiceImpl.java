@@ -492,6 +492,7 @@ public class ClientServiceImpl implements ClientService {
 	 public static void main(String arg[]) {
 		 ClientServiceImpl cs=new ClientServiceImpl();
 		// cs.deleteMenu();
+		// cs.createWeChatMenu();
 		 com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
 			String accessToken = tokenJson.getString("access_token");
 			com.alibaba.fastjson.JSONObject res = WeixinUtil.httpRequest(Constants.URL_CREATE_MENU + accessToken, "POST",
@@ -1176,9 +1177,23 @@ public class ClientServiceImpl implements ClientService {
 		Map item1 = new HashMap();
 		item1.put("type", "view");
 		item1.put("name", "约工");
-		item1.put("url",
-				"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce20c658c1eb222f&redirect_uri=http://weixin.tjxfjz.com/xfjy/client/login.html&response_type=code&scope=snsapi_userinfo&state=1&connect_redirect=1#wechat_redirect");
-
+//		item1.put("url",
+//				"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce20c658c1eb222f&redirect_uri=http://weixin.tjxfjz.com/xfjy/client/login.html&response_type=code&scope=snsapi_userinfo&state=1&connect_redirect=1#wechat_redirect");
+		List item1SubList=new ArrayList();
+		Map  item1Subbj=new HashMap();
+		item1Subbj.put("type", "view");
+		item1Subbj.put("name", "保洁业务");
+		item1Subbj.put("url", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce20c658c1eb222f&redirect_uri=http://weixin.tjxfjz.com/xfjy/client/login4bj.html&response_type=code&scope=snsapi_userinfo&state=1&connect_redirect=1#wechat_redirect");
+		Map  item2Subbj=new HashMap();
+		item2Subbj.put("type", "view");
+		item2Subbj.put("name", "家政业务");
+		item2Subbj.put("url", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxce20c658c1eb222f&redirect_uri=http://weixin.tjxfjz.com/xfjy/client/login4jz.html&response_type=code&scope=snsapi_userinfo&state=1&connect_redirect=1#wechat_redirect");
+		item1SubList.add(item1Subbj);
+		item1SubList.add(item2Subbj);
+		
+		item1.put("sub_button", item1SubList);
+		
+		
 		Map  item2=new HashMap();
 		item2.put("name", "服务说明");
 		List item2List=new ArrayList();
