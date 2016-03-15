@@ -88,8 +88,8 @@ body, html {
 			</div>
 			<div style="height:70px;">
 				<div style="float:left;height:70px;width:70px;display:block;margin-left:15px;">
-					<img th:src="@{/app/img/ayi.jpg}" style="width:48px;height:auto"/>
-					<!-- <img th:src="@{'/app/uploadfiles/workerphoto/'+${worker.teacher.photo}}" style="width:48px;height:auto"/> -->
+					<!-- <img th:src="@{/app/img/ayi.jpg}" style="width:48px;height:auto"/>-->
+					<img th:src="@{'/app/uploadfiles/workerphoto/'+${worker.teacher.photo}}" style="width:48px;height:auto"/>
 				</div>
 				<div style="float:left;width:200px;height:70px;">
 					<span style="font-weight:bold" th:text="${worker.teacher.name}"></span><br/>

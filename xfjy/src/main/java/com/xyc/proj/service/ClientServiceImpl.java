@@ -491,7 +491,7 @@ public class ClientServiceImpl implements ClientService {
 	
 	 public static void main(String arg[]) {
 		 ClientServiceImpl cs=new ClientServiceImpl();
-		// cs.deleteMenu();
+		 cs.deleteMenu();
 		// cs.createWeChatMenu();
 		 com.alibaba.fastjson.JSONObject tokenJson = WeixinUtil.httpRequest(Constants.URL_GET_TOKEN, "GET", null);
 			String accessToken = tokenJson.getString("access_token");
@@ -824,7 +824,7 @@ public class ClientServiceImpl implements ClientService {
 		//int totalFee = 1;
 		int  totalFee=(int)  Double.parseDouble(new DecimalFormat("#.00").format(order.getTotalFee().doubleValue()*100d)) ;
 		 
-		 totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
+		//totalFee=(int)(getMockTotalFee(order.getTotalFee())*100);
 		// 判断是否用了余额或优惠券，如果是，减去余额
 		String payMode = order.getPayMode();
 		boolean goWechat = true;// 是否还需要走微信支付
@@ -1211,9 +1211,16 @@ public class ClientServiceImpl implements ClientService {
 		item2sub3.put("type", "click");
 		item2sub3.put("name", "服务电话 ");
 		item2sub3.put("key", "servicePhone");
+		
+		Map item2sub4=new HashMap();
+		item2sub4.put("type", "view");
+		item2sub4.put("name", "平台服务时间");
+		item2sub4.put("url", "http://mp.weixin.qq.com/s?plg_nld=1&mid=402589120&plg_auth=1&plg_uin=1&plg_dev=1&sn=4f74e52247b6c9d259eaba5e36a59714&idx=4&plg_nld=1&__biz=MzI3ODA4MTI2Mw%3D%3D&plg_usr=1&plg_vkey=1#rd");
+		
 		item2List.add(item2sub1);
 		item2List.add(item2sub2);
 		item2List.add(item2sub3);
+		item2List.add(item2sub4);
 		
 		item2.put("sub_button", item2List);
 		

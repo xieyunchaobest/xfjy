@@ -55,5 +55,7 @@ public interface ServerService {
 	public Worker findWorkerPlus(Worker w) ;
 	
 	public List findWorkerByTeacherId(Long teacherId) ;
+	
+	List findWorkerByStateAndRole(String state,String role);
 
 }

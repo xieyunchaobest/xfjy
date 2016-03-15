@@ -511,4 +511,8 @@ public class ServerServiceImpl implements ServerService {
 	public void saveConfig(Config config) {
 		configRepository.save(config);
 	}
+	
+	public List findWorkerByStateAndRole(String state,String role) {
+		return workerRepository.findByStateAndRole(state,role);
+	}
 }

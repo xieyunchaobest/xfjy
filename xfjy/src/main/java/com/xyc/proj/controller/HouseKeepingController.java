@@ -153,6 +153,8 @@ public class HouseKeepingController {
 		List ayiList=new ArrayList();
 		if(w!=null && Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
 			ayiList=serverService.findWorkerByTeacherId(w.getId());
+		}else if(w!=null && "M".equals(w.getRole())) {
+			ayiList=serverService.findWorkerByStateAndRole("A","A");
 		}
 		model.addAttribute("order", o);
 		model.addAttribute("ayiList", ayiList);

@@ -36,5 +36,7 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
 	
 	List findByTeacherId(Long teacherId);
 	
+	List findByStateAndRole(String state,String role);
+	
 	
 }
