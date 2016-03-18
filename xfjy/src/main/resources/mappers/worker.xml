@@ -73,6 +73,9 @@
 		<if test="workTime != null and workTime !=''">
 		 	<![CDATA[ and WORK_TIME=  #{workTime}  ]]>
 		</if> 
+		<if test="teacherId != null and teacherId !=''">
+			 <![CDATA[ and    teacher_Id  =#{teacherId}  ]]>
+		</if> 
 	</sql>
  
 	

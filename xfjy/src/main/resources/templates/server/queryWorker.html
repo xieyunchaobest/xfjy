@@ -109,10 +109,12 @@
 								style="height: 25px; width: 120px">
 								<option value="">全部</option>
 								<option value="C" th:selected="${parms.serviceTypeTwo == 'C'}">保洁</option>
+								<option value="JZY" th:selected="${parms.serviceTypeTwo == 'JZY'}">家政员</option>
+								<option value="YYS" th:selected="${parms.serviceTypeTwo == 'YYS'}">育婴师</option>
 								<option value="YS" th:selected="${parms.serviceTypeTwo == 'YS'}">月嫂</option>
-								<option value="YY" th:selected="${parms.serviceTypeTwo == 'YY'}">孕婴、育儿嫂</option>
-								<option value="YL" th:selected="${parms.serviceTypeTwo == 'YL'}">养老护工</option>
-								<option value="JZ" th:selected="${parms.serviceTypeTwo == 'JZ'}">家政、小时工</option>
+								<option value="YL" th:selected="${parms.serviceTypeTwo == 'YL'}">养老</option>
+								<option value="XSG" th:selected="${parms.serviceTypeTwo == 'XSG'}">小时工</option>
+								<option value="YYHG" th:selected="${parms.serviceTypeTwo == 'YYHG'}">医院护工</option>
 							</select>
 						</div>
 					</div>
@@ -132,6 +134,14 @@
 							<option value="">全部</option>
 							<option value="D" th:selected="${parms.workTime == 'D'}">白班</option>
 							<option value="H" th:selected="${parms.workTime== 'H'}">24H</option>
+						</select>
+					</div>
+					<div class="col-xs-4" style="width: 220px">
+						<label>老师:</label> <select name="teacherId"
+							style="height: 25px; width: 120px">
+							<option value="">全部</option>
+							<option th:each="tea : ${teacherList}" th:value="${tea.id}"
+									th:text="${tea.name}" th:selected="${parms.teacherId == tea.id}"></option>
 						</select>
 					</div>
 				</div>

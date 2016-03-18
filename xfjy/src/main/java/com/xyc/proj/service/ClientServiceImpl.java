@@ -60,6 +60,7 @@ import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.MsgUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
+import com.xyc.proj.utility.Tools;
 import com.xyc.proj.utility.WeixinUtil;
 
 @Service
@@ -515,7 +516,7 @@ public class ClientServiceImpl implements ClientService {
 					
 					if (Constants.ORDER_STATE_FINISH.equals(o.getState())) {
 						//如果是家政的单子，需要重新算一下价格。如果单子状态为已完成，就把两个单子的价格加在一起
-						if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {
+						if(Tools.isjz(o.getServiceType())) {
 							Order oo=orderRepository.findByFollowOrderId(o.getId());
 							double totalFee=oo.getTotalFee()+o.getTotalFee();
 							o.setTotalFee(totalFee);
@@ -541,8 +542,18 @@ public class ClientServiceImpl implements ClientService {
 			o.setServiceTypeText("擦玻璃");
 		} else if (Constants.SERVICE_TYPE_KH.equals(o.getServiceType())) {
 			o.setServiceTypeText("开荒");
-		} else if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {
-			o.setServiceTypeText("家政");
+		} else if(Constants.WORK_SERVICE_JZY.equals(o.getServiceType())) {
+			o.setServiceTypeText("家政员");
+		}else if(Constants.WORK_SERVICE_YY_YYS.equals(o.getServiceType())) {
+			o.setServiceTypeText("育婴师");
+		}else if(Constants.WORK_SERVICE_YY_YS.equals(o.getServiceType())) {
+			o.setServiceTypeText("月嫂");
+		}else if(Constants.WORK_SERVICE_YL.equals(o.getServiceType())) {
+			o.setServiceTypeText("养老");
+		}else if(Constants.WORK_SERVICE_XSG.equals(o.getServiceType())) {
+			o.setServiceTypeText("小时工");
+		}else if(Constants.WORK_SERVICE_YYHG.equals(o.getServiceType())) {
+			o.setServiceTypeText("医院护工");
 		}
 
 		if (Constants.CYCLE_TYPE_BY.equals(o.getCycleType())) {
@@ -937,7 +948,7 @@ public class ClientServiceImpl implements ClientService {
 					c.setState(Constants.STATE_P);
 					couponRepository.save(c);
 				}
-				if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {//如果是家政。家政的状态分为试用/完成
+				if(Tools.isjz(o.getServiceType())) {//如果是家政。家政的状态分为试用/完成
 					if(Constants.ORDER_STATE_CONFIRMED.equals(o.getState())) {
 						order.setState(Constants.ORDER_STATE_PROBATION);
 					}else if(Constants.ORDER_STATE_PROBATION.equals(o.getState())) {
@@ -964,7 +975,7 @@ public class ClientServiceImpl implements ClientService {
 				order.setWechatfee(finalPay4Wechat/100d);
 				orderRepository.save(order);
 				//推送客服消息
-				if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {
+				if(Tools.isjz(order.getServiceType())) {
 					Worker ayi=workerRepository.findOne(order.getWorkerId());
 					Worker teacher=workerRepository.findOne(order.getTeacherId());
 					String phone=teacher.getPhone();
@@ -1016,7 +1027,7 @@ public class ClientServiceImpl implements ClientService {
 			Order order = orderRepository.findByOutTradeNo(outTradeNo);
 			if (order != null) {
 				order.setOrderId(orderId);
-				if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {//如果是家政。家政的状态分为试用/完成
+				if(Tools.isjz(order.getServiceType())) {//如果是家政。家政的状态分为试用/完成
 					if(Constants.ORDER_STATE_CONFIRMED.equals(order.getState())) {
 						order.setState(Constants.ORDER_STATE_PROBATION);
 					}else if(Constants.ORDER_STATE_PROBATION.equals(order.getState())) {
@@ -1041,7 +1052,7 @@ public class ClientServiceImpl implements ClientService {
 				order.setPayTime(new Date());
 				orderRepository.save(order);
 				
-				if(Constants.SERVICE_TYPE_JZ.equals(order.getServiceType())) {
+				if(Tools.isjz(order.getServiceType())) {
 					Worker ayi=workerRepository.findOne(order.getWorkerId());
 					Worker teacher=workerRepository.findOne(order.getTeacherId());
 					String phone=teacher.getPhone();

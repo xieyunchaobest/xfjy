@@ -76,6 +76,7 @@ public class ServerController {
 			@RequestParam(value = "role", required = false) String role,
 			@RequestParam(value = "workTime", required = false) String workTime,
 			@RequestParam(value = "orderId", required = false) String orderId,
+			@RequestParam(value = "teacherId", required = false) String teacherId,
 			@RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum,
 			@RequestParam(value = "orderByStr", required = false, defaultValue = "name,desc") String orderBy,
 			Model model) {
@@ -96,6 +97,13 @@ public class ServerController {
 		} else {
 			parmMap.put("storeId", "");
 		}
+		
+		if (!StringUtil.isBlank(teacherId)) {
+			long lteacherId = Long.parseLong(teacherId);
+			parmMap.put("teacherId", lteacherId);
+		} else {
+			parmMap.put("teacherId", "");
+		}
 	 
 
 		parmMap.put("name", name);
@@ -108,8 +116,10 @@ public class ServerController {
 
 		List areaList = clientService.findAreaList();
 		List storeList = serverService.findStore();
+		List teacherList=serverService.findWorkerByStateAndRole("A", "T");
 		model.addAttribute("areaList", areaList);
 		model.addAttribute("storeList", storeList);
+		model.addAttribute("teacherList", teacherList);
 		if (StringUtil.isBlank(orderId)) {
 			return "server/queryWorker";
 		} else {

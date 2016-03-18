@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.HashMap;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 
 import com.xyc.proj.entity.Order;
+import com.xyc.proj.global.Constants;
 
 
 public class Tools {
@@ -134,4 +133,17 @@ public class Tools {
 		return false;
 	}
 
+	public static boolean isjz(String busi) {
+		if(busi.equals(Constants.WORK_SERVICE_JZY) || 
+			busi.equals(Constants.WORK_SERVICE_YY_YYS) ||
+			busi.equals(Constants.WORK_SERVICE_YY_YS) ||
+			busi.equals(Constants.WORK_SERVICE_YL) ||
+			busi.equals(Constants.WORK_SERVICE_XSG)  ||
+			busi.equals(Constants.WORK_SERVICE_YYHG)  
+		) {
+			return true;
+		}
+		
+		return false;
+	}
 }

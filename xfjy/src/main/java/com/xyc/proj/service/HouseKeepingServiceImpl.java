@@ -16,6 +16,7 @@ import com.xyc.proj.repository.ClientUserRepository;
 import com.xyc.proj.repository.OrderRepository;
 import com.xyc.proj.repository.OrderWorkerRepository;
 import com.xyc.proj.repository.WorkerRepository;
+import com.xyc.proj.utility.Tools;
 
 @Service
 public class HouseKeepingServiceImpl implements HouseKeepingService {
@@ -54,7 +55,7 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
 	}
 
 	public void createOrder(Order o) {
-		o.setServiceType(Constants.SERVICE_TYPE_JZ);
+		//o.setServiceType(Constants.SERVICE_TYPE_JZ);
 		o.setState(Constants.ORDER_STATE_UNPAY);
 		Worker worker=serverService.findWorker(o.getWorkerId());
 		double salary=worker.getSalary();
@@ -84,7 +85,7 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
 //		double totalFee=Double.parseDouble( new DecimalFormat("#.00").format(salary/22.0d*3d*1.2d)) ;
 //		o.setTotalFee(totalFee);
 		//如果是家政的单子，需要重新算一下价格。如果单子状态为已完成，就把两个单子的价格加在一起
-		if(Constants.SERVICE_TYPE_JZ.equals(o.getServiceType())) {
+		if(Tools.isjz(o.getServiceType())) {
 			Order oo=orderRepository.findByFollowOrderId(o.getId());
 			if(oo!=null) {
 				double totalFee=oo.getTotalFee()+o.getTotalFee();
