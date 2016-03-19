@@ -40,7 +40,12 @@
  			var state=$('input:checked').attr('state');
  			
  			var serviceType=$(chb).attr('serviceType');
- 			if(serviceType=='JZ'){
+ 			if(serviceType=='JZY'||
+ 					serviceType=='YYS'|| 
+ 					serviceType=='YS'||
+ 					serviceType=='YL'||
+ 					serviceType=='XSG'||
+ 					serviceType=='YYHG'){
  				if(state=='F'){
  	 				alert('订单状态不符合分配要求！');
  	 				return;
