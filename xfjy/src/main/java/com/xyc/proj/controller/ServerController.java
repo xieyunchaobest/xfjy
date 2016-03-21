@@ -70,6 +70,7 @@ public class ServerController {
 
 	@RequestMapping(value = "/server/queryWorker.html", method = { RequestMethod.POST, RequestMethod.GET })
 	public String queryWorker(@RequestParam(value = "areaId", required = false) String areaId,
+			HttpSession session,
 			@RequestParam(value = "storeId", required = false) String storeId,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "serviceTypeTwo", required = false) String serviceTypeTwo,
@@ -98,12 +99,16 @@ public class ServerController {
 			parmMap.put("storeId", "");
 		}
 		
-		if (!StringUtil.isBlank(teacherId)) {
-			long lteacherId = Long.parseLong(teacherId);
-			parmMap.put("teacherId", lteacherId);
-		} else {
-			parmMap.put("teacherId", "");
+		Worker w=(Worker)session.getAttribute("user");
+		if(w!=null && Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
+			parmMap.put("teacherId", w.getId());
 		}
+//		if (!StringUtil.isBlank(teacherId)) {
+//			long lteacherId = Long.parseLong(teacherId);
+//			parmMap.put("teacherId", lteacherId);
+//		} else {
+//			parmMap.put("teacherId", "");
+//		}
 	 
 
 		parmMap.put("name", name);
@@ -119,7 +124,7 @@ public class ServerController {
 		List teacherList=serverService.findWorkerByStateAndRole("A", "T");
 		model.addAttribute("areaList", areaList);
 		model.addAttribute("storeList", storeList);
-		model.addAttribute("teacherList", teacherList);
+//		model.addAttribute("teacherList", teacherList);
 		if (StringUtil.isBlank(orderId)) {
 			return "server/queryWorker";
 		} else {
