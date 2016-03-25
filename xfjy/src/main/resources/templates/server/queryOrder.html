@@ -14,7 +14,7 @@
 <script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
 <script th:inline="javascript" th:src="@{/app/js/commonSort.js}"></script>
 <script th:inline="javascript" th:src="@{/app/js/commonPage.js}"></script>
-<script th:src="@{/app/js/vendor/bootstrap-datetimepicker.min.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap-datetimepicker.js}"></script>
 <script th:src="@{/app/js/public.js}"></script>
 
 <script type="text/javascript">
@@ -144,6 +144,7 @@
 						<th>手机号</th>
 						<th>地址</th>
 						<th>支付金额</th>
+						<th>状态</th>
 						<th>交易时间</th>
 						<th>交易方式</th>
 						<th>阿姨</th>
@@ -158,7 +159,7 @@
 						<th>面积</th>
 						<th>内窗数量</th>
 						<th>阳台数量</th>
-						<th>状态</th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -171,6 +172,7 @@
 						<td th:text="${item.mobileNo}"></td>
 						<td nowrap='nowrap' th:text="${item.fullAddress}"></td>
 						<td th:text="${item.totalFee}"></td>
+						<td th:text="${item.stateText}"></td>
 						<td th:text="${item.payTime}"></td>
 						<td th:text="${item.payModeText}"></td>
 						<td th:text="${item.workers}"></td>
@@ -185,7 +187,6 @@
 						<td th:text="${item.area}"></td>
 						<td th:text="${item.windowCount}"></td>
 						<td th:text="${item.balconyCount}"></td>
-						<td th:text="${item.stateText}"></td>
 					</tr>
 				</tbody>
 			</table>
@@ -198,7 +199,7 @@
 					</nav>
 				</div> 
 				<div style="float: left; margin-right: 15px;">
-					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"  th:if="${session.user.role=='M'} or  ${session.user.role=='D'} or ${session.user.role=='T'}"  
 						onclick="showModal()">派单</button>
 				</div> 
 			</div>

@@ -83,8 +83,14 @@
 	  <if test="mobileNo != null and mobileNo !=''">
 			 <![CDATA[ and    mobileNo =#{mobileNo}  ]]>
 	  </if>
-	  <if test="teacherId != null and teacherId !=''">
+	  <if test="teacherId != null and teacherId !='' and ( role == null or role=='') ">
 			 <![CDATA[ and    teacherId =#{teacherId}  ]]>
+	  </if>
+	  <if test="teacherId != null and teacherId !='' and role != null and role =='D'.toString()">
+			 <![CDATA[ and    (teacherId =#{teacherId}   or
+			 teacherId in (select id from T_WORKER w where w.TEACHER_ID=#{teacherId})
+			 
+			 )]]>
 	  </if>
 	  
 	  order by payTime desc

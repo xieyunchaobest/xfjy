@@ -180,6 +180,7 @@
 	 			<td align="right" width="100px">一级服务类型：</td>
 	 			<td width="150px">
 	 				<select  name="serviceTypeOne" id="serviceTypeOne" style="height:30px;width:120px" >
+	 						<option value=""   th:selected="${worker.serviceTypeOne == ''}">无</option>
 							<option value="C"   th:selected="${worker.serviceTypeOne == 'C'}">保洁</option>
 							<option value="J" th:selected="${worker.serviceTypeOne == 'J'}">家政</option> 
 					</select>
@@ -187,6 +188,7 @@
 	 			<td align="right" width="100px">二级服务类型：</td>
 	 			<td width="150px">
 	 				<select  name="serviceTypeTwo" id="serviceTypeTwo" style="height:30px;width:120px" >
+	 						<option value=""  th:selected="${worker.serviceTypeTwo == ''}">无</option>
 							<option value="C"  th:selected="${worker.serviceTypeTwo == 'C'}">保洁</option>
 							<option value="JZY" th:selected="${worker.serviceTypeTwo == 'JZY'}">家政员</option>
 							<option value="YYS" th:selected="${worker.serviceTypeTwo == 'YYS'}">育婴师</option> 
@@ -202,7 +204,11 @@
 	 			<td width="150px">
 	 				<select  name="role" id="role" style="height:30px;width:120px" >
 							<option value="T" th:selected="${worker.role == 'T'}">老师</option>
-							<option value="A" th:selected="${worker.role == 'A'}">阿姨</option>  
+							<option value="A" th:selected="${worker.role == 'A'}">阿姨</option>
+							<option value="D" th:selected="${worker.role == 'D'}">店长</option>    
+							<option value="K" th:selected="${worker.role == 'K'}">客服</option>
+							<option value="C" th:selected="${worker.role == 'C'}">财务</option>
+							<option value="X" th:selected="${worker.role == 'X'}">行政</option>
 					</select> 
 	 			</td>
 	 			<td align="right" width="100px">老师：</td>

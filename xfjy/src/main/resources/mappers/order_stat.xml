@@ -31,10 +31,10 @@ ifnull(sum(
   
   <sql id="queryOrderCondition">
   	  <if test="startTime != null and startTime !=''">
-			 <![CDATA[ and   PAY_TIME >=#{startTime}  ]]>
+			 <![CDATA[ and   date_format(PAY_TIME,'%Y-%m-%d') >=#{startTime}  ]]>
 	  </if>
 	  <if test="endTime != null and endTime !=''">
-			 <![CDATA[ and    PAY_TIME <=#{endTime}  ]]>
+			 <![CDATA[ and    date_format(PAY_TIME,'%Y-%m-%d') <=#{endTime}  ]]>
 	  </if>
   </sql>
   

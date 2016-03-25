@@ -100,6 +100,10 @@ public class Constants {
 	
 	public static final String WORK_ROLE_ROLE_AY="A";//阿姨
 	public static final String WORK_ROLE_ROLE_TEACHER="T";//老师
+	public static final String WORK_ROLE_ROLE_DIANZHANG="D";//店长
+	public static final String WORK_ROLE_ROLE_XINGZHENG="X";//行政
+	public static final String WORK_ROLE_ROLE_CAIWU="C";//财务
+	public static final String WORK_ROLE_ROLE_GUANLIYUAN="M";//管理员
 	
 	public static final String WORK_TIME_DAY="D";//白班
 	public static final String WORK_TIME_24H="H";//24XIAOSHI

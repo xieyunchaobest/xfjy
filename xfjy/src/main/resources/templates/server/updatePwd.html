@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" th:href="@{/app/css/bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/bootstrap-theme.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/font-awesome.min.css}" />
+<link rel="stylesheet" th:href="@{/app/css/components.css}" />
+<link rel="shortcut icon" th:href="@{/app/img/favicon.png}" />
+<script th:src="@{/app/js/vendor/jquery-1.11.1.js}"></script>
+<script th:src="@{/app/js/vendor/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/app/validation/jquery.validate.min.js}"></script>
+<script th:src="@{/app/js/public.js}"></script>
+	<meta charset="utf-8" />
+	 <script type="text/javascript">
+	 $().ready(function() {
+		 formValidate();
+	 }); 
+	 
+	 function formValidate(){
+		 $("#aform").validate({
+		     	focusInvalid:false	, 
+		     	rules : {
+		     		"originalPwd":{
+		     			required:true 
+		     		} , 
+		     		"newPwd":{
+		     			required:true 
+		     		} ,
+		     		"newPwdConfirm":{
+		     			required:true ,
+		     			equalTo:"#newPwd"
+		     		}  
+		     		
+		     	},
+		         messages: {
+		             
+		         }
+		     });
+	 }
+	 
+	 
+	 
+	 
+	 function save(){ 
+		   var path = basePath+"/server/updatePwd.html";  
+			$('#aform').attr("action", path).submit(); 
+	 }
+	 
+    </script> 
+</head>
+
+<form id="aform" th:action="@{/server/updatePwd.html}"  method="post" enctype="multipart/form-data"  >
+	<div style="display:none">
+	</div>
+
+	 <div id="userAdd">
+	 	<table class="table table-bordered table-striped" >
+	 		<tr>
+	 			<td align="right" width="300px">原密码：</td>
+	 			<td><input type="password" id="originalPwd" name="originalPwd" maxlength="20"  /> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="300px">新密码：</td>
+	 			<td><input type="password" id="newPwd" name="newPwd" maxlength="20"  /> </td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right" width="300px">在输入一次新密码：</td>
+	 			<td><input type="password" id="newPwdConfirm" name="newPwdConfirm" maxlength="20"    /> </td>
+	 		</tr>
+	 		 
+	 	</table>
+	 </div>
+	 <div style="text-align: center">
+	 	<input type="button" onclick="save()"  class="btn btn-danger fl btn-lg"  value="确定" />
+	 </div>
+</form>
+ 
+    
+</html>

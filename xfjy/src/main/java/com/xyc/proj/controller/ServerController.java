@@ -4,6 +4,8 @@
 package com.xyc.proj.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -237,9 +240,19 @@ public class ServerController {
 		parmMap.put("state", state);
 		parmMap.put("mobileNo", mobileNo);
 		Worker w=(Worker)session.getAttribute("user");
-		if(w!=null && Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
-			parmMap.put("teacherId", w.getId());
+		if(w!=null && (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeOne())  ||
+				StringUtil.isBlank(w.getServiceTypeOne())
+				)) {//如果是宝洁，或者非业务人员，则不限制老师
+			
+		}else if(w!=null && Constants.WORK_SERVICE_TYPE_JZ.equals(w.getServiceTypeOne())  ){//如果是家政
+			if( Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {//如果是老师
+				parmMap.put("teacherId", w.getId());
+			}else if( Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole())) {
+				parmMap.put("role", Constants.WORK_ROLE_ROLE_DIANZHANG);
+				parmMap.put("teacherId", w.getId());
+			}
 		}
+		  
 		List areaList = clientService.findAreaList();
 
 		PageView pageView = serverService.getOrderPageView(parmMap);
@@ -519,5 +532,29 @@ public class ServerController {
 	}
 	
 	
+	@RequestMapping(value ="/server/updatePwdInit.html",method = {RequestMethod.GET, RequestMethod.POST})
+	public String updatePwd( Model model) {
+		return "server/updatePwd";
+	}
+	
+			
+	
+	@RequestMapping(value ="/server/updatePwd.html",method = {RequestMethod.GET, RequestMethod.POST})
+	public String updatePwd( Model model, 
+			HttpServletRequest request,HttpServletResponse response,
+			@RequestParam(value = "originalPwd", required = true) String originalPwd,
+			@RequestParam(value = "newPwd", required = true) String newPwd,
+			HttpSession session) throws IOException {
+		 response.setContentType("text/html; charset=utf-8");  
+		 PrintWriter out = response.getWriter();
+		Worker w=(Worker)session.getAttribute("user");
+		String res=serverService.updatePwd(w, originalPwd, newPwd);
+		if(res.equals("F")) {
+			out.println("<script>alert('修改失败，请检查输入！');</script>");
+		}else {
+			out.println("<script>alert('修改成功！');</script>");
+		}
+		return "server/updatePwd";
+	}
 	
 }

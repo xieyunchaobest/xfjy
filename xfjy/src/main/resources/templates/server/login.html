@@ -33,7 +33,11 @@
                     <div id="wrapper">
                         <div id="login" class="animate form">
                             <form  th:action="@{/server/doLogin}" autocomplete="on" method="post"> 
-                                <h1>幸福家缘后台管理</h1> 
+                                <h1 style="height:50px;margin-bottom:10px;"><!-- 幸福家缘后台管理 -->Login in<br/>
+                                </h1>
+                                <div style="text-align:center">
+                                	<img alt="" th:src="@{/app/img/logo_login.PNG}" style="height:100px;"/>
+                                </div> 
                                 <p> 
                                     <label for="username" class="uname"   >用户名</label>
                                     <input id="code" name="code" required="required" type="text" />

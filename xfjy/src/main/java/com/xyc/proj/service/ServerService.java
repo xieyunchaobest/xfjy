@@ -57,5 +57,7 @@ public interface ServerService {
 	public List findWorkerByTeacherId(Long teacherId) ;
 	
 	List findWorkerByStateAndRole(String state,String role);
+	
+	public String updatePwd(Worker w,String opwd,String newPwd) ;
 
 }

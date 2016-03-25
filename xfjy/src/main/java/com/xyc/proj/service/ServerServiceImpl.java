@@ -515,4 +515,17 @@ public class ServerServiceImpl implements ServerService {
 	public List findWorkerByStateAndRole(String state,String role) {
 		return workerRepository.findByStateAndRole(state,role);
 	}
+	
+	public String updatePwd(Worker w,String opwd,String newPwd) {
+		String res="S";
+		try {
+			if(!opwd.equals(w.getPassword())) return "F";
+			w.setPassword(newPwd);
+			workerRepository.save(w);
+		}catch(Exception e) {
+			e.printStackTrace();
+			res="F";
+		}
+		return res;
+	}
 }
