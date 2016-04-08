@@ -23,6 +23,9 @@
 		     		"nation":{
 		     			required:true 
 		     		} ,
+		     		"role":{
+		     			required:true 
+		     		} ,
 		     		"stature":{
 		     			required:true 
 		     		} ,
@@ -82,6 +85,21 @@
 		 return true;
 	 }
 	 
+	 function roleChange(target){
+		 var val=$(target).val();
+		 if(val!='A'){
+			 $("#religion").prop('disabled',true);
+			 $("#languageLevel").prop('disabled',true);
+			 $("#stature").prop('disabled',true);
+			 $("#weight").prop('disabled',true);
+			 $("#bloodType").prop('disabled',true);
+			 $("#certificateOfHonor").prop('disabled',true);
+			 $("#education").prop('disabled',true);
+			 $("#constellation").prop('disabled',true);
+			 $("#serviceTypeTwo").prop('disabled',true);
+		 }
+		 
+	 }
 	 
 	 
 	 function save(){ 
@@ -118,6 +136,30 @@
 	 			<td align="right" width="100px">政治面貌：</td>
 	 			<td width="150px"><input type="text" id="politicStatus" name="politicStatus" maxlength="10"  th:value="${worker.politicStatus}"/> </td>
 	 		</tr>
+	 		<tr>
+	 			<td align="right" width="100px">角色：</td>
+	 			<td width="150px">
+	 				<select  name="role" id="role" style="height:30px;width:120px" onchange="roleChange(this)">
+	 						<option value="" >请选择</option>
+							<option value="T" th:if="${session.user.role=='M'} or  ${session.user.role=='D'}" th:selected="${worker.role == 'T'}">老师</option>
+							<option value="A" th:if="${session.user.role=='M'} or  ${session.user.role=='D'} or ${session.user.role=='T'}" th:selected="${worker.role == 'A'}">阿姨</option>
+							<option value="D" th:if="${session.user.role=='M'}" th:selected="${worker.role == 'D'}">店长</option>    
+							<option value="K" th:if="${session.user.role=='M'}" th:selected="${worker.role == 'K'}">客服</option>
+							<option value="C" th:if="${session.user.role=='M'}" th:selected="${worker.role == 'C'}">财务</option>
+							<option value="X" th:if="${session.user.role=='M'}" th:selected="${worker.role == 'X'}">行政</option>
+					</select> 
+	 			</td>
+	 			<td align="right" width="100px">老师：</td>
+	 			<td width="150px">
+	 				 <select  name="teacherId" id="teacherId" style="height:30px;width:120px" >
+	 				 		  <option value="" >无</option>
+								<option th:each="t: ${teacherList}"
+								th:value="${t.id}" th:text="${t.name}"
+								th:selected="${worker.teacherId == t.id}"
+								></option>  
+					</select> 
+	 			</td>
+	 		</tr> 
 	 		<tr>
 	 			<td align="right" width="100px">宗教信仰：</td>
 	 			<td width="150px"><input type="text" id="religion" name="religion" maxlength="10"   th:value="${worker.religion}" /> </td>
@@ -199,29 +241,7 @@
 					</select> 
 	 			</td>
 	 		</tr> 
-	 		<tr>
-	 			<td align="right" width="100px">角色：</td>
-	 			<td width="150px">
-	 				<select  name="role" id="role" style="height:30px;width:120px" >
-							<option value="T" th:selected="${worker.role == 'T'}">老师</option>
-							<option value="A" th:selected="${worker.role == 'A'}">阿姨</option>
-							<option value="D" th:selected="${worker.role == 'D'}">店长</option>    
-							<option value="K" th:selected="${worker.role == 'K'}">客服</option>
-							<option value="C" th:selected="${worker.role == 'C'}">财务</option>
-							<option value="X" th:selected="${worker.role == 'X'}">行政</option>
-					</select> 
-	 			</td>
-	 			<td align="right" width="100px">老师：</td>
-	 			<td width="150px">
-	 				 <select  name="teacherId" id="teacherId" style="height:30px;width:120px" >
-	 				 		  <option value="" >无</option>
-								<option th:each="t: ${teacherList}"
-								th:value="${t.id}" th:text="${t.name}"
-								th:selected="${worker.teacherId == t.id}"
-								></option>  
-					</select> 
-	 			</td>
-	 		</tr> 
+	 		
 	 		<tr>
 	 			<td align="right" width="100px">工作时间：</td>
 	 			<td width="150px">
@@ -250,11 +270,11 @@
 				</td>
 	 		</tr>
 	 		 <tr>
-	 			<td align="right" width="100px">照片：</td>
+	 			<td align="right" width="100px">照片(PNG格式，不大于3M)：</td>
 	 			<td width="150px">
 	 				<input type="file" id="afile" name="afile" style="width:120px"/>
 	 			</td>
-	 			<td align="right" width="100px">头像：</td>
+	 			<td align="right" width="100px">头像(PNG格式，不大于3M)：</td>
 	 			<td width="150px">
 	 				<input type="file"  id="aheadphoto" name="aheadphoto" style="width:120px"/>
 				</td>

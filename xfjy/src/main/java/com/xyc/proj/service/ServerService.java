@@ -59,5 +59,7 @@ public interface ServerService {
 	List findWorkerByStateAndRole(String state,String role);
 	
 	public String updatePwd(Worker w,String opwd,String newPwd) ;
+	
+	public List findDianZhang();
 
 }

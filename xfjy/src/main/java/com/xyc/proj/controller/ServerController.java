@@ -103,8 +103,13 @@ public class ServerController {
 		}
 		
 		Worker w=(Worker)session.getAttribute("user");
-		if(w!=null && Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
+		if(w!=null && 	Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
 			parmMap.put("teacherId", w.getId());
+		}
+		//如果是店长，能看自己店的老师和老师属下的员工
+		if(w!=null && 	Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole())) {
+			parmMap.put("loginRole",Constants.WORK_ROLE_ROLE_DIANZHANG);
+			parmMap.put("tid", w.getId());
 		}
 //		if (!StringUtil.isBlank(teacherId)) {
 //			long lteacherId = Long.parseLong(teacherId);
@@ -222,10 +227,12 @@ public class ServerController {
 			@RequestParam(value = "areaId", required = false, defaultValue = "0") Long areaId,
 			@RequestParam(value = "startTime", required = false) String startTime,
 			@RequestParam(value = "endTime", required = false) String endTime,
+			@RequestParam(value = "serviceTypeOne", required = false) String serviceTypeOne,
 			@RequestParam(value = "serviceDate", required = false) String serviceDate,
 			@RequestParam(value = "serviceType", required = false) String serviceType,
 			@RequestParam(value = "state", required = false) String state,
 			@RequestParam(value = "mobileNo", required = false) String mobileNo,
+			@RequestParam(value = "finished", required = false) String finished,
 			@RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum,
 			@RequestParam(value = "orderByStr", required = false, defaultValue = "name,desc") String orderBy,
 			HttpSession session) {
@@ -239,6 +246,8 @@ public class ServerController {
 		parmMap.put("serviceType", serviceType);
 		parmMap.put("state", state);
 		parmMap.put("mobileNo", mobileNo);
+		parmMap.put("finished", finished);
+		parmMap.put("serviceTypeOne", serviceTypeOne);
 		Worker w=(Worker)session.getAttribute("user");
 		if(w!=null && (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeOne())  ||
 				StringUtil.isBlank(w.getServiceTypeOne())
@@ -266,6 +275,8 @@ public class ServerController {
 		model.addAttribute("serviceType", serviceType);
 		model.addAttribute("state", state);
 		model.addAttribute("mobileNo", mobileNo);
+		model.addAttribute("finished",finished);
+		model.addAttribute("serviceTypeOne", serviceTypeOne);
 		return "server/queryOrder";
 
 	}
@@ -328,7 +339,8 @@ public class ServerController {
 	}
 	
 	@RequestMapping(value = "/server/workerAddInit.html", method = { RequestMethod.POST, RequestMethod.GET })
-	public String workerAddInit(Model model, @RequestParam(value = "wid", required = false) String wid
+	public String workerAddInit(Model model, @RequestParam(value = "wid", required = false) String wid,
+			HttpSession session
 			) {
 		Worker w=new Worker();
 		if(!StringUtil.isBlank(wid)) {
@@ -340,6 +352,19 @@ public class ServerController {
 		List storeList = serverService.findStore();
 		model.addAttribute("storeList", storeList);
 		List teacheList=serverService.findTeachers();
+		Worker worker=(Worker)session.getAttribute("user");
+		if(Constants.WORK_ROLE_ROLE_TEACHER.equals(worker.getRole())) {// 如果是老师，则添加阿姨的时候老师只能是自己
+			teacheList=new ArrayList();
+			teacheList.add(worker);
+		}else if(Constants.WORK_ROLE_ROLE_DIANZHANG.equals(worker.getRole())) {//店长 
+			teacheList=new ArrayList();
+			teacheList.add(worker);
+			List tList=serverService.findWorkerByTeacherId(worker.getId());
+			teacheList.addAll(tList);
+		}else if(Constants.WORK_ROLE_ROLE_GUANLIYUAN.equals(worker.getRole())) {//如果是管理员 ，老师是店长和老师的合集
+			List dList=serverService.findDianZhang();
+			teacheList.addAll(dList);
+		}
 		model.addAttribute("teacherList", teacheList);
 		model.addAttribute("worker", w);
 		return "server/workerAdd";
@@ -349,14 +374,19 @@ public class ServerController {
 	public String saveWorker(Model model, @RequestParam(value = "wid", required = false) String wid,
 			@RequestParam(value = "afile", required = false) MultipartFile file,
 			@RequestParam(value = "aheadphoto", required = false) MultipartFile headphoto,
+			HttpServletRequest request,HttpServletResponse response,
 			@ModelAttribute("worker") Worker worker
-			) {
+			) throws IOException {
 		System.out.println("msdfasfsfasdfd");
+		response.setContentType("text/html; charset=utf-8"); 
+		 PrintWriter out = response.getWriter();
 		String ares="redirect:/server/queryWorker.html";
+		String ures="err";
 		String imgpath=properties.getFileuploadpath();
 		
 		String fileName=String.valueOf(new Date().getTime());
 		String originalFilename=file.getOriginalFilename();
+		 
 		String fileEnd="";
 		if(!StringUtil.isBlank(originalFilename)) {
 			fileEnd=originalFilename.substring(originalFilename.indexOf("."));
@@ -368,10 +398,18 @@ public class ServerController {
 					if(!StringUtil.isBlank(fileEnd)) {//如果重新提交
 						if(!StringUtil.isBlank(imgName)) {//如果原来就有图片，只需要复制图片就行
 							File targetFile = new File(imgpath, imgName);
+							if(file.getSize()>3072000) {
+								out.println("<script>alert('保存失败，文件大小超过限制！');</script>");
+								return ures;
+							}
 							file.transferTo(targetFile);
 						}else {//如果原来没有图片，复制图片，并插入数据库
 							String fillwholename=fileName+fileEnd;
 							File targetFile = new File(imgpath, fillwholename);
+							if(file.getSize()>3072000) {
+								out.println("<script>alert('保存失败，文件大小超过限制！');</script>");
+								return ures;
+							}
 							file.transferTo(targetFile);
 							worker.setPhoto(fillwholename);
 						}
@@ -382,6 +420,10 @@ public class ServerController {
 				 if(!StringUtil.isBlank(originalFilename)) {
 					 String fillwholename=fileName+fileEnd;
 						File targetFile = new File(imgpath, fillwholename);
+						if(file.getSize()>3072000) {
+							out.println("<script>alert('保存失败，文件大小超过限制！');</script>");
+							return ures;
+						}
 						file.transferTo(targetFile);
 						worker.setPhoto(fillwholename);
 				 }
@@ -399,10 +441,18 @@ public class ServerController {
 							if(!StringUtil.isBlank(fileEnd4Head)) {//如果重新提交
 								if(!StringUtil.isBlank(imgName)) {//如果原来就有图片，只需要复制图片就行
 									File targetFile = new File(imgpath, imgName);
+									if(headphoto.getSize()>3072000) {
+										out.println("<script>alert('保存失败，文件大小超过限制！');</script>");
+										return ures;
+									}
 									headphoto.transferTo(targetFile);
 								}else {//如果原来没有图片，复制图片，并插入数据库
 									String fillwholename=fileName4Head+fileEnd4Head;
 									File targetFile = new File(imgpath, fillwholename);
+									if(headphoto.getSize()>3072000) {
+										out.println("<script>alert('保存失败，文件大小超过限制！');</script>");
+										return ures;
+									}
 									headphoto.transferTo(targetFile);
 									worker.setHeadphoto(fillwholename);
 								}
@@ -413,6 +463,10 @@ public class ServerController {
 						 if(!StringUtil.isBlank(originalFilename4Head)) {
 							 String fillwholename=fileName4Head+fileEnd4Head;
 								File targetFile = new File(imgpath, fillwholename);
+								if(headphoto.getSize()>3072000) {
+									out.println("<script>alert('保存失败，文件大小超过限制！');</script>");
+									return ures;
+								}
 								headphoto.transferTo(targetFile);
 								worker.setHeadphoto(fillwholename);
 						 }

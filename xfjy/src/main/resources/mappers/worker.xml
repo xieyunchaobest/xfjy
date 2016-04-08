@@ -76,6 +76,9 @@
 		<if test="teacherId != null and teacherId !=''">
 			 <![CDATA[ and    teacher_Id  =#{teacherId}  ]]>
 		</if> 
+		<if test="loginRole != null and loginRole =='D'.toString()">
+			 <![CDATA[ and  (  teacher_Id  =#{tid} or  teacher_Id in (select id from T_WORKER w where w.TEACHER_ID=#{tid} ) )]]>
+		</if> 
 	</sql>
  
 	

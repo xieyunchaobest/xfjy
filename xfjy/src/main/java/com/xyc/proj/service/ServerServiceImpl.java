@@ -123,6 +123,14 @@ public class ServerServiceImpl implements ServerService {
 			w.setRoleName("阿姨");
 		} else if (Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
 			w.setRoleName("老师");
+		}else if (Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole())) {
+			w.setRoleName("店长");
+		}else if (Constants.WORK_ROLE_ROLE_XINGZHENG.equals(w.getRole())) {
+			w.setRoleName("行政");
+		}else if (Constants.WORK_ROLE_ROLE_CAIWU.equals(w.getRole())) {
+			w.setRoleName("财务");
+		}else if (Constants.WORK_ROLE_ROLE_GUANLIYUAN.equals(w.getRole())) {
+			w.setRoleName("管理员");
 		}
 
 		if (Constants.WORK_TIME_DAY.equals(w.getWorkTime())) {
@@ -448,6 +456,10 @@ public class ServerServiceImpl implements ServerService {
 	
 	public List findTeachers() {
 		return workerRepository.findByRoleAndState("T","A");
+	}
+	
+	public List findDianZhang() {
+		return workerRepository.findByRoleAndState("D","A");
 	}
 	
 	

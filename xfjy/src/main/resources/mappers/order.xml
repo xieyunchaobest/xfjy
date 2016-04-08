@@ -77,8 +77,9 @@
 	  <if test="state != null and state !=''">
 			 <![CDATA[ and    state =#{state}  ]]>
 	  </if>
-	   <if test="state == null and state ==''">
-			 <![CDATA[ and   (( state ='P' OR state ='C' OR state ='F' ) or (servicetype='J' AND state ='U' ))]]>
+	   <if test="state == null or state ==''">
+	   		 <![CDATA[ and    (1=1)  ]]>
+			 <!-- <![CDATA[ and   (( state ='P' OR state ='C' OR state ='F' ) or ((servicetype='JZY' or servicetype='YYS'  or servicetype='YS' or servicetype='YL'  or servicetype='XSG'  or servicetype='YYHG') AND state ='U' ))]]> -->
 	  </if>
 	  <if test="mobileNo != null and mobileNo !=''">
 			 <![CDATA[ and    mobileNo =#{mobileNo}  ]]>
@@ -91,6 +92,19 @@
 			 teacherId in (select id from T_WORKER w where w.TEACHER_ID=#{teacherId})
 			 
 			 )]]>
+	  </if>
+	  <if test="finished != null and finished =='N'.toString() ">
+			 <![CDATA[ and   state<>'F'  ]]>
+	  </if>
+	  <if test="finished != null and finished =='Y'.toString() ">
+			 <![CDATA[ and   state='F'  ]]>
+	  </if>
+	  
+	  <if test="serviceTypeOne != null and serviceTypeOne =='BJ'.toString() ">
+			 <![CDATA[ and ( servicetype ='CC' or servicetype ='DBJ' or servicetype ='KH' or  servicetype ='CBL' ) ]]>
+	  </if>
+	  <if test="serviceTypeOne != null and serviceTypeOne =='JZ'.toString() ">
+			 <![CDATA[ and ( servicetype ='JZY' or servicetype ='YYS' or servicetype ='YS' or  servicetype ='YL' or servicetype ='XSG' or  servicetype ='YYHG') ]]>
 	  </if>
 	  
 	  order by payTime desc

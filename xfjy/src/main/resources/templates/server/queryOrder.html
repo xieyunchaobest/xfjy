@@ -70,6 +70,7 @@
 	<div class="container-fluid">
 		<form id="orderByForm" th:action="@{/server/queryOrder.html}" method="post">
 			<input type="hidden" id="orderByStr" name="orderByStr"   th:value="${orderBy}"/>
+			<input type="hidden" id="finished" name="finished"   th:value="${finished}"/>
 		 <div class="row" id="qry"  >
 		 	<div  class="col-xs-12" style="padding:10px;border:solid 1px #cccccc;margin:0 0 ;padding:0 0;height:100px;margin-bottom:15px;margin-top:10px ">
 		 		<div style="height:80px;float:left;width:85%">
@@ -94,7 +95,7 @@
 		 		<input name="serviceDate" class="input-append date" id="serviceDate" size="12"  onfocus="this.blur()"  th:value="${serviceDate}"/>
 		 		</div>	
 		 		<div class="col-xs-4" style="width:220px">
-		 		<label>服务类型:</label>
+		 		<!-- <label>服务类型:</label>
 		 		 <select  name="serviceType" style="height:25px;width:120px" >
 		 				<option value="">全部</option>
 							<option value="CC" th:selected="${serviceType == 'CC'}">日常保洁</option>
@@ -107,7 +108,13 @@
 							<option value="YL" th:selected="${serviceType == 'YL'}">养老</option>
 							<option value="XSG" th:selected="${serviceType == 'XSG'}">小时工</option>
 							<option value="YYHG" th:selected="${serviceType == 'YYHG'}">医院护工</option>
-					</select>
+					</select> -->
+					<label>订单分类:</label>
+		 		 <select  name="serviceTypeOne" style="height:25px;width:120px" >
+		 				<option value="">全部</option>
+							<option value="BJ" th:selected="${serviceTypeOne == 'BJ'}">保洁</option>
+							<option value="JZ" th:selected="${serviceTypeOne == 'JZ'}">家政</option> 
+					</select> 
 		 		</div>		
 		 			
 		 			 </div>
@@ -116,13 +123,13 @@
 		 					<label>联系方式:</label>
 		 					<input name="mobileNo"   id="mobileNo"   th:value="${mobileNo}"/>
 		 				</div>	
-		 				<div class="col-xs-4" style="width:300px">
+		 				<div class="col-xs-4" style="width:300px" th:if="${finished=='N'}">
 		 					<label>状态:</label>
 		 					<select  name="state" style="height:25px;width:120px" >
 			 					<option value="">全部</option>
 								<option value="P" th:selected="${state == 'P'}">已支付</option>
+								<option value="U" th:selected="${state == 'U'}">未支付</option>
 								<option value="C" th:selected="${state == 'C'}">已确认</option>
-								<option value="F" th:selected="${state == 'F'}">已完成</option>
 							</select>
 		 				</div>
 		 			 </div>		

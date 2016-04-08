@@ -82,6 +82,8 @@ public class WeChatMessageUtil {
 						if(EventKeyNl.item(0)!=null) {
 							if(EventKeyNl.item(0).getTextContent().equals("servicePhone")) {
 								content="022-60956627";
+							}else if(EventKeyNl.item(0).getTextContent().equals("trainingCourse")) {
+								content="建设中";
 							}
 						}
 					}
