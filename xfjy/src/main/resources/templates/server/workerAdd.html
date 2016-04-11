@@ -97,7 +97,32 @@
 			 $("#education").prop('disabled',true);
 			 $("#constellation").prop('disabled',true);
 			 $("#serviceTypeTwo").prop('disabled',true);
+		 }else{
+			 $("#religion").prop('disabled',false);
+			 $("#languageLevel").prop('disabled',false);
+			 $("#stature").prop('disabled',false);
+			 $("#weight").prop('disabled',false);
+			 $("#bloodType").prop('disabled',false);
+			 $("#certificateOfHonor").prop('disabled',false);
+			 $("#education").prop('disabled',false);
+			 $("#constellation").prop('disabled',false);
+			 $("#serviceTypeTwo").prop('disabled',false);
+			 
+			 $('#teacherId option[role="D"]').hide();
 		 }
+		 
+		 
+		 if(val=='T'){
+			 $('#teacherId').val('');
+			 $('#teacherId option[role="T"]').hide();
+			 $('#teacherId option[role="D"]').show();
+		 }else if(val=='A'){
+			 $('#teacherId option[role="T"]').show();
+			 $('#teacherId option[role="D"]').hide();
+			 $('#teacherId').val('');
+		 }
+		 
+		 
 		 
 	 }
 	 
@@ -152,9 +177,9 @@
 	 			<td align="right" width="100px">老师：</td>
 	 			<td width="150px">
 	 				 <select  name="teacherId" id="teacherId" style="height:30px;width:120px" >
-	 				 		  <option value="" >无</option>
+	 				 		  <option value=""  >无</option>
 								<option th:each="t: ${teacherList}"
-								th:value="${t.id}" th:text="${t.name}"
+								th:value="${t.id}" th:text="${t.name}" th:attr="role=''+${t.role}+''"
 								th:selected="${worker.teacherId == t.id}"
 								></option>  
 					</select> 
