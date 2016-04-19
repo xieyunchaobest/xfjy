@@ -5,15 +5,21 @@
 	 <script type="text/javascript">
 	 $().ready(function() {
 		 formValidate();
+		 roleChange($("#role"));
+		 serviceTypeOneChange($("#serviceTypeOne"));
 	 }); 
-	 
+		// <![CDATA[
 	 function formValidate(){
 		 $("#aform").validate({
 		     	focusInvalid:false	, 
 		     	rules : {
 		     		"name":{
 		     			required:true 
-		     		} , 
+		     		} ,
+		     		"idNo":{
+		     			maxlength:18,
+		     			minlength:18
+	     			} ,
 		     		"birthday":{
 		     			required:true 
 		     		} ,
@@ -34,7 +40,10 @@
 		     		} ,
 
 		     		"phone":{
-		     			required:true 
+		     			required:true ,
+		     			digits:true,
+		     			maxlength:11,
+		     			minlength:11
 		     		} , 
 		     		"kmCount":{
 		     			required:true,
@@ -49,13 +58,22 @@
 		     		"descr":{
 		     			required:true,
 		     		},
-		     		
 		     		"afile":{
 		     			required:$("#id").val()==0,
 		     		} ,
 		     		"aheadphoto":{
 		     			required:$("#id").val()==0,
-		     		}  
+		     		},
+		     		"teacherId":{
+		     			required: function(){
+		     				return ($("#role").val()=='T'|| $("#role").val()=='A');
+		     			}
+		     		},
+		     		"salary":{
+		     			required: function(){
+		     				return ($("#role").val()=='A' && $("#serviceTypeOne").val()=='J');
+		     			}
+		     		}
 		     		
 		     	},
 		         messages: {
@@ -63,24 +81,25 @@
 		         }
 		     });
 	 }
-	 
+	// ]]>
 	 function valdateData(){
 		 var role=$("#role").val();
 		 var teacherId=$("#teacherId").val();
 		 var salary=$("#salary").val();
 		 var serviceTypeOne=$("#serviceTypeOne").val();
 		 if(role=='A'){
-			 if(teacherId==''){
-				 alert('当角色为阿姨时，必须要选择老师！');
-				 return false;
-			 }
-			 if(serviceTypeOne=='J'){
+			 /**if(serviceTypeOne=='J'){
 				 if(salary=='' ){
 					 alert('当角色为阿姨并服务类型为家政时，工资必填！');
 					 return false;
 				 }
-			 }
+			 }**/
 			 
+		 }else if(role=='T'){
+			 /**if(teacherId==''){
+				 alert('当角色为老师时，必须要选择老师！');
+				 return false;
+			 }**/
 		 }
 		 return true;
 	 }
@@ -122,8 +141,39 @@
 			 $('#teacherId').val('');
 		 }
 		 
-		 
-		 
+		 if(val=='T' || val=='A'){
+			 $("#teacherId").attr('disabled',false);
+			 $("#serviceTypeOne").attr('disabled',false);
+			 $("#serviceTypeTwo").attr('disabled',false);
+		 }else{
+			 $("#teacherId").val('');
+			 $("#teacherId").attr('disabled',true);
+			 $("#serviceTypeOne").attr('disabled',true);
+			 $("#serviceTypeTwo").attr('disabled',true);
+		 }
+	 }
+	 
+	 function serviceTypeOneChange(target){
+		 var val=$(target).val();
+		 if(val=='C'){
+			 $('#serviceTypeTwo option[value="JZY"]').hide();
+			 $('#serviceTypeTwo option[value="YYS"]').hide();
+			 $('#serviceTypeTwo option[value="YS"]').hide();
+			 $('#serviceTypeTwo option[value="YL"]').hide();
+			 $('#serviceTypeTwo option[value="XSG"]').hide();
+			 $('#serviceTypeTwo option[value="YYHG"]').hide();
+			 $('#serviceTypeTwo option[value=""]').hide();
+			 $('#serviceTypeTwo option[value="C"]').show();
+		 }else if(val=='J'){
+			 $('#serviceTypeTwo option[value="JZY"]').show();
+			 $('#serviceTypeTwo option[value="YYS"]').show();
+			 $('#serviceTypeTwo option[value="YS"]').show();
+			 $('#serviceTypeTwo option[value="YL"]').show();
+			 $('#serviceTypeTwo option[value="XSG"]').show();
+			 $('#serviceTypeTwo option[value="YYHG"]').show();
+			 $('#serviceTypeTwo option[value="C"]').hide();
+			 $('#serviceTypeTwo option[value=""]').hide();
+		 }
 	 }
 	 
 	 
@@ -246,7 +296,7 @@
 	 		<tr>
 	 			<td align="right" width="100px">一级服务类型：</td>
 	 			<td width="150px">
-	 				<select  name="serviceTypeOne" id="serviceTypeOne" style="height:30px;width:120px" >
+	 				<select  name="serviceTypeOne" id="serviceTypeOne" style="height:30px;width:120px"  onchange="serviceTypeOneChange(this)">
 	 						<option value=""   th:selected="${worker.serviceTypeOne == ''}">无</option>
 							<option value="C"   th:selected="${worker.serviceTypeOne == 'C'}">保洁</option>
 							<option value="J" th:selected="${worker.serviceTypeOne == 'J'}">家政</option> 

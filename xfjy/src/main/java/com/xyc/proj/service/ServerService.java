@@ -3,8 +3,10 @@ package com.xyc.proj.service;
 import java.util.List;
 import java.util.Map;
 
+import com.xyc.proj.entity.Area;
 import com.xyc.proj.entity.Community;
 import com.xyc.proj.entity.Config;
+import com.xyc.proj.entity.Store;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.utility.PageView;
 
@@ -61,5 +63,9 @@ public interface ServerService {
 	public String updatePwd(Worker w,String opwd,String newPwd) ;
 	
 	public List findDianZhang();
+	
+	public Store getStore(Long id) ;
+	
+	public Area getArea(Long id);
 
 }

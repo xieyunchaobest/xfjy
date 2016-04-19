@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.xyc.proj.entity.Area;
 import com.xyc.proj.entity.ClientUser;
 import com.xyc.proj.entity.Community;
 import com.xyc.proj.entity.Config;
 import com.xyc.proj.entity.Order;
 import com.xyc.proj.entity.OrderWorker;
 import com.xyc.proj.entity.Schedule;
+import com.xyc.proj.entity.Store;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.mapper.ClientUserMapper;
@@ -98,9 +100,9 @@ public class ServerServiceImpl implements ServerService {
 		}
 		
 		if(Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeOne())) {
-			w.setServiceTypeTwoName("保洁");
+			w.setServiceTypeOneName("保洁");
 		}else if(Constants.WORK_SERVICE_TYPE_JZ.equals(w.getServiceTypeOne())) {
-			w.setServiceTypeTwoName("家政");
+			w.setServiceTypeOneName("家政");
 		}
 
 		if (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeTwo())) {
@@ -356,6 +358,10 @@ public class ServerServiceImpl implements ServerService {
 	public List findStore() {
 		return storeRepository.findAll();
 	}
+	
+	public Store getStore(Long id) {
+		return storeRepository.findOne(id);
+	}
 
 	public PageView getCommunityPage(Map parm) {
 		PageView pv = new PageView((Integer) parm.get("currentPageNum"));
@@ -539,5 +545,9 @@ public class ServerServiceImpl implements ServerService {
 			res="F";
 		}
 		return res;
+	}
+	
+	public Area getArea(Long id) {
+		return areaRepository.findOne(id);
 	}
 }

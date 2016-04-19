@@ -27,8 +27,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.xyc.proj.entity.Area;
 import com.xyc.proj.entity.Community;
 import com.xyc.proj.entity.Config;
+import com.xyc.proj.entity.Store;
 import com.xyc.proj.entity.Worker;
 import com.xyc.proj.global.Constants;
 import com.xyc.proj.pay.RandomStringGenerator;
@@ -345,14 +347,26 @@ public class ServerController {
 		Worker w=new Worker();
 		if(!StringUtil.isBlank(wid)) {
 			w=serverService.findWorker(Long.parseLong(wid));
-			
 		}
 		List areaList = clientService.findAreaList();
-		model.addAttribute("areaList", areaList);
+		
 		List storeList = serverService.findStore();
-		model.addAttribute("storeList", storeList);
-		List teacheList=serverService.findTeachers();
 		Worker worker=(Worker)session.getAttribute("user");
+		if(Constants.WORK_ROLE_ROLE_TEACHER.equals(worker.getRole()) || Constants.WORK_ROLE_ROLE_DIANZHANG.equals(worker.getRole()) ) {//如果当前登陆的是店长或者阿姨，则添加员工的时候门店只能选择自己所在的门店
+			storeList=new ArrayList();
+			Store s=serverService.getStore(worker.getStoreId());
+			storeList.add(s);
+		}
+		if(Constants.WORK_ROLE_ROLE_TEACHER.equals(worker.getRole()) || Constants.WORK_ROLE_ROLE_DIANZHANG.equals(worker.getRole()) ) {//如果当前登陆的是店长或者阿姨，则添加员工的时候门店只能选择自己所在的区域
+			areaList=new ArrayList();
+			Area a=serverService.getArea(worker.getAreaId());
+			areaList.add(a);
+		}
+			
+			
+		
+		List teacheList=serverService.findTeachers();
+		
 		if(Constants.WORK_ROLE_ROLE_TEACHER.equals(worker.getRole())) {// 如果是老师，则添加阿姨的时候老师只能是自己
 			teacheList=new ArrayList();
 			teacheList.add(worker);
@@ -367,6 +381,8 @@ public class ServerController {
 		}
 		model.addAttribute("teacherList", teacheList);
 		model.addAttribute("worker", w);
+		model.addAttribute("areaList", areaList);
+		model.addAttribute("storeList", storeList);
 		return "server/workerAdd";
 	}
 	
