@@ -58,7 +58,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr  th:each="item : ${pageView.resultList}">
+					<tr  th:each="item : ${ClientUserPageView.resultList}">
 						<td>
 							<a th:href="@{/server/queryOrder.html?mobileNo=__${item.mobileNo}__}"   th:text="${item.mobileNo}"></a>
 						</td>
@@ -69,9 +69,9 @@
 			<div>
 				<div style="border:1px solid #fffff">
 					 <nav id="tslCommon-Page"  style="float:right">
-			  			<input type="hidden" name="currentPageNum" th:value="${pageView.currentPageNum}"/>
-			  			<input type="hidden" name="totalPageCnt" th:value="${pageView.totalPageCnt}"/>
-			  			<input type="hidden" name="totalRecord" th:value="${pageView.totalRecord}"/>
+			  			<input type="hidden" name="currentPageNum" th:value="${ClientUserPageView.currentPageNum}"/>
+			  			<input type="hidden" name="totalPageCnt" th:value="${ClientUserPageView.totalPageCnt}"/>
+			  			<input type="hidden" name="totalRecord" th:value="${ClientUserPageView.totalRecord}"/>
 					</nav>
 				</div> 
 			</div>

@@ -55,7 +55,7 @@ public class StatController {
 		paraMap.put("endTime", endTime);
 		paraMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
 		PageView pv=statService.geOrderStatPage(paraMap);
-		model.addAttribute("pv", pv);
+		model.addAttribute("orderStatpv", pv);
 		model.addAttribute("paraMap", paraMap);
 		return "server/orderStat";
 	}

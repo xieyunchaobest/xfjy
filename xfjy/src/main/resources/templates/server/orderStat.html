@@ -103,7 +103,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr  th:each="item : ${pv.resultList}">
+					<tr  th:each="item : ${orderStatpv.resultList}">
 						<td style="width:90px" th:text="${item.serviceTypeTxt}"></td>
 						<td th:text="${item.atotalFee}"></td>
 						<td th:text="${item.wechatFee}"></td>
@@ -115,9 +115,9 @@
 			<div>
 				<div style="border:1px solid #fffff">
 					 <nav id="tslCommon-Page"  style="float:right">
-			  			<input type="hidden" name="currentPageNum" th:value="${pv.currentPageNum}"/>
-			  			<input type="hidden" name="totalPageCnt" th:value="${pv.totalPageCnt}"/>
-			  			<input type="hidden" name="totalRecord" th:value="${pv.totalRecord}"/>
+			  			<input type="hidden" name="currentPageNum" th:value="${orderStatpv.currentPageNum}"/>
+			  			<input type="hidden" name="totalPageCnt" th:value="${orderStatpv.totalPageCnt}"/>
+			  			<input type="hidden" name="totalRecord" th:value="${orderStatpv.totalRecord}"/>
 					</nav>
 				</div>  
 			</div>

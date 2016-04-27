@@ -92,7 +92,7 @@ function deleteSelect(){
 					</tr>
 				</thead>
 				<tbody>
-					<tr  th:each="item : ${pageView.resultList}">
+					<tr  th:each="item : ${commPageView.resultList}">
 						<td>
 							<input type="checkbox" id="cbchooseCommu" name="CommuIds" th:attr="value=''+${item.id}+''" />
 						</td>
@@ -105,9 +105,9 @@ function deleteSelect(){
 			<div>
 				<div style="border:1px solid #fffff">
 					 <nav id="tslCommon-Page"  style="float:right">
-			  			<input type="hidden" name="currentPageNum" th:value="${pageView.currentPageNum}"/>
-			  			<input type="hidden" name="totalPageCnt" th:value="${pageView.totalPageCnt}"/>
-			  			<input type="hidden" name="totalRecord" th:value="${pageView.totalRecord}"/>
+			  			<input type="hidden" name="currentPageNum" th:value="${commPageView.currentPageNum}"/>
+			  			<input type="hidden" name="totalPageCnt" th:value="${commPageView.totalPageCnt}"/>
+			  			<input type="hidden" name="totalRecord" th:value="${commPageView.totalRecord}"/>
 					</nav>
 				</div> 
 				<div style="float: left; margin-right: 15px;">

@@ -127,7 +127,7 @@ public class ServerController {
 		parmMap.put("workTime", workTime);
 		parmMap.put("state", "A");
 		PageView pageView = serverService.getWorkPage(parmMap);
-		model.addAttribute("pageView", pageView);
+		model.addAttribute("workerPageView", pageView);
 		model.addAttribute("parms", parmMap);
 
 		List areaList = clientService.findAreaList();
@@ -355,7 +355,7 @@ public class ServerController {
 		List areaList = clientService.findAreaList();
 
 		PageView pageView = serverService.getCommunityPage(parmMap);
-		model.addAttribute("pageView", pageView);
+		model.addAttribute("commPageView", pageView);
 		model.addAttribute("parms", parmMap);
 		model.addAttribute("areaList", areaList);
 		return "server/queryCommunity";
@@ -369,7 +369,7 @@ public class ServerController {
 		parmMap.put("mobileNo", mobileNo);
 
 		PageView pageView = serverService.getClientUserPage(parmMap);
-		model.addAttribute("pageView", pageView);
+		model.addAttribute("ClientUserPageView", pageView);
 		model.addAttribute("parms", parmMap);
 		return "server/queryClientUser";
 	}
