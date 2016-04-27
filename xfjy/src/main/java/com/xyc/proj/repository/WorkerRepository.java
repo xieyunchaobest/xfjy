@@ -11,14 +11,14 @@ import com.xyc.proj.entity.Worker;
 public interface WorkerRepository extends JpaRepository<Worker, Long> {
 	List<Worker> findByStoreId(Long storeId);
 
-	List<Worker> findByCodeAndPasswordAndRoleNot(String code, String password,String role);
+	List<Worker> findByCodeAndPasswordAndRoleNotAndWorkStateNotAndState(String code, String password,String role,String workstate,String state);
 
 	List<Worker> findByAreaId(Long areaId);
 
 	@Query("select  w,c from Worker w ,ClientUser c where  w.areaId=?1 and c.mobileNo=w.phone and w.serviceTypeOne='C' and w.role='A' and w.state='A'")
 	List findWorkerAndOpenIdInArea(Long areaId);
 	
-	@Query("select  w,c from Worker w ,ClientUser c where c.mobileNo=w.phone and w.serviceTypeOne='C' and w.role='A' and w.state='A'")
+	@Query("select  w,c from Worker w ,ClientUser c where c.mobileNo=w.phone and w.serviceTypeOne='C' and w.role='A' and w.state='A' and w.workState<>'L'")
 	List findByRoleAndServiceTypeOneAndState();
 
 	Worker findByPhone(String phone);
@@ -34,9 +34,21 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
 	@Query("select  w from Worker w ,ClientUser cu   where w.phone=cu.mobileNo and  cu.openId=?1 and w.state='A'")
 	Worker findWorkerByOpenId(String openId);
 	
-	List findByTeacherId(Long teacherId);
+	List findByTeacherIdAndState(Long teacherId,String state);
 	
 	List findByStateAndRole(String state,String role);
+	
+	@Query("select  w from Worker w   where  w.teacherId=?1 and w.state=?2 and w.workState in ('F')" )
+	List findByTeacherIdAndStateAndWorkState(Long teacherId,String state);
+	
+	
+	@Query("select  w from Worker w   where  w.role=?1 and w.storeId=?2 and serviceTypeOne=?3 and w.state='A' and w.workState in ('F')" )
+	List findByRoleAndStoreIdAndStateAndWorkstateAndServiceTypeOne(String role,Long storeId,String serviceTypeOne);
+	
+	List findByRoleAndStoreIdAndState(String role,Long storeId,String state);
+	
+	@Query("select  w from Worker w   where  w.role=?1 and w.storeId=?2 and state=?3  and id<>?4" )
+	List findByRoleAndStoreIdAndStateAndIdNot(String role,Long storeId,String state,Long id);
 	
 	
 }

@@ -38,7 +38,10 @@
  	
  	//<![CDATA[
 	function showAddModal(flag){ 
+		$("#dvsaveState").hide();
+		$("#dvsaveInfo").show();
 		var len=$('input:checked').length;
+		$("#dvmodal-body").css('height','500px');
 		if(flag=='U'){
 			if(len==1){
 	 			var wid=$('input:checked').val();
@@ -70,6 +73,19 @@
 	        });  
 		}
 		 
+	}
+	
+	function updateState(){
+		$("#dvsaveState").show();
+		$("#dvsaveInfo").hide();
+		var len=$('input:checked').length;
+		if(len==1){
+			var wid=$('input:checked').val();
+			$("#dvmodal-body").css('height','300px');
+			$("#dvmodal-body").html("").load(basePath+"/server/workerStateUpdateInit.html?wid="+wid+"&rn="+Math.random(), function() {
+ 				$('#inputDialog').modal('show'); 
+ 			});
+		}
 	}
 	/*]]>*/
 	
@@ -126,6 +142,10 @@
 							<option value="">全部</option>
 							<option value="T" th:selected="${parms.role == 'T'}">老师</option>
 							<option value="A" th:selected="${parms.role== 'A'}">阿姨</option>
+							<option value="D" th:selected="${parms.role == 'D'}">店长</option>    
+							<option value="K" th:selected="${parms.role == 'K'}">客服</option>
+							<option value="C" th:selected="${parms.role == 'C'}">财务</option>
+							<option value="X" th:selected="${parms.role == 'X'}">行政</option>
 						</select>
 					</div>
 					<div class="col-xs-4" style="width: 220px">
@@ -221,8 +241,10 @@
 						onclick="showAddModal('A')">添加</button>
 					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
 						onclick="showAddModal('U')">修改</button>
-						<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
 						onclick="deleteSelect()">删除</button>
+					<button type="button" name="btnQuery" id="btnQuery"  class="btn btn-info"   
+						onclick="updateState()">状态变更</button>
 				</div> 
 			</div>
 		</div>
@@ -239,10 +261,16 @@
 		            </button>
 		            <h4 class="modal-title" id="inputDialoglLabel">添加/修改员工信息</h4> 
 		         </div>
-		         <div class="modal-body" id='dvmodal-body' style="height:500px;overflow:scroll"></div>
-		         <div style="text-align:center;height:60px">
+		         <div class="modal-body" id='dvmodal-body' style="height:500px;overflow:scroll;"></div>
+		         <div style="text-align:center;height:60px;display:none" id="dvsaveInfo">
 		            <button type="button" id="submit"  onclick="save()"  class="btn btn-danger fl btn-lg" style="border-radius:0px;width:128px;height:34px;line-height:10px;"> 确定 </button>
-		             <button type="button" data-dismiss="modal"
+		            <button type="button" data-dismiss="modal"
+								class="btn btn-lg btn-blue" style="border-radius:0px;width:128px;height:34px;margin-left:25px;line-height:10px;">取消</button>
+		         
+		         </div>
+		         <div style="text-align:center;height:60px;display:none" id="dvsaveState">
+		            <button type="button" id="submit"  onclick="saveState()"  class="btn btn-danger fl btn-lg" style="border-radius:0px;width:128px;height:34px;line-height:10px;"> 确定 </button>
+		            <button type="button" data-dismiss="modal"
 								class="btn btn-lg btn-blue" style="border-radius:0px;width:128px;height:34px;margin-left:25px;line-height:10px;">取消</button>
 		         
 		         </div>

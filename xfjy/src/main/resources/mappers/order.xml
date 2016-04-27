@@ -63,10 +63,10 @@
 			 <![CDATA[ and   areaId =#{areaId}  ]]>
 	  </if>
   	  <if test="startTime != null and startTime !=''">
-			 <![CDATA[ and   payTime >=#{startTime}  ]]>
+			 <![CDATA[ and    date_format(payTime,'%Y-%m-%d')  >=#{startTime}  ]]>
 	  </if>
 	  <if test="endTime != null and endTime !=''">
-			 <![CDATA[ and    payTime <=#{endTime}  ]]>
+			 <![CDATA[ and    date_format(payTime,'%Y-%m-%d')  <=#{endTime}  ]]>
 	  </if>
 	   <if test="serviceDate != null and serviceDate !=''">
 			 <![CDATA[ and    serviceDate =#{serviceDate}  ]]>
@@ -84,13 +84,13 @@
 	  <if test="mobileNo != null and mobileNo !=''">
 			 <![CDATA[ and    mobileNo =#{mobileNo}  ]]>
 	  </if>
-	  <if test="teacherId != null and teacherId !='' and ( role == null or role=='') ">
-			 <![CDATA[ and    teacherId =#{teacherId}  ]]>
+	  <if test="teacherId != null and teacherId !='' and role != null and role =='T'.toString()">
+			 <![CDATA[ and    teacherId =#{teacherId}    or ( teacherId='' or teacherId is null )]]>
 	  </if>
 	  <if test="teacherId != null and teacherId !='' and role != null and role =='D'.toString()">
-			 <![CDATA[ and    (teacherId =#{teacherId}   or
+			 <![CDATA[ and    ( teacherId =#{teacherId}   or
 			 teacherId in (select id from T_WORKER w where w.TEACHER_ID=#{teacherId})
-			 
+			  or ( teacherId='' or teacherId is null )
 			 )]]>
 	  </if>
 	  <if test="finished != null and finished =='N'.toString() ">

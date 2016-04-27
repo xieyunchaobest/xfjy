@@ -331,7 +331,7 @@ $.extend( $.validator, {
 		date: "请输入正确的日期格式.",
 		dateISO: "Please enter a valid date ( ISO ).",
 		number: "请输入数字.",
-		digits: "请输入证书 .",
+		digits: "请输入整数 .",
 		creditcard: "Please enter a valid credit card number.",
 		equalTo: "两次输入请保持一致.",
 		maxlength: $.validator.format( "最长不能超过 {0} 个字符." ),

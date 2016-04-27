@@ -152,9 +152,11 @@ public class HouseKeepingController {
 		Worker w=(Worker)session.getAttribute("user");
 		List ayiList=new ArrayList();
 		if(w!=null && Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
-			ayiList=serverService.findWorkerByTeacherId(w.getId());
+			ayiList=serverService.findWorkerByTeacherIdAndStateAndWorkState(w.getId(), "A");
 		}else if(w!=null && "M".equals(w.getRole())) {
 			ayiList=serverService.findWorkerByStateAndRole("A","A");
+		}else if(w!=null && Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole())) {
+			ayiList=serverService.findByRoleAndStoreIdAndStateAndWorkstateAndServiceTypeOne("A",w.getStoreId(),Constants.WORK_SERVICE_TYPE_JZ);;
 		}
 		model.addAttribute("order", o);
 		model.addAttribute("ayiList", ayiList);

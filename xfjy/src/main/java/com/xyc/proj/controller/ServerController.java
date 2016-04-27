@@ -36,6 +36,7 @@ import com.xyc.proj.global.Constants;
 import com.xyc.proj.pay.RandomStringGenerator;
 import com.xyc.proj.service.ClientService;
 import com.xyc.proj.service.ServerService;
+import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.PageView;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
@@ -110,8 +111,7 @@ public class ServerController {
 		}
 		//如果是店长，能看自己店的老师和老师属下的员工
 		if(w!=null && 	Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole())) {
-			parmMap.put("loginRole",Constants.WORK_ROLE_ROLE_DIANZHANG);
-			parmMap.put("tid", w.getId());
+			parmMap.put("storeId",w.getStoreId());
 		}
 //		if (!StringUtil.isBlank(teacherId)) {
 //			long lteacherId = Long.parseLong(teacherId);
@@ -125,6 +125,7 @@ public class ServerController {
 		parmMap.put("serviceTypeTwo", serviceTypeTwo);
 		parmMap.put("role", role);
 		parmMap.put("workTime", workTime);
+		parmMap.put("state", "A");
 		PageView pageView = serverService.getWorkPage(parmMap);
 		model.addAttribute("pageView", pageView);
 		model.addAttribute("parms", parmMap);
@@ -158,7 +159,9 @@ public class ServerController {
 			@RequestParam(value = "orderId", required = true) String orderId,
 			@RequestParam(value = "currentPageNum", required = false, defaultValue = "1") Integer currentPageNum,
 			@RequestParam(value = "orderByStr", required = false, defaultValue = "name,desc") String orderBy,
+			HttpSession session,
 			Model model) {
+		Worker w=(Worker)session.getAttribute("user");
 		Map<String, Object> parmMap = new HashMap<String, Object>();
 		parmMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
 		parmMap.put(Constants.ORDERBY, StringUtil.formatSortBy(orderBy));
@@ -175,10 +178,22 @@ public class ServerController {
 		}
 
 		parmMap.put("name", name);
-		parmMap.put("serviceTypeTwo", serviceTypeTwo);
-		parmMap.put("role", role);
+		//parmMap.put("serviceTypeTwo", serviceTypeTwo);
+		parmMap.put("role", "A");
+		parmMap.put("serviceTypeOne", Constants.WORK_SERVICE_TYPE_CLEAN);
 		parmMap.put("workTime", workTime);
 		parmMap.put("durationMonth", durationMonth);
+		parmMap.put("state", "A");
+		parmMap.put("workStateNot", "L");
+		if(w!=null && 	Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {
+			parmMap.put("teacherId", w.getId());
+		}
+		//如果是店长，能看自己店的老师和老师属下的员工
+		if(w!=null && 	Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole())) {
+			parmMap.put("storeId",w.getStoreId());
+		}
+		
+		
 		PageView pageView = serverService.getWorkPage(parmMap);
 		model.addAttribute("pageView", pageView);
 		model.addAttribute("parms", parmMap);
@@ -242,6 +257,12 @@ public class ServerController {
 		parmMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
 		parmMap.put(Constants.ORDERBY, StringUtil.formatSortBy(orderBy));
 		parmMap.put("areaId", areaId);
+//		if(StringUtil.isBlank(startTime)) {
+//			startTime=DateUtil.getYesterday();
+//		}
+//		if(StringUtil.isBlank(endTime)) {
+//			endTime=DateUtil.getToday();
+//		}
 		parmMap.put("startTime", startTime);
 		parmMap.put("endTime", endTime);
 		parmMap.put("serviceDate", serviceDate);
@@ -251,19 +272,32 @@ public class ServerController {
 		parmMap.put("finished", finished);
 		parmMap.put("serviceTypeOne", serviceTypeOne);
 		Worker w=(Worker)session.getAttribute("user");
-		if(w!=null && (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeOne())  ||
-				StringUtil.isBlank(w.getServiceTypeOne())
-				)) {//如果是宝洁，或者非业务人员，则不限制老师
-			
-		}else if(w!=null && Constants.WORK_SERVICE_TYPE_JZ.equals(w.getServiceTypeOne())  ){//如果是家政
-			if( Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {//如果是老师
-				parmMap.put("teacherId", w.getId());
-			}else if( Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole())) {
-				parmMap.put("role", Constants.WORK_ROLE_ROLE_DIANZHANG);
-				parmMap.put("teacherId", w.getId());
+//		if(w!=null && (Constants.WORK_SERVICE_TYPE_CLEAN.equals(w.getServiceTypeOne())  ||
+//				StringUtil.isBlank(w.getServiceTypeOne())
+//				)) {//如果是宝洁，或者非业务人员，则不限制老师
+//			
+//		}else if(w!=null && Constants.WORK_SERVICE_TYPE_JZ.equals(w.getServiceTypeOne())  ){//如果是家政
+//			if( Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole())) {//如果是老师
+//				parmMap.put("teacherId", w.getId());
+//			}else if( Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole())) {
+//				parmMap.put("role", Constants.WORK_ROLE_ROLE_DIANZHANG);
+//				parmMap.put("teacherId", w.getId());
+//			}
+//		}
+		  
+		if(w!=null && (Constants.WORK_ROLE_ROLE_DIANZHANG.equals(w.getRole()) )){//如果是店长，则指能看到该店的担子
+			parmMap.put("role", Constants.WORK_ROLE_ROLE_DIANZHANG);
+			parmMap.put("teacherId", w.getId());
+		}else if(w!=null && (Constants.WORK_ROLE_ROLE_TEACHER.equals(w.getRole()) )) {//如果是老师
+			parmMap.put("role", Constants.WORK_ROLE_ROLE_TEACHER);
+			parmMap.put("teacherId", w.getId());
+			if(w.getServiceTypeOne().equals(Constants.WORK_SERVICE_TYPE_CLEAN)) {
+				parmMap.put("serviceTypeOne", "BJ");
+			}else {
+				parmMap.put("serviceTypeOne", "JZ");
 			}
 		}
-		  
+				
 		List areaList = clientService.findAreaList();
 
 		PageView pageView = serverService.getOrderPageView(parmMap);
@@ -606,6 +640,83 @@ public class ServerController {
 	public String updatePwd( Model model) {
 		return "server/updatePwd";
 	}
+	
+	
+	@RequestMapping(value = "/server/workerStateUpdateInit.html", method = { RequestMethod.POST, RequestMethod.GET })
+	public String workerStateUpdateInit(@RequestParam(value = "areaId", required = false) String areaId,
+			@RequestParam(value = "wid", required = false) Long wid,
+			Model model) {
+		Worker ww=serverService.findWorker(wid);
+		Worker w=serverService.findWorkerDetail(ww);
+		Store store=new Store();
+		if(w.getStoreId()!=null) {
+			store=serverService.getStore(w.getStoreId());
+		}
+		
+		model.addAttribute("worker", w);
+		model.addAttribute("store", store);
+		return "server/workerStateUpdate";
+
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/server/updateWorkerState", method = { RequestMethod.POST, RequestMethod.GET })
+	public String updateWorkerState(Model model, HttpServletRequest request,
+			@RequestParam(value = "wid", required = true) Long wid,
+			@RequestParam(value = "workState", required = true) String workState
+			) {
+		String res = "S";
+		try {
+			 Worker w=serverService.findWorker(wid);
+			 w.setWorkState(workState);
+			 serverService.saveWorker(w);
+		} catch (Exception e) {
+			e.printStackTrace();
+			res = "E";
+		}
+		return res;
+	}
+	
+	/**
+	 * 校验该门店中是否已经存在店长
+	 * @param model
+	 * @param request
+	 * @param wid
+	 * @param workState
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/server/validateDzExists", method = { RequestMethod.POST, RequestMethod.GET })
+	public boolean validateDzExists(Model model, HttpServletRequest request,
+			@RequestParam(value = "storeId", required = true) Long storeId,
+			@RequestParam(value = "role", required = true) String role,
+			@RequestParam(value = "wid", required = true) String id
+			) {
+		boolean res = true;
+		try {
+			 if(!role.equals(Constants.WORK_ROLE_ROLE_DIANZHANG))return true;
+			 if(Long.parseLong(id)==0l) {//添加
+				 List alist=serverService.findByRoleAndStoreIdAndState(Constants.WORK_ROLE_ROLE_DIANZHANG, storeId, Constants.STATE_A);
+				 if(alist==null || alist.size()>0) {
+					 return false;
+				 }
+			 }else {//修改需要除去当前记录
+				 List alist=serverService.findByRoleAndStoreIdAndStateAndIdNot(Constants.WORK_ROLE_ROLE_DIANZHANG, storeId,Constants.STATE_A, Long.parseLong(id));
+				 if(alist==null || alist.size()>0) {
+					 return false;
+				 }
+			 }
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	
+	
 	
 			
 	

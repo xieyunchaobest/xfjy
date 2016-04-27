@@ -14,7 +14,9 @@
 		     	focusInvalid:false	, 
 		     	rules : {
 		     		"name":{
-		     			required:true 
+		     			required:true,
+		     			minlength:2,
+		     			maxlength:10
 		     		} ,
 		     		"idNo":{
 		     			maxlength:18,
@@ -24,19 +26,24 @@
 		     			required:true 
 		     		} ,
 		     		"nativePlace":{
-		     			required:true 
+		     			required:true ,
+		     			minlength:2,
+		     			maxlength:15
 		     		} ,
 		     		"nation":{
-		     			required:true 
+		     			required:true ,
+		     			maxlength:15
 		     		} ,
 		     		"role":{
 		     			required:true 
 		     		} ,
 		     		"stature":{
-		     			required:true 
+		     			required:true ,
+		     			number:true
 		     		} ,
 		     		"weight":{
-		     			required:true 
+		     			required:true ,
+		     			number:true
 		     		} ,
 
 		     		"phone":{
@@ -57,6 +64,8 @@
 		     		},
 		     		"descr":{
 		     			required:true,
+		     			minlength:20,
+		     			maxlength:150,
 		     		},
 		     		"afile":{
 		     			required:$("#id").val()==0,
@@ -73,11 +82,24 @@
 		     			required: function(){
 		     				return ($("#role").val()=='A' && $("#serviceTypeOne").val()=='J');
 		     			}
+		     		},
+		     		"storeId":{
+		     			 remote:{
+		     	               type:"POST",
+		     	               url:basePath+"/server/validateDzExists",
+		     	               data:{
+		     	                 role:function(){return $("#role").val();},
+		     	                 storeId:function(){return $("#storeId").val();},
+		     	                 wid:function(){return $("#id").val();}
+		     	               } 
+		     	              } 
 		     		}
 		     		
 		     	},
 		         messages: {
-		             
+		        	 "storeId":{
+		        		 remote:"该门店已有店长，请勿重复添加!" 
+		        	 }
 		         }
 		     });
 	 }
@@ -142,9 +164,13 @@
 		 }
 		 
 		 if(val=='T' || val=='A'){
+			 if(val=='A'){
+				 $("#serviceTypeTwo").attr('disabled',false);
+			 }else{
+				 $("#serviceTypeTwo").attr('disabled',true);
+			 }
 			 $("#teacherId").attr('disabled',false);
 			 $("#serviceTypeOne").attr('disabled',false);
-			 $("#serviceTypeTwo").attr('disabled',false);
 		 }else{
 			 $("#teacherId").val('');
 			 $("#teacherId").attr('disabled',true);
@@ -355,7 +381,7 @@
 				</td>
 	 		</tr> 
 	 		 <tr>
-	 			<td align="right" width="100px">工资：</td>
+	 			<td align="right" width="100px">工资(元)：</td>
 	 			<td width="150px">
 	 				 <input type="text" id="salary" name="salary" maxlength="10" th:value="${worker.salary}"  /> 
 	 			</td>
@@ -366,6 +392,7 @@
 	 						<option value="R" th:selected="${worker.workState == 'R'}">预定中</option>  
 							<option value="S" th:selected="${worker.workState == 'S'}">服务中</option>
 							<option value="O" th:selected="${worker.workState == 'O'}">已成单</option>  
+							<option value="L" th:selected="${worker.workState == 'L'}">锁定</option>  
 					</select> 
 				</td>
 	 		</tr> 

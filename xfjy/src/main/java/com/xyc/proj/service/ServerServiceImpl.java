@@ -352,7 +352,7 @@ public class ServerServiceImpl implements ServerService {
 	// }
 
 	public List findByCodeAndPassword(String code, String pwd) {
-		return workerRepository.findByCodeAndPasswordAndRoleNot(code, pwd,"A");
+		return workerRepository.findByCodeAndPasswordAndRoleNotAndWorkStateNotAndState(code, pwd,"A","L","A");
 	}
 
 	public List findStore() {
@@ -520,7 +520,11 @@ public class ServerServiceImpl implements ServerService {
 	}
 
 	public List findWorkerByTeacherId(Long teacherId) {
-		return workerRepository.findByTeacherId(teacherId);
+		return workerRepository.findByTeacherIdAndState(teacherId,"A");
+	}
+	
+	public List findWorkerByTeacherIdAndStateAndWorkState(Long teacherId,String state) {
+		return workerRepository.findByTeacherIdAndStateAndWorkState(teacherId, state);
 	}
 	public Config getConfigByCode(String code) {
 		return configRepository.findByConfigCode(code);
@@ -550,4 +554,19 @@ public class ServerServiceImpl implements ServerService {
 	public Area getArea(Long id) {
 		return areaRepository.findOne(id);
 	}
+	
+	public List findByRoleAndStoreIdAndStateAndWorkstateAndServiceTypeOne(String role,Long storeId,String serviceTypeOne) {
+		return workerRepository.findByRoleAndStoreIdAndStateAndWorkstateAndServiceTypeOne(role, storeId,serviceTypeOne);
+	}
+	
+	public List findByRoleAndStoreIdAndState(String role,Long storeId,String state) {
+		return workerRepository.findByRoleAndStoreIdAndState(role,storeId,state);
+	}
+	
+	
+	public List findByRoleAndStoreIdAndStateAndIdNot(String role,Long storeId,String state,Long id){
+		return workerRepository.findByRoleAndStoreIdAndStateAndIdNot(role,storeId,state,id);
+	}
+ 
+ 
 }

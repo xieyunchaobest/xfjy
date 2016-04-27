@@ -26,6 +26,7 @@ public interface ServerService {
 	public List findByCodeAndPassword(String code, String pwd);
 
 	public List findStore();
+	
 
 	public PageView getCommunityPage(Map parm);
 
@@ -67,5 +68,13 @@ public interface ServerService {
 	public Store getStore(Long id) ;
 	
 	public Area getArea(Long id);
+	
+	public List findWorkerByTeacherIdAndStateAndWorkState(Long teacherId,String state) ;
+	
+	List findByRoleAndStoreIdAndStateAndWorkstateAndServiceTypeOne(String role,Long storeId,String serviceTypeOne);
+	
+	List findByRoleAndStoreIdAndState(String role,Long storeId,String state);
+	
+	public List findByRoleAndStoreIdAndStateAndIdNot(String role,Long storeId,String state,Long wid);
 
 }

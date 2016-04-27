@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	 <script type="text/javascript">
+	 function saveState(){
+		 $.ajax({
+	            type: "POST",
+	            url: basePath+'/server/updateWorkerState',
+	            data:$("#aform").serialize(),
+	            success: function(data) {
+	            	if(data=="S"){
+	            		alert('操作成功!');
+	            		$("#inputDialog").modal('hide');
+	            	}else{
+	            		 alert('操作失败 ！');
+	            	}
+	            }
+	        }); 
+	}
+	 
+	 
+    </script> 
+</head>
+
+<form id="aform" th:action="@{/server/saveWorkerState}"  method="post"   >
+	<div style="display:none">
+		<input type="hidden" id="wid" name="wid"  th:value="${worker.id}"  />
+	</div>
+
+	 <div id="userAdd">
+	 	<table class="table table-bordered table-striped" >
+	 		<tr>
+	 			<td align="right" width="200px">姓名：</td>
+	 			<td>
+	 				<input  type="hidden" id="wid" th:value="${worker.id}"/>
+	 				 <span th:text="${worker.name}"/>
+	 			</td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right">工号：</td>
+	 			<td>
+	 				 <span id="code" name="code" th:text="${worker.code}"/>
+	 			</td>
+	 		</tr>
+	 		<tr>
+	 			<td align="right">门店：</td>
+	 			<td>
+	 				 <span id="store" name="store" th:text="${store.name}"/>
+	 			</td>
+	 		</tr>
+	 		<tr id="carPrice">
+	 			<td align="right">服务类型</td>
+	 			<td>
+	 				<span name="address" th:text="${worker.serviceTypeOneName}" />
+	 			</td>
+	 		</tr>
+	 		<tr id="carPrice">
+	 			<td align="right">状态</td>
+	 			<td>
+	 				 <select  name="workState" id="workState" style="height:30px;width:120px" >
+	 						<option value="F" th:selected="${worker.workState == 'F'}">空闲</option> 
+	 						<option value="R" th:selected="${worker.workState == 'R'}">预定中</option>  
+							<option value="S" th:selected="${worker.workState == 'S'}">服务中</option>
+							<option value="O" th:selected="${worker.workState == 'O'}">已成单</option>  
+							<option value="L" th:selected="${worker.workState == 'L'}">锁定</option>  
+					</select> 
+	 			</td>
+	 		</tr>
+	 	</table>
+	 </div>
+</form>
+</html>
