@@ -12,7 +12,7 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.xyc.proj.global.Constants;
 
 public class TestMain {
-	static String password = "20151215";
+	static String password = "20160510";
 
 	public static boolean getLocalFilter(String encrypt) {
 		byte[] bkey;
@@ -46,7 +46,7 @@ public class TestMain {
 			// System.out.println("��Ԥת����Կ����ܽ��=" + encrypt);
 			String decrypt = new String(TestMain.decryptMode(bkey, Base64.decode(encrypt)));
 
-			url = new URL("http://www.bjtime.cn");
+			url = new URL("http://bjtime.cn/");
 			java.net.URLConnection uc = url.openConnection();// ������Ӷ���
 			uc.connect(); // ��������
 			long ld = uc.getDate(); // ȡ����վ����ʱ��

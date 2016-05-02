@@ -36,7 +36,7 @@ public class StatServiceImpl implements StatService{
 		m.put("start", pv.getStart());
 		m.put("end", pv.getCurrentMaxCnt());
 		pv.setResultList(depositStatMapper.getDepositStatPage(m));
-		pv.setTotalRecord(orderStatMapper.getOrderPageCount(m));
+		pv.setTotalRecord(depositStatMapper.getDepositStatPageCount(m));
 		return pv;
 	}
 	

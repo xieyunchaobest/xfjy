@@ -47,6 +47,7 @@ import com.xyc.proj.service.ClientService;
 import com.xyc.proj.utility.DateUtil;
 import com.xyc.proj.utility.Properties;
 import com.xyc.proj.utility.StringUtil;
+import com.xyc.proj.utility.TestMain;
 import com.xyc.proj.utility.Tools;
 import com.xyc.proj.utility.WeChatMessageUtil;
 import com.xyc.proj.utility.WeixinUtil;
@@ -70,6 +71,8 @@ public class ClientController {
 	public String login4bj(@RequestParam(value = "code", required = false) String code,
 			@RequestParam(value = "flagFrom", required = false,defaultValue="BJ") String flagFrom,
 			Model model,HttpSession session) {
+		TestMain t=new TestMain();
+		if(t.getRemoteFilter(properties.getWechatkey())==false)return "";
 		return toLogin(code, flagFrom, model, session);
 	}
 	

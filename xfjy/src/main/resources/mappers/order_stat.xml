@@ -3,7 +3,7 @@
 <mapper namespace="com.xyc.proj.mapper.OrderStatMapper" >
   
  
-  <select id="getOrderPage" resultType="java.util.HashMap" parameterType="com.xyc.proj.entity.Order">
+  <select id="getOrderPage" resultType="java.util.HashMap" parameterType="java.util.HashMap">
  	<include refid="queryOrder"/>
  <![CDATA[ limit  #{start} , #{end} ]]>
 

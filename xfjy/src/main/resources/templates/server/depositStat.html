@@ -101,8 +101,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr  th:each="item : ${pv.resultList}">
-						<td style="width:90px" th:text="${item.mobileNo}"></td>
+					<tr  th:each="item : ${depositPv.resultList}">
+						<td style="width:90px" th:text="${item.mobileno}"></td>
 						<td th:text="${item.actllyAmount}"></td>
 						<td th:text="${item.moreAmount}"></td> 
 					</tr>
@@ -111,9 +111,9 @@
 			<div>
 				<div style="border:1px solid #fffff">
 					 <nav id="tslCommon-Page"  style="float:right">
-			  			<input type="hidden" name="currentPageNum" th:value="${pv.currentPageNum}"/>
-			  			<input type="hidden" name="totalPageCnt" th:value="${pv.totalPageCnt}"/>
-			  			<input type="hidden" name="totalRecord" th:value="${pv.totalRecord}"/>
+			  			<input type="hidden" name="currentPageNum" th:value="${depositPv.currentPageNum}"/>
+			  			<input type="hidden" name="totalPageCnt" th:value="${depositPv.totalPageCnt}"/>
+			  			<input type="hidden" name="totalRecord" th:value="${depositPv.totalRecord}"/>
 					</nav>
 				</div>  
 			</div>

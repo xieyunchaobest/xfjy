@@ -83,7 +83,7 @@ public class StatController {
 		paraMap.put("endTime", endTime);
 		paraMap.put(Constants.CURRENT_PAGENUM, currentPageNum);
 		PageView pv=statService.getDepositStatPage(paraMap);
-		model.addAttribute("pv", pv);
+		model.addAttribute("depositPv", pv);
 		model.addAttribute("paraMap", paraMap);
 		return "server/depositStat";
 	}

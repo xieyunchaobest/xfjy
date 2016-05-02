@@ -12,7 +12,7 @@
   
   <sql id="queryDepositStat">
   	 select 
-  	  t1.mobile_no as mobileNo,
+  	  t1.mobile_no as mobileno,
   	 (t2.DEPOSIT_AMOUNT-ifnull(MORE_AMOUNT,0)) as actllyAmount,
   	 ifnull(t2.MORE_AMOUNT,0) as moreAmount
   	   from T_CLIENT_USER t1 , T_DEPOSIT_LOG t2 
