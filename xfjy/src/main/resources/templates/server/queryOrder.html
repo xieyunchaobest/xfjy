@@ -146,7 +146,6 @@
 				<thead>
 					<tr>
 						<th></th>
-						<th>交易号</th>
 						<th>姓名</th>
 						<th>手机号</th>
 						<th>地址</th>
@@ -166,7 +165,7 @@
 						<th>面积</th>
 						<th>内窗数量</th>
 						<th>阳台数量</th>
-						
+						<th>交易号</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -174,7 +173,6 @@
 						<td style="width:20px">
 							<input type="checkbox" id="cbchooseworker" name="orderId" th:attr="value=''+${item.id}+'',state=''+${item.state}+'',busiDate=''+${item.serviceDate}+'',startTime=''+${item.startTime}+'',druation=''+${item.duration}+'',areaId=''+${item.areaId}+'',durationMonth=''+${item.durationMonth}+'',serviceType=''+${item.serviceType}" />
 						</td>
-						<td style="width:35px" th:text="${item.outTradeNo}"></td>
 						<td th:text="${item.name}"></td>
 						<td th:text="${item.mobileNo}"></td>
 						<td nowrap='nowrap' th:text="${item.fullAddress}"></td>
@@ -194,6 +192,7 @@
 						<td th:text="${item.area}"></td>
 						<td th:text="${item.windowCount}"></td>
 						<td th:text="${item.balconyCount}"></td>
+						<td style="width:35px" th:text="${item.outTradeNo}"></td>
 					</tr>
 				</tbody>
 			</table>
