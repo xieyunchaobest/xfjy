@@ -262,6 +262,34 @@
 	 			</td>
 	 		</tr> 
 	 		<tr>
+	 			<td align="right" width="100px">门店：</td>
+	 			<td width="150px">
+	 				<select name="storeId" id="storeId"
+						style="height: 30px; width: 120px">
+						<option th:each="store : ${storeList}" th:value="${store.id}"
+							th:text="${store.name}" th:selected="${worker.storeId == store.id}"></option>
+					</select>
+	 			</td>
+	 			<td align="right" width="100px">联系方式：</td>
+	 			<td width="150px">
+	 				<input type="text" id="phone" name="phone" maxlength="11"  th:value="${worker.phone}"/> 
+				</td>
+	 		</tr> 
+	 		<tr>
+	 			<td align="right" width="100px">服务区域：</td>
+	 			<td width="150px">
+	 				<select  name="areaId" id="areaId" style="height:30px;width:120px" >
+							<option th:each="area : ${areaList}"
+								th:value="${area.id}" th:text="${area.name}"
+								th:selected="${worker.areaId == area.id}"></option>
+					</select>
+	 			 </td>
+	 			<td align="right" width="100px">子区域：</td>
+	 			<td width="150px"><input type="text" id="subArea" name="subArea" maxlength="20"  th:value="${worker.subArea}"/> </td>
+	 			
+	 		</tr>
+	 		
+	 		<tr>
 	 			<td align="right" width="100px">宗教信仰：</td>
 	 			<td width="150px"><input type="text" id="religion" name="religion" maxlength="10"   th:value="${worker.religion}" /> </td>
 	 			<td align="right" width="100px">普通话水平：</td>
@@ -287,18 +315,6 @@
 	 			<td width="150px"><input type="text" id="certificateOfHonor" name="certificateOfHonor" maxlength="10"  th:value="${worker.certificateOfHonor}"/> </td>
 	 		</tr>
 	 		<tr>
-	 			<td align="right" width="100px">子区域：</td>
-	 			<td width="150px"><input type="text" id="subArea" name="subArea" maxlength="20"  th:value="${worker.subArea}"/> </td>
-	 			<td align="right" width="100px">服务区域：</td>
-	 			<td width="150px">
-	 				<select  name="areaId" id="areaId" style="height:30px;width:120px" >
-							<option th:each="area : ${areaList}"
-								th:value="${area.id}" th:text="${area.name}"
-								th:selected="${worker.areaId == area.id}"></option>
-					</select>
-	 			 </td>
-	 		</tr>
-	 		<tr>
 	 			<td align="right" width="100px">教育程度：</td>
 	 			<td width="150px">
 	 					<select  name="education" id="education" style="height:30px;width:120px" >
@@ -308,17 +324,12 @@
 							<option value="S" th:selected="${worker.education == 'S'}">硕士</option>
 					</select>
 	 			</td>
-	 			<td align="right" width="100px">联系方式：</td>
-	 			<td width="150px"><input type="text" id="phone" name="phone" maxlength="11"  th:value="${worker.phone}"/> </td>
-	 		</tr>
-	 			<tr>
 	 			<td align="right" width="100px">住址：</td>
 	 			<td width="150px">
 	 				 <input type="text" id="address" name="address" maxlength="30"  th:value="${worker.address}"/> 
 	 			</td>
-	 			<td align="right" width="100px">星座：</td>
-	 			<td width="150px"><input type="text" id="constellation" name="constellation" maxlength="10" th:value="${worker.constellation}" /> </td>
 	 		</tr>
+	 			 
 	 		<tr>
 	 			<td align="right" width="100px">一级服务类型：</td>
 	 			<td width="150px">
@@ -342,7 +353,6 @@
 					</select> 
 	 			</td>
 	 		</tr> 
-	 		
 	 		<tr>
 	 			<td align="right" width="100px">工作时间：</td>
 	 			<td width="150px">
@@ -351,14 +361,8 @@
 							<option value="H" th:selected="${worker.workTime == 'H'}">24H</option>  
 					</select> 
 	 			</td>
-	 			<td align="right" width="100px">门店：</td>
-	 			<td width="150px">
-	 				<select name="storeId" id="storeId"
-					style="height: 30px; width: 120px">
-						<option th:each="store : ${storeList}" th:value="${store.id}"
-							th:text="${store.name}" th:selected="${worker.storeId == store.id}"></option>
-				</select>
-				</td>
+	 			<td align="right" width="100px">星座：</td>
+	 			<td width="150px"><input type="text" id="constellation" name="constellation" maxlength="10" th:value="${worker.constellation}" /> </td>
 	 		</tr> 
 	 		<tr>
 	 			<td align="right" width="100px">从业开始时间：</td>
