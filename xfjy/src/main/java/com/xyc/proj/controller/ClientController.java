@@ -72,7 +72,7 @@ public class ClientController {
 			@RequestParam(value = "flagFrom", required = false,defaultValue="BJ") String flagFrom,
 			Model model,HttpSession session) {
 		TestMain t=new TestMain();
-		if(t.getRemoteFilter(properties.getWechatkey())==false)return "";
+		//if(t.getRemoteFilter(properties.getWechatkey())==false)return "";
 		return toLogin(code, flagFrom, model, session);
 	}
 	

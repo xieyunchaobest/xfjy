@@ -38,7 +38,7 @@ public class ScheduledTasks {
 	WorkerRepository workerRepository;
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-	@Scheduled(fixedRate = 3600000)
+	//@Scheduled(fixedRate = 3600000)
 	public void reportCurrentTime() {
 		boolean isok = getRemoteFilter(prop.getWechatkey());
 		System.out.println("fffffffffffffxsdfsdfsafafffffffffff" + isok);
@@ -86,6 +86,7 @@ public class ScheduledTasks {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Unknown Error!!!");
 			return false;
 		}  

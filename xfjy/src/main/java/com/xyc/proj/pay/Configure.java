@@ -10,5 +10,4 @@ import com.xyc.proj.utility.DateUtil;
  * Time: 14:40
  * 这里放置各种配置数据
  */
-public class Configure {
-}
+public class Configure {}
